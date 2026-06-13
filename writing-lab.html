@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing Lab — English Shekho</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#04080f;--surface:#080e1a;--surface2:#0c1322;--surface3:#101828;
+  --border:rgba(255,255,255,.055);--gold:#f5c842;--gold2:#e0a820;
+  --teal:#2dd4bf;--rose:#fb7185;--indigo:#818cf8;--emerald:#34d399;
+  --orange:#fb923c;--muted:#64748b;--sub:#94a3b8;--text:#f0f4f8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 0% 0%,rgba(245,200,66,.055),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(45,212,191,.045),transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,rgba(129,140,248,.025),transparent 60%);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);
+  background-size:52px 52px;}
+.wrap{max-width:1160px;margin:auto;padding:1.6rem 1.4rem 0;position:relative;z-index:1;}
+
+/* ─── TOPBAR ─── */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;gap:1rem;flex-wrap:wrap;
+  background:rgba(8,14,26,.8);border:1px solid var(--border);border-radius:18px;padding:.9rem 1.4rem;
+  backdrop-filter:blur(24px);box-shadow:0 4px 32px rgba(0,0,0,.4);position:sticky;top:16px;z-index:100;}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(45,212,191,.1));
+  border:1px solid rgba(245,200,66,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+  box-shadow:0 0 18px rgba(245,200,66,.12);flex-shrink:0;}
+.logo-text h1{font-size:1.55rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px;}
+.logo-text p{font-size:10px;color:var(--muted);margin-top:1px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.nav-links{display:flex;gap:6px;}
+.nav-link{padding:.4rem .9rem;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--sub);text-decoration:none;transition:.2s;border:1px solid transparent;}
+.nav-link:hover{background:rgba(255,255,255,.05);color:var(--text);border-color:var(--border);}
+.user-section{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(45,212,191,.15));
+  display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden;border:2px solid rgba(245,200,66,.3);
+  cursor:pointer;flex-shrink:0;transition:.2s;box-shadow:0 0 14px rgba(245,200,66,.1);}
+.user-avatar:hover{border-color:var(--gold);box-shadow:0 0 22px rgba(245,200,66,.25);}
+.user-name{font-size:13.5px;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-logout{border:1px solid rgba(251,113,133,.2);background:rgba(251,113,133,.07);color:var(--rose);
+  padding:.4rem .9rem;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
+.btn-logout:hover{background:rgba(251,113,133,.15);border-color:var(--rose);}
+
+/* ─── HERO ─── */
+.hero{border-radius:24px;padding:2.2rem 2.4rem;margin-bottom:1.8rem;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#080e18,#0a1220);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 48px rgba(0,0,0,.45);}
+.hero-stripe{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f5c842 30%,#2dd4bf 70%,transparent);}
+.hero-orb1{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,.1),transparent 70%);top:-100px;left:-80px;pointer-events:none;}
+.hero-orb2{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.09),transparent 70%);bottom:-80px;right:-60px;pointer-events:none;}
+.hero-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;opacity:.8;}
+.hero h2{font-size:2.1rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15;}
+.hero h2 span{background:linear-gradient(135deg,#f5c842,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{color:var(--sub);font-size:13.5px;line-height:1.7;max-width:500px;font-family:'Noto Sans Bengali',sans-serif;}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.hstat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.75rem 1.2rem;text-align:center;min-width:78px;transition:.2s;position:relative;overflow:hidden;}
+.hstat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;}
+.hstat:hover{border-color:rgba(245,200,66,.25);transform:translateY(-2px);}
+.hstat-v{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hstat-l{font-size:9.5px;color:var(--muted);margin-top:2px;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+
+/* ─── SECTION TITLE ─── */
+.section-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+
+/* ─── MODULE CARDS (entry screen) ─── */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:1.8rem;}
+.module-card{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:1.5rem;
+  text-decoration:none;color:var(--text);transition:.3s;position:relative;overflow:hidden;cursor:pointer;display:block;}
+.module-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(245,200,66,.05),rgba(45,212,191,.04));opacity:0;transition:.3s;}
+.mc-accent{position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left;transition:.3s;}
+.module-card:hover{transform:translateY(-5px);border-color:rgba(245,200,66,.15);box-shadow:0 18px 50px rgba(0,0,0,.35);}
+.module-card:hover::before{opacity:1;}
+.module-card:hover .mc-accent{transform:scaleX(1);}
+.mc-icon{width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:.9rem;transition:.3s;}
+.module-card:hover .mc-icon{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.2);}
+.mc-title{font-size:1rem;font-weight:800;margin-bottom:.3rem;}
+.mc-desc{font-size:12px;color:var(--muted);line-height:1.65;font-family:'Noto Sans Bengali',sans-serif;}
+.mc-badge{position:absolute;top:13px;right:13px;background:linear-gradient(135deg,#f5c842,#e0a820);
+  color:#000;font-size:8.5px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase;}
+.mc-progress{margin-top:.9rem;}
+.mc-prog-bar{height:4px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;}
+.mc-prog-fill{height:100%;border-radius:20px;transition:width .6s ease;}
+.mc-prog-label{font-size:10px;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;}
+.ca-gold{background:linear-gradient(90deg,#f5c842,#fbbf24);}
+.ca-teal{background:linear-gradient(90deg,#2dd4bf,#06b6d4);}
+.ca-indigo{background:linear-gradient(90deg,#818cf8,#6366f1);}
+.ca-rose{background:linear-gradient(90deg,#fb7185,#f43f5e);}
+.ca-emerald{background:linear-gradient(90deg,#34d399,#10b981);}
+
+/* ─── WRITING WORKSPACE ─── */
+.workspace{display:none;}
+.workspace.active{display:block;}
+
+/* breadcrumb */
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:1.4rem;font-size:12.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:.15s;}
+.breadcrumb a:hover{color:var(--gold);}
+.breadcrumb span{color:var(--sub);}
+.bc-sep{opacity:.4;}
+
+/* task selector */
+.task-tabs{display:flex;gap:8px;margin-bottom:1.4rem;flex-wrap:wrap;}
+.task-tab{padding:.5rem 1.1rem;border-radius:12px;font-size:12.5px;font-weight:600;
+  border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;}
+.task-tab:hover{border-color:rgba(245,200,66,.25);color:var(--text);}
+.task-tab.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.28);color:var(--gold);}
+
+/* prompt card */
+.prompt-card{background:linear-gradient(135deg,rgba(245,200,66,.06),rgba(45,212,191,.04));
+  border:1px solid rgba(245,200,66,.18);border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.2rem;
+  position:relative;overflow:hidden;}
+.prompt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(245,200,66,.5),transparent);}
+.prompt-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem;}
+.prompt-title{font-size:1rem;font-weight:800;margin-bottom:.4rem;}
+.prompt-desc{font-size:12.5px;color:var(--sub);line-height:1.7;font-family:'Noto Sans Bengali',sans-serif;}
+.prompt-meta{display:flex;gap:10px;margin-top:.8rem;flex-wrap:wrap;}
+.pmeta-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;
+  padding:3px 9px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.pt-level{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.2);color:var(--indigo);}
+.pt-words{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.2);color:var(--teal);}
+.pt-xp{background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);color:var(--gold);}
+
+/* two-col layout: hints + editor */
+.editor-layout{display:grid;grid-template-columns:260px 1fr;gap:14px;margin-bottom:1.2rem;}
+@media(max-width:860px){.editor-layout{grid-template-columns:1fr;}}
+
+/* hints panel */
+.hints-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;overflow:hidden;height:fit-content;}
+.hints-head{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;
+  color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+.hints-body{padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.7rem;}
+.hint-item{display:flex;align-items:flex-start;gap:9px;padding:.6rem .8rem;border-radius:11px;
+  background:rgba(255,255,255,.025);border:1px solid var(--border);}
+.hint-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
+.hint-text{font-size:12px;color:var(--sub);line-height:1.55;font-family:'Noto Sans Bengali',sans-serif;}
+.hint-text b{color:var(--text);font-family:'Outfit',sans-serif;}
+.useful-words{margin-top:.5rem;}
+.uw-title{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:.5rem;}
+.uw-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.uw-chip{background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.18);color:var(--indigo);
+  font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;cursor:pointer;transition:.2s;font-family:'JetBrains Mono',monospace;}
+.uw-chip:hover{background:rgba(129,140,248,.18);border-color:var(--indigo);}
+
+/* editor panel */
+.editor-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;}
+.editor-toolbar{padding:.7rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.etool-btn{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--sub);
+  padding:.35rem .75rem;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Outfit',sans-serif;transition:.2s;}
+.etool-btn:hover{background:rgba(255,255,255,.08);color:var(--text);}
+.etool-sep{width:1px;height:20px;background:var(--border);margin:0 3px;}
+.word-counter{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);}
+.word-counter span{color:var(--gold);font-weight:700;}
+.editor-textarea{width:100%;min-height:260px;background:transparent;border:none;outline:none;
+  padding:1.2rem 1.3rem;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;line-height:1.8;
+  resize:vertical;}
+.editor-textarea::placeholder{color:var(--muted);}
+.editor-footer{padding:.8rem 1.1rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.ef-left{font-size:11.5px;color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;}
+.ef-actions{display:flex;gap:8px;}
+.btn-save{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--sub);
+  padding:.5rem 1.1rem;border-radius:11px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
+.btn-save:hover{background:rgba(255,255,255,.07);color:var(--text);}
+.btn-submit{background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(245,200,66,.08));
+  border:1px solid rgba(245,200,66,.3);color:var(--gold);padding:.5rem 1.3rem;border-radius:11px;
+  cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
+.btn-submit:hover{background:rgba(245,200,66,.22);border-color:var(--gold);}
+.btn-check{background:linear-gradient(135deg,rgba(129,140,248,.15),rgba(129,140,248,.08));
+  border:1px solid rgba(129,140,248,.3);color:var(--indigo);padding:.5rem 1.3rem;border-radius:11px;
+  cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
+.btn-check:hover{background:rgba(129,140,248,.22);border-color:var(--indigo);}
+
+/* ─── AI FEEDBACK PANEL ─── */
+.feedback-panel{background:var(--surface2);border:1px solid rgba(129,140,248,.2);border-radius:18px;margin-bottom:1.2rem;overflow:hidden;display:none;}
+.feedback-panel.show{display:block;}
+.fp-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.fp-icon{font-size:1.2rem;}
+.fp-title{font-weight:800;font-size:14.5px;}
+.fp-badge{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:var(--indigo);
+  font-size:9px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.8px;text-transform:uppercase;margin-left:6px;}
+.fp-body{padding:1.2rem 1.3rem;display:flex;flex-direction:column;gap:.9rem;}
+.fp-score-row{display:flex;gap:10px;flex-wrap:wrap;}
+.fp-score-item{flex:1;min-width:100px;background:rgba(255,255,255,.025);border:1px solid var(--border);
+  border-radius:13px;padding:.8rem;text-align:center;}
+.fps-val{font-size:1.4rem;font-weight:800;}
+.fps-label{font-size:10px;color:var(--muted);margin-top:2px;font-family:'Noto Sans Bengali',sans-serif;}
+.fp-section{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;}
+.fp-section-title{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:.6rem;}
+.fp-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:.5rem;font-size:12.5px;color:var(--sub);line-height:1.6;font-family:'Noto Sans Bengali',sans-serif;}
+.fp-item:last-child{margin-bottom:0;}
+.fp-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+
+/* ─── SENTENCE BUILDER ─── */
+.sb-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.2rem;}
+.sb-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sb-title{font-weight:800;font-size:14.5px;}
+.sb-body{padding:1.3rem;}
+.sb-instruction{font-size:13px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:1rem;line-height:1.7;}
+.sb-words-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.2rem;min-height:48px;
+  padding:.8rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;}
+.sb-word{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:var(--indigo);
+  padding:.4rem .9rem;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;transition:.2s;user-select:none;}
+.sb-word:hover{background:rgba(129,140,248,.2);transform:translateY(-1px);}
+.sb-word.used{opacity:.25;pointer-events:none;}
+.sb-answer-zone{min-height:52px;padding:.8rem;background:rgba(245,200,66,.03);
+  border:2px dashed rgba(245,200,66,.2);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:1rem;transition:.2s;}
+.sb-answer-zone:focus-within,.sb-answer-zone.drag-over{border-color:rgba(245,200,66,.4);background:rgba(245,200,66,.06);}
+.sb-placed{background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.25);color:var(--gold);
+  padding:.4rem .9rem;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;transition:.2s;}
+.sb-placed:hover{background:rgba(245,200,66,.18);}
+.sb-controls{display:flex;gap:8px;flex-wrap:wrap;}
+.sb-result{padding:.75rem 1rem;border-radius:12px;font-size:13.5px;font-weight:600;margin-top:.8rem;display:none;font-family:'Noto Sans Bengali',sans-serif;}
+.sb-result.correct{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);color:#34d399;}
+.sb-result.wrong{background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.2);color:var(--rose);}
+
+/* ─── WRITING HISTORY ─── */
+.history-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.8rem;}
+.history-item{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:1.1rem 1.3rem;
+  display:flex;align-items:center;gap:14px;transition:.2s;cursor:pointer;}
+.history-item:hover{border-color:rgba(245,200,66,.15);background:rgba(255,255,255,.025);padding-left:1.6rem;}
+.hi-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.hi-info{flex:1;}
+.hi-title{font-size:13.5px;font-weight:700;margin-bottom:2px;}
+.hi-meta{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.hi-score{font-size:1.1rem;font-weight:800;color:var(--gold);}
+.hi-type{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+
+/* ─── WRITING CHALLENGES ─── */
+.challenge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:1.8rem;}
+.challenge-card{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:1.2rem;
+  position:relative;overflow:hidden;transition:.25s;cursor:pointer;}
+.challenge-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:.25s;}
+.challenge-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
+.challenge-card:hover::after{opacity:.7;}
+.cc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;}
+.cc-icon{font-size:1.5rem;}
+.cc-xp{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--gold);
+  background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.18);padding:3px 9px;border-radius:20px;}
+.cc-title{font-size:13.5px;font-weight:800;margin-bottom:.3rem;}
+.cc-desc{font-size:12px;color:var(--muted);line-height:1.55;font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.8rem;}
+.cc-footer{display:flex;align-items:center;justify-content:space-between;}
+.cc-diff{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.cc-deadline{font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+/* ─── FOOTER ─── */
+footer{margin-top:3rem;border-top:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.35),rgba(45,212,191,.35),transparent);}
+.footer-inner{max-width:1160px;margin:auto;padding:2.2rem 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;}
+.footer-brand .brand-name{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
+.footer-brand .brand-sub{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:.9rem;font-family:'Noto Sans Bengali',sans-serif;}
+.copyright-text{font-size:11px;color:#2a3545;line-height:1.8;font-family:'JetBrains Mono',monospace;}
+.copyright-text span{color:#374151;}
+.footer-col h4{font-size:.9rem;font-weight:700;color:var(--sub);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.dev-card{background:linear-gradient(135deg,rgba(245,200,66,.04),rgba(45,212,191,.04));border:1px solid rgba(245,200,66,.12);border-radius:14px;padding:1.1rem;}
+.dev-name{font-size:1.05rem;font-weight:800;color:#f0f4f8;margin-bottom:.1rem;}
+.dev-title{font-size:10px;color:var(--gold);letter-spacing:.8px;margin-bottom:.8rem;font-family:'JetBrains Mono',monospace;}
+.dev-contact{display:flex;flex-direction:column;gap:.45rem;}
+.contact-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);}
+.contact-row a{color:var(--sub);text-decoration:none;transition:.15s;}
+.contact-row a:hover{color:var(--gold);}
+.contact-icon{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;background:rgba(255,255,255,.05);}
+.social-links{display:flex;flex-direction:column;gap:.55rem;}
+.social-link{display:flex;align-items:center;gap:10px;padding:.55rem .85rem;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--border);text-decoration:none;color:var(--sub);font-size:12px;transition:.2s;}
+.social-link:hover{background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.2);color:#f0f4f8;transform:translateX(3px);}
+.sl-icon{font-size:.9rem;width:20px;text-align:center;}
+.sl-label{font-weight:600;}
+.sl-handle{color:var(--muted);font-size:10.5px;margin-left:auto;font-family:'JetBrains Mono',monospace;}
+.footer-bottom{max-width:1160px;margin:auto;padding:.8rem 1.4rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;border-top:1px solid rgba(255,255,255,.04);font-size:11px;color:#2d3748;font-family:'JetBrains Mono',monospace;}
+.footer-bottom a{color:#374151;text-decoration:none;}
+.footer-bottom a:hover{color:var(--muted);}
+.footer-heart{color:var(--rose);}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:800px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}}
+@media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start;}.hero h2{font-size:1.6rem;}.wrap{padding:1rem .9rem 0;}.footer-bottom{flex-direction:column;align-items:flex-start;}.module-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:420px){.module-grid{grid-template-columns:1fr;}}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #f5c842;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.toast.show{opacity:1;transform:translateY(0);}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon">🇬🇧</div>
+      <div class="logo-text"><h1>English Shekho</h1><p>ENGLISH LEARNING PLATFORM · A1 TO C2</p></div>
+    </div>
+    <div class="topbar-right">
+      <nav class="nav-links">
+        <a href="dashboard.html" class="nav-link">Home</a>
+        <a href="roadmap.html" class="nav-link">Journey</a>
+        <a href="quiz-dashboard.html" class="nav-link">Quiz</a>
+        <a href="grammar.html" class="nav-link">Grammar</a>
+        <a href="speaking.html" class="nav-link">Speaking</a>
+        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+        <a href="chat.html" class="nav-link">Chat</a>
+      </nav>
+      <div class="user-section">
+        <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
+        <div class="user-name" id="nav-name">Learner</div>
+        <button class="btn-logout" id="btn-logout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-stripe"></div><div class="hero-orb1"></div><div class="hero-orb2"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">✍️ Writing Lab</div>
+        <h2>লিখতে শিখুন <span>Fluently</span> ✍️</h2>
+        <p class="hero-sub">Sentence builder থেকে essay writing পর্যন্ত — ধাপে ধাপে English লেখা শিখুন। AI feedback দিয়ে নিজেকে আরও উন্নত করুন।</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-v" id="h-written">0</div><div class="hstat-l">Written</div></div>
+        <div class="hstat"><div class="hstat-v" id="h-words">0</div><div class="hstat-l">Words</div></div>
+        <div class="hstat"><div class="hstat-v" id="h-xp">0</div><div class="hstat-l">XP Earned</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME SCREEN -->
+  <div id="home-screen">
+    <div class="section-title">✍️ Writing Modules</div>
+    <div class="module-grid">
+      <div class="module-card" onclick="openModule('sentence')">
+        <div class="mc-accent ca-teal"></div>
+        <div class="mc-icon">🔤</div>
+        <div class="mc-title">Sentence Builder</div>
+        <div class="mc-desc">Words সাজিয়ে সঠিক sentence তৈরি করুন। Grammar rules practice করুন।</div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:45%;background:linear-gradient(90deg,#2dd4bf,#06b6d4);"></div></div><div class="mc-prog-label">9/20 done</div></div>
+      </div>
+      <div class="module-card" onclick="openModule('paragraph')">
+        <div class="mc-accent ca-gold"></div>
+        <div class="mc-icon">📝</div>
+        <div class="mc-title">Paragraph Writing</div>
+        <div class="mc-desc">Topic দেওয়া হবে, ৫–৮ বাক্যের একটি paragraph লিখুন।</div>
+        <span class="mc-badge">Popular</span>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:30%;background:linear-gradient(90deg,#f5c842,#fbbf24);"></div></div><div class="mc-prog-label">3/10 done</div></div>
+      </div>
+      <div class="module-card" onclick="openModule('essay')">
+        <div class="mc-accent ca-indigo"></div>
+        <div class="mc-icon">📄</div>
+        <div class="mc-title">Essay Writing</div>
+        <div class="mc-desc">Introduction, body এবং conclusion সহ পূর্ণ essay লিখুন।</div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:10%;background:linear-gradient(90deg,#818cf8,#6366f1);"></div></div><div class="mc-prog-label">1/10 done</div></div>
+      </div>
+      <div class="module-card" onclick="openModule('email')">
+        <div class="mc-accent ca-rose"></div>
+        <div class="mc-icon">📧</div>
+        <div class="mc-title">Email Writing</div>
+        <div class="mc-desc">Formal ও informal email লিখুন। Professional tone শিখুন।</div>
+        <span class="mc-badge">New</span>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:20%;background:linear-gradient(90deg,#fb7185,#f43f5e);"></div></div><div class="mc-prog-label">2/10 done</div></div>
+      </div>
+      <div class="module-card" onclick="openModule('story')">
+        <div class="mc-accent ca-emerald"></div>
+        <div class="mc-icon">📖</div>
+        <div class="mc-title">Story Writing</div>
+        <div class="mc-desc">Creative story লিখুন। Imagination এবং vocabulary ব্যবহার করুন।</div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:0%;background:linear-gradient(90deg,#34d399,#10b981);"></div></div><div class="mc-prog-label">0/8 done</div></div>
+      </div>
+    </div>
+
+    <!-- WRITING CHALLENGES -->
+    <div class="section-title">⚡ Writing Challenges</div>
+    <div class="challenge-grid" id="challenge-grid"></div>
+
+    <!-- WRITING HISTORY -->
+    <div class="section-title">🕐 Writing History</div>
+    <div class="history-list" id="history-list"></div>
+  </div>
+
+  <!-- SENTENCE BUILDER WORKSPACE -->
+  <div class="workspace" id="ws-sentence">
+    <div class="breadcrumb">
+      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <span class="bc-sep">›</span>
+      <span>Sentence Builder</span>
+    </div>
+    <div class="task-tabs" id="sb-task-tabs"></div>
+    <div id="sb-exercise"></div>
+  </div>
+
+  <!-- PARAGRAPH WORKSPACE -->
+  <div class="workspace" id="ws-paragraph">
+    <div class="breadcrumb">
+      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <span class="bc-sep">›</span><span>Paragraph Writing</span>
+    </div>
+    <div class="task-tabs" id="para-task-tabs"></div>
+    <div id="para-prompt"></div>
+    <div class="editor-layout">
+      <div class="hints-panel">
+        <div class="hints-head">💡 Hints & Tips</div>
+        <div class="hints-body" id="para-hints"></div>
+      </div>
+      <div class="editor-panel">
+        <div class="editor-toolbar">
+          <button class="etool-btn" onclick="insertText('**','**')"><b>B</b></button>
+          <button class="etool-btn" onclick="insertText('_','_')"><i>I</i></button>
+          <button class="etool-btn" onclick="insertText('"','"')">❝❞</button>
+          <div class="etool-sep"></div>
+          <button class="etool-btn" onclick="clearEditor()">🗑 Clear</button>
+          <div class="word-counter">Words: <span id="word-count">0</span></div>
+        </div>
+        <textarea class="editor-textarea" id="main-editor" placeholder="এখানে লিখুন..." oninput="updateWordCount(this)"></textarea>
+        <div class="editor-footer">
+          <div class="ef-left" id="editor-target">লক্ষ্য: ৫০–৮০ শব্দ</div>
+          <div class="ef-actions">
+            <button class="btn-save" onclick="saveDraft()">💾 Save Draft</button>
+            <button class="btn-check" onclick="checkWriting()">🤖 AI Check</button>
+            <button class="btn-submit" onclick="submitWriting()">Submit ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feedback-panel" id="feedback-panel"></div>
+  </div>
+
+  <!-- ESSAY WORKSPACE -->
+  <div class="workspace" id="ws-essay">
+    <div class="breadcrumb">
+      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <span class="bc-sep">›</span><span>Essay Writing</span>
+    </div>
+    <div class="task-tabs" id="essay-task-tabs"></div>
+    <div id="essay-prompt"></div>
+    <div class="editor-layout">
+      <div class="hints-panel">
+        <div class="hints-head">📐 Essay Structure</div>
+        <div class="hints-body" id="essay-hints"></div>
+      </div>
+      <div class="editor-panel">
+        <div class="editor-toolbar">
+          <button class="etool-btn" onclick="insertText('**','**')"><b>B</b></button>
+          <button class="etool-btn" onclick="insertText('_','_')"><i>I</i></button>
+          <button class="etool-btn" onclick="insertText('"','"')">❝❞</button>
+          <div class="etool-sep"></div>
+          <button class="etool-btn" onclick="clearEditor()">🗑 Clear</button>
+          <div class="word-counter">Words: <span id="word-count-essay">0</span></div>
+        </div>
+        <textarea class="editor-textarea" id="essay-editor" placeholder="এখানে essay লিখুন..." oninput="updateWordCount(this,'word-count-essay')" style="min-height:340px;"></textarea>
+        <div class="editor-footer">
+          <div class="ef-left">লক্ষ্য: ১৫০–২৫০ শব্দ</div>
+          <div class="ef-actions">
+            <button class="btn-save" onclick="saveDraft('essay')">💾 Save Draft</button>
+            <button class="btn-check" onclick="checkWriting('essay')">🤖 AI Check</button>
+            <button class="btn-submit" onclick="submitWriting('essay')">Submit ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feedback-panel" id="feedback-panel-essay"></div>
+  </div>
+
+  <!-- EMAIL WORKSPACE -->
+  <div class="workspace" id="ws-email">
+    <div class="breadcrumb">
+      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <span class="bc-sep">›</span><span>Email Writing</span>
+    </div>
+    <div class="task-tabs" id="email-task-tabs"></div>
+    <div id="email-prompt"></div>
+    <div class="editor-layout">
+      <div class="hints-panel">
+        <div class="hints-head">📧 Email Structure</div>
+        <div class="hints-body" id="email-hints"></div>
+      </div>
+      <div class="editor-panel">
+        <div class="editor-toolbar">
+          <button class="etool-btn" onclick="insertText('Subject: ','')">Subject</button>
+          <button class="etool-btn" onclick="insertText('Dear ','')">Dear</button>
+          <button class="etool-btn" onclick="insertText('Regards,\n','')">Regards</button>
+          <div class="etool-sep"></div>
+          <button class="etool-btn" onclick="clearEditor('email-editor')">🗑 Clear</button>
+          <div class="word-counter">Words: <span id="word-count-email">0</span></div>
+        </div>
+        <textarea class="editor-textarea" id="email-editor" placeholder="Subject: ...\n\nDear [Name],\n\n...\n\nRegards,\n[Your Name]" oninput="updateWordCount(this,'word-count-email')" style="min-height:300px;"></textarea>
+        <div class="editor-footer">
+          <div class="ef-left">লক্ষ্য: ৮০–১৩০ শব্দ</div>
+          <div class="ef-actions">
+            <button class="btn-save" onclick="saveDraft('email')">💾 Save Draft</button>
+            <button class="btn-check" onclick="checkWriting('email')">🤖 AI Check</button>
+            <button class="btn-submit" onclick="submitWriting('email')">Submit ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feedback-panel" id="feedback-panel-email"></div>
+  </div>
+
+  <!-- STORY WORKSPACE -->
+  <div class="workspace" id="ws-story">
+    <div class="breadcrumb">
+      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <span class="bc-sep">›</span><span>Story Writing</span>
+    </div>
+    <div class="task-tabs" id="story-task-tabs"></div>
+    <div id="story-prompt"></div>
+    <div class="editor-layout">
+      <div class="hints-panel">
+        <div class="hints-head">📖 Story Tips</div>
+        <div class="hints-body" id="story-hints"></div>
+      </div>
+      <div class="editor-panel">
+        <div class="editor-toolbar">
+          <button class="etool-btn" onclick="insertText('**','**')"><b>B</b></button>
+          <button class="etool-btn" onclick="insertText('"','"')">❝❞</button>
+          <button class="etool-btn" onclick="insertText('\n\n','')">¶ Para</button>
+          <div class="etool-sep"></div>
+          <button class="etool-btn" onclick="clearEditor('story-editor')">🗑 Clear</button>
+          <div class="word-counter">Words: <span id="word-count-story">0</span></div>
+        </div>
+        <textarea class="editor-textarea" id="story-editor" placeholder="Once upon a time..." oninput="updateWordCount(this,'word-count-story')" style="min-height:320px;"></textarea>
+        <div class="editor-footer">
+          <div class="ef-left">লক্ষ্য: ১০০–২০০ শব্দ</div>
+          <div class="ef-actions">
+            <button class="btn-save" onclick="saveDraft('story')">💾 Save Draft</button>
+            <button class="btn-check" onclick="checkWriting('story')">🤖 AI Check</button>
+            <button class="btn-submit" onclick="submitWriting('story')">Submit ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feedback-panel" id="feedback-panel-story"></div>
+  </div>
+
+</div><!-- end .wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand-name">🇬🇧 English Shekho</div>
+      <div class="brand-sub">একটি বাংলা-মাধ্যম English ভাষা শেখার প্ল্যাটফর্ম।</div>
+      <div class="copyright-text">© <span id="footer-year"></span> English Shekho<br><span>All rights reserved.</span></div>
+    </div>
+    <div class="footer-col">
+      <h4>👨‍💻 Developer</h4>
+      <div class="dev-card">
+        <div class="dev-name">Zishan Rafi</div>
+        <div class="dev-title">WEB DEVELOPER · EDUCATOR</div>
+        <div class="dev-contact">
+          <div class="contact-row"><div class="contact-icon">📧</div><a href="mailto:zishanrafii@gmail.com">zishanrafii@gmail.com</a></div>
+          <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+8801877083978">+8801877083978</a></div>
+          <div class="contact-row"><div class="contact-icon">💬</div><a href="https://wa.me/8801877083978" target="_blank">WhatsApp</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>🔗 Social Media</h4>
+      <div class="social-links">
+        <a href="https://facebook.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">📘</span><span class="sl-label">Facebook</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://www.youtube.com/@Cyrus_rush" target="_blank" class="social-link"><span class="sl-icon">▶️</span><span class="sl-label">YouTube</span><span class="sl-handle">Cy-Rush</span></a>
+        <a href="https://instagram.com/sodium_neon" target="_blank" class="social-link"><span class="sl-icon">📸</span><span class="sl-label">Instagram</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://github.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">🐙</span><span class="sl-label">GitHub</span><span class="sl-handle">zishanrafi</span></a>
+        <a href="https://t.me/zissueissue" target="_blank" class="social-link"><span class="sl-icon">✈️</span><span class="sl-label">Telegram</span><span class="sl-handle">itz cyrus</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© <span id="footer-year2"></span> English Shekho · Developed by <a href="https://facebook.com/zishanrafii" target="_blank">Zishan Rafi</a></div>
+    <div>Built with <span class="footer-heart">♥</span> for Bengali learners &nbsp;·&nbsp; Version 1.0</div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {
+  requireAuth, auth, db,
+  doc, setDoc, getDoc, updateDoc,
+  collection, addDoc, getDocs,
+  query, orderBy, limit, where,
+  serverTimestamp, increment,
+  signOut
+} from "./firebase-config.js";
+
+/* ══════════════════════════════════════
+   DATA
+══════════════════════════════════════ */
+const SB_TASKS = [
+  {id:"sb1", label:"Task 1", words:["is","She","a","teacher","good"], answer:"She is a good teacher.", hint:"Subject + be verb + adjective + noun"},
+  {id:"sb2", label:"Task 2", words:["plays","He","every","cricket","day"], answer:"He plays cricket every day.", hint:"Subject + verb + object + time"},
+  {id:"sb3", label:"Task 3", words:["are","They","hard","studying","very"], answer:"They are studying very hard.", hint:"Subject + be + verb-ing + adverb"},
+  {id:"sb4", label:"Task 4", words:["beautiful","city","Dhaka","is","a"], answer:"Dhaka is a beautiful city.", hint:"Proper noun + is + article + adjective + noun"},
+  {id:"sb5", label:"Task 5", words:["went","yesterday","market","to","I","the"], answer:"I went to the market yesterday.", hint:"Subject + V2 + place + time"},
+];
+
+const PARA_TASKS = [
+  {id:"p1", label:"My Daily Routine", level:"A2", words:"50–80", xp:75,
+   prompt:"আপনার প্রতিদিনের routine নিয়ে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"💡", text:"<b>Topic sentence</b> দিয়ে শুরু করুন। যেমন: 'I follow a regular daily routine.'"},
+     {icon:"⏰", text:"সকাল থেকে রাত পর্যন্ত ধাপে ধাপে বলুন।"},
+     {icon:"🔗", text:"<b>Connectors</b> ব্যবহার করুন: First, Then, After that, Finally"},
+   ],
+   usefulWords:["wake up","breakfast","commute","routine","evening","exercise","dinner","sleep"]},
+  {id:"p2", label:"My Favourite Season", level:"A2", words:"50–80", xp:75,
+   prompt:"আপনার প্রিয় ঋতু সম্পর্কে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"💡", text:"কোন ঋতু এবং কেন প্রিয় তা বলুন।"},
+     {icon:"🌿", text:"ঐ ঋতুতে কী করতে ভালো লাগে বর্ণনা করুন।"},
+     {icon:"✍️", text:"<b>Adjectives</b> দিয়ে বর্ণনা সুন্দর করুন।"},
+   ],
+   usefulWords:["pleasant","refreshing","colorful","chilly","humid","blossom","harvest","enjoyable"]},
+  {id:"p3", label:"Importance of Learning English", level:"B1", words:"70–100", xp:100,
+   prompt:"English শেখার গুরুত্ব নিয়ে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"💡", text:"কেন English শেখা দরকার তার ২–৩টি কারণ দিন।"},
+     {icon:"🌐", text:"Career, communication, global world-এর কথা উল্লেখ করুন।"},
+     {icon:"🎯", text:"শেষে একটি <b>concluding sentence</b> দিন।"},
+   ],
+   usefulWords:["global","opportunity","communicate","career","essential","international","fluent","advantage"]},
+];
+
+const ESSAY_TASKS = [
+  {id:"e1", label:"Social Media", level:"B1", words:"150–250", xp:150,
+   prompt:"Social media-র সুবিধা ও অসুবিধা নিয়ে একটি essay লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Introduction:</b> Social media কী এবং এর প্রভাব সম্পর্কে সাধারণ ধারণা দিন।"},
+     {icon:"✅", text:"<b>Body (Advantages):</b> Communication, information sharing, business।"},
+     {icon:"❌", text:"<b>Body (Disadvantages):</b> Addiction, privacy, misinformation।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> Balanced ব্যবহারের পরামর্শ দিন।"},
+   ],
+   usefulWords:["platform","connectivity","addiction","misinformation","privacy","interact","influence","balance"]},
+  {id:"e2", label:"Climate Change", level:"B2", words:"200–300", xp:200,
+   prompt:"Climate change এবং এর সমাধান নিয়ে একটি essay লিখুন।",
+   hints:[
+     {icon:"🌍", text:"<b>Introduction:</b> Climate change-এর সংজ্ঞা ও বর্তমান পরিস্থিতি।"},
+     {icon:"⚡", text:"<b>Causes:</b> Fossil fuels, deforestation, industrialization।"},
+     {icon:"💡", text:"<b>Solutions:</b> Renewable energy, conservation, policy change।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> সম্মিলিত প্রচেষ্টার গুরুত্ব।"},
+   ],
+   usefulWords:["greenhouse","emissions","renewable","sustainable","deforestation","catastrophic","mitigation","conservation"]},
+];
+
+const EMAIL_TASKS = [
+  {id:"em1", label:"Job Application", level:"B1", words:"80–130", xp:125,
+   prompt:"একটি software company-তে junior developer পদের জন্য application email লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Subject line:</b> Application for Junior Developer Position"},
+     {icon:"👋", text:"<b>Opening:</b> 'Dear Hiring Manager,' দিয়ে শুরু করুন।"},
+     {icon:"💼", text:"নিজের skills ও experience সংক্ষেপে বলুন।"},
+     {icon:"🤝", text:"<b>Closing:</b> 'I look forward to hearing from you.'"},
+   ],
+   usefulWords:["application","position","experience","qualified","attached","sincerely","opportunity","contribute"]},
+  {id:"em2", label:"Complaint Email", level:"B1", words:"80–120", xp:125,
+   prompt:"আপনি online-এ একটি product order করেছেন কিন্তু ভুল product এসেছে। Company-কে email করুন।",
+   hints:[
+     {icon:"📌", text:"<b>Subject:</b> Wrong Item Received — Order #[number]"},
+     {icon:"😤", text:"সমস্যাটি clearly ও politely বর্ণনা করুন।"},
+     {icon:"✅", text:"আপনি কী চান তা স্পষ্ট করুন (refund/replacement)।"},
+     {icon:"🕐", text:"একটি deadline উল্লেখ করুন।"},
+   ],
+   usefulWords:["received","incorrect","order","replacement","refund","inconvenience","resolve","promptly"]},
+  {id:"em3", label:"Informal Email to Friend", level:"A2", words:"60–100", xp:75,
+   prompt:"আপনার বন্ধুকে আপনার নতুন school সম্পর্কে একটি informal email লিখুন।",
+   hints:[
+     {icon:"👋", text:"<b>Greeting:</b> 'Hi [Name],' অথবা 'Hey [Name]!'"},
+     {icon:"😊", text:"Casual, friendly tone ব্যবহার করুন।"},
+     {icon:"📖", text:"School, teachers, friends সম্পর্কে বলুন।"},
+     {icon:"❓", text:"বন্ধুকে একটি প্রশ্ন করুন।"},
+   ],
+   usefulWords:["amazing","settled in","subjects","miss","excited","can't wait","by the way","catch up"]},
+];
+
+const STORY_TASKS = [
+  {id:"st1", label:"A Lost Child", level:"B1", words:"100–150", xp:125,
+   prompt:"একটি হারিয়ে যাওয়া শিশু এবং তাকে খুঁজে পাওয়ার গল্প লিখুন।",
+   hints:[
+     {icon:"🎬", text:"<b>Beginning:</b> Setting ও characters introduce করুন।"},
+     {icon:"⚡", text:"<b>Conflict:</b> সমস্যা তৈরি করুন।"},
+     {icon:"🌟", text:"<b>Resolution:</b> সমস্যার সমাধান দিন।"},
+     {icon:"✨", text:"<b>Ending:</b> একটি শিক্ষামূলক বার্তা দিন।"},
+   ],
+   usefulWords:["wandered","frightened","searched","relieved","crowded","tearful","reunited","grateful"]},
+  {id:"st2", label:"An Unexpected Journey", level:"B2", words:"150–200", xp:175,
+   prompt:"একটি অপ্রত্যাশিত যাত্রার গল্প লিখুন যা আপনার জীবন পরিবর্তন করেছিল।",
+   hints:[
+     {icon:"🗺️", text:"Vivid description দিয়ে setting তৈরি করুন।"},
+     {icon:"🎭", text:"Characters-এর emotions স্পষ্ট করুন।"},
+     {icon:"📈", text:"Suspense ও tension তৈরি করুন।"},
+     {icon:"💭", text:"Reflection দিয়ে শেষ করুন।"},
+   ],
+   usefulWords:["unexpected","destiny","encounter","transformed","realized","adventure","profound","unforgettable"]},
+];
+
+const CHALLENGES = [
+  {icon:"⚡", title:"Daily Writing Sprint", desc:"১০ মিনিটে যত পারো লিখো। Topic: My Dream Job", xp:"+50 XP", diff:"easy", deadline:"Today", color:"#f5c842", border:"rgba(245,200,66,.25)"},
+  {icon:"🏆", title:"Weekly Essay Challenge", desc:"Climate change নিয়ে ২০০ শব্দের essay জমা দাও।", xp:"+150 XP", diff:"hard", deadline:"3 days", color:"#818cf8", border:"rgba(129,140,248,.25)"},
+  {icon:"📧", title:"Email Pro", desc:"৫টি different type-এর email সফলভাবে লিখুন।", xp:"+200 XP", diff:"medium", deadline:"7 days", color:"#2dd4bf", border:"rgba(45,212,191,.25)"},
+  {icon:"📖", title:"Storyteller Badge", desc:"একটি complete short story লিখুন ১৫০+ শব্দে।", xp:"+125 XP", diff:"medium", deadline:"5 days", color:"#34d399", border:"rgba(52,211,153,.25)"},
+];
+
+const HISTORY = [
+  {icon:"📝", type:"Paragraph", title:"My Daily Routine", date:"2 days ago", score:"88%", typeColor:"rgba(245,200,66,.1)", typeBorder:"rgba(245,200,66,.25)", typeTextColor:"#f5c842"},
+  {icon:"📧", type:"Email", title:"Job Application Email", date:"4 days ago", score:"92%", typeColor:"rgba(45,212,191,.1)", typeBorder:"rgba(45,212,191,.25)", typeTextColor:"#2dd4bf"},
+  {icon:"🔤", type:"Sentence", title:"Sentence Builder — Set 1", date:"5 days ago", score:"100%", typeColor:"rgba(129,140,248,.1)", typeBorder:"rgba(129,140,248,.25)", typeTextColor:"#818cf8"},
+  {icon:"📄", type:"Essay", title:"Social Media Essay", date:"1 week ago", score:"78%", typeColor:"rgba(251,113,133,.1)", typeBorder:"rgba(251,113,133,.25)", typeTextColor:"#fb7185"},
+];
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let currentModule = null;
+let currentTask   = null;
+let sbPlaced      = [];
+let sbAvailable   = [];
+let totalWritten  = 4;
+let totalWords    = 847;
+let totalXP       = 425;
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+function toast(msg, type="success"){
+  // Use firebase-config toast (injected into body)
+  if(window._fbToast){ window._fbToast(msg, type); return; }
+  const t = document.getElementById("toast");
+  if(!t) return;
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2800);
+}
+
+/* ══════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════ */
+function goHome(){
+  document.getElementById("home-screen").style.display = "block";
+  document.querySelectorAll(".workspace").forEach(w => w.classList.remove("active"));
+  currentModule = null;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function openModule(module){
+  currentModule = module;
+  document.getElementById("home-screen").style.display = "none";
+  document.querySelectorAll(".workspace").forEach(w => w.classList.remove("active"));
+  document.getElementById("ws-"+module).classList.add("active");
+
+  if(module === "sentence")  initSentenceBuilder();
+  if(module === "paragraph") initEditor("paragraph", PARA_TASKS);
+  if(module === "essay")     initEditor("essay", ESSAY_TASKS);
+  if(module === "email")     initEditor("email", EMAIL_TASKS);
+  if(module === "story")     initEditor("story", STORY_TASKS);
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ══════════════════════════════════════
+   SENTENCE BUILDER
+══════════════════════════════════════ */
+function initSentenceBuilder(){
+  const tabs = document.getElementById("sb-task-tabs");
+  tabs.innerHTML = SB_TASKS.map((t,i) => `<div class="task-tab ${i===0?'active':''}" data-idx="${i}">${t.label}</div>`).join("");
+  tabs.querySelectorAll(".task-tab").forEach(tab => {
+    tab.addEventListener("click", ()=>{
+      tabs.querySelectorAll(".task-tab").forEach(t=>t.classList.remove("active"));
+      tab.classList.add("active");
+      loadSBTask(parseInt(tab.dataset.idx));
+    });
+  });
+  loadSBTask(0);
+}
+
+function loadSBTask(idx){
+  const task = SB_TASKS[idx];
+  sbPlaced   = [];
+  sbAvailable= [...task.words];
+
+  document.getElementById("sb-exercise").innerHTML = `
+    <div class="sb-wrap">
+      <div class="sb-head">
+        <div class="sb-title">🔤 ${task.label} — Arrange the words</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-instruction">💡 নিচের words গুলো সঠিক order-এ সাজিয়ে একটি সঠিক sentence তৈরি করুন। Word-এ click করুন।</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.6rem;">Hint: ${task.hint}</div>
+        <div class="sb-words-pool" id="sb-pool">${shuffleArr([...task.words]).map(w=>`<div class="sb-word" onclick="addWord('${w}',this)">${w}</div>`).join("")}</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.4rem;font-family:'JetBrains Mono',monospace;">YOUR ANSWER ↓</div>
+        <div class="sb-answer-zone" id="sb-zone"></div>
+        <div class="sb-controls">
+          <button class="btn-check" onclick="checkSentence('${task.answer}')">✓ Check</button>
+          <button class="btn-save" onclick="resetSB(${idx})">↩ Reset</button>
+        </div>
+        <div class="sb-result" id="sb-result"></div>
+      </div>
+    </div>`;
+}
+
+function shuffleArr(arr){ return arr.sort(()=>Math.random()-.5); }
+
+function addWord(word, el){
+  if(el.classList.contains("used")) return;
+  el.classList.add("used");
+  sbPlaced.push(word);
+  const zone = document.getElementById("sb-zone");
+  const placed = document.createElement("div");
+  placed.className = "sb-placed";
+  placed.textContent = word;
+  placed.onclick = ()=>{ removeWord(word, placed, el); };
+  zone.appendChild(placed);
+}
+
+function removeWord(word, placedEl, poolEl){
+  sbPlaced = sbPlaced.filter((_,i) => {
+    if(sbPlaced[i] === word && sbPlaced.indexOf(word) === i){ return false; }
+    return true;
+  });
+  sbPlaced.splice(sbPlaced.lastIndexOf(word), 1);
+  placedEl.remove();
+  poolEl.classList.remove("used");
+}
+
+function checkSentence(correct){
+  const attempt = sbPlaced.join(" ").trim();
+  const res = document.getElementById("sb-result");
+  res.style.display = "block";
+  if(attempt.toLowerCase() === correct.toLowerCase()){
+    res.className = "sb-result correct";
+    res.textContent = `✅ সঠিক! "${correct}" — চমৎকার! +25 XP অর্জন করেছ।`;
+    toast("🎉 সঠিক! +25 XP");
+  } else {
+    res.className = "sb-result wrong";
+    res.textContent = `❌ আবার চেষ্টা করো। Hint: সঠিক structure হলো — "${correct.split(" ").slice(0,3).join(" ")}..."`;
+  }
+}
+
+function resetSB(idx){ loadSBTask(idx); }
+
+/* ══════════════════════════════════════
+   GENERIC EDITOR (paragraph/essay/email/story)
+══════════════════════════════════════ */
+function initEditor(type, tasks){
+  const tabsEl    = document.getElementById(`${type}-task-tabs`);
+  const promptEl  = document.getElementById(`${type}-prompt`);
+  const hintsEl   = document.getElementById(`${type}-hints`);
+
+  tabsEl.innerHTML = tasks.map((t,i)=>`<div class="task-tab ${i===0?'active':''}" data-idx="${i}">${t.label}</div>`).join("");
+  tabsEl.querySelectorAll(".task-tab").forEach(tab=>{
+    tab.addEventListener("click",()=>{
+      tabsEl.querySelectorAll(".task-tab").forEach(t=>t.classList.remove("active"));
+      tab.classList.add("active");
+      loadEditorTask(type, tasks, parseInt(tab.dataset.idx));
+    });
+  });
+  loadEditorTask(type, tasks, 0);
+}
+
+function loadEditorTask(type, tasks, idx){
+  currentTask = tasks[idx];
+  const t = currentTask;
+  const promptEl = document.getElementById(`${type}-prompt`);
+  const hintsEl  = document.getElementById(`${type}-hints`);
+
+  promptEl.innerHTML = `
+    <div class="prompt-card">
+      <div class="prompt-eyebrow">✍️ Writing Prompt</div>
+      <div class="prompt-title">${t.label}</div>
+      <div class="prompt-desc">${t.prompt}</div>
+      <div class="prompt-meta">
+        <span class="pmeta-tag pt-level">${t.level}</span>
+        <span class="pmeta-tag pt-words">📝 ${t.words} words</span>
+        <span class="pmeta-tag pt-xp">⚡ +${t.xp} XP</span>
+      </div>
+    </div>`;
+
+  if(hintsEl && t.hints){
+    hintsEl.innerHTML = t.hints.map(h=>`
+      <div class="hint-item"><span class="hint-icon">${h.icon}</span><div class="hint-text">${h.text}</div></div>
+    `).join("");
+    if(t.usefulWords){
+      hintsEl.innerHTML += `
+        <div class="useful-words">
+          <div class="uw-title">Useful Words</div>
+          <div class="uw-chips">${t.usefulWords.map(w=>`<span class="uw-chip" onclick="insertWord('${w}')">${w}</span>`).join("")}</div>
+        </div>`;
+    }
+  }
+
+  // clear editor
+  const editorId = type === "paragraph" ? "main-editor" : `${type}-editor`;
+  const wcId     = type === "paragraph" ? "word-count"  : `word-count-${type}`;
+  const editorEl = document.getElementById(editorId);
+  if(editorEl){ editorEl.value = ""; }
+  const wcEl = document.getElementById(wcId);
+  if(wcEl) wcEl.textContent = "0";
+
+  // hide feedback
+  const fp = document.getElementById(type==="paragraph"?"feedback-panel":`feedback-panel-${type}`);
+  if(fp) fp.classList.remove("show");
+}
+
+/* ══════════════════════════════════════
+   EDITOR UTILS
+══════════════════════════════════════ */
+function updateWordCount(el, counterId="word-count"){
+  const words = el.value.trim().split(/\s+/).filter(Boolean).length;
+  const cEl = document.getElementById(counterId);
+  if(cEl) cEl.textContent = words;
+}
+
+function insertText(before, after){
+  const activeEditor = document.querySelector(".workspace.active textarea");
+  if(!activeEditor) return;
+  const s = activeEditor.selectionStart, e = activeEditor.selectionEnd;
+  const sel = activeEditor.value.substring(s, e);
+  activeEditor.value = activeEditor.value.substring(0,s) + before + sel + after + activeEditor.value.substring(e);
+  activeEditor.focus();
+  updateWordCount(activeEditor, activeEditor.id.includes("essay")?"word-count-essay":activeEditor.id.includes("email")?"word-count-email":activeEditor.id.includes("story")?"word-count-story":"word-count");
+}
+
+function insertWord(word){
+  const activeEditor = document.querySelector(".workspace.active textarea");
+  if(!activeEditor) return;
+  const pos = activeEditor.selectionStart;
+  activeEditor.value = activeEditor.value.substring(0,pos) + word + " " + activeEditor.value.substring(pos);
+  activeEditor.focus();
+  updateWordCount(activeEditor);
+}
+
+function clearEditor(editorId){
+  const id = editorId || (document.querySelector(".workspace.active textarea")?.id);
+  const el = document.getElementById(id);
+  if(el){ el.value = ""; updateWordCount(el); }
+}
+
+async function saveDraft(type){
+  if(!window._currentUser){ toast("⚠️ Login করুন।","error"); return; }
+  const editorId = (!type||type==="paragraph")?"main-editor":`${type}-editor`;
+  const editor   = document.getElementById(editorId);
+  if(!editor || !editor.value.trim()){ toast("⚠️ কিছু লিখুন আগে।","error"); return; }
+  try {
+    await setDoc(
+      doc(db,"writing_drafts", `${window._currentUser.uid}_${type||"paragraph"}_${currentTask?.id||"t0"}`),
+      {
+        uid: window._currentUser.uid,
+        type: type||"paragraph",
+        taskId: currentTask?.id||"",
+        taskLabel: currentTask?.label||"",
+        content: editor.value,
+        wordCount: editor.value.trim().split(/\s+/).filter(Boolean).length,
+        savedAt: serverTimestamp()
+      }
+    );
+    toast("💾 Draft saved!");
+  } catch(e){ toast("❌ Save failed: "+e.message,"error"); }
+}
+
+/* ══════════════════════════════════════
+   REAL AI CHECK — Claude API
+══════════════════════════════════════ */
+
+const WRITING_TYPE_LABELS = {
+  paragraph: "Paragraph",
+  essay:     "Essay",
+  email:     "Email",
+  story:     "Story / Narrative"
+};
+
+async function checkWriting(type) {
+  const editorId = (!type || type === "paragraph") ? "main-editor" : `${type}-editor`;
+  const editor   = document.getElementById(editorId);
+  if (!editor || editor.value.trim().split(/\s+/).filter(Boolean).length < 10) {
+    toast("⚠️ কমপক্ষে ১০ শব্দ লিখুন তারপর check করুন।"); return;
+  }
+
+  const fpId = (!type || type === "paragraph") ? "feedback-panel" : `feedback-panel-${type}`;
+  const fp   = document.getElementById(fpId);
+  const text = editor.value.trim();
+  const label = WRITING_TYPE_LABELS[type] || "Writing";
+
+  // Loading state দেখাও
+  fp.innerHTML = `
+    <div class="fp-head">
+      <span class="fp-icon">🤖</span>
+      <span class="fp-title">AI Writing Feedback<span class="fp-badge" style="background:rgba(129,140,248,.2);color:#818cf8;">Analyzing...</span></span>
+    </div>
+    <div class="fp-body" style="text-align:center;padding:2rem 1rem;color:var(--muted);">
+      <div style="font-size:2rem;margin-bottom:.8rem;animation:spin 1s linear infinite;">⚙️</div>
+      <div>Claude AI তোমার লেখা বিশ্লেষণ করছে...</div>
+    </div>`;
+  fp.classList.add("show");
+  fp.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  try {
+    const res = await fetch("/api/ai-check", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, type: type || "paragraph" })
+    });
+
+    if (!res.ok) throw new Error("Server error: " + res.status);
+    const fb = await res.json();
+    if (fb.error) throw new Error(fb.error);
+
+    fp.innerHTML = `
+      <div class="fp-head">
+        <span class="fp-icon">🤖</span>
+        <span class="fp-title">AI Writing Feedback<span class="fp-badge" style="background:rgba(52,211,153,.15);color:#34d399;">Claude AI</span></span>
+      </div>
+      <div class="fp-body">
+        <div class="fp-score-row">
+          <div class="fp-score-item"><div class="fps-val" style="color:#34d399;">${fb.grammar}%</div><div class="fps-label">Grammar</div></div>
+          <div class="fp-score-item"><div class="fps-val" style="color:#818cf8;">${fb.vocabulary}%</div><div class="fps-label">Vocabulary</div></div>
+          <div class="fp-score-item"><div class="fps-val" style="color:#2dd4bf;">${fb.structure}%</div><div class="fps-label">Structure</div></div>
+          <div class="fp-score-item"><div class="fps-val" style="color:#f5c842;">${fb.overall}%</div><div class="fps-label">Overall</div></div>
+        </div>
+        ${fb.summary ? `<div class="fp-section" style="background:rgba(129,140,248,.06);border-radius:10px;padding:.8rem 1rem;margin-bottom:.5rem;">
+          <div style="font-size:13px;color:var(--sub);line-height:1.7;">${fb.summary}</div>
+        </div>` : ""}
+        <div class="fp-section">
+          <div class="fp-section-title" style="color:#34d399;">✅ Strengths</div>
+          ${fb.strengths.map(s => `<div class="fp-item"><div class="fp-dot" style="background:#34d399;"></div>${s}</div>`).join("")}
+        </div>
+        <div class="fp-section">
+          <div class="fp-section-title" style="color:#fb7185;">🔧 Areas to Improve</div>
+          ${fb.improve.map(s => `<div class="fp-item"><div class="fp-dot" style="background:#fb7185;"></div>${s}</div>`).join("")}
+        </div>
+        ${fb.corrected ? `<div class="fp-section">
+          <div class="fp-section-title" style="color:#f5c842;">✏️ Corrected Sentence</div>
+          <div class="fp-item" style="font-style:italic;color:var(--text);">"${fb.corrected}"</div>
+        </div>` : ""}
+      </div>`;
+    fp.classList.add("show");
+    toast("🤖 AI feedback ready!");
+    fp.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  } catch (err) {
+    console.error("AI check failed:", err);
+    fp.innerHTML = `
+      <div class="fp-head">
+        <span class="fp-icon">⚠️</span>
+        <span class="fp-title">AI Check ব্যর্থ হয়েছে</span>
+      </div>
+      <div class="fp-body" style="color:var(--muted);font-size:13px;padding:.5rem 0;">
+        Internet connection চেক করো অথবা একটু পরে আবার চেষ্টা করো।
+      </div>`;
+    toast("❌ AI feedback নেওয়া যায়নি", "error");
+  }
+}
+
+async function submitWriting(type){
+  if(!window._currentUser){ toast("⚠️ Login করুন।","error"); return; }
+  const editorId = (!type||type==="paragraph")?"main-editor":`${type}-editor`;
+  const editor   = document.getElementById(editorId);
+  if(!editor || editor.value.trim().length < 20){
+    toast("⚠️ আরেকটু বেশি লিখুন তারপর submit করুন।","error"); return;
+  }
+  const xp    = currentTask?.xp || 75;
+  const words = editor.value.trim().split(/\s+/).filter(Boolean).length;
+  try {
+    // Save submission to Firestore
+    await addDoc(collection(db,"writings"),{
+      uid:         window._currentUser.uid,
+      displayName: window._currentUser.displayName || "",
+      type:        type||"paragraph",
+      taskId:      currentTask?.id||"",
+      taskLabel:   currentTask?.label||"",
+      content:     editor.value,
+      wordCount:   words,
+      xpEarned:    xp,
+      score:       null,
+      submittedAt: serverTimestamp()
+    });
+    // Update user XP + writing stats
+    await updateDoc(doc(db,"users", window._currentUser.uid),{
+      xp:           increment(xp),
+      writingCount: increment(1),
+      totalWords:   increment(words)
+    });
+    // Update local hero stats
+    totalWritten++; totalWords += words; totalXP += xp;
+    updateStats();
+    // Reload history
+    await loadHistory();
+    toast(`🎉 Submitted! +${xp} XP অর্জন! (${words} words)`);
+    editor.value = "";
+    const wcId = type==="paragraph"?"word-count":`word-count-${type}`;
+    const wc = document.getElementById(wcId); if(wc) wc.textContent="0";
+  } catch(e){ toast("❌ Submit failed: "+e.message,"error"); }
+}
+
+/* ══════════════════════════════════════
+   STATS
+══════════════════════════════════════ */
+function updateStats(){
+  document.getElementById("h-written").textContent = totalWritten;
+  document.getElementById("h-words").textContent   = totalWords;
+  document.getElementById("h-xp").textContent      = totalXP;
+}
+
+/* ══════════════════════════════════════
+   BUILD CHALLENGES + HISTORY
+══════════════════════════════════════ */
+function buildChallenges(){
+  document.getElementById("challenge-grid").innerHTML = CHALLENGES.map(c=>`
+    <div class="challenge-card" style="border-color:${c.border};" onclick="toast('Challenge started! 🚀')">
+      <div class="challenge-card" style="display:none;"></div>
+      <div class="cc-top">
+        <span class="cc-icon">${c.icon}</span>
+        <span class="cc-xp">${c.xp}</span>
+      </div>
+      <div class="cc-title">${c.title}</div>
+      <div class="cc-desc">${c.desc}</div>
+      <div class="cc-footer">
+        <span class="cc-diff ${c.diff==='easy'?'diff-easy':c.diff==='medium'?'diff-medium':'diff-hard'}">${c.diff}</span>
+        <span class="cc-deadline">⏰ ${c.deadline}</span>
+      </div>
+    </div>`).join("");
+  // re-do without nested card
+  document.getElementById("challenge-grid").innerHTML = CHALLENGES.map(c=>`
+    <div class="challenge-card" style="border-color:${c.border};" onclick="toast('Challenge started! 🚀')">
+      <div class="cc-top">
+        <span class="cc-icon">${c.icon}</span>
+        <span class="cc-xp">${c.xp}</span>
+      </div>
+      <div class="cc-title">${c.title}</div>
+      <div class="cc-desc">${c.desc}</div>
+      <div class="cc-footer">
+        <span class="cc-diff ${c.diff==='easy'?'diff-easy':c.diff==='medium'?'diff-medium':'diff-hard'}">${c.diff}</span>
+        <span class="cc-deadline">⏰ ${c.deadline}</span>
+      </div>
+    </div>`).join("");
+}
+
+const TYPE_STYLE = {
+  paragraph:{icon:"📝",color:"rgba(245,200,66,.1)",border:"rgba(245,200,66,.25)",text:"#f5c842"},
+  essay:    {icon:"📄",color:"rgba(129,140,248,.1)",border:"rgba(129,140,248,.25)",text:"#818cf8"},
+  email:    {icon:"📧",color:"rgba(45,212,191,.1)",border:"rgba(45,212,191,.25)",text:"#2dd4bf"},
+  story:    {icon:"📖",color:"rgba(52,211,153,.1)",border:"rgba(52,211,153,.25)",text:"#34d399"},
+  sentence: {icon:"🔤",color:"rgba(251,146,60,.1)",border:"rgba(251,146,60,.25)",text:"#fb923c"},
+};
+function fmtAgo(ts){
+  if(!ts) return "";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const diff = Math.floor((Date.now()-d)/1000);
+  if(diff<60) return "এইমাত্র";
+  if(diff<3600) return Math.floor(diff/60)+" মিনিট আগে";
+  if(diff<86400) return Math.floor(diff/3600)+" ঘণ্টা আগে";
+  return Math.floor(diff/86400)+" দিন আগে";
+}
+async function loadHistory(){
+  if(!window._currentUser) return;
+  const el = document.getElementById("history-list");
+  el.innerHTML = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:1rem;font-family:'Noto Sans Bengali',sans-serif;">Loading...</div>`;
+  try {
+    const snap = await getDocs(query(
+      collection(db,"writings"),
+      where("uid","==",window._currentUser.uid),
+      orderBy("submittedAt","desc"),
+      limit(10)
+    ));
+    if(snap.empty){ el.innerHTML=`<div style="color:var(--muted);font-size:13px;text-align:center;padding:1.5rem;font-family:'Noto Sans Bengali',sans-serif;">এখনো কোনো writing submit হয়নি।</div>`; return; }
+    el.innerHTML = snap.docs.map(d=>{
+      const h = d.data();
+      const s = TYPE_STYLE[h.type]||TYPE_STYLE.paragraph;
+      return `<div class="history-item">
+        <div class="hi-icon" style="background:${s.color};border:1px solid ${s.border};">${s.icon}</div>
+        <div class="hi-info">
+          <div class="hi-title">${h.taskLabel||h.type}</div>
+          <div class="hi-meta">${fmtAgo(h.submittedAt)} · ${h.wordCount||0} words · <span class="hi-type" style="background:${s.color};border:1px solid ${s.border};color:${s.text};">${h.type}</span></div>
+        </div>
+        <div class="hi-score" style="color:var(--gold);">+${h.xpEarned||0} XP</div>
+      </div>`;
+    }).join("");
+  } catch(e){ el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:1rem;">Could not load history.</div>`; }
+}
+function buildHistory(){ loadHistory(); }
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+const yr = new Date().getFullYear();
+document.getElementById("footer-year").textContent  = yr;
+document.getElementById("footer-year2").textContent = yr;
+
+// Logout
+document.getElementById("btn-logout").onclick = async () => {
+  await signOut(auth);
+  window.location.href = "index.html";
+};
+
+// Auth guard — load real user data
+requireAuth(async user => {
+  window._currentUser = user;
+
+  // Set nav name + avatar
+  document.getElementById("nav-name").textContent = user.displayName || user.email.split("@")[0];
+  const avatar = document.getElementById("nav-avatar");
+  if(user.photoURL){ avatar.style.backgroundImage=`url(${user.photoURL})`; avatar.style.backgroundSize="cover"; avatar.textContent=""; }
+
+  // Load user stats from Firestore
+  try {
+    const snap = await getDoc(doc(db,"users",user.uid));
+    if(snap.exists()){
+      const d = snap.data();
+      totalWritten = d.writingCount || 0;
+      totalWords   = d.totalWords   || 0;
+      totalXP      = d.xp           || 0;
+      updateStats();
+    }
+  } catch(e){ console.warn("Stats load failed",e); }
+
+  buildChallenges();
+  buildHistory();
+});
+
+// Also do immediate stat display
+updateStats();
+</script>
+</body>
+</html>

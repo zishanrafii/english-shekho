@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listening Center — English Shekho</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#04080f;--surface:#080e1a;--surface2:#0c1322;--surface3:#101828;
+  --border:rgba(255,255,255,.055);--gold:#f5c842;--gold2:#e0a820;
+  --teal:#2dd4bf;--rose:#fb7185;--indigo:#818cf8;--emerald:#34d399;
+  --orange:#fb923c;--muted:#64748b;--sub:#94a3b8;--text:#f0f4f8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 0% 0%,rgba(245,200,66,.055),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(45,212,191,.045),transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,rgba(129,140,248,.025),transparent 60%);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);
+  background-size:52px 52px;}
+.wrap{max-width:1160px;margin:auto;padding:1.6rem 1.4rem 0;position:relative;z-index:1;}
+
+/* ─── TOPBAR ─── */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;gap:1rem;flex-wrap:wrap;
+  background:rgba(8,14,26,.8);border:1px solid var(--border);border-radius:18px;padding:.9rem 1.4rem;
+  backdrop-filter:blur(24px);box-shadow:0 4px 32px rgba(0,0,0,.4);position:sticky;top:16px;z-index:100;}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(45,212,191,.1));
+  border:1px solid rgba(245,200,66,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+  box-shadow:0 0 18px rgba(245,200,66,.12);flex-shrink:0;}
+.logo-text h1{font-size:1.55rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px;}
+.logo-text p{font-size:10px;color:var(--muted);margin-top:1px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.nav-links{display:flex;gap:6px;}
+.nav-link{padding:.4rem .9rem;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--sub);
+  text-decoration:none;transition:.2s;border:1px solid transparent;}
+.nav-link:hover{background:rgba(255,255,255,.05);color:var(--text);border-color:var(--border);}
+.user-section{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(45,212,191,.15));
+  display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden;
+  border:2px solid rgba(245,200,66,.3);cursor:pointer;flex-shrink:0;transition:.2s;box-shadow:0 0 14px rgba(245,200,66,.1);}
+.user-avatar:hover{border-color:var(--gold);box-shadow:0 0 22px rgba(245,200,66,.25);}
+.user-name{font-size:13.5px;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-logout{border:1px solid rgba(251,113,133,.2);background:rgba(251,113,133,.07);color:var(--rose);
+  padding:.4rem .9rem;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
+.btn-logout:hover{background:rgba(251,113,133,.15);border-color:var(--rose);}
+
+/* ─── HERO ─── */
+.hero{border-radius:24px;padding:2.2rem 2.4rem;margin-bottom:1.8rem;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#080e18,#0a1220);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 48px rgba(0,0,0,.45);}
+.hero-stripe{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f5c842 30%,#2dd4bf 70%,transparent);}
+.hero-orb1{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,.1),transparent 70%);top:-100px;left:-80px;pointer-events:none;}
+.hero-orb2{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.09),transparent 70%);bottom:-80px;right:-60px;pointer-events:none;}
+.hero-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;opacity:.8;}
+.hero h2{font-size:2.1rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15;}
+.hero h2 span{background:linear-gradient(135deg,#f5c842,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{color:var(--sub);font-size:13.5px;line-height:1.7;max-width:500px;font-family:'Noto Sans Bengali',sans-serif;}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.hstat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.75rem 1.2rem;text-align:center;min-width:78px;transition:.2s;position:relative;overflow:hidden;}
+.hstat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;}
+.hstat:hover{border-color:rgba(245,200,66,.25);transform:translateY(-2px);}
+.hstat-v{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hstat-l{font-size:9.5px;color:var(--muted);margin-top:2px;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+
+/* ─── SECTION TITLE ─── */
+.section-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+
+/* ─── AUDIO PLAYER ─── */
+.player-card{background:var(--surface2);border:1px solid var(--border);border-radius:22px;
+  padding:1.8rem 2rem;margin-bottom:1.8rem;position:relative;overflow:hidden;}
+.player-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#f5c842 30%,#2dd4bf 70%,transparent);}
+.pc-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem;opacity:.8;}
+.pc-title{font-size:1.2rem;font-weight:800;margin-bottom:.3rem;}
+.pc-meta{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:1.4rem;display:flex;gap:12px;flex-wrap:wrap;}
+.pc-meta span{display:flex;align-items:center;gap:4px;}
+
+/* waveform visual */
+.audio-wave{display:flex;align-items:center;gap:2.5px;height:44px;margin-bottom:1.2rem;cursor:pointer;}
+.aw-bar{border-radius:3px;background:rgba(245,200,66,.25);transition:.15s;flex-shrink:0;}
+.aw-bar.played{background:var(--gold);}
+.aw-bar.active{background:var(--teal);animation:wvPulse .4s ease-in-out infinite alternate;}
+@keyframes wvPulse{from{opacity:.7;}to{opacity:1;}}
+
+/* progress */
+.audio-progress-wrap{margin-bottom:1rem;}
+.audio-track{height:5px;background:rgba(255,255,255,.07);border-radius:20px;overflow:hidden;cursor:pointer;margin-bottom:.4rem;}
+.audio-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f5c842,#2dd4bf);transition:width .3s linear;width:0%;}
+.audio-times{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);}
+
+/* controls */
+.audio-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.ac-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:.2s;}
+.ac-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.12);}
+.ac-play{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(45,212,191,.12));
+  border:2px solid rgba(245,200,66,.35);font-size:1.3rem;box-shadow:0 0 20px rgba(245,200,66,.15);}
+.ac-play:hover{box-shadow:0 0 32px rgba(245,200,66,.28);transform:scale(1.06);}
+.ac-speed{background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);color:var(--indigo);
+  padding:.4rem .85rem;border-radius:10px;cursor:pointer;font-size:11.5px;font-weight:700;font-family:'JetBrains Mono',monospace;transition:.2s;}
+.ac-speed:hover{background:rgba(129,140,248,.16);}
+.ac-vol{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.vol-slider{width:70px;accent-color:var(--gold);cursor:pointer;}
+
+/* ─── TRANSCRIPT PANEL ─── */
+.transcript-panel{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;
+  padding:1.2rem 1.3rem;margin-top:1.2rem;}
+.tp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem;}
+.tp-title{font-size:11px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+.tp-toggle{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--sub);
+  padding:.3rem .75rem;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;font-family:'Outfit',sans-serif;transition:.2s;}
+.tp-toggle:hover{background:rgba(255,255,255,.08);color:var(--text);}
+.transcript-text{font-size:13.5px;line-height:2;color:var(--sub);}
+.transcript-text .word{cursor:pointer;border-radius:4px;padding:1px 3px;transition:.15s;}
+.transcript-text .word:hover{background:rgba(245,200,66,.15);color:var(--gold);}
+.transcript-text .word.highlight{background:rgba(45,212,191,.15);color:var(--teal);}
+
+/* ─── LESSON CARDS ─── */
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:1.8rem;}
+.lesson-card{background:var(--surface2);border:1px solid var(--border);border-radius:18px;
+  padding:1.3rem;cursor:pointer;transition:.3s;position:relative;overflow:hidden;}
+.lesson-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:.3s;}
+.lesson-card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,0,0,.35);}
+.lesson-card:hover::after{opacity:.8;}
+.lesson-card.active-lesson{border-color:rgba(245,200,66,.3);background:rgba(245,200,66,.04);}
+.lesson-card.completed{border-color:rgba(45,212,191,.2);}
+.lc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;}
+.lc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.lc-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.lc-title{font-size:13.5px;font-weight:800;margin-bottom:.3rem;}
+.lc-desc{font-size:12px;color:var(--muted);line-height:1.6;font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.8rem;}
+.lc-footer{display:flex;align-items:center;justify-content:space-between;}
+.lc-dur{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px;}
+.lc-xp{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);font-weight:700;}
+.lc-check{width:20px;height:20px;border-radius:50%;background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);
+  display:flex;align-items:center;justify-content:center;font-size:.65rem;color:#2dd4bf;}
+
+/* ─── CATEGORY TABS ─── */
+.cat-tabs{display:flex;gap:8px;margin-bottom:1.4rem;flex-wrap:wrap;}
+.cat-tab{padding:.5rem 1.1rem;border-radius:12px;font-size:12.5px;font-weight:600;
+  border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;}
+.cat-tab:hover{border-color:rgba(245,200,66,.25);color:var(--text);}
+.cat-tab.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.28);color:var(--gold);}
+
+/* ─── COMPREHENSION QUIZ ─── */
+.quiz-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;
+  overflow:hidden;margin-bottom:1.8rem;display:none;}
+.quiz-panel.show{display:block;}
+.qp-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.qp-title{font-weight:800;font-size:14.5px;}
+.qp-progress{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+.qp-body{padding:1.3rem;}
+.q-text{font-size:14px;font-weight:700;margin-bottom:1rem;line-height:1.5;}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.q-opt{padding:.75rem 1rem;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.025);
+  cursor:pointer;font-size:13px;transition:.2s;font-weight:500;}
+.q-opt:hover{border-color:rgba(245,200,66,.25);background:rgba(245,200,66,.04);}
+.q-opt.correct{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.3);color:#34d399;}
+.q-opt.wrong{background:rgba(251,113,133,.08);border-color:rgba(251,113,133,.3);color:var(--rose);}
+.q-opt.selected{border-color:rgba(245,200,66,.35);background:rgba(245,200,66,.06);}
+.q-feedback{font-size:12.5px;padding:.7rem .9rem;border-radius:11px;margin-top:.5rem;display:none;font-family:'Noto Sans Bengali',sans-serif;line-height:1.6;}
+.q-feedback.show{display:block;}
+.q-feedback.correct{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);color:#34d399;}
+.q-feedback.wrong{background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.2);color:var(--rose);}
+.qp-actions{display:flex;gap:8px;padding:1rem 1.3rem;border-top:1px solid var(--border);}
+.btn-next-q{background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(245,200,66,.08));
+  border:1px solid rgba(245,200,66,.3);color:var(--gold);padding:.55rem 1.3rem;border-radius:11px;
+  cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;transition:.2s;}
+.btn-next-q:hover{background:rgba(245,200,66,.22);}
+.btn-skip-q{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--sub);
+  padding:.55rem 1.1rem;border-radius:11px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:13px;transition:.2s;}
+.btn-skip-q:hover{background:rgba(255,255,255,.07);color:var(--text);}
+
+/* ─── PROGRESS ─── */
+.progress-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;}
+.pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:1rem;}
+.pp-item{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:13px;padding:.9rem;text-align:center;}
+.pp-val{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.pp-label{font-size:10.5px;color:var(--muted);margin-top:2px;font-family:'Noto Sans Bengali',sans-serif;}
+.prog-track{height:7px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;margin:.7rem 0 .4rem;}
+.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f5c842,#2dd4bf);transition:width .8s ease;box-shadow:0 0 10px rgba(245,200,66,.25);}
+.prog-meta{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;}
+
+/* ─── HISTORY ─── */
+.history-list{display:flex;flex-direction:column;gap:8px;margin-bottom:2rem;}
+.history-item{background:var(--surface2);border:1px solid var(--border);border-radius:14px;
+  padding:1rem 1.2rem;display:flex;align-items:center;gap:12px;transition:.2s;cursor:pointer;}
+.history-item:hover{border-color:rgba(245,200,66,.15);padding-left:1.5rem;}
+.hi-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.hi-info{flex:1;}
+.hi-title{font-size:13px;font-weight:700;margin-bottom:1px;}
+.hi-meta{font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.hi-score{font-size:1.05rem;font-weight:800;color:var(--gold);}
+
+/* ─── FOOTER ─── */
+footer{margin-top:3rem;border-top:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.35),rgba(45,212,191,.35),transparent);}
+.footer-inner{max-width:1160px;margin:auto;padding:2.2rem 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;}
+.footer-brand .brand-name{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
+.footer-brand .brand-sub{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:.9rem;font-family:'Noto Sans Bengali',sans-serif;}
+.copyright-text{font-size:11px;color:#2a3545;line-height:1.8;font-family:'JetBrains Mono',monospace;}
+.copyright-text span{color:#374151;}
+.footer-col h4{font-size:.9rem;font-weight:700;color:var(--sub);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.dev-card{background:linear-gradient(135deg,rgba(245,200,66,.04),rgba(45,212,191,.04));border:1px solid rgba(245,200,66,.12);border-radius:14px;padding:1.1rem;}
+.dev-name{font-size:1.05rem;font-weight:800;color:#f0f4f8;margin-bottom:.1rem;}
+.dev-title{font-size:10px;color:var(--gold);letter-spacing:.8px;margin-bottom:.8rem;font-family:'JetBrains Mono',monospace;}
+.dev-contact{display:flex;flex-direction:column;gap:.45rem;}
+.contact-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);}
+.contact-row a{color:var(--sub);text-decoration:none;transition:.15s;}
+.contact-row a:hover{color:var(--gold);}
+.contact-icon{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;background:rgba(255,255,255,.05);}
+.social-links{display:flex;flex-direction:column;gap:.55rem;}
+.social-link{display:flex;align-items:center;gap:10px;padding:.55rem .85rem;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--border);text-decoration:none;color:var(--sub);font-size:12px;transition:.2s;}
+.social-link:hover{background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.2);color:#f0f4f8;transform:translateX(3px);}
+.sl-icon{font-size:.9rem;width:20px;text-align:center;}
+.sl-label{font-weight:600;}
+.sl-handle{color:var(--muted);font-size:10.5px;margin-left:auto;font-family:'JetBrains Mono',monospace;}
+.footer-bottom{max-width:1160px;margin:auto;padding:.8rem 1.4rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;border-top:1px solid rgba(255,255,255,.04);font-size:11px;color:#2d3748;font-family:'JetBrains Mono',monospace;}
+.footer-bottom a{color:#374151;text-decoration:none;}
+.footer-bottom a:hover{color:var(--muted);}
+.footer-heart{color:var(--rose);}
+
+@media(max-width:800px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}}
+@media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start;}.hero h2{font-size:1.6rem;}.wrap{padding:1rem .9rem 0;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
+
+.toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #f5c842;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.toast.show{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon">🇬🇧</div>
+      <div class="logo-text"><h1>English Shekho</h1><p>ENGLISH LEARNING PLATFORM · A1 TO C2</p></div>
+    </div>
+    <div class="topbar-right">
+      <nav class="nav-links">
+        <a href="dashboard.html" class="nav-link">Home</a>
+        <a href="roadmap.html" class="nav-link">Journey</a>
+        <a href="quiz-dashboard.html" class="nav-link">Quiz</a>
+        <a href="grammar.html" class="nav-link">Grammar</a>
+        <a href="speaking.html" class="nav-link">Speaking</a>
+        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+        <a href="chat.html" class="nav-link">Chat</a>
+      </nav>
+      <div class="user-section">
+        <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
+        <div class="user-name" id="nav-name">Learner</div>
+        <button class="btn-logout" id="btn-logout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-stripe"></div><div class="hero-orb1"></div><div class="hero-orb2"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">👂 Listening Center</div>
+        <h2>শুনে শিখুন <span>Fluently</span> 👂</h2>
+        <p class="hero-sub">Audio lessons, story listening, conversation practice — native speaker-দের কথা শুনে English বোঝার দক্ষতা বাড়ান।</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-v" id="h-listened">0</div><div class="hstat-l">Lessons</div></div>
+        <div class="hstat"><div class="hstat-v" id="h-minutes">0</div><div class="hstat-l">Minutes</div></div>
+        <div class="hstat"><div class="hstat-v" id="h-xp">0</div><div class="hstat-l">XP Earned</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOW PLAYING -->
+  <div class="section-title">▶️ Now Playing</div>
+  <div class="player-card" id="player-card">
+    <div class="pc-eyebrow" id="pc-eyebrow">Audio Lesson · A1</div>
+    <div class="pc-title" id="pc-title">Daily Greetings & Introductions</div>
+    <div class="pc-meta">
+      <span>⏱ <span id="pc-dur">3:24</span></span>
+      <span>📚 <span id="pc-cat">Conversation</span></span>
+      <span>⚡ <span id="pc-xp">+50 XP</span></span>
+    </div>
+
+    <!-- Waveform -->
+    <div class="audio-wave" id="audio-wave" onclick="seekAudio(event)"></div>
+
+    <!-- Progress -->
+    <div class="audio-progress-wrap">
+      <div class="audio-track" onclick="seekAudio(event)">
+        <div class="audio-fill" id="audio-fill"></div>
+      </div>
+      <div class="audio-times">
+        <span id="time-current">0:00</span>
+        <span id="time-total">0:00</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="audio-controls">
+      <button class="ac-btn" onclick="skipBackward()" title="Rewind 10s">⏮ 10s</button>
+      <button class="ac-btn ac-play" id="play-btn" onclick="togglePlay()">▶</button>
+      <button class="ac-btn" onclick="skipForward()" title="Forward 10s">10s ⏭</button>
+      <button class="ac-speed" id="speed-btn" onclick="cycleSpeed()">1×</button>
+      <div class="ac-vol">
+        🔊 <input type="range" class="vol-slider" id="vol-slider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)">
+      </div>
+    </div>
+
+    <!-- Transcript -->
+    <div class="transcript-panel">
+      <div class="tp-head">
+        <div class="tp-title">📝 Transcript</div>
+        <button class="tp-toggle" id="tp-toggle-btn" onclick="toggleTranscript()">Hide</button>
+      </div>
+      <div class="transcript-text" id="transcript-text"></div>
+    </div>
+  </div>
+
+  <!-- COMPREHENSION QUIZ -->
+  <div class="quiz-panel" id="quiz-panel">
+    <div class="qp-head">
+      <div class="qp-title">🧠 Comprehension Quiz</div>
+      <div class="qp-progress" id="qp-progress">Q 1 / 3</div>
+    </div>
+    <div class="qp-body" id="qp-body"></div>
+    <div class="qp-actions">
+      <button class="btn-next-q" id="btn-next-q" onclick="nextQuestion()" style="display:none;">Next →</button>
+      <button class="btn-skip-q" onclick="skipQuestion()">Skip</button>
+    </div>
+  </div>
+
+  <!-- CATEGORY FILTER -->
+  <div class="section-title">📂 Lesson Library</div>
+  <div class="cat-tabs" id="cat-tabs"></div>
+  <div class="lesson-grid" id="lesson-grid"></div>
+
+  <!-- PROGRESS -->
+  <div class="section-title">📊 Listening Progress</div>
+  <div class="progress-panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+      <div style="font-weight:700;font-size:15px;">Overall Completion</div>
+      <div id="prog-label" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);">0 / 0 lessons</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-bar" style="width:0%"></div></div>
+    <div class="prog-meta"><span id="prog-pct">0% complete</span><span id="prog-tip">Start listening! 👂</span></div>
+    <div class="pp-grid" id="pp-grid"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="section-title">🕐 Listening History</div>
+  <div class="history-list" id="history-list"></div>
+
+</div><!-- end .wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand-name">🇬🇧 English Shekho</div>
+      <div class="brand-sub">একটি বাংলা-মাধ্যম English ভাষা শেখার প্ল্যাটফর্ম।</div>
+      <div class="copyright-text">© <span id="footer-year"></span> English Shekho<br><span>All rights reserved.</span></div>
+    </div>
+    <div class="footer-col">
+      <h4>👨‍💻 Developer</h4>
+      <div class="dev-card">
+        <div class="dev-name">Zishan Rafi</div>
+        <div class="dev-title">WEB DEVELOPER · EDUCATOR</div>
+        <div class="dev-contact">
+          <div class="contact-row"><div class="contact-icon">📧</div><a href="mailto:zishanrafii@gmail.com">zishanrafii@gmail.com</a></div>
+          <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+8801877083978">+8801877083978</a></div>
+          <div class="contact-row"><div class="contact-icon">💬</div><a href="https://wa.me/8801877083978" target="_blank">WhatsApp</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>🔗 Social Media</h4>
+      <div class="social-links">
+        <a href="https://facebook.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">📘</span><span class="sl-label">Facebook</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://www.youtube.com/@Cyrus_rush" target="_blank" class="social-link"><span class="sl-icon">▶️</span><span class="sl-label">YouTube</span><span class="sl-handle">Cy-Rush</span></a>
+        <a href="https://instagram.com/sodium_neon" target="_blank" class="social-link"><span class="sl-icon">📸</span><span class="sl-label">Instagram</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://github.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">🐙</span><span class="sl-label">GitHub</span><span class="sl-handle">zishanrafi</span></a>
+        <a href="https://t.me/zissueissue" target="_blank" class="social-link"><span class="sl-icon">✈️</span><span class="sl-label">Telegram</span><span class="sl-handle">itz cyrus</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© <span id="footer-year2"></span> English Shekho · Developed by <a href="https://facebook.com/zishanrafii" target="_blank">Zishan Rafi</a></div>
+    <div>Built with <span class="footer-heart">♥</span> for Bengali learners &nbsp;·&nbsp; Version 1.0</div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {
+  requireAuth, auth, db,
+  doc, getDoc, updateDoc,
+  collection, addDoc, getDocs,
+  query, orderBy, limit, where,
+  serverTimestamp, increment,
+  signOut
+} from "./firebase-config.js";
+
+/* ══════════════════════════════════════
+   LESSON DATA
+══════════════════════════════════════ */
+const LESSONS = [
+
+  /* ── CONVERSATION ── */
+  { id:"l1", title:"Daily Greetings & Introductions", category:"Conversation", level:"A1", dur:"3:24", durSec:204, xp:50,
+    icon:"👋", color:"rgba(45,212,191,.12)", border:"rgba(45,212,191,.25)",
+    transcript:[
+      "Hello! My name is Sarah. What's your name?",
+      "Hi Sarah! I'm Rahim. Nice to meet you.",
+      "Nice to meet you too, Rahim. Where are you from?",
+      "I'm from Dhaka, Bangladesh. And you?",
+      "I'm from London. Are you a student?",
+      "Yes, I'm studying English. It's a beautiful language.",
+      "That's wonderful! English opens so many doors in life.",
+      "I agree. I want to work in an international company one day.",
+      "That's a great goal. Keep practising and you'll get there!",
+      "Thank you so much, Sarah. You're very encouraging.",
+    ],
+    quiz:[
+      {q:"Where is Rahim from?", opts:["London","Dhaka","Chittagong","New York"], ans:1, exp:"Rahim বলেছে 'I'm from Dhaka, Bangladesh.'"},
+      {q:"Why is Rahim learning English?", opts:["For fun","To travel","To work in an international company","For school"], ans:2, exp:"Rahim বলেছে 'I want to work in an international company.'"},
+      {q:"What does Sarah say about English?", opts:["It is difficult","It opens many doors","It is boring","It is not useful"], ans:1, exp:"Sarah বলেছে 'English opens so many doors in life.'"},
+    ]
+  },
+  { id:"l2", title:"At the Restaurant", category:"Conversation", level:"A2", dur:"4:10", durSec:250, xp:75,
+    icon:"🍽️", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Good evening! Welcome to The Garden Restaurant.",
+      "Good evening. A table for two, please.",
+      "Of course. This way, please. Here is your menu.",
+      "Thank you. What do you recommend today?",
+      "Our chef's special is grilled salmon with vegetables. It's delicious.",
+      "That sounds lovely. I'll have that, please.",
+      "And for you, sir?",
+      "I'd like the pasta carbonara, please.",
+      "Excellent choices. Would you like anything to drink?",
+      "Two glasses of water and a lemonade, please.",
+    ],
+    quiz:[
+      {q:"What is the chef's special?", opts:["Pasta","Pizza","Grilled salmon","Burger"], ans:2, exp:"Waiter বলেছে 'Our chef's special is grilled salmon with vegetables.'"},
+      {q:"What drink was ordered?", opts:["Coffee","Two waters and a lemonade","Tea","Juice"], ans:1, exp:"Customer বলেছে 'Two glasses of water and a lemonade.'"},
+    ]
+  },
+  { id:"l3", title:"Asking for Directions", category:"Conversation", level:"A2", dur:"3:45", durSec:225, xp:75,
+    icon:"🗺️", color:"rgba(251,146,60,.12)", border:"rgba(251,146,60,.25)",
+    transcript:[
+      "Excuse me, could you help me? I'm looking for the train station.",
+      "Of course! It's not far from here.",
+      "Go straight down this road for about five minutes.",
+      "Then turn left at the traffic lights.",
+      "The station will be on your right, next to a big supermarket.",
+      "That sounds straightforward. About how far is it?",
+      "It's about a ten-minute walk from here.",
+      "Thank you so much. You've been very helpful.",
+      "You're welcome. Have a good journey!",
+    ],
+    quiz:[
+      {q:"Where should you turn?", opts:["Right at the lights","Left at the lights","Straight ahead","Back the way you came"], ans:1, exp:"'Turn left at the traffic lights.'"},
+      {q:"How long is the walk?", opts:["5 minutes","10 minutes","15 minutes","20 minutes"], ans:1, exp:"'It's about a ten-minute walk.'"},
+    ]
+  },
+  { id:"l4b", title:"Making a Phone Call", category:"Conversation", level:"A2", dur:"3:55", durSec:235, xp:75,
+    icon:"📞", color:"rgba(129,140,248,.12)", border:"rgba(129,140,248,.25)",
+    transcript:[
+      "Hello, this is City Clinic. How can I help you?",
+      "Hello. I'd like to make an appointment with Dr Ahmed, please.",
+      "Of course. Is this your first visit with us?",
+      "No, I'm an existing patient. My name is Karim Hossain.",
+      "Let me check the schedule. Are you available on Thursday at 3pm?",
+      "Thursday at 3pm works perfectly for me.",
+      "Wonderful. Can I confirm your phone number?",
+      "Yes, it's zero one seven, double four, three eight nine.",
+      "Thank you, Mr Hossain. We'll see you on Thursday.",
+      "Great. Thank you very much. Goodbye.",
+    ],
+    quiz:[
+      {q:"Why is Karim calling?", opts:["To cancel an appointment","To make an appointment","To ask for directions","To speak to a nurse"], ans:1, exp:"'I'd like to make an appointment with Dr Ahmed.'"},
+      {q:"When is the appointment?", opts:["Wednesday 3pm","Thursday 3pm","Friday 3pm","Thursday 5pm"], ans:1, exp:"'Are you available on Thursday at 3pm?'"},
+    ]
+  },
+  { id:"l4c", title:"Job Interview", category:"Conversation", level:"B1", dur:"5:30", durSec:330, xp:100,
+    icon:"💼", color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)",
+    transcript:[
+      "Good morning. Please take a seat. Thank you for coming in today.",
+      "Good morning. Thank you for having me. I'm really excited about this opportunity.",
+      "Let's start. Can you tell me a little about yourself?",
+      "Of course. I graduated in Computer Science two years ago.",
+      "Since then, I've been working as a junior developer at a software firm.",
+      "I've gained strong experience in web development and team collaboration.",
+      "That's impressive. Why do you want to work for our company specifically?",
+      "I've followed your work for a long time. Your products solve real problems.",
+      "I believe my skills would contribute meaningfully to your team.",
+      "What would you say is your greatest strength?",
+      "I'd say my ability to learn quickly and adapt to new challenges.",
+      "Excellent. We'll be in touch within the next few days. Thank you.",
+    ],
+    quiz:[
+      {q:"How long has the candidate been working?", opts:["One year","Two years","Three years","Just graduated"], ans:1, exp:"'I've been working as a junior developer' for two years since graduation."},
+      {q:"What does the candidate say is their greatest strength?", opts:["Leadership","Technical skills","Learning quickly and adapting","Communication"], ans:2, exp:"'My ability to learn quickly and adapt to new challenges.'"},
+      {q:"When will the company respond?", opts:["Today","Tomorrow","Within a few days","Next week"], ans:2, exp:"'We'll be in touch within the next few days.'"},
+    ]
+  },
+  { id:"l4d", title:"Discussing a Problem at Work", category:"Conversation", level:"B2", dur:"5:50", durSec:350, xp:125,
+    icon:"🤝", color:"rgba(251,113,133,.12)", border:"rgba(251,113,133,.25)",
+    transcript:[
+      "I need to raise something that's been on my mind for a while.",
+      "Of course. Please go ahead. This is a safe space to talk.",
+      "I feel that my contributions aren't being acknowledged in team meetings.",
+      "I understand how that must feel. Can you give me a specific example?",
+      "Last Tuesday, I proposed the new workflow system, but it was attributed to someone else.",
+      "I wasn't aware of that. That certainly shouldn't have happened.",
+      "I'd appreciate it if credit were given where it's due in future.",
+      "Absolutely. I'll ensure that recognition is handled more carefully going forward.",
+      "I also think a more structured meeting format might help everyone contribute fairly.",
+      "That's a constructive suggestion. Let's pilot that in our next meeting.",
+      "Thank you for listening. I feel much better having raised this.",
+      "Thank you for bringing it to my attention. Open communication is essential.",
+    ],
+    quiz:[
+      {q:"What is the main problem being raised?", opts:["Being underpaid","Contributions not being acknowledged","Too much workload","Poor communication"], ans:1, exp:"'I feel that my contributions aren't being acknowledged.'"},
+      {q:"What solution does the employee suggest?", opts:["More pay","A new office","A structured meeting format","Fewer meetings"], ans:2, exp:"'A more structured meeting format might help everyone contribute fairly.'"},
+    ]
+  },
+
+  /* ── STORY ── */
+  { id:"l5", title:"The Clever Fox", category:"Story", level:"A1", dur:"5:20", durSec:320, xp:75,
+    icon:"🦊", color:"rgba(251,113,133,.12)", border:"rgba(251,113,133,.25)",
+    transcript:[
+      "Once upon a time, in a deep green forest, there lived a very clever fox.",
+      "The fox was known throughout the forest for his quick thinking.",
+      "One hot summer day, the fox was very thirsty.",
+      "He searched and searched for water but could not find any.",
+      "Finally, he discovered a deep well at the edge of the forest.",
+      "He jumped inside and drank until he was no longer thirsty.",
+      "But then he realised he could not climb out — the walls were too smooth.",
+      "Just then, a goat came by and looked into the well.",
+      "Is the water good? asked the goat.",
+      "It's the most delicious water in the world! said the fox.",
+      "The goat jumped in eagerly. The fox climbed on the goat's back and jumped out.",
+      "Always look before you leap! laughed the fox as he ran away.",
+    ],
+    quiz:[
+      {q:"Why did the fox jump into the well?", opts:["To hide","He was thirsty","To swim","He fell in"], ans:1, exp:"'He searched and searched for water' — সে খুব পিপাসার্ত ছিল।"},
+      {q:"How did the fox escape?", opts:["He climbed the walls","A rope was lowered","He climbed on the goat's back","He waited for help"], ans:2, exp:"'The fox climbed on the goat's back and jumped out.'"},
+      {q:"What is the moral of the story?", opts:["Be kind to animals","Always look before you leap","Never trust a fox","Water is precious"], ans:1, exp:"Fox বলেছে 'Always look before you leap!'"},
+    ]
+  },
+  { id:"l6", title:"The Gift of Time", category:"Story", level:"B1", dur:"6:30", durSec:390, xp:100,
+    icon:"⏰", color:"rgba(129,140,248,.12)", border:"rgba(129,140,248,.25)",
+    transcript:[
+      "There was once a young man named Daniel who was always busy.",
+      "He worked long hours and rarely spent time with his family.",
+      "His father was an old man who loved to sit by the garden.",
+      "Every evening, his father would call, Daniel, come sit with me.",
+      "But Daniel always replied, Not now, Father. I'm too busy.",
+      "One autumn morning, Daniel's father fell very ill.",
+      "As Daniel sat beside his hospital bed, his father whispered,",
+      "Son, all the money in the world cannot buy back lost time.",
+      "Daniel's eyes filled with tears. He finally understood.",
+      "Time is the most precious gift we can give to those we love.",
+      "From that day forward, Daniel made sure to be present for his family.",
+    ],
+    quiz:[
+      {q:"What did Daniel's father love to do?", opts:["Read books","Sit by the garden","Cook food","Travel"], ans:1, exp:"'His father was an old man who loved to sit by the garden.'"},
+      {q:"What is the main message of the story?", opts:["Work hard always","Money is important","Time is the most precious gift","Travel while young"], ans:2, exp:"'Time is the most precious gift we can give.'"},
+    ]
+  },
+  { id:"l6b", title:"The Last Letter", category:"Story", level:"A2", dur:"5:00", durSec:300, xp:75,
+    icon:"✉️", color:"rgba(96,165,250,.12)", border:"rgba(96,165,250,.25)",
+    transcript:[
+      "Emma found an old letter in her grandmother's wooden box.",
+      "It was written in neat handwriting on yellowed paper.",
+      "My dearest Emma, it began, by the time you read this, I will be gone.",
+      "But I want you to know how proud I am of the person you have become.",
+      "You have your mother's kindness and your grandfather's courage.",
+      "Never stop asking questions, and never stop being curious.",
+      "The world is full of wonder if you look at it with open eyes.",
+      "Emma read the letter three times, her tears falling softly.",
+      "She placed it carefully back in the box and held it close.",
+      "Some words, she thought, can last forever.",
+    ],
+    quiz:[
+      {q:"Where did Emma find the letter?", opts:["In a drawer","In her grandmother's wooden box","At the post office","Under her bed"], ans:1, exp:"'Emma found an old letter in her grandmother's wooden box.'"},
+      {q:"What advice does the letter give?", opts:["Work hard","Travel the world","Never stop being curious","Save money"], ans:2, exp:"'Never stop asking questions, and never stop being curious.'"},
+    ]
+  },
+  { id:"l6c", title:"The Scientist's Dream", category:"Story", level:"B2", dur:"7:00", durSec:420, xp:125,
+    icon:"🔬", color:"rgba(167,139,250,.12)", border:"rgba(167,139,250,.25)",
+    transcript:[
+      "Dr Maya had dedicated thirty years of her life to finding a cure.",
+      "Her colleagues had given up, but Maya refused to abandon her research.",
+      "She believed that somewhere in the data lay the answer.",
+      "One sleepless night, she noticed an anomaly in her results.",
+      "A protein she had dismissed years ago was behaving unexpectedly.",
+      "With trembling hands, she ran the test again. And again.",
+      "Each time, the results were the same. She had found something remarkable.",
+      "The discovery was not just a cure — it was a new understanding of life itself.",
+      "Maya sat quietly for a long time, overcome with a profound sense of responsibility.",
+      "She picked up the phone and called her team. It was 3am, but no one minded.",
+      "Sometimes, she later wrote, the greatest breakthroughs come to those who simply refuse to stop.",
+    ],
+    quiz:[
+      {q:"What had Maya been searching for?", opts:["A new planet","A cure","A scientific theory","Funding"], ans:1, exp:"'Dr Maya had dedicated thirty years of her life to finding a cure.'"},
+      {q:"What did she notice that led to the discovery?", opts:["A new chemical","An anomaly in her results","A colleague's mistake","A research paper"], ans:1, exp:"'She noticed an anomaly in her results.'"},
+      {q:"What time did she call her team?", opts:["Midnight","1am","3am","Dawn"], ans:2, exp:"'She picked up the phone and called her team. It was 3am.'"},
+    ]
+  },
+  { id:"l6d", title:"The Mountain Between Us", category:"Story", level:"C1", dur:"8:00", durSec:480, xp:150,
+    icon:"🏔️", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "There are certain truths that only solitude can teach you.",
+      "I learned mine at four thousand metres above sea level, alone, in a blizzard.",
+      "The expedition had gone wrong on the second day, when Torres twisted his ankle.",
+      "We had a choice — turn back, or press on with our diminishing supplies.",
+      "Against my better judgement, I chose to continue alone.",
+      "The mountain does not care about your ambition or your timeline.",
+      "It exists on its own terms, indifferent to human desire.",
+      "As night fell, the temperature plummeted to minus twenty.",
+      "I built a snow shelter and listened to the wind scream outside.",
+      "In that stillness, stripped of every comfort, I understood something fundamental.",
+      "We do not conquer nature. We are merely permitted to pass through it.",
+      "I descended the next morning, humbled, but profoundly changed.",
+    ],
+    quiz:[
+      {q:"Why did the expedition go wrong?", opts:["Bad weather","Torres twisted his ankle","They ran out of food","They got lost"], ans:1, exp:"'The expedition had gone wrong when Torres twisted his ankle.'"},
+      {q:"What did the narrator learn?", opts:["Mountains are dangerous","We conquer nature","We are merely permitted to pass through nature","Solo climbing is impossible"], ans:2, exp:"'We do not conquer nature. We are merely permitted to pass through it.'"},
+    ]
+  },
+
+  /* ── AUDIO LESSON ── */
+  { id:"l7", title:"Present Perfect Tense", category:"Audio Lesson", level:"B1", dur:"7:15", durSec:435, xp:100,
+    icon:"📻", color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)",
+    transcript:[
+      "Welcome to today's audio lesson on the Present Perfect Tense.",
+      "The Present Perfect is formed with have or has plus the past participle.",
+      "For example: I have eaten lunch, or She has visited Paris.",
+      "We use the Present Perfect for experiences in our life.",
+      "Have you ever seen the ocean? Have you ever eaten sushi?",
+      "We also use it for recent events that affect the present.",
+      "For example: I can't find my keys. I have lost them!",
+      "Important signal words include: just, already, yet, ever, and never.",
+      "I have just finished my homework means very recently.",
+      "Have you done it yet is used in questions and negatives.",
+      "Practice sentence: She has never tried Indian food.",
+      "Now it's your turn — make your own Present Perfect sentence!",
+    ],
+    quiz:[
+      {q:"How is Present Perfect formed?", opts:["Subject + V2","Have/Has + past participle","Will + V1","am/is/are + Ving"], ans:1, exp:"'Have/Has + past participle' — যেমন: I have eaten, She has gone।"},
+      {q:"Which word means 'very recently'?", opts:["Yet","Ever","Just","Never"], ans:2, exp:"'Just' means very recently — 'I have just finished.'"},
+      {q:"Which sentence is correct?", opts:["I have went there","She has go to London","They have visited Japan","He have eaten"], ans:2, exp:"'They have visited Japan' — সঠিক: have/has + past participle।"},
+    ]
+  },
+  { id:"l7b", title:"Articles — A, An and The", category:"Audio Lesson", level:"A1", dur:"6:00", durSec:360, xp:50,
+    icon:"📖", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Today we are going to learn about articles in English.",
+      "There are three articles: a, an, and the.",
+      "We use a before words that begin with a consonant sound.",
+      "For example: a book, a cat, a university.",
+      "We use an before words that begin with a vowel sound.",
+      "For example: an apple, an orange, an honest man.",
+      "Notice that honest starts with a vowel sound, even though it is spelled with H.",
+      "We use the when we are talking about something specific.",
+      "For example: Please close the door — we both know which door.",
+      "We also use the with rivers, oceans, and mountain ranges.",
+      "The Nile, the Pacific Ocean, the Himalayas.",
+      "Remember: use the when both speaker and listener know what is being referred to.",
+    ],
+    quiz:[
+      {q:"Which is correct?", opts:["a apple","an apple","the apple always","a honest man"], ans:1, exp:"'an apple' — apple starts with a vowel sound."},
+      {q:"When do we use 'the'?", opts:["Before all nouns","When something is specific and known","Before vowel sounds","Never with proper nouns"], ans:1, exp:"'We use the when we are talking about something specific.'"},
+    ]
+  },
+  { id:"l7c", title:"Conditionals — Types 1, 2 and 3", category:"Audio Lesson", level:"B2", dur:"8:30", durSec:510, xp:125,
+    icon:"🔀", color:"rgba(251,113,133,.12)", border:"rgba(251,113,133,.25)",
+    transcript:[
+      "Today's lesson covers the three main types of conditional sentences.",
+      "The First Conditional talks about real and possible future situations.",
+      "Its structure is: If plus present simple, will plus base verb.",
+      "Example: If it rains tomorrow, I will stay at home.",
+      "The Second Conditional talks about unreal or imaginary situations.",
+      "Its structure is: If plus past simple, would plus base verb.",
+      "Example: If I had a million dollars, I would travel the world.",
+      "Notice — this doesn't mean I actually have a million dollars.",
+      "The Third Conditional talks about past situations that didn't happen.",
+      "Its structure is: If plus past perfect, would have plus past participle.",
+      "Example: If I had studied harder, I would have passed the exam.",
+      "A common mistake is using would in the if clause — never do this.",
+    ],
+    quiz:[
+      {q:"Which is a correct First Conditional?", opts:["If I would go","If it rains, I will stay home","If I had money, I would buy it","If she had tried, she would have passed"], ans:1, exp:"First Conditional: If + present simple, will + base verb."},
+      {q:"What does Second Conditional express?", opts:["Real future events","Past regrets","Unreal or imaginary situations","Scientific facts"], ans:2, exp:"Second Conditional = unreal/imaginary: 'If I had a million dollars...'"},
+      {q:"Which tense is used in the Third Conditional if-clause?", opts:["Present Simple","Past Simple","Past Perfect","Future Simple"], ans:2, exp:"Third Conditional: If + Past Perfect, would have + past participle."},
+    ]
+  },
+  { id:"l7d", title:"Vocabulary — Academic Word List", category:"Audio Lesson", level:"C1", dur:"9:00", durSec:540, xp:150,
+    icon:"🎓", color:"rgba(129,140,248,.12)", border:"rgba(129,140,248,.25)",
+    transcript:[
+      "Welcome to this advanced vocabulary lesson on the Academic Word List.",
+      "These words appear frequently in academic texts and formal writing.",
+      "The first word is analyze. To analyze means to examine in detail.",
+      "Example: Researchers analyzed the data over a period of six months.",
+      "Next is constitute. To constitute means to be a part of, or to make up.",
+      "Example: Women constitute over half of the university's student population.",
+      "The word imply means to suggest something without stating it directly.",
+      "Example: The silence implied that no one agreed with the proposal.",
+      "To sustain means to maintain something over time.",
+      "Example: It is difficult to sustain motivation without clear goals.",
+      "Finally, ambiguous means open to more than one interpretation.",
+      "Example: The instructions were ambiguous, causing widespread confusion.",
+    ],
+    quiz:[
+      {q:"What does 'ambiguous' mean?", opts:["Very clear","Open to more than one interpretation","Impossible to understand","Formal and academic"], ans:1, exp:"'Ambiguous means open to more than one interpretation.'"},
+      {q:"Which sentence uses 'constitute' correctly?", opts:["She constituted to the project","Women constitute half the students","He constituted the answer","They constituted quickly"], ans:1, exp:"'Women constitute over half the population' — constitute means to make up or form."},
+    ]
+  },
+  { id:"l7e", title:"Discourse Markers & Cohesion", category:"Audio Lesson", level:"C2", dur:"9:30", durSec:570, xp:175,
+    icon:"🧠", color:"rgba(167,139,250,.12)", border:"rgba(167,139,250,.25)",
+    transcript:[
+      "At the highest levels of English proficiency, cohesion is everything.",
+      "Discourse markers are words and phrases that connect ideas logically.",
+      "They signal relationships between sentences and paragraphs.",
+      "Additive markers add information: furthermore, moreover, in addition.",
+      "Example: The policy was expensive. Moreover, it proved ineffective.",
+      "Adversative markers show contrast: however, nevertheless, on the contrary.",
+      "Example: The results were promising. Nevertheless, further research is needed.",
+      "Causal markers show cause and effect: therefore, consequently, as a result.",
+      "Example: Funding was cut. Consequently, the project was abandoned.",
+      "Temporal markers sequence events: subsequently, meanwhile, prior to.",
+      "Example: She submitted the report. Subsequently, she resigned.",
+      "Mastering these markers will elevate your writing to a truly sophisticated level.",
+    ],
+    quiz:[
+      {q:"What is the function of 'nevertheless'?", opts:["To add information","To show contrast","To show cause and effect","To sequence events"], ans:1, exp:"'Nevertheless' is an adversative marker — it shows contrast."},
+      {q:"Which marker shows cause and effect?", opts:["Furthermore","However","Consequently","Subsequently"], ans:2, exp:"'Consequently' is a causal marker showing cause and effect."},
+    ]
+  },
+
+  /* ── NEWS ── */
+  { id:"l8", title:"Climate Change News Report", category:"News", level:"B2", dur:"4:50", durSec:290, xp:100,
+    icon:"🌍", color:"rgba(96,165,250,.12)", border:"rgba(96,165,250,.25)",
+    transcript:[
+      "Good evening. Tonight's top story: climate scientists have released their latest report.",
+      "The report warns that global temperatures have risen by 1.2 degrees Celsius.",
+      "Scientists say this is primarily caused by greenhouse gas emissions.",
+      "Governments around the world are being urged to take immediate action.",
+      "Renewable energy sources such as solar and wind power are being promoted.",
+      "Many countries have pledged to reach net zero emissions by 2050.",
+      "However, critics argue that current pledges are not ambitious enough.",
+      "Local communities are also taking action by planting trees and reducing waste.",
+      "Experts agree that individual actions, combined with policy change, are essential.",
+      "The next global climate summit is scheduled for later this year.",
+    ],
+    quiz:[
+      {q:"By how much have global temperatures risen?", opts:["0.5°C","1.2°C","2.0°C","1.5°C"], ans:1, exp:"'Global temperatures have risen by 1.2 degrees Celsius.'"},
+      {q:"What do critics say?", opts:["Pledges are too ambitious","Pledges are not ambitious enough","Everything is fine","Countries should do nothing"], ans:1, exp:"'Critics argue that current pledges are not ambitious enough.'"},
+    ]
+  },
+  { id:"l8b", title:"Technology & Artificial Intelligence", category:"News", level:"B1", dur:"4:30", durSec:270, xp:100,
+    icon:"🤖", color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)",
+    transcript:[
+      "Good morning. Today we look at the growing influence of artificial intelligence.",
+      "AI is now being used in hospitals to help doctors diagnose diseases earlier.",
+      "In education, AI tutors are personalising lessons for millions of students.",
+      "However, concerns are growing about job losses due to automation.",
+      "A recent report suggests that up to 40 percent of jobs could change significantly.",
+      "Experts are divided on whether AI will create more jobs than it destroys.",
+      "Governments are being called upon to regulate the technology responsibly.",
+      "Meanwhile, researchers continue to push the boundaries of what machines can do.",
+      "The debate about AI ethics has never been more urgent.",
+      "One thing is certain — the world is changing faster than ever before.",
+    ],
+    quiz:[
+      {q:"How is AI being used in hospitals?", opts:["To replace doctors","To help diagnose diseases earlier","To manage finances","To train nurses"], ans:1, exp:"'AI is now being used in hospitals to help doctors diagnose diseases earlier.'"},
+      {q:"What percentage of jobs could change significantly?", opts:["10%","20%","40%","60%"], ans:2, exp:"'Up to 40 percent of jobs could change significantly.'"},
+    ]
+  },
+  { id:"l8c", title:"Education News — Future of Learning", category:"News", level:"A2", dur:"3:50", durSec:230, xp:75,
+    icon:"📚", color:"rgba(251,146,60,.12)", border:"rgba(251,146,60,.25)",
+    transcript:[
+      "Welcome to Education Today. I'm your host, James Walker.",
+      "Schools around the world are changing the way they teach.",
+      "Many classrooms are now using tablets and computers instead of textbooks.",
+      "Students can watch lessons online and study at their own pace.",
+      "Teachers say technology helps students who learn in different ways.",
+      "However, some experts worry that too much screen time is harmful.",
+      "They recommend that children still spend time reading physical books.",
+      "Parents are being encouraged to talk to their children about healthy habits.",
+      "The most important thing, says one teacher, is to keep children curious.",
+      "That curiosity, she says, is what makes great learners.",
+    ],
+    quiz:[
+      {q:"What are many classrooms using instead of textbooks?", opts:["Newspapers","Tablets and computers","Whiteboards","Radio"], ans:1, exp:"'Many classrooms are now using tablets and computers instead of textbooks.'"},
+      {q:"What do some experts worry about?", opts:["Too much homework","Too much screen time","Not enough teachers","School fees"], ans:1, exp:"'Some experts worry that too much screen time is harmful.'"},
+    ]
+  },
+  { id:"l8d", title:"Health & Wellbeing Report", category:"News", level:"C1", dur:"5:20", durSec:320, xp:150,
+    icon:"🏥", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Researchers at a leading university have published a landmark study on mental health.",
+      "The study, which followed ten thousand participants over a decade, yields striking conclusions.",
+      "Those who reported strong social connections were 50 percent less likely to develop depression.",
+      "The findings underscore the profound impact of community on psychological wellbeing.",
+      "Dr Patel, who led the research, described the results as both alarming and hopeful.",
+      "Alarming, because loneliness is reaching epidemic proportions in developed nations.",
+      "Hopeful, because the solution — human connection — is within our reach.",
+      "The study recommends that governments invest in community centres and social programmes.",
+      "It also highlights the role of workplaces in fostering meaningful relationships.",
+      "As our world becomes increasingly digital, the report warns, the need for genuine connection grows ever more urgent.",
+    ],
+    quiz:[
+      {q:"What did the study find about social connections?", opts:["They reduce physical illness","They reduce depression by 50%","They improve academic performance","They increase productivity"], ans:1, exp:"'Those with strong social connections were 50 percent less likely to develop depression.'"},
+      {q:"How does Dr Patel describe the results?", opts:["Surprising and interesting","Alarming and hopeful","Confusing and unclear","Disappointing"], ans:1, exp:"'Dr Patel described the results as both alarming and hopeful.'"},
+    ]
+  },
+
+  /* ── BUSINESS ── */
+  { id:"l9", title:"Business English — Meetings", category:"Audio Lesson", level:"B2", dur:"8:00", durSec:480, xp:125,
+    icon:"📊", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Good morning everyone. Thank you for joining today's meeting.",
+      "Let's begin with a quick update on the quarterly targets.",
+      "As you can see from the data, we've exceeded our sales goals by 15 percent.",
+      "I'd like to hand over to Mr Karim now for the marketing report.",
+      "Thank you. Our new campaign has reached over 2 million customers.",
+      "We're seeing very positive engagement across all digital platforms.",
+      "Excellent. Does anyone have any questions or concerns at this stage?",
+      "Yes, I'd like to raise the issue of our delivery timeline.",
+      "That's a valid point. Let's schedule a separate meeting to discuss that.",
+      "Great. To summarise today's meeting: targets are on track.",
+      "Please refer to the minutes that will be circulated this afternoon.",
+      "Thank you all for your time. The meeting is now adjourned.",
+    ],
+    quiz:[
+      {q:"By how much did they exceed sales goals?", opts:["10%","15%","20%","5%"], ans:1, exp:"'We've exceeded our sales goals by 15 percent.'"},
+      {q:"Who gave the marketing report?", opts:["The chairperson","Mr Karim","The secretary","The CEO"], ans:1, exp:"'I'd like to hand over to Mr Karim now for the marketing report.'"},
+    ]
+  },
+];
+
+
+const CATEGORIES = ["All", "Conversation", "Story", "Audio Lesson", "News", "Business"];
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let currentUser    = null;
+let currentLesson  = LESSONS[0];
+let activeCat      = "All";
+let completedLessons = new Set();
+// audioEl replaced by Web Speech TTS
+let isPlaying      = false;
+let speeds         = [0.75, 1, 1.25, 1.5, 2];
+let speedIdx       = 1;
+let waveIntervals  = [];
+let currentQ       = 0;
+let quizAnswered   = false;
+let totalListened  = 0;
+let totalMinutes   = 0;
+let totalXP        = 0;
+let showTranscript = true;
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+function toast(msg, type="success"){
+  const t = document.getElementById("toast");
+  if(!t) return;
+  t.textContent = msg;
+  t.style.borderLeftColor = type==="error"?"#fb7185":type==="info"?"#818cf8":"#f5c842";
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2800);
+}
+
+/* ══════════════════════════════════════
+   AUDIO PLAYER
+══════════════════════════════════════ */
+function buildWaveform(){
+  const wave = document.getElementById("audio-wave");
+  wave.innerHTML = "";
+  const count = 60;
+  for(let i=0;i<count;i++){
+    const bar = document.createElement("div");
+    const h = 6 + Math.random()*30;
+    bar.className = "aw-bar";
+    bar.style.cssText = `height:${h}px;width:3px;`;
+    bar.dataset.idx = i;
+    wave.appendChild(bar);
+  }
+}
+
+function updateWaveform(pct){
+  const bars = document.querySelectorAll(".aw-bar");
+  const played = Math.floor(pct * bars.length);
+  bars.forEach((b,i)=>{
+    b.classList.remove("played","active");
+    if(i < played-1)   b.classList.add("played");
+    if(i === played-1) b.classList.add("active");
+  });
+}
+
+function loadLesson(lesson){
+  currentLesson = lesson;
+  currentQ = 0; quizAnswered = false;
+
+  // Update player info
+  document.getElementById("pc-eyebrow").textContent = `Audio Lesson · ${lesson.level}`;
+  document.getElementById("pc-title").textContent   = lesson.title;
+  document.getElementById("pc-dur").textContent     = lesson.dur;
+  document.getElementById("pc-cat").textContent     = lesson.category;
+  document.getElementById("pc-xp").textContent      = `+${lesson.xp} XP`;
+
+  // Rebuild waveform
+  buildWaveform();
+
+  // Stop any ongoing TTS
+  stopTTS();
+  document.getElementById("time-total").textContent = lesson.dur;
+
+  // Build transcript
+  buildTranscript(lesson.transcript);
+
+  // Build quiz
+  buildQuiz(lesson.quiz);
+  document.getElementById("quiz-panel").classList.remove("show");
+
+  // Highlight active lesson card
+  document.querySelectorAll(".lesson-card").forEach(c=>{
+    c.classList.toggle("active-lesson", c.dataset.id === lesson.id);
+  });
+
+  window.scrollTo({top:0, behavior:"smooth"});
+  toast(`Now playing: ${lesson.title}`,"info");
+}
+
+function buildTranscript(lines){
+  const el = document.getElementById("transcript-text");
+  el.innerHTML = lines.map((line,li)=>
+    line.split(" ").map((word,wi)=>
+      `<span class="word" data-line="${li}" data-word="${wi}" onclick="speakWord('${word.replace(/[^a-zA-Z]/g,'')}') ">${word} </span>`
+    ).join("")
+    + "<br>"
+  ).join("");
+}
+
+function speakWord(word){
+  if(!word) return;
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang="en-US"; u.rate=0.85;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+window.speakWord = speakWord;
+
+function toggleTranscript(){
+  showTranscript = !showTranscript;
+  const el = document.getElementById("transcript-text");
+  const btn = document.getElementById("tp-toggle-btn");
+  el.style.display = showTranscript ? "" : "none";
+  btn.textContent  = showTranscript ? "Hide" : "Show";
+}
+window.toggleTranscript = toggleTranscript;
+
+/* ══════════════════════════════════════
+   WEB SPEECH API — REAL TTS PLAYER
+══════════════════════════════════════ */
+let ttsUtterance  = null;
+let ttsLines      = [];       // flat array of all lines
+let ttsLineIdx    = 0;        // current line being spoken
+let ttsStartTime  = 0;        // Date.now() when playback started
+let ttsElapsed    = 0;        // seconds elapsed (tracked manually)
+let ttsTimer      = null;     // interval for progress bar
+let ttsVolume     = 1;
+let ttsPaused     = false;
+
+function fmtTime(s){ return `${Math.floor(s/60)}:${String(Math.max(0,s)%60).toString().padStart(2,"0")}`; }
+
+/* Check browser support */
+function ttsSupported(){
+  if(!window.speechSynthesis){ toast("⚠️ আপনার browser TTS support করে না।","error"); return false; }
+  return true;
+}
+
+/* Load all lines for current lesson */
+function prepTTS(){
+  ttsLines   = currentLesson.transcript;
+  ttsLineIdx = 0;
+  ttsElapsed = 0;
+  ttsPaused  = false;
+  speechSynthesis.cancel();
+}
+
+/* Speak from current line index */
+function speakFromLine(idx){
+  if(idx >= ttsLines.length){ onTTSEnd(); return; }
+  ttsLineIdx = idx;
+
+  // Highlight current line in transcript
+  highlightLine(idx);
+
+  ttsUtterance = new SpeechSynthesisUtterance(ttsLines[idx]);
+  ttsUtterance.lang   = "en-US";
+  ttsUtterance.rate   = speeds[speedIdx];
+  ttsUtterance.volume = ttsVolume;
+
+  // Pick a good English voice if available
+  const voices = speechSynthesis.getVoices();
+  const enVoice = voices.find(v=>v.lang==="en-US"&&v.name.toLowerCase().includes("google"))
+                ||voices.find(v=>v.lang==="en-US")
+                ||voices.find(v=>v.lang.startsWith("en"));
+  if(enVoice) ttsUtterance.voice = enVoice;
+
+  ttsUtterance.onend = ()=>{
+    if(!ttsPaused) speakFromLine(idx+1);
+  };
+  ttsUtterance.onerror = (e)=>{
+    if(e.error !== "interrupted") speakFromLine(idx+1);
+  };
+
+  speechSynthesis.speak(ttsUtterance);
+}
+
+/* Highlight spoken line and word in transcript */
+function highlightLine(idx){
+  document.querySelectorAll(".word").forEach(w=>{
+    const li = parseInt(w.dataset.line);
+    w.classList.toggle("highlight", li === idx);
+  });
+  // Scroll to highlighted line
+  const first = document.querySelector(`.word[data-line="${idx}"]`);
+  if(first) first.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+/* Called when all lines done */
+function onTTSEnd(){
+  isPlaying = false;
+  ttsPaused = false;
+  clearInterval(ttsTimer);
+  document.getElementById("play-btn").textContent = "▶";
+  document.getElementById("audio-fill").style.width = "100%";
+  document.querySelectorAll(".word").forEach(w=>w.classList.remove("highlight"));
+  updateWaveform(1);
+  onLessonComplete();
+}
+
+/* Start progress bar ticker */
+function startProgressTicker(){
+  clearInterval(ttsTimer);
+  const dur = currentLesson.durSec;
+  ttsTimer = setInterval(()=>{
+    if(!isPlaying) return;
+    ttsElapsed = Math.min(ttsElapsed+1, dur);
+    const pct = ttsElapsed / dur;
+    document.getElementById("audio-fill").style.width = (pct*100)+"%";
+    document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
+    updateWaveform(pct);
+    if(ttsElapsed >= dur) clearInterval(ttsTimer);
+  }, 1000);
+}
+
+/* ── CONTROLS ── */
+function togglePlay(){
+  if(!ttsSupported()) return;
+
+  if(!isPlaying && !ttsPaused){
+    // Fresh start
+    prepTTS();
+    isPlaying = true;
+    ttsPaused = false;
+    document.getElementById("play-btn").textContent = "⏸";
+    document.getElementById("time-total").textContent = currentLesson.dur;
+    startProgressTicker();
+    // Wait for voices to load on first call
+    if(speechSynthesis.getVoices().length === 0){
+      speechSynthesis.addEventListener("voiceschanged", ()=>speakFromLine(0), {once:true});
+    } else {
+      speakFromLine(0);
+    }
+  } else if(isPlaying && !ttsPaused){
+    // Pause
+    speechSynthesis.pause();
+    ttsPaused = true;
+    isPlaying = false;
+    clearInterval(ttsTimer);
+    document.getElementById("play-btn").textContent = "▶";
+    toast("⏸ Paused","info");
+  } else if(ttsPaused){
+    // Resume
+    speechSynthesis.resume();
+    ttsPaused = false;
+    isPlaying = true;
+    document.getElementById("play-btn").textContent = "⏸";
+    startProgressTicker();
+    toast("▶ Resumed","info");
+  }
+}
+window.togglePlay = togglePlay;
+
+function skipForward(){
+  if(!ttsSupported()) return;
+  const next = Math.min(ttsLineIdx+1, ttsLines.length-1);
+  speechSynthesis.cancel();
+  ttsPaused = false;
+  if(isPlaying) speakFromLine(next);
+  else { ttsLineIdx = next; highlightLine(next); }
+  ttsElapsed = Math.min(ttsElapsed+10, currentLesson.durSec);
+  document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
+  document.getElementById("audio-fill").style.width = (ttsElapsed/currentLesson.durSec*100)+"%";
+}
+
+function skipBackward(){
+  if(!ttsSupported()) return;
+  const prev = Math.max(ttsLineIdx-1, 0);
+  speechSynthesis.cancel();
+  ttsPaused = false;
+  if(isPlaying) speakFromLine(prev);
+  else { ttsLineIdx = prev; highlightLine(prev); }
+  ttsElapsed = Math.max(ttsElapsed-10, 0);
+  document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
+  document.getElementById("audio-fill").style.width = (ttsElapsed/currentLesson.durSec*100)+"%";
+}
+
+function seekAudio(e){
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct  = Math.max(0, Math.min(1,(e.clientX-rect.left)/rect.width));
+  const targetLine = Math.floor(pct * ttsLines.length);
+  ttsElapsed = Math.floor(pct * currentLesson.durSec);
+  document.getElementById("audio-fill").style.width = (pct*100)+"%";
+  document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
+  updateWaveform(pct);
+  if(isPlaying){
+    speechSynthesis.cancel();
+    ttsPaused = false;
+    speakFromLine(targetLine);
+  } else {
+    ttsLineIdx = targetLine;
+    highlightLine(targetLine);
+  }
+}
+
+function cycleSpeed(){
+  speedIdx = (speedIdx+1) % speeds.length;
+  const s  = speeds[speedIdx];
+  document.getElementById("speed-btn").textContent = s+"×";
+  // Apply immediately if playing
+  if(isPlaying){
+    const line = ttsLineIdx;
+    speechSynthesis.cancel();
+    ttsPaused = false;
+    speakFromLine(line);
+  }
+  toast(`Speed: ${s}×`,"info");
+}
+
+function setVolume(v){
+  ttsVolume = parseFloat(v);
+  // Will apply on next utterance
+}
+
+// Stop speech when lesson changes
+function stopTTS(){
+  speechSynthesis.cancel();
+  clearInterval(ttsTimer);
+  isPlaying = false;
+  ttsPaused = false;
+  ttsElapsed = 0;
+  ttsLineIdx = 0;
+  document.getElementById("play-btn").textContent = "▶";
+  document.getElementById("audio-fill").style.width = "0%";
+  document.getElementById("time-current").textContent = "0:00";
+  document.querySelectorAll(".word").forEach(w=>w.classList.remove("highlight"));
+}
+
+window.skipForward  = skipForward;
+window.skipBackward = skipBackward;
+window.seekAudio    = seekAudio;
+window.cycleSpeed   = cycleSpeed;
+window.setVolume    = setVolume;
+
+/* ══════════════════════════════════════
+   LESSON COMPLETE → Firebase
+══════════════════════════════════════ */
+async function onLessonComplete(){
+  if(!currentUser || completedLessons.has(currentLesson.id)) {
+    // Show quiz even if already completed
+    document.getElementById("quiz-panel").classList.add("show");
+    loadQuestion(0);
+    return;
+  }
+  completedLessons.add(currentLesson.id);
+  const xp = currentLesson.xp;
+  const mins = Math.round(currentLesson.durSec / 60);
+
+  try {
+    await addDoc(collection(db,"listening_sessions"),{
+      uid:         currentUser.uid,
+      displayName: currentUser.displayName||"",
+      lessonId:    currentLesson.id,
+      lessonTitle: currentLesson.title,
+      category:    currentLesson.category,
+      level:       currentLesson.level,
+      durationMin: mins,
+      xpEarned:    xp,
+      completedAt: serverTimestamp()
+    });
+    await updateDoc(doc(db,"users",currentUser.uid),{
+      xp:               increment(xp),
+      listenCount:      increment(1),
+      listeningMinutes: increment(mins)
+    });
+
+    totalListened++;
+    totalMinutes += mins;
+    totalXP      += xp;
+    updateHeroStats();
+    updateProgress();
+    await loadHistory();
+    toast(`✅ Lesson complete! +${xp} XP 🎉`);
+  } catch(e){ toast("❌ Save failed: "+e.message,"error"); }
+
+  // Show quiz
+  document.getElementById("quiz-panel").classList.add("show");
+  loadQuestion(0);
+  document.getElementById("quiz-panel").scrollIntoView({behavior:"smooth"});
+}
+
+/* ══════════════════════════════════════
+   QUIZ
+══════════════════════════════════════ */
+function buildQuiz(questions){
+  document.getElementById("qp-progress").textContent = `Q 1 / ${questions.length}`;
+  loadQuestion(0);
+}
+
+function loadQuestion(idx){
+  const questions = currentLesson.quiz;
+  if(idx >= questions.length){ showQuizComplete(); return; }
+  currentQ = idx; quizAnswered = false;
+  const q = questions[idx];
+  document.getElementById("qp-progress").textContent = `Q ${idx+1} / ${questions.length}`;
+  document.getElementById("btn-next-q").style.display = "none";
+  document.getElementById("qp-body").innerHTML = `
+    <div class="q-text">${q.q}</div>
+    <div class="q-options">
+      ${q.opts.map((opt,i)=>`<div class="q-opt" data-idx="${i}" onclick="answerQ(${i})">${opt}</div>`).join("")}
+    </div>
+    <div class="q-feedback" id="q-feedback"></div>`;
+}
+
+function answerQ(idx){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const q    = currentLesson.quiz[currentQ];
+  const opts = document.querySelectorAll(".q-opt");
+  const fb   = document.getElementById("q-feedback");
+  opts[idx].classList.add("selected");
+  if(idx === q.ans){
+    opts[idx].classList.add("correct");
+    fb.textContent = "✅ সঠিক! "+q.exp;
+    fb.className   = "q-feedback show correct";
+    toast("✅ Correct! +5 XP","success");
+  } else {
+    opts[idx].classList.add("wrong");
+    opts[q.ans].classList.add("correct");
+    fb.textContent = "❌ ভুল। সঠিক উত্তর: "+q.opts[q.ans]+" — "+q.exp;
+    fb.className   = "q-feedback show wrong";
+  }
+  document.getElementById("btn-next-q").style.display = "inline-flex";
+}
+window.answerQ = answerQ;
+
+function nextQuestion(){ loadQuestion(currentQ+1); }
+window.nextQuestion = nextQuestion;
+
+function skipQuestion(){ loadQuestion(currentQ+1); }
+window.skipQuestion = skipQuestion;
+
+function showQuizComplete(){
+  document.getElementById("qp-body").innerHTML = `
+    <div style="text-align:center;padding:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:.6rem;">🏆</div>
+      <div style="font-weight:800;font-size:15px;margin-bottom:.4rem;">Quiz Complete!</div>
+      <div style="font-size:13px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;">পরের lesson শুরু করুন।</div>
+    </div>`;
+  document.getElementById("btn-next-q").style.display = "none";
+}
+
+/* ══════════════════════════════════════
+   LESSON GRID
+══════════════════════════════════════ */
+function buildLessons(){
+  const tabs = document.getElementById("cat-tabs");
+  tabs.innerHTML = CATEGORIES.map(c=>`<div class="cat-tab ${c===activeCat?'active':''}" data-cat="${c}">${c}</div>`).join("");
+  tabs.querySelectorAll(".cat-tab").forEach(t=>{
+    t.addEventListener("click",()=>{
+      activeCat = t.dataset.cat;
+      tabs.querySelectorAll(".cat-tab").forEach(x=>x.classList.remove("active"));
+      t.classList.add("active");
+      renderLessonGrid();
+    });
+  });
+  renderLessonGrid();
+}
+
+function renderLessonGrid(){
+  const list = activeCat==="All" ? LESSONS : LESSONS.filter(l=>l.category===activeCat);
+  const grid = document.getElementById("lesson-grid");
+  grid.innerHTML = list.map(l=>`
+    <div class="lesson-card ${l.id===currentLesson.id?'active-lesson':''} ${completedLessons.has(l.id)?'completed':''}"
+      data-id="${l.id}" style="border-color:${l.border};">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,${l.border.replace('.25','.8')},transparent);opacity:.7;"></div>
+      <div class="lc-top">
+        <div class="lc-icon" style="background:${l.color};border:1px solid ${l.border};">${l.icon}</div>
+        <span class="lc-badge" style="background:${l.color};border:1px solid ${l.border};color:#fff;">${l.level}</span>
+      </div>
+      <div class="lc-title">${l.title}</div>
+      <div class="lc-desc">${l.category}</div>
+      <div class="lc-footer">
+        <span class="lc-dur">⏱ ${l.dur}</span>
+        <span class="lc-xp">+${l.xp} XP</span>
+        ${completedLessons.has(l.id)?'<div class="lc-check">✓</div>':''}
+      </div>
+    </div>`).join("");
+
+  grid.querySelectorAll(".lesson-card").forEach(card=>{
+    card.addEventListener("click",()=>{
+      stopTTS();
+      loadLesson(LESSONS.find(l=>l.id===card.dataset.id));
+    });
+  });
+}
+
+/* ══════════════════════════════════════
+   PROGRESS + STATS
+══════════════════════════════════════ */
+function updateHeroStats(){
+  document.getElementById("h-listened").textContent = totalListened;
+  document.getElementById("h-minutes").textContent  = totalMinutes;
+  document.getElementById("h-xp").textContent       = totalXP;
+}
+
+function updateProgress(){
+  const total = LESSONS.length;
+  const done  = completedLessons.size;
+  const pct   = Math.round(done/total*100);
+  document.getElementById("prog-bar").style.width  = pct+"%";
+  document.getElementById("prog-label").textContent = `${done} / ${total} lessons`;
+  document.getElementById("prog-pct").textContent   = pct+"% complete";
+  document.getElementById("prog-tip").textContent   =
+    pct>=100?"🏆 All lessons complete!":pct>=75?"Almost there! 🔥":pct>=50?"Halfway! 💪":"Keep listening! 👂";
+
+  document.getElementById("pp-grid").innerHTML = [
+    {val:done,         label:"Lessons Done"},
+    {val:totalMinutes+"m", label:"Minutes Listened"},
+    {val:totalXP,      label:"XP Earned"},
+    {val:pct+"%",      label:"Completion"},
+  ].map(s=>`<div class="pp-item"><div class="pp-val">${s.val}</div><div class="pp-label">${s.label}</div></div>`).join("");
+}
+
+/* ══════════════════════════════════════
+   HISTORY — Firebase
+══════════════════════════════════════ */
+function fmtAgo(ts){
+  if(!ts) return "";
+  const d = ts.toDate?ts.toDate():new Date(ts);
+  const diff = Math.floor((Date.now()-d)/1000);
+  if(diff<60)    return "এইমাত্র";
+  if(diff<3600)  return Math.floor(diff/60)+" মিনিট আগে";
+  if(diff<86400) return Math.floor(diff/3600)+" ঘণ্টা আগে";
+  return Math.floor(diff/86400)+" দিন আগে";
+}
+
+async function loadHistory(){
+  if(!currentUser) return;
+  const el = document.getElementById("history-list");
+  el.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:1rem;text-align:center;font-family:'Noto Sans Bengali',sans-serif;">Loading...</div>`;
+  try {
+    const snap = await getDocs(query(
+      collection(db,"listening_sessions"),
+      where("uid","==",currentUser.uid),
+      orderBy("completedAt","desc"),
+      limit(8)
+    ));
+    if(snap.empty){
+      el.innerHTML=`<div style="color:var(--muted);font-size:13px;text-align:center;padding:1.5rem;font-family:'Noto Sans Bengali',sans-serif;">এখনো কোনো lesson complete হয়নি।</div>`;
+      return;
+    }
+    el.innerHTML = snap.docs.map(d=>{
+      const s = d.data();
+      const lesson = LESSONS.find(l=>l.id===s.lessonId);
+      return `<div class="history-item">
+        <div class="hi-icon" style="background:${lesson?.color||'rgba(245,200,66,.1)'};border:1px solid ${lesson?.border||'rgba(245,200,66,.2)'};">${lesson?.icon||'👂'}</div>
+        <div class="hi-info">
+          <div class="hi-title">${s.lessonTitle}</div>
+          <div class="hi-meta">${fmtAgo(s.completedAt)} · ${s.durationMin||0} min · ${s.category}</div>
+        </div>
+        <div class="hi-score">+${s.xpEarned||0} XP</div>
+      </div>`;
+    }).join("");
+  } catch(e){
+    el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:1rem;">Could not load history.</div>`;
+  }
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+const yr = new Date().getFullYear();
+document.getElementById("footer-year").textContent  = yr;
+document.getElementById("footer-year2").textContent = yr;
+
+document.getElementById("btn-logout").onclick = async()=>{
+  await signOut(auth);
+  window.location.href="index.html";
+};
+
+requireAuth(async user=>{
+  currentUser = user;
+  document.getElementById("nav-name").textContent = user.displayName||user.email.split("@")[0];
+  const av = document.getElementById("nav-avatar");
+  if(user.photoURL){av.style.backgroundImage=`url(${user.photoURL})`;av.style.backgroundSize="cover";av.textContent="";}
+
+  // Load user stats
+  try {
+    const snap = await getDoc(doc(db,"users",user.uid));
+    if(snap.exists()){
+      const d = snap.data();
+      totalListened = d.listenCount      || 0;
+      totalMinutes  = d.listeningMinutes || 0;
+      totalXP       = d.xp              || 0;
+    }
+  } catch(e){ console.warn(e); }
+
+  updateHeroStats();
+  updateProgress();
+  buildWaveform();
+  buildTranscript(currentLesson.transcript);
+  buildQuiz(currentLesson.quiz);
+  document.getElementById("time-total").textContent = currentLesson.dur;
+  buildLessons();
+  await loadHistory();
+});
+</script>
+</body>
+</html>

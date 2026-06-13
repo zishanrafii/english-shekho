@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulary Hub — English Shekho</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#04080f;
+  --surface:#080e1a;
+  --surface2:#0c1322;
+  --surface3:#101828;
+  --border:rgba(255,255,255,.055);
+  --gold:#f5c842;
+  --gold2:#e0a820;
+  --teal:#2dd4bf;
+  --rose:#fb7185;
+  --indigo:#818cf8;
+  --emerald:#34d399;
+  --orange:#fb923c;
+  --muted:#64748b;
+  --sub:#94a3b8;
+  --text:#f0f4f8;
+}
+
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Outfit',sans-serif;
+  min-height:100vh;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 0%,rgba(245,200,66,.055),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(45,212,191,.045),transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,rgba(129,140,248,.025),transparent 60%);
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);
+  background-size:52px 52px;
+}
+.wrap{max-width:1160px;margin:auto;padding:1.6rem 1.4rem 0;position:relative;z-index:1;}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:2rem;gap:1rem;flex-wrap:wrap;
+  background:rgba(8,14,26,.8);border:1px solid var(--border);
+  border-radius:18px;padding:.9rem 1.4rem;
+  backdrop-filter:blur(24px);box-shadow:0 4px 32px rgba(0,0,0,.4);
+  position:sticky;top:16px;z-index:100;
+}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(45,212,191,.1));border:1px solid rgba(245,200,66,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 0 18px rgba(245,200,66,.12);flex-shrink:0;}
+.logo-text h1{font-size:1.55rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px;}
+.logo-text p{font-size:10px;color:var(--muted);margin-top:1px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.nav-links{display:flex;gap:6px;}
+.nav-link{padding:.4rem .9rem;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--sub);text-decoration:none;transition:.2s;border:1px solid transparent;}
+.nav-link:hover{background:rgba(255,255,255,.05);color:var(--text);border-color:var(--border);}
+.user-section{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(45,212,191,.15));display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden;border:2px solid rgba(245,200,66,.3);cursor:pointer;flex-shrink:0;transition:.2s;box-shadow:0 0 14px rgba(245,200,66,.1);}
+.user-avatar:hover{border-color:var(--gold);box-shadow:0 0 22px rgba(245,200,66,.25);}
+.user-name{font-size:13.5px;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-logout{border:1px solid rgba(251,113,133,.2);background:rgba(251,113,133,.07);color:var(--rose);padding:.4rem .9rem;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
+.btn-logout:hover{background:rgba(251,113,133,.15);border-color:var(--rose);}
+
+/* ─── HERO ─── */
+.hero{border-radius:24px;padding:2.2rem 2.4rem;margin-bottom:1.8rem;position:relative;overflow:hidden;background:linear-gradient(135deg,#080e18,#0a1220);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 48px rgba(0,0,0,.45);}
+.hero-stripe{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f5c842 30%,#2dd4bf 70%,transparent);}
+.hero-orb1{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,.1),transparent 70%);top:-100px;left:-80px;pointer-events:none;}
+.hero-orb2{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.09),transparent 70%);bottom:-80px;right:-60px;pointer-events:none;}
+.hero-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;opacity:.8;}
+.hero h2{font-size:2.1rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15;}
+.hero h2 span{background:linear-gradient(135deg,#f5c842,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{color:var(--sub);font-size:13.5px;line-height:1.7;max-width:500px;font-family:'Noto Sans Bengali',sans-serif;}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.hstat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.75rem 1.2rem;text-align:center;min-width:78px;transition:.2s;position:relative;overflow:hidden;}
+.hstat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;}
+.hstat:hover{border-color:rgba(245,200,66,.25);transform:translateY(-2px);}
+.hstat-v{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hstat-l{font-size:9.5px;color:var(--muted);margin-top:2px;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+
+/* ─── SECTION TITLE ─── */
+.section-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+
+/* ─── SEARCH + TOOLBAR ─── */
+.toolbar{display:flex;gap:10px;margin-bottom:1.8rem;flex-wrap:wrap;align-items:center;}
+.search-wrap{flex:1;min-width:200px;position:relative;}
+.search-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:.75rem 1.1rem .75rem 2.8rem;color:var(--text);font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;transition:.2s;}
+.search-input:focus{border-color:rgba(245,200,66,.35);box-shadow:0 0 0 3px rgba(245,200,66,.07);}
+.search-input::placeholder{color:var(--muted);}
+.search-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.toolbar-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.tbtn{padding:.55rem 1rem;border-radius:11px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;white-space:nowrap;font-family:'Outfit',sans-serif;}
+.tbtn:hover{border-color:rgba(245,200,66,.25);color:var(--gold);}
+.tbtn.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.28);color:var(--gold);}
+.tbtn-mode{display:flex;gap:4px;}
+.mode-btn{padding:.5rem .75rem;border-radius:9px;font-size:1rem;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:.2s;line-height:1;}
+.mode-btn:hover,.mode-btn.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.28);}
+
+/* ─── CATEGORY PILLS ─── */
+.cat-pills{display:flex;gap:8px;margin-bottom:1.6rem;flex-wrap:wrap;}
+.pill{padding:.45rem 1.1rem;border-radius:20px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.pill:hover{border-color:rgba(245,200,66,.25);color:var(--text);}
+.pill.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.3);color:var(--gold);}
+.pill-count{font-family:'JetBrains Mono',monospace;font-size:9.5px;opacity:.7;}
+
+/* ─── WORD GRID ─── */
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:1.8rem;}
+
+/* ─── WORD CARD ─── */
+.word-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:18px;padding:1.2rem 1.1rem;
+  position:relative;overflow:hidden;transition:.25s;cursor:pointer;
+}
+.word-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:.25s;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.word-card:hover{transform:translateY(-3px);border-color:rgba(245,200,66,.15);box-shadow:0 10px 32px rgba(0,0,0,.3);}
+.word-card:hover::after{opacity:.7;}
+.word-card.favorited{border-color:rgba(251,113,133,.2);}
+.word-card.favorited::after{background:linear-gradient(90deg,transparent,var(--rose),transparent);opacity:.5;}
+.wc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.6rem;}
+.wc-diff{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.diff-easy{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);color:#34d399;}
+.diff-medium{background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);color:#f5c842;}
+.diff-hard{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.2);color:#fb7185;}
+.fav-btn{background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;padding:0;transition:.2s;opacity:.4;}
+.fav-btn:hover,.fav-btn.active{opacity:1;}
+.wc-word{font-size:1.25rem;font-weight:800;letter-spacing:-.3px;margin-bottom:3px;}
+.wc-phonetic{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal);margin-bottom:.5rem;opacity:.8;}
+.wc-meaning{font-size:12px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;line-height:1.55;margin-bottom:.7rem;}
+.wc-example{font-size:11px;color:var(--muted);font-style:italic;line-height:1.5;border-left:2px solid rgba(245,200,66,.2);padding-left:.6rem;margin-bottom:.7rem;}
+.wc-footer{display:flex;align-items:center;justify-content:space-between;}
+.wc-cat{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.3px;}
+.pronounce-btn{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.18);color:var(--teal);padding:3px 9px;border-radius:8px;cursor:pointer;font-size:10.5px;font-weight:600;font-family:'Outfit',sans-serif;transition:.2s;display:flex;align-items:center;gap:4px;}
+.pronounce-btn:hover{background:rgba(45,212,191,.15);border-color:var(--teal);}
+
+/* ─── LIST VIEW ─── */
+.word-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.8rem;}
+.word-row{display:flex;align-items:center;gap:14px;padding:.85rem 1.1rem;background:var(--surface2);border:1px solid var(--border);border-radius:14px;transition:.2s;cursor:pointer;}
+.word-row:hover{border-color:rgba(245,200,66,.15);background:rgba(255,255,255,.025);padding-left:1.4rem;}
+.wr-word{font-size:14px;font-weight:800;min-width:120px;}
+.wr-phonetic{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal);min-width:100px;opacity:.8;}
+.wr-meaning{font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;flex:1;}
+.wr-diff{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.wr-actions{display:flex;gap:6px;align-items:center;}
+
+/* ─── FLASHCARD MODE ─── */
+.flashcard-wrap{margin-bottom:1.8rem;display:flex;flex-direction:column;align-items:center;gap:1.2rem;}
+.flashcard-nav{display:flex;align-items:center;gap:14px;}
+.fc-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
+.fc-btn{background:var(--surface2);border:1px solid var(--border);color:var(--sub);padding:.5rem 1.1rem;border-radius:11px;cursor:pointer;font-size:1rem;transition:.2s;font-family:'Outfit',sans-serif;}
+.fc-btn:hover{border-color:rgba(245,200,66,.25);color:var(--gold);}
+.flashcard{
+  width:100%;max-width:520px;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:24px;padding:2.5rem 2rem;text-align:center;
+  position:relative;overflow:hidden;min-height:220px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
+  transition:.35s;cursor:pointer;
+  box-shadow:0 8px 40px rgba(0,0,0,.35);
+}
+.flashcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f5c842,#2dd4bf,transparent);}
+.flashcard:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4);}
+.fc-hint{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem;}
+.fc-front-word{font-size:2.2rem;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.fc-front-phonetic{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);opacity:.8;}
+.fc-back{display:none;flex-direction:column;align-items:center;gap:.6rem;width:100%;}
+.fc-back.show{display:flex;}
+.fc-back-meaning{font-size:1.1rem;font-weight:700;font-family:'Noto Sans Bengali',sans-serif;color:var(--text);}
+.fc-back-example{font-size:12px;color:var(--muted);font-style:italic;max-width:340px;text-align:center;line-height:1.6;}
+.fc-actions{display:flex;gap:10px;}
+.fc-know{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:#34d399;padding:.5rem 1.3rem;border-radius:11px;cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;transition:.2s;}
+.fc-know:hover{background:rgba(52,211,153,.18);}
+.fc-skip{background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.2);color:var(--rose);padding:.5rem 1.3rem;border-radius:11px;cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;transition:.2s;}
+.fc-skip:hover{background:rgba(251,113,133,.15);}
+.fc-progress-wrap{width:100%;max-width:520px;}
+.fc-progress-track{height:5px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;}
+.fc-progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f5c842,#2dd4bf);transition:width .5s ease;}
+.fc-score{display:flex;gap:1.5rem;justify-content:center;}
+.fc-score-item{text-align:center;}
+.fc-score-v{font-size:1.3rem;font-weight:800;}
+.fc-score-l{font-size:9.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.8px;}
+
+/* ─── PROGRESS PANEL ─── */
+.progress-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;}
+.pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:1rem;}
+.pp-item{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:13px;padding:.9rem 1rem;text-align:center;}
+.pp-val{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.pp-label{font-size:10.5px;color:var(--muted);margin-top:2px;font-family:'Noto Sans Bengali',sans-serif;}
+.progress-track{height:7px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;margin:.7rem 0 .4rem;}
+.progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f5c842,#2dd4bf);transition:width .8s ease;box-shadow:0 0 10px rgba(245,200,66,.25);}
+.progress-meta{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;}
+
+/* ─── FOOTER ─── */
+footer{margin-top:3rem;border-top:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.35),rgba(45,212,191,.35),transparent);}
+.footer-inner{max-width:1160px;margin:auto;padding:2.2rem 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;}
+.footer-brand .brand-name{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
+.footer-brand .brand-sub{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:.9rem;font-family:'Noto Sans Bengali',sans-serif;}
+.copyright-text{font-size:11px;color:#2a3545;line-height:1.8;font-family:'JetBrains Mono',monospace;}
+.copyright-text span{color:#374151;}
+.footer-col h4{font-size:.9rem;font-weight:700;color:var(--sub);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.dev-card{background:linear-gradient(135deg,rgba(245,200,66,.04),rgba(45,212,191,.04));border:1px solid rgba(245,200,66,.12);border-radius:14px;padding:1.1rem;}
+.dev-name{font-size:1.05rem;font-weight:800;color:#f0f4f8;margin-bottom:.1rem;}
+.dev-title{font-size:10px;color:var(--gold);letter-spacing:.8px;margin-bottom:.8rem;font-family:'JetBrains Mono',monospace;}
+.dev-contact{display:flex;flex-direction:column;gap:.45rem;}
+.contact-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);}
+.contact-row a{color:var(--sub);text-decoration:none;transition:.15s;}
+.contact-row a:hover{color:var(--gold);}
+.contact-icon{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;background:rgba(255,255,255,.05);}
+.social-links{display:flex;flex-direction:column;gap:.55rem;}
+.social-link{display:flex;align-items:center;gap:10px;padding:.55rem .85rem;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--border);text-decoration:none;color:var(--sub);font-size:12px;transition:.2s;}
+.social-link:hover{background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.2);color:#f0f4f8;transform:translateX(3px);}
+.sl-icon{font-size:.9rem;width:20px;text-align:center;}
+.sl-label{font-weight:600;}
+.sl-handle{color:var(--muted);font-size:10.5px;margin-left:auto;font-family:'JetBrains Mono',monospace;}
+.footer-bottom{max-width:1160px;margin:auto;padding:.8rem 1.4rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;border-top:1px solid rgba(255,255,255,.04);font-size:11px;color:#2d3748;font-family:'JetBrains Mono',monospace;}
+.footer-bottom a{color:#374151;text-decoration:none;}
+.footer-bottom a:hover{color:var(--muted);}
+.footer-heart{color:var(--rose);}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:800px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}.word-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start;}.hero h2{font-size:1.6rem;}.word-grid{grid-template-columns:1fr;}.wrap{padding:1rem .9rem 0;}.footer-bottom{flex-direction:column;align-items:flex-start;}.wr-phonetic,.wr-diff{display:none;}}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #f5c842;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* ─── EMPTY STATE ─── */
+.empty-state{text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1;}
+.empty-state .es-icon{font-size:2.5rem;margin-bottom:.8rem;}
+.empty-state p{font-size:13px;font-family:'Noto Sans Bengali',sans-serif;}
+
+/* flip animation */
+.flashcard.flipped .fc-hint,
+.flashcard.flipped .fc-front-word,
+.flashcard.flipped .fc-front-phonetic{display:none;}
+.flashcard.flipped .fc-back{display:flex;}
+.flashcard.flipped .fc-actions{display:flex;}
+.fc-actions{display:none;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon">🇬🇧</div>
+      <div class="logo-text">
+        <h1>English Shekho</h1>
+        <p>ENGLISH LEARNING PLATFORM · A1 TO C2</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <nav class="nav-links">
+        <a href="dashboard.html" class="nav-link">Home</a>
+        <a href="roadmap.html" class="nav-link">Journey</a>
+        <a href="quiz-dashboard.html" class="nav-link">Quiz</a>
+        <a href="grammar.html" class="nav-link">Grammar</a>
+        <a href="speaking.html" class="nav-link">Speaking</a>
+        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+        <a href="chat.html" class="nav-link">Chat</a>
+      </nav>
+      <div class="user-section">
+        <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
+        <div class="user-name" id="nav-name">Learner</div>
+        <button class="btn-logout" id="btn-logout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-stripe"></div>
+    <div class="hero-orb1"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">📚 Vocabulary Hub</div>
+        <h2>আপনার <span>Word Bank</span> 🔤</h2>
+        <p class="hero-sub">Category অনুযায়ী শব্দ শিখুন, flashcard দিয়ে practice করুন এবং favorite করে রাখুন। প্রতিটি শব্দে pronunciation ও বাংলা অর্থ আছে।</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-v" id="h-learned">0</div>
+          <div class="hstat-l">Learned</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-v" id="h-total">0</div>
+          <div class="hstat-l">Total Words</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-v" id="h-fav">0</div>
+          <div class="hstat-l">Favorites</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+      <div style="font-weight:700;font-size:15px;">📈 Vocabulary Progress</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);" id="prog-label">0 / 0 words learned</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+    <div class="progress-meta"><span id="prog-pct">0% complete</span><span id="prog-next">Keep going! 💪</span></div>
+    <div class="pp-grid" id="pp-grid"></div>
+  </div>
+
+  <!-- SEARCH + TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="শব্দ খুঁজুন... e.g. beautiful, achieve">
+    </div>
+    <div class="toolbar-btns">
+      <button class="tbtn active" data-diff="all">All Levels</button>
+      <button class="tbtn" data-diff="easy">Easy</button>
+      <button class="tbtn" data-diff="medium">Medium</button>
+      <button class="tbtn" data-diff="hard">Hard</button>
+      <button class="tbtn" data-fav="true" id="fav-filter-btn">❤️ Favorites</button>
+    </div>
+    <div class="tbtn-mode">
+      <button class="mode-btn active" id="mode-grid" title="Grid View">▦</button>
+      <button class="mode-btn" id="mode-list" title="List View">☰</button>
+      <button class="mode-btn" id="mode-flash" title="Flashcard Mode">🃏</button>
+    </div>
+  </div>
+
+  <!-- CATEGORY PILLS -->
+  <div class="cat-pills" id="cat-pills"></div>
+
+  <!-- WORD GRID VIEW -->
+  <div id="view-grid">
+    <div class="section-title" id="words-section-title">📖 Words</div>
+    <div class="word-grid" id="word-grid"></div>
+  </div>
+
+  <!-- WORD LIST VIEW -->
+  <div id="view-list" style="display:none;">
+    <div class="section-title">📋 Word List</div>
+    <div class="word-list" id="word-list"></div>
+  </div>
+
+  <!-- FLASHCARD VIEW -->
+  <div id="view-flash" style="display:none;">
+    <div class="section-title">🃏 Flashcard Practice</div>
+    <div class="flashcard-wrap">
+      <div class="fc-score">
+        <div class="fc-score-item"><div class="fc-score-v" id="fc-know-count" style="color:#34d399;">0</div><div class="fc-score-l">Known</div></div>
+        <div class="fc-score-item"><div class="fc-score-v" id="fc-skip-count" style="color:var(--rose);">0</div><div class="fc-score-l">Review</div></div>
+      </div>
+      <div class="fc-progress-wrap">
+        <div class="fc-progress-track"><div class="fc-progress-fill" id="fc-prog" style="width:0%"></div></div>
+      </div>
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-hint">👆 tap to reveal meaning</div>
+        <div class="fc-front-word" id="fc-word">—</div>
+        <div class="fc-front-phonetic" id="fc-phonetic"></div>
+        <div class="fc-back" id="fc-back">
+          <div class="fc-back-meaning" id="fc-meaning"></div>
+          <div class="fc-back-example" id="fc-example"></div>
+          <div class="fc-actions">
+            <button class="fc-know" onclick="event.stopPropagation();fcKnow()">✓ জানি</button>
+            <button class="fc-skip" onclick="event.stopPropagation();fcSkip()">↩ Review</button>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-nav">
+        <button class="fc-btn" onclick="fcPrev()">← Prev</button>
+        <span class="fc-count" id="fc-count">1 / 1</span>
+        <button class="fc-btn" onclick="fcNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand-name">🇬🇧 English Shekho</div>
+      <div class="brand-sub">একটি বাংলা-মাধ্যম English ভাষা শেখার প্ল্যাটফর্ম। A1 থেকে C2 পর্যন্ত vocabulary, grammar, speaking এবং live chat সুবিধা।</div>
+      <div class="copyright-text">© <span id="footer-year"></span> English Shekho<br><span>All rights reserved.</span><br><span>Unauthorized reproduction</span><br><span>is strictly prohibited.</span></div>
+    </div>
+    <div class="footer-col">
+      <h4>👨‍💻 Developer</h4>
+      <div class="dev-card">
+        <div class="dev-name">Zishan Rafi</div>
+        <div class="dev-title">WEB DEVELOPER · EDUCATOR</div>
+        <div class="dev-contact">
+          <div class="contact-row"><div class="contact-icon">📧</div><a href="mailto:zishanrafii@gmail.com">zishanrafii@gmail.com</a></div>
+          <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+8801877083978">+8801877083978</a></div>
+          <div class="contact-row"><div class="contact-icon">💬</div><a href="https://wa.me/8801877083978" target="_blank">WhatsApp</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>🔗 Social Media</h4>
+      <div class="social-links">
+        <a href="https://facebook.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">📘</span><span class="sl-label">Facebook</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://www.youtube.com/@Cyrus_rush" target="_blank" class="social-link"><span class="sl-icon">▶️</span><span class="sl-label">YouTube</span><span class="sl-handle">Cy-Rush</span></a>
+        <a href="https://instagram.com/sodium_neon" target="_blank" class="social-link"><span class="sl-icon">📸</span><span class="sl-label">Instagram</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://github.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">🐙</span><span class="sl-label">GitHub</span><span class="sl-handle">zishanrafi</span></a>
+        <a href="https://t.me/zissueissue" target="_blank" class="social-link"><span class="sl-icon">✈️</span><span class="sl-label">Telegram</span><span class="sl-handle">itz cyrus</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© <span id="footer-year2"></span> English Shekho · Developed by <a href="https://facebook.com/zishanrafii" target="_blank">Zishan Rafi</a></div>
+    <div>Built with <span class="footer-heart">♥</span> for Bengali learners &nbsp;·&nbsp; Version 1.0</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {
+  auth, db, signOut, requireAuth,
+  doc, getDoc, setDoc, updateDoc, increment
+} from "./js/firebase-config.js";
+
+/* ══════════════════════════════════
+   VOCABULARY DATA
+══════════════════════════════════ */
+
+import { VOCAB_A1 } from "./js/vocab-a1.js";
+import { VOCAB_A2 } from "./js/vocab-a2.js";
+
+// শুধু A1 দেখাতে চাইলে:
+const VOCAB = VOCAB_A1;
+
+// A1 + A2 একসাথে দেখাতে চাইলে:
+// const VOCAB = [...VOCAB_A1, ...VOCAB_A2];
+
+const CATEGORIES = ["All", ...new Set(VOCAB.map(w => w.category))];
+
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+let favorites   = new Set();
+let learned     = new Set();
+let currentUid  = null;
+let activeCat   = "All";
+let activeDiff  = "all";
+let showFavOnly = false;
+let searchQ     = "";
+let viewMode    = "grid"; // grid | list | flash
+let fcIndex     = 0;
+let fcKnownSet  = new Set();
+let fcSkipSet   = new Set();
+let fcFlipped   = false;
+
+/* ══════════════════════════════════
+   HELPERS
+══════════════════════════════════ */
+function filtered(){
+  return VOCAB.filter(w => {
+    if(activeCat !== "All" && w.category !== activeCat) return false;
+    if(activeDiff !== "all" && w.difficulty !== activeDiff) return false;
+    if(showFavOnly && !favorites.has(w.id)) return false;
+    if(searchQ && !w.word.toLowerCase().includes(searchQ) && !w.meaning.includes(searchQ)) return false;
+    return true;
+  });
+}
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2800);
+}
+
+function speak(word){
+  if(!window.speechSynthesis) return toast("Browser speech not supported");
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = "en-US"; u.rate = 0.85;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+function toggleFav(id, e){
+  e && e.stopPropagation();
+  if(favorites.has(id)) favorites.delete(id);
+  else { favorites.add(id); toast("❤️ Added to favorites!"); }
+  document.getElementById("h-fav").textContent = favorites.size;
+  saveProgress();
+  render();
+}
+
+function toggleLearned(id){
+  if(learned.has(id)) learned.delete(id);
+  else {
+    learned.add(id); toast("✅ Marked as learned! +10 XP");
+    if(currentUid){
+      updateDoc(doc(db,"users",currentUid), { xp: increment(10) }).catch(()=>{});
+    }
+  }
+  updateProgress();
+  saveProgress();
+  render();
+}
+
+/* ══════════════════════════════════
+   FIRESTORE SYNC
+══════════════════════════════════ */
+function saveProgress(){
+  if(!currentUid) return;
+  setDoc(doc(db,"users",currentUid), {
+    vocabProgress: {
+      learned:   Array.from(learned),
+      favorites: Array.from(favorites)
+    }
+  }, { merge:true }).catch(e=>console.warn("save failed",e));
+}
+
+/* ══════════════════════════════════
+   RENDER
+══════════════════════════════════ */
+function render(){
+  const list = filtered();
+  document.getElementById("words-section-title").textContent =
+    `📖 ${activeCat === "All" ? "All Words" : activeCat} · ${list.length} words`;
+
+  if(viewMode === "grid") renderGrid(list);
+  else if(viewMode === "list") renderList(list);
+  else renderFlash(list);
+}
+
+function diffBadge(d){
+  const map = {easy:"diff-easy",medium:"diff-medium",hard:"diff-hard"};
+  const label = {easy:"Easy",medium:"Medium",hard:"Hard"};
+  return `<span class="wc-diff ${map[d]}">${label[d]}</span>`;
+}
+
+function renderGrid(list){
+  const grid = document.getElementById("word-grid");
+  if(!list.length){
+    grid.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><p>কোনো word পাওয়া যায়নি।</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(w => `
+    <div class="word-card ${favorites.has(w.id)?'favorited':''}" data-id="${w.id}">
+      <div class="wc-top">
+        ${diffBadge(w.difficulty)}
+        <button class="fav-btn ${favorites.has(w.id)?'active':''}" onclick="toggleFav('${w.id}',event)" title="Favorite">${favorites.has(w.id)?'❤️':'🤍'}</button>
+      </div>
+      <div class="wc-word">${w.word}</div>
+      <div class="wc-phonetic">${w.phonetic}</div>
+      <div class="wc-meaning">${w.meaning}</div>
+      <div class="wc-example">"${w.example}"</div>
+      <div class="wc-footer">
+        <span class="wc-cat">${w.category}</span>
+        <button class="pronounce-btn" onclick="speak('${w.word}')">🔊 Play</button>
+      </div>
+    </div>`).join("");
+
+  grid.querySelectorAll(".word-card").forEach(el => {
+    el.addEventListener("click", ()=> toggleLearned(el.dataset.id));
+  });
+}
+
+function renderList(list){
+  const container = document.getElementById("word-list");
+  if(!list.length){
+    container.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><p>কোনো word পাওয়া যায়নি।</p></div>`;
+    return;
+  }
+  container.innerHTML = list.map(w => `
+    <div class="word-row" data-id="${w.id}">
+      <div class="wr-word">${w.word} ${learned.has(w.id)?'<span style="color:#34d399;font-size:.75rem;">✓</span>':''}</div>
+      <div class="wr-phonetic">${w.phonetic}</div>
+      <div class="wr-meaning">${w.meaning}</div>
+      <span class="wr-diff ${w.difficulty==='easy'?'diff-easy':w.difficulty==='medium'?'diff-medium':'diff-hard'}">${w.difficulty}</span>
+      <div class="wr-actions">
+        <button class="pronounce-btn" onclick="event.stopPropagation();speak('${w.word}')">🔊</button>
+        <button class="fav-btn ${favorites.has(w.id)?'active':''}" onclick="toggleFav('${w.id}',event)">${favorites.has(w.id)?'❤️':'🤍'}</button>
+      </div>
+    </div>`).join("");
+
+  container.querySelectorAll(".word-row").forEach(el => {
+    el.addEventListener("click", ()=> toggleLearned(el.dataset.id));
+  });
+}
+
+function renderFlash(list){
+  if(!list.length){ fcSetWord(null); return; }
+  const w = list[fcIndex] || list[0];
+  fcIndex = Math.min(fcIndex, list.length - 1);
+  fcSetWord(w, list.length);
+}
+
+function fcSetWord(w, total){
+  const card = document.getElementById("flashcard");
+  card.classList.remove("flipped");
+  fcFlipped = false;
+  if(!w){
+    document.getElementById("fc-word").textContent = "—";
+    document.getElementById("fc-phonetic").textContent = "";
+    document.getElementById("fc-meaning").textContent = "";
+    document.getElementById("fc-example").textContent = "";
+    document.getElementById("fc-count").textContent = "0 / 0";
+    return;
+  }
+  document.getElementById("fc-word").textContent = w.word;
+  document.getElementById("fc-phonetic").textContent = w.phonetic;
+  document.getElementById("fc-meaning").textContent = w.meaning;
+  document.getElementById("fc-example").textContent = `"${w.example}"`;
+  document.getElementById("fc-count").textContent = `${fcIndex+1} / ${total}`;
+  const pct = total ? Math.round((fcIndex+1)/total*100) : 0;
+  document.getElementById("fc-prog").style.width = pct + "%";
+}
+
+function flipCard(){
+  const card = document.getElementById("flashcard");
+  fcFlipped = !fcFlipped;
+  card.classList.toggle("flipped", fcFlipped);
+}
+
+function fcNext(){
+  const list = filtered();
+  if(fcIndex < list.length - 1){ fcIndex++; renderFlash(list); }
+  else toast("🎉 সব cards শেষ! আবার শুরু করতে পারো।");
+}
+
+function fcPrev(){
+  if(fcIndex > 0){ fcIndex--; renderFlash(filtered()); }
+}
+
+function fcKnow(){
+  const list = filtered();
+  const w = list[fcIndex];
+  if(w){ fcKnownSet.add(w.id); learned.add(w.id); }
+  document.getElementById("fc-know-count").textContent = fcKnownSet.size;
+  updateProgress();
+  if(fcIndex < list.length - 1){ fcIndex++; renderFlash(list); }
+  else toast(`🏆 Session done! ${fcKnownSet.size} known, ${fcSkipSet.size} to review.`);
+}
+
+function fcSkip(){
+  const list = filtered();
+  const w = list[fcIndex];
+  if(w) fcSkipSet.add(w.id);
+  document.getElementById("fc-skip-count").textContent = fcSkipSet.size;
+  if(fcIndex < list.length - 1){ fcIndex++; renderFlash(list); }
+  else toast(`Session done! ${fcKnownSet.size} known, ${fcSkipSet.size} to review.`);
+}
+
+/* ══════════════════════════════════
+   PROGRESS + STATS
+══════════════════════════════════ */
+function updateProgress(){
+  const total = VOCAB.length;
+  const done  = learned.size;
+  const pct   = Math.round(done/total*100);
+
+  document.getElementById("h-learned").textContent = done;
+  document.getElementById("h-total").textContent   = total;
+  document.getElementById("h-fav").textContent     = favorites.size;
+
+  document.getElementById("prog-bar").style.width    = pct + "%";
+  document.getElementById("prog-label").textContent  = `${done} / ${total} words learned`;
+  document.getElementById("prog-pct").textContent    = pct + "% complete";
+  document.getElementById("prog-next").textContent   =
+    pct >= 100 ? "🏆 All words learned!" :
+    pct >= 75  ? "Almost there! 🔥" :
+    pct >= 50  ? "Halfway there! 💪" : "Keep going! 📚";
+
+  const cats = [...new Set(VOCAB.map(w=>w.category))];
+  const catDone = cats.filter(c => VOCAB.filter(w=>w.category===c).every(w=>learned.has(w.id))).length;
+  document.getElementById("pp-grid").innerHTML = [
+    {val:done,          label:"শব্দ শেখা হয়েছে"},
+    {val:favorites.size,label:"Favorites"},
+    {val:catDone,       label:"Categories Done"},
+    {val:pct+"%",       label:"Completion"},
+  ].map(s=>`<div class="pp-item"><div class="pp-val">${s.val}</div><div class="pp-label">${s.label}</div></div>`).join("");
+}
+
+/* ══════════════════════════════════
+   BUILD CATEGORY PILLS
+══════════════════════════════════ */
+function buildPills(){
+  const wrap = document.getElementById("cat-pills");
+  wrap.innerHTML = CATEGORIES.map(c => {
+    const count = c === "All" ? VOCAB.length : VOCAB.filter(w=>w.category===c).length;
+    return `<div class="pill ${c===activeCat?'active':''}" data-cat="${c}">
+      ${c} <span class="pill-count">${count}</span>
+    </div>`;
+  }).join("");
+  wrap.querySelectorAll(".pill").forEach(el => {
+    el.addEventListener("click", ()=>{
+      activeCat = el.dataset.cat;
+      fcIndex = 0; fcKnownSet.clear(); fcSkipSet.clear();
+      document.getElementById("fc-know-count").textContent = 0;
+      document.getElementById("fc-skip-count").textContent = 0;
+      buildPills(); render();
+    });
+  });
+}
+
+/* ══════════════════════════════════
+   VIEW MODE SWITCH
+══════════════════════════════════ */
+function setView(mode){
+  viewMode = mode;
+  ["grid","list","flash"].forEach(m => {
+    document.getElementById("view-"+m).style.display = m===mode ? "block" : "none";
+    document.getElementById("mode-"+m)?.classList.toggle("active", m===mode);
+  });
+  if(mode==="flash"){ fcIndex=0; fcKnownSet.clear(); fcSkipSet.clear();
+    document.getElementById("fc-know-count").textContent=0;
+    document.getElementById("fc-skip-count").textContent=0;
+  }
+  render();
+}
+
+/* ══════════════════════════════════
+   EVENTS
+══════════════════════════════════ */
+document.getElementById("mode-grid").onclick  = ()=> setView("grid");
+document.getElementById("mode-list").onclick  = ()=> setView("list");
+document.getElementById("mode-flash").onclick = ()=> setView("flash");
+
+document.getElementById("search-input").addEventListener("input", e => {
+  searchQ = e.target.value.trim().toLowerCase();
+  fcIndex = 0; render();
+});
+
+document.querySelectorAll(".tbtn[data-diff]").forEach(btn => {
+  btn.addEventListener("click", ()=>{
+    activeDiff = btn.dataset.diff;
+    document.querySelectorAll(".tbtn[data-diff]").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    fcIndex=0; render();
+  });
+});
+
+document.getElementById("fav-filter-btn").addEventListener("click", function(){
+  showFavOnly = !showFavOnly;
+  this.classList.toggle("active", showFavOnly);
+  fcIndex=0; render();
+});
+
+/* ══════════════════════════════════
+   AUTH + INIT
+══════════════════════════════════ */
+requireAuth(async user => {
+  currentUid = user.uid;
+  const snap = await getDoc(doc(db,"users",user.uid));
+  const d = snap.exists() ? snap.data() : {};
+
+  const name  = d.displayName || user.displayName || "Learner";
+  const photo = d.photoURL    || user.photoURL    || "";
+  document.getElementById("nav-name").textContent = name;
+  const av = document.getElementById("nav-avatar");
+  if(photo) av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`;
+  else av.textContent = name[0]?.toUpperCase() || "?";
+
+  const vp = d.vocabProgress || {};
+  learned   = new Set(vp.learned   || []);
+  favorites = new Set(vp.favorites || []);
+
+  document.getElementById("btn-logout").onclick = async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
+  };
+
+  const yr = new Date().getFullYear();
+  document.getElementById("footer-year").textContent  = yr;
+  document.getElementById("footer-year2").textContent = yr;
+
+  buildPills();
+  updateProgress();
+  render();
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Practice — English Shekho</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#04080f;--surface:#080e1a;--surface2:#0c1322;--surface3:#101828;
+  --border:rgba(255,255,255,.055);--gold:#f5c842;--gold2:#e0a820;
+  --teal:#2dd4bf;--rose:#fb7185;--indigo:#818cf8;--emerald:#34d399;
+  --orange:#fb923c;--muted:#64748b;--sub:#94a3b8;--text:#f0f4f8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 0% 0%,rgba(245,200,66,.055),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(45,212,191,.045),transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,rgba(129,140,248,.025),transparent 60%);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);
+  background-size:52px 52px;}
+.wrap{max-width:1160px;margin:auto;padding:1.6rem 1.4rem 0;position:relative;z-index:1;}
+
+/* ─── TOPBAR ─── */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;gap:1rem;flex-wrap:wrap;
+  background:rgba(8,14,26,.8);border:1px solid var(--border);border-radius:18px;padding:.9rem 1.4rem;
+  backdrop-filter:blur(24px);box-shadow:0 4px 32px rgba(0,0,0,.4);position:sticky;top:16px;z-index:100;}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(45,212,191,.1));
+  border:1px solid rgba(245,200,66,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+  box-shadow:0 0 18px rgba(245,200,66,.12);flex-shrink:0;}
+.logo-text h1{font-size:1.55rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px;}
+.logo-text p{font-size:10px;color:var(--muted);margin-top:1px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.nav-links{display:flex;gap:6px;}
+.nav-link{padding:.4rem .9rem;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--sub);
+  text-decoration:none;transition:.2s;border:1px solid transparent;}
+.nav-link:hover{background:rgba(255,255,255,.05);color:var(--text);border-color:var(--border);}
+.user-section{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(45,212,191,.15));
+  display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden;
+  border:2px solid rgba(245,200,66,.3);cursor:pointer;flex-shrink:0;transition:.2s;box-shadow:0 0 14px rgba(245,200,66,.1);}
+.user-avatar:hover{border-color:var(--gold);box-shadow:0 0 22px rgba(245,200,66,.25);}
+.user-name{font-size:13.5px;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-logout{border:1px solid rgba(251,113,133,.2);background:rgba(251,113,133,.07);color:var(--rose);
+  padding:.4rem .9rem;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
+.btn-logout:hover{background:rgba(251,113,133,.15);border-color:var(--rose);}
+
+/* ─── HERO ─── */
+.hero{border-radius:24px;padding:2.2rem 2.4rem;margin-bottom:1.8rem;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#080e18,#0a1220);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 48px rgba(0,0,0,.45);}
+.hero-stripe{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f5c842 30%,#2dd4bf 70%,transparent);}
+.hero-orb1{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,.1),transparent 70%);top:-100px;left:-80px;pointer-events:none;}
+.hero-orb2{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.09),transparent 70%);bottom:-80px;right:-60px;pointer-events:none;}
+.hero-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;opacity:.8;}
+.hero h2{font-size:2.1rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15;}
+.hero h2 span{background:linear-gradient(135deg,#f5c842,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{color:var(--sub);font-size:13.5px;line-height:1.7;max-width:500px;font-family:'Noto Sans Bengali',sans-serif;}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.hstat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.75rem 1.2rem;text-align:center;min-width:78px;transition:.2s;position:relative;overflow:hidden;}
+.hstat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;}
+.hstat:hover{border-color:rgba(245,200,66,.25);transform:translateY(-2px);}
+.hstat-v{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hstat-l{font-size:9.5px;color:var(--muted);margin-top:2px;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+
+/* ─── SECTION TITLE ─── */
+.section-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+
+/* ─── DAILY SPEAKING TASKS ─── */
+.daily-strip{background:linear-gradient(135deg,rgba(245,200,66,.06),rgba(45,212,191,.04));
+  border:1px solid rgba(245,200,66,.18);border-radius:18px;padding:1.3rem 1.6rem;margin-bottom:1.8rem;
+  position:relative;overflow:hidden;}
+.daily-strip::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.5),transparent);}
+.ds-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;}
+.ds-title{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px;}
+.ds-badge{background:linear-gradient(135deg,#f5c842,#e0a820);color:#000;font-size:9px;font-weight:800;padding:2px 9px;border-radius:20px;letter-spacing:.8px;text-transform:uppercase;}
+.ds-progress{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+.daily-tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
+.dt-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:.9rem 1rem;
+  display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s;}
+.dt-card:hover{border-color:rgba(245,200,66,.2);background:rgba(245,200,66,.04);}
+.dt-card.done{background:rgba(45,212,191,.04);border-color:rgba(45,212,191,.2);}
+.dt-check{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.75rem;transition:.2s;}
+.dt-card.done .dt-check{background:rgba(45,212,191,.15);border-color:#2dd4bf;color:#2dd4bf;}
+.dt-info{flex:1;}
+.dt-name{font-size:12.5px;font-weight:700;}
+.dt-sub{font-size:10.5px;color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;}
+
+/* ─── MIC RECORDER ─── */
+.recorder-section{background:var(--surface2);border:1px solid var(--border);border-radius:22px;
+  padding:2rem;margin-bottom:1.8rem;text-align:center;position:relative;overflow:hidden;}
+.recorder-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#f5c842 30%,#2dd4bf 70%,transparent);}
+.rec-prompt-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.8rem;opacity:.8;}
+.rec-prompt{font-size:1.1rem;font-weight:700;margin-bottom:.4rem;line-height:1.5;}
+.rec-prompt-bn{font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:1.6rem;}
+
+/* mic button */
+.mic-wrap{display:flex;flex-direction:column;align-items:center;gap:1.2rem;margin-bottom:1.4rem;}
+.mic-btn{width:88px;height:88px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(45,212,191,.1));
+  border:2px solid rgba(245,200,66,.3);font-size:2.2rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:.3s;position:relative;box-shadow:0 0 24px rgba(245,200,66,.15);}
+.mic-btn:hover{transform:scale(1.07);box-shadow:0 0 36px rgba(245,200,66,.25);}
+.mic-btn.recording{background:linear-gradient(135deg,rgba(251,113,133,.2),rgba(251,113,133,.1));
+  border-color:rgba(251,113,133,.5);box-shadow:0 0 36px rgba(251,113,133,.3);animation:pulse 1.2s infinite;}
+.mic-btn.recording::after{content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:2px solid rgba(251,113,133,.3);animation:ripple 1.2s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+@keyframes ripple{0%{transform:scale(1);opacity:1;}100%{transform:scale(1.35);opacity:0;}}
+.mic-status{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.5px;}
+.mic-status.active{color:var(--rose);}
+
+/* waveform */
+.waveform{display:flex;align-items:center;justify-content:center;gap:3px;height:36px;}
+.wave-bar{width:4px;border-radius:4px;background:var(--gold);opacity:.3;transition:.15s;}
+.wave-bar.active{opacity:1;animation:wave var(--d,.6s) ease-in-out infinite alternate;}
+@keyframes wave{from{height:6px;}to{height:28px;}}
+
+/* transcript box */
+.transcript-box{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:14px;
+  padding:1rem 1.2rem;margin-bottom:1rem;min-height:60px;text-align:left;font-size:13.5px;line-height:1.7;
+  color:var(--sub);font-style:italic;display:none;}
+.transcript-box.show{display:block;}
+.transcript-box.has-text{color:var(--text);font-style:normal;}
+
+/* rec controls */
+.rec-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn-rec{padding:.6rem 1.4rem;border-radius:12px;cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;transition:.2s;border:1px solid;}
+.btn-start{background:rgba(245,200,66,.1);border-color:rgba(245,200,66,.3);color:var(--gold);}
+.btn-start:hover{background:rgba(245,200,66,.18);}
+.btn-stop{background:rgba(251,113,133,.1);border-color:rgba(251,113,133,.3);color:var(--rose);display:none;}
+.btn-stop:hover{background:rgba(251,113,133,.18);}
+.btn-replay{background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal);display:none;}
+.btn-replay:hover{background:rgba(45,212,191,.15);}
+.btn-submit-rec{background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(245,200,66,.08));
+  border-color:rgba(245,200,66,.3);color:var(--gold);display:none;}
+.btn-submit-rec:hover{background:rgba(245,200,66,.22);}
+.btn-next-prompt{background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.2);color:var(--indigo);}
+.btn-next-prompt:hover{background:rgba(129,140,248,.15);}
+
+/* score after submit */
+.speak-score{background:linear-gradient(135deg,rgba(245,200,66,.07),rgba(45,212,191,.05));
+  border:1px solid rgba(245,200,66,.18);border-radius:16px;padding:1.1rem 1.3rem;
+  margin-top:1rem;display:none;text-align:left;}
+.speak-score.show{display:block;}
+.ss-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.8rem;}
+.ss-item{flex:1;min-width:80px;background:rgba(255,255,255,.025);border:1px solid var(--border);
+  border-radius:11px;padding:.6rem .8rem;text-align:center;}
+.ss-val{font-size:1.2rem;font-weight:800;}
+.ss-label{font-size:9.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.7px;margin-top:2px;}
+.ss-feedback{font-size:12.5px;color:var(--sub);line-height:1.6;font-family:'Noto Sans Bengali',sans-serif;}
+
+/* ─── PRONUNCIATION PRACTICE ─── */
+.pronun-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:1.8rem;}
+.pronun-card{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.2rem;
+  position:relative;overflow:hidden;transition:.25s;}
+.pronun-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:0;transition:.25s;}
+.pronun-card:hover{transform:translateY(-3px);border-color:rgba(45,212,191,.2);box-shadow:0 10px 28px rgba(0,0,0,.3);}
+.pronun-card:hover::after{opacity:.7;}
+.pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.pc-word{font-size:1.4rem;font-weight:900;letter-spacing:-.3px;}
+.pc-phonetic{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:.4rem;opacity:.85;}
+.pc-meaning{font-size:12px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.8rem;}
+.pc-tips{display:flex;flex-direction:column;gap:4px;margin-bottom:.8rem;}
+.pc-tip{font-size:11px;color:var(--muted);display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
+.pc-tip-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+.pc-actions{display:flex;gap:6px;}
+.btn-listen{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal);
+  padding:.4rem .9rem;border-radius:9px;cursor:pointer;font-size:11.5px;font-weight:600;font-family:'Outfit',sans-serif;transition:.2s;}
+.btn-listen:hover{background:rgba(45,212,191,.16);}
+.btn-practice{background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);color:var(--gold);
+  padding:.4rem .9rem;border-radius:9px;cursor:pointer;font-size:11.5px;font-weight:600;font-family:'Outfit',sans-serif;transition:.2s;}
+.btn-practice:hover{background:rgba(245,200,66,.16);}
+.diff-dot{width:8px;height:8px;border-radius:50%;}
+
+/* ─── SPEAKING TOPICS ─── */
+.topics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:1.8rem;}
+.topic-card{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.3rem;
+  cursor:pointer;transition:.3s;position:relative;overflow:hidden;}
+.topic-card::before{content:'';position:absolute;inset:0;opacity:0;transition:.3s;background:linear-gradient(135deg,rgba(245,200,66,.05),rgba(45,212,191,.04));}
+.topic-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left;transition:.3s;}
+.topic-card:hover{transform:translateY(-4px);border-color:rgba(245,200,66,.15);box-shadow:0 14px 40px rgba(0,0,0,.35);}
+.topic-card:hover::before{opacity:1;}
+.topic-card:hover::after{transform:scaleX(1);}
+.tc-icon{font-size:1.8rem;margin-bottom:.6rem;}
+.tc-title{font-size:14px;font-weight:800;margin-bottom:.3rem;}
+.tc-desc{font-size:12px;color:var(--muted);line-height:1.6;font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.8rem;}
+.tc-footer{display:flex;align-items:center;justify-content:space-between;}
+.tc-level{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.tc-xp{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);font-weight:700;}
+
+/* ─── FLUENCY TRACKER ─── */
+.fluency-tracker{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;}
+.ft-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:1rem;}
+.ft-item{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:13px;padding:.9rem;text-align:center;}
+.ft-val{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ft-label{font-size:10.5px;color:var(--muted);margin-top:2px;font-family:'Noto Sans Bengali',sans-serif;}
+.progress-track{height:7px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;margin:.8rem 0 .4rem;}
+.progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f5c842,#2dd4bf);transition:width .8s ease;box-shadow:0 0 10px rgba(245,200,66,.25);}
+.progress-meta{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;}
+
+/* ─── SPEAKING HISTORY ─── */
+.history-list{display:flex;flex-direction:column;gap:8px;margin-bottom:2rem;}
+.history-item{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;
+  display:flex;align-items:center;gap:12px;transition:.2s;}
+.history-item:hover{border-color:rgba(245,200,66,.15);padding-left:1.5rem;}
+.hi-icon{width:38px;height:38px;border-radius:10px;background:rgba(245,200,66,.08);
+  border:1px solid rgba(245,200,66,.18);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.hi-info{flex:1;}
+.hi-title{font-size:13px;font-weight:700;margin-bottom:1px;}
+.hi-meta{font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.hi-score{font-size:1.05rem;font-weight:800;color:var(--gold);}
+
+/* ─── CHALLENGES ─── */
+.challenge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:1.8rem;}
+.ch-card{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:1.2rem;transition:.25s;cursor:pointer;position:relative;overflow:hidden;}
+.ch-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.3);}
+.ch-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;}
+.ch-icon{font-size:1.4rem;}
+.ch-xp{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--gold);background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.18);padding:2px 8px;border-radius:20px;}
+.ch-title{font-size:13px;font-weight:800;margin-bottom:.3rem;}
+.ch-desc{font-size:11.5px;color:var(--muted);line-height:1.55;font-family:'Noto Sans Bengali',sans-serif;}
+
+/* ─── FOOTER ─── */
+footer{margin-top:3rem;border-top:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.35),rgba(45,212,191,.35),transparent);}
+.footer-inner{max-width:1160px;margin:auto;padding:2.2rem 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;}
+.footer-brand .brand-name{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
+.footer-brand .brand-sub{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:.9rem;font-family:'Noto Sans Bengali',sans-serif;}
+.copyright-text{font-size:11px;color:#2a3545;line-height:1.8;font-family:'JetBrains Mono',monospace;}
+.copyright-text span{color:#374151;}
+.footer-col h4{font-size:.9rem;font-weight:700;color:var(--sub);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.dev-card{background:linear-gradient(135deg,rgba(245,200,66,.04),rgba(45,212,191,.04));border:1px solid rgba(245,200,66,.12);border-radius:14px;padding:1.1rem;}
+.dev-name{font-size:1.05rem;font-weight:800;color:#f0f4f8;margin-bottom:.1rem;}
+.dev-title{font-size:10px;color:var(--gold);letter-spacing:.8px;margin-bottom:.8rem;font-family:'JetBrains Mono',monospace;}
+.dev-contact{display:flex;flex-direction:column;gap:.45rem;}
+.contact-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);}
+.contact-row a{color:var(--sub);text-decoration:none;transition:.15s;}
+.contact-row a:hover{color:var(--gold);}
+.contact-icon{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;background:rgba(255,255,255,.05);}
+.social-links{display:flex;flex-direction:column;gap:.55rem;}
+.social-link{display:flex;align-items:center;gap:10px;padding:.55rem .85rem;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--border);text-decoration:none;color:var(--sub);font-size:12px;transition:.2s;}
+.social-link:hover{background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.2);color:#f0f4f8;transform:translateX(3px);}
+.sl-icon{font-size:.9rem;width:20px;text-align:center;}
+.sl-label{font-weight:600;}
+.sl-handle{color:var(--muted);font-size:10.5px;margin-left:auto;font-family:'JetBrains Mono',monospace;}
+.footer-bottom{max-width:1160px;margin:auto;padding:.8rem 1.4rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;border-top:1px solid rgba(255,255,255,.04);font-size:11px;color:#2d3748;font-family:'JetBrains Mono',monospace;}
+.footer-bottom a{color:#374151;text-decoration:none;}
+.footer-bottom a:hover{color:var(--muted);}
+.footer-heart{color:var(--rose);}
+
+@media(max-width:800px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}}
+@media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start;}.hero h2{font-size:1.6rem;}.wrap{padding:1rem .9rem 0;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
+
+.toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #f5c842;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.toast.show{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon">🇬🇧</div>
+      <div class="logo-text"><h1>English Shekho</h1><p>ENGLISH LEARNING PLATFORM · A1 TO C2</p></div>
+    </div>
+    <div class="topbar-right">
+      <nav class="nav-links">
+        <a href="dashboard.html" class="nav-link">Home</a>
+        <a href="roadmap.html" class="nav-link">Journey</a>
+        <a href="quiz-dashboard.html" class="nav-link">Quiz</a>
+        <a href="grammar.html" class="nav-link">Grammar</a>
+        <a href="speaking.html" class="nav-link">Speaking</a>
+        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+        <a href="chat.html" class="nav-link">Chat</a>
+      </nav>
+      <div class="user-section">
+        <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
+        <div class="user-name" id="nav-name">Learner</div>
+        <button class="btn-logout" id="btn-logout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-stripe"></div><div class="hero-orb1"></div><div class="hero-orb2"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">🎙️ Speaking Practice</div>
+        <h2>বলতে শিখুন <span>Confidently</span> 🗣️</h2>
+        <p class="hero-sub">Pronunciation practice, speaking topics এবং fluency tracking — microphone দিয়ে নিজের voice রেকর্ড করুন এবং AI feedback পান।</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-v" id="h-sessions">0</div><div class="hstat-l">Sessions</div></div>
+        <div class="hstat"><div class="hstat-v" id="h-streak">0</div><div class="hstat-l">Day Streak</div></div>
+        <div class="hstat"><div class="hstat-v" id="h-xp">0</div><div class="hstat-l">XP Earned</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY TASKS -->
+  <div class="section-title">✅ Daily Speaking Tasks</div>
+  <div class="daily-strip">
+    <div class="ds-header">
+      <div class="ds-title">🎯 আজকের Tasks <span class="ds-badge">Daily</span></div>
+      <div class="ds-progress" id="daily-progress">0 / 5 done</div>
+    </div>
+    <div class="daily-tasks" id="daily-tasks"></div>
+  </div>
+
+  <!-- MIC RECORDER -->
+  <div class="section-title">🎙️ Speaking Practice</div>
+  <div class="recorder-section">
+    <div class="rec-prompt-label">Today's Prompt</div>
+    <div class="rec-prompt" id="rec-prompt">Introduce yourself in English.</div>
+    <div class="rec-prompt-bn" id="rec-prompt-bn">নিজেকে English-এ পরিচয় করিয়ে দিন।</div>
+
+    <div class="mic-wrap">
+      <button class="mic-btn" id="mic-btn" onclick="toggleRecording()">🎙️</button>
+      <div class="waveform" id="waveform">
+        <div class="wave-bar" style="--d:.5s;height:8px;"></div>
+        <div class="wave-bar" style="--d:.7s;height:14px;"></div>
+        <div class="wave-bar" style="--d:.4s;height:10px;"></div>
+        <div class="wave-bar" style="--d:.6s;height:20px;"></div>
+        <div class="wave-bar" style="--d:.5s;height:12px;"></div>
+        <div class="wave-bar" style="--d:.8s;height:18px;"></div>
+        <div class="wave-bar" style="--d:.45s;height:8px;"></div>
+        <div class="wave-bar" style="--d:.65s;height:16px;"></div>
+        <div class="wave-bar" style="--d:.55s;height:10px;"></div>
+      </div>
+      <div class="mic-status" id="mic-status">🎙️ Tap to start recording</div>
+    </div>
+
+    <div class="transcript-box" id="transcript-box">Your speech will appear here...</div>
+
+    <div class="rec-controls">
+      <button class="btn-rec btn-start" id="btn-start" onclick="toggleRecording()">● Start Recording</button>
+      <button class="btn-rec btn-stop" id="btn-stop" onclick="toggleRecording()">■ Stop</button>
+      <button class="btn-rec btn-replay" id="btn-replay" onclick="replayAudio()">▶ Replay</button>
+      <button class="btn-rec btn-submit-rec" id="btn-submit-rec" onclick="submitSpeaking()">Submit ✓</button>
+      <button class="btn-rec btn-next-prompt" onclick="nextPrompt()">Next Prompt →</button>
+    </div>
+
+    <div class="speak-score" id="speak-score"></div>
+  </div>
+
+  <!-- PRONUNCIATION PRACTICE -->
+  <div class="section-title">🔊 Pronunciation Practice</div>
+  <div class="pronun-grid" id="pronun-grid"></div>
+
+  <!-- SPEAKING TOPICS -->
+  <div class="section-title">💬 Speaking Topics</div>
+  <div class="topics-grid" id="topics-grid"></div>
+
+  <!-- FLUENCY TRACKER -->
+  <div class="section-title">📊 Fluency Tracker</div>
+  <div class="fluency-tracker">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+      <div style="font-weight:700;font-size:15px;">Overall Speaking Progress</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);" id="fluency-label">0 sessions completed</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="fluency-bar" style="width:0%"></div></div>
+    <div class="progress-meta"><span id="fluency-pct">0% fluency score</span><span id="fluency-next">Keep speaking daily! 🎙️</span></div>
+    <div class="ft-grid" id="ft-grid"></div>
+  </div>
+
+  <!-- SPEAKING CHALLENGES -->
+  <div class="section-title">⚡ Speaking Challenges</div>
+  <div class="challenge-grid" id="challenge-grid"></div>
+
+  <!-- HISTORY -->
+  <div class="section-title">🕐 Speaking History</div>
+  <div class="history-list" id="history-list"></div>
+
+</div><!-- end .wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand-name">🇬🇧 English Shekho</div>
+      <div class="brand-sub">একটি বাংলা-মাধ্যম English ভাষা শেখার প্ল্যাটফর্ম। A1 থেকে C2 পর্যন্ত vocabulary, grammar, speaking এবং live chat সুবিধা।</div>
+      <div class="copyright-text">© <span id="footer-year"></span> English Shekho<br><span>All rights reserved.</span><br><span>Unauthorized reproduction</span><br><span>is strictly prohibited.</span></div>
+    </div>
+    <div class="footer-col">
+      <h4>👨‍💻 Developer</h4>
+      <div class="dev-card">
+        <div class="dev-name">Zishan Rafi</div>
+        <div class="dev-title">WEB DEVELOPER · EDUCATOR</div>
+        <div class="dev-contact">
+          <div class="contact-row"><div class="contact-icon">📧</div><a href="mailto:zishanrafii@gmail.com">zishanrafii@gmail.com</a></div>
+          <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+8801877083978">+8801877083978</a></div>
+          <div class="contact-row"><div class="contact-icon">💬</div><a href="https://wa.me/8801877083978" target="_blank">WhatsApp</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>🔗 Social Media</h4>
+      <div class="social-links">
+        <a href="https://facebook.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">📘</span><span class="sl-label">Facebook</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://www.youtube.com/@Cyrus_rush" target="_blank" class="social-link"><span class="sl-icon">▶️</span><span class="sl-label">YouTube</span><span class="sl-handle">Cy-Rush</span></a>
+        <a href="https://instagram.com/sodium_neon" target="_blank" class="social-link"><span class="sl-icon">📸</span><span class="sl-label">Instagram</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://github.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">🐙</span><span class="sl-label">GitHub</span><span class="sl-handle">zishanrafi</span></a>
+        <a href="https://t.me/zissueissue" target="_blank" class="social-link"><span class="sl-icon">✈️</span><span class="sl-label">Telegram</span><span class="sl-handle">itz cyrus</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© <span id="footer-year2"></span> English Shekho · Developed by <a href="https://facebook.com/zishanrafii" target="_blank">Zishan Rafi</a></div>
+    <div>Built with <span class="footer-heart">♥</span> for Bengali learners &nbsp;·&nbsp; Version 1.0</div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {
+  requireAuth, auth, db,
+  doc, getDoc, updateDoc, setDoc,
+  collection, addDoc, getDocs,
+  query, orderBy, limit, where,
+  serverTimestamp, increment,
+  signOut
+} from "./firebase-config.js";
+
+/* ══════════════════════════════════════
+   DATA
+══════════════════════════════════════ */
+const PROMPTS = [
+  {en:"Introduce yourself in English.",            bn:"নিজেকে English-এ পরিচয় করিয়ে দিন।"},
+  {en:"Describe your hometown.",                   bn:"আপনার শহর বা গ্রামের বর্ণনা দিন।"},
+  {en:"Talk about your favourite hobby.",          bn:"আপনার প্রিয় hobby সম্পর্কে বলুন।"},
+  {en:"What do you want to do in the future?",    bn:"ভবিষ্যতে আপনি কী করতে চান?"},
+  {en:"Describe your best friend.",               bn:"আপনার সেরা বন্ধুর সম্পর্কে বলুন।"},
+  {en:"What is your daily routine?",              bn:"আপনার প্রতিদিনের রুটিন কী?"},
+  {en:"Talk about a memorable experience.",       bn:"একটি স্মরণীয় অভিজ্ঞতার কথা বলুন।"},
+  {en:"Why are you learning English?",            bn:"কেন আপনি English শিখছেন?"},
+  {en:"Describe your favourite food.",            bn:"আপনার প্রিয় খাবারের বর্ণনা দিন।"},
+  {en:"What do you think about social media?",   bn:"Social media সম্পর্কে আপনার মতামত কী?"},
+];
+
+const DAILY_TASKS = [
+  {id:"dt1", name:"Read aloud 5 sentences",      sub:"৫টি sentence জোরে পড়ুন",      done:false},
+  {id:"dt2", name:"Record a 1-min introduction", sub:"১ মিনিট নিজেকে introduce করুন", done:false},
+  {id:"dt3", name:"Pronounce 10 new words",      sub:"১০টি নতুন শব্দ উচ্চারণ করুন",  done:false},
+  {id:"dt4", name:"Listen & repeat 3 phrases",   sub:"৩টি phrase শুনে repeat করুন",   done:false},
+  {id:"dt5", name:"Answer today's prompt",       sub:"আজকের prompt-এর উত্তর দিন",     done:false},
+];
+
+const PRONUN_WORDS = [
+  {word:"Comfortable", phonetic:"/ˈkʌmftəbl/",  meaning:"আরামদায়ক",   tips:["'Comf-ta-bl' — মাঝের 'or' নীরব","৩ syllable: COMF-ta-bl","Common mistake: 'com-FOR-ta-ble'"],   diff:"medium"},
+  {word:"Pronunciation",phonetic:"/prəˌnʌnsiˈeɪʃn/",meaning:"উচ্চারণ",tips:["'pro-NUN-see-AY-shun'","৫ syllable word","'Pronounce' থেকে আলাদা!"],                             diff:"hard"},
+  {word:"Regularly",   phonetic:"/ˈreɡjələrli/", meaning:"নিয়মিত",    tips:["'REG-yuh-ler-lee'","৪ syllable","র‍্যাগ-ইউ-লার-লি"],                                            diff:"medium"},
+  {word:"Wednesday",   phonetic:"/ˈwenzdeɪ/",    meaning:"বুধবার",     tips:["'WENZ-day' — মাঝের 'd' নীরব","Spelling-এ 'd' আছে কিন্তু উচ্চারণে নেই"],                        diff:"easy"},
+  {word:"Clothes",     phonetic:"/kloʊðz/",       meaning:"পোশাক",      tips:["'Klohz' — 'e' নীরব","th sound: voiced /ð/","'Close' এর মতো শোনায়"],                             diff:"easy"},
+  {word:"Particularly",phonetic:"/pəˈtɪkjələrli/",meaning:"বিশেষভাবে", tips:["'par-TIK-yuh-ler-lee'","৫ syllable","প্রায়ই ভুল: 'par-TIC-u-lar-ly'"],                         diff:"hard"},
+  {word:"Thorough",    phonetic:"/ˈθʌrə/",        meaning:"পুঙ্খানুপুঙ্খ",tips:["'THUR-oh'","gh নীরব","'though' এর মতো শেষ হয়"],                                               diff:"hard"},
+  {word:"Inevitable",  phonetic:"/ɪnˈevɪtəbl/",  meaning:"অনিবার্য",   tips:["'in-EV-i-ta-bl'","stress দ্বিতীয় syllable-এ","৫ syllable"],                                   diff:"hard"},
+];
+
+const TOPICS = [
+  {icon:"🏠", title:"My Home & Family",   desc:"বাড়ি ও পরিবার নিয়ে কথা বলুন।",       level:"A1", xp:50,  color:"rgba(45,212,191,.12)", border:"rgba(45,212,191,.25)"},
+  {icon:"🎓", title:"Education & School", desc:"পড়াশোনা ও স্কুল নিয়ে আলোচনা।",      level:"A2", xp:75,  color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)"},
+  {icon:"💼", title:"Work & Career",      desc:"কাজ ও ক্যারিয়ার নিয়ে বলুন।",         level:"B1", xp:100, color:"rgba(129,140,248,.12)",border:"rgba(129,140,248,.25)"},
+  {icon:"🌍", title:"Environment",        desc:"পরিবেশ ও climate change নিয়ে।",       level:"B1", xp:100, color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)"},
+  {icon:"📱", title:"Technology & Life",  desc:"Technology কীভাবে জীবন বদলাচ্ছে।",   level:"B2", xp:125, color:"rgba(251,146,60,.12)", border:"rgba(251,146,60,.25)"},
+  {icon:"🏛️", title:"Culture & Society",  desc:"সংস্কৃতি ও সমাজ নিয়ে opinion দিন।",  level:"B2", xp:125, color:"rgba(251,113,133,.12)",border:"rgba(251,113,133,.25)"},
+  {icon:"🧠", title:"Critical Thinking",  desc:"কোনো বিষয়ে argue করতে শিখুন।",       level:"C1", xp:150, color:"rgba(167,139,250,.12)",border:"rgba(167,139,250,.25)"},
+  {icon:"🎤", title:"Public Speaking",    desc:"বড় audience-এর সামনে speak করুন।",   level:"C1", xp:150, color:"rgba(96,165,250,.12)", border:"rgba(96,165,250,.25)"},
+];
+
+const CHALLENGES = [
+  {icon:"🔥", title:"7-Day Streak",        desc:"টানা ৭ দিন speaking practice করুন।",  xp:"+200 XP"},
+  {icon:"🎤", title:"2-Min Speech",         desc:"যেকোনো topic-এ ২ মিনিট কথা বলুন।",  xp:"+100 XP"},
+  {icon:"🗣️", title:"Pronunciation Master", desc:"১০টি কঠিন word সঠিকভাবে বলুন।",     xp:"+75 XP"},
+  {icon:"📖", title:"Read Aloud Challenge", desc:"একটি paragraph জোরে পড়ুন।",         xp:"+50 XP"},
+];
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let currentUser   = null;
+let isRecording   = false;
+let mediaRecorder = null;
+let audioChunks   = [];
+let audioBlob     = null;
+let audioUrl      = null;
+let recognition   = null;
+let currentPromptIdx = 0;
+let transcript    = "";
+let sessionCount  = 0;
+let streakCount   = 0;
+let xpTotal       = 0;
+let dailyDone     = 0;
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+function toast(msg, type="success"){
+  const t = document.getElementById("toast");
+  if(!t) return;
+  t.textContent = msg;
+  t.style.borderLeftColor = type==="error"?"#fb7185":type==="info"?"#818cf8":"#f5c842";
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2800);
+}
+
+/* ══════════════════════════════════════
+   BUILD UI
+══════════════════════════════════════ */
+function buildDailyTasks(){
+  const el = document.getElementById("daily-tasks");
+  el.innerHTML = DAILY_TASKS.map(t=>`
+    <div class="dt-card ${t.done?'done':''}" id="dtc-${t.id}" onclick="toggleDailyTask('${t.id}')">
+      <div class="dt-check">${t.done?'✓':''}</div>
+      <div class="dt-info">
+        <div class="dt-name">${t.name}</div>
+        <div class="dt-sub">${t.sub}</div>
+      </div>
+    </div>`).join("");
+  updateDailyProgress();
+}
+
+function toggleDailyTask(id){
+  const task = DAILY_TASKS.find(t=>t.id===id);
+  if(!task) return;
+  task.done = !task.done;
+  const card = document.getElementById("dtc-"+id);
+  card.classList.toggle("done", task.done);
+  card.querySelector(".dt-check").textContent = task.done ? "✓" : "";
+  updateDailyProgress();
+  if(task.done) toast("✅ Task completed! Keep going 💪");
+}
+
+function updateDailyProgress(){
+  dailyDone = DAILY_TASKS.filter(t=>t.done).length;
+  document.getElementById("daily-progress").textContent = `${dailyDone} / ${DAILY_TASKS.length} done`;
+}
+
+function buildPronunGrid(){
+  document.getElementById("pronun-grid").innerHTML = PRONUN_WORDS.map(w=>`
+    <div class="pronun-card">
+      <div class="pc-top">
+        <div>
+          <div class="pc-word">${w.word}</div>
+          <div class="pc-phonetic">${w.phonetic}</div>
+        </div>
+        <div class="diff-dot" style="background:${w.diff==='easy'?'#34d399':w.diff==='medium'?'#f5c842':'#fb7185'};"></div>
+      </div>
+      <div class="pc-meaning">${w.meaning}</div>
+      <div class="pc-tips">${w.tips.map(tip=>`<div class="pc-tip"><span class="pc-tip-dot"></span>${tip}</div>`).join("")}</div>
+      <div class="pc-actions">
+        <button class="btn-listen" onclick="listenWord('${w.word}')">🔊 Listen</button>
+        <button class="btn-practice" onclick="practiceWord('${w.word}')">🎙️ Practice</button>
+      </div>
+    </div>`).join("");
+}
+
+function buildTopicsGrid(){
+  document.getElementById("topics-grid").innerHTML = TOPICS.map(t=>`
+    <div class="topic-card" style="background:linear-gradient(135deg,${t.color},rgba(8,14,26,.8));border-color:${t.border};"
+      onclick="loadPromptFromTopic('${t.title}','${t.desc}')">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,${t.border.replace('.25','.8')},transparent);"></div>
+      <div class="tc-icon">${t.icon}</div>
+      <div class="tc-title">${t.title}</div>
+      <div class="tc-desc">${t.desc}</div>
+      <div class="tc-footer">
+        <span class="tc-level" style="background:${t.color};border:1px solid ${t.border};color:${t.border.replace('rgba(','').split(',')[0].length<3?'#fff':'#fff'};">${t.level}</span>
+        <span class="tc-xp">+${t.xp} XP</span>
+      </div>
+    </div>`).join("");
+}
+
+function buildChallenges(){
+  document.getElementById("challenge-grid").innerHTML = CHALLENGES.map(c=>`
+    <div class="ch-card" onclick="toast('Challenge started! 🔥')">
+      <div class="ch-top"><span class="ch-icon">${c.icon}</span><span class="ch-xp">${c.xp}</span></div>
+      <div class="ch-title">${c.title}</div>
+      <div class="ch-desc">${c.desc}</div>
+    </div>`).join("");
+}
+
+function updateFluencyTracker(){
+  const pct = Math.min(100, Math.round(sessionCount * 3.33));
+  document.getElementById("fluency-bar").style.width = pct+"%";
+  document.getElementById("fluency-label").textContent = `${sessionCount} sessions completed`;
+  document.getElementById("fluency-pct").textContent   = pct+"% fluency score";
+  document.getElementById("fluency-next").textContent  =
+    pct>=100?"🏆 Expert speaker!"  :pct>=75?"Almost fluent! 🔥":pct>=50?"Good progress! 💪":"Keep speaking daily! 🎙️";
+
+  document.getElementById("ft-grid").innerHTML = [
+    {val:sessionCount,        label:"Total Sessions"},
+    {val:streakCount+"d",     label:"Current Streak"},
+    {val:xpTotal,             label:"XP Earned"},
+    {val:Math.round(pct)+"%", label:"Fluency Score"},
+  ].map(s=>`<div class="ft-item"><div class="ft-val">${s.val}</div><div class="ft-label">${s.label}</div></div>`).join("");
+}
+
+function updateHeroStats(){
+  document.getElementById("h-sessions").textContent = sessionCount;
+  document.getElementById("h-streak").textContent   = streakCount;
+  document.getElementById("h-xp").textContent       = xpTotal;
+}
+
+/* ══════════════════════════════════════
+   PROMPT SYSTEM
+══════════════════════════════════════ */
+function loadPrompt(idx){
+  const p = PROMPTS[idx % PROMPTS.length];
+  document.getElementById("rec-prompt").textContent    = p.en;
+  document.getElementById("rec-prompt-bn").textContent = p.bn;
+  resetRecorder();
+}
+
+function nextPrompt(){
+  currentPromptIdx = (currentPromptIdx + 1) % PROMPTS.length;
+  loadPrompt(currentPromptIdx);
+  toast("Next prompt loaded! 🎙️","info");
+}
+
+function loadPromptFromTopic(title, desc){
+  document.getElementById("rec-prompt").textContent    = `Talk about: ${title}`;
+  document.getElementById("rec-prompt-bn").textContent = desc;
+  resetRecorder();
+  document.querySelector(".recorder-section").scrollIntoView({behavior:"smooth"});
+  toast(`Topic loaded: ${title} 🎤`,"info");
+}
+
+function resetRecorder(){
+  isRecording = false;
+  audioBlob = null; audioUrl = null; transcript = "";
+  document.getElementById("mic-btn").classList.remove("recording");
+  document.getElementById("mic-status").textContent = "🎙️ Tap to start recording";
+  document.getElementById("mic-status").classList.remove("active");
+  document.getElementById("btn-start").style.display = "inline-flex";
+  document.getElementById("btn-stop").style.display  = "none";
+  document.getElementById("btn-replay").style.display = "none";
+  document.getElementById("btn-submit-rec").style.display = "none";
+  document.getElementById("transcript-box").className = "transcript-box";
+  document.getElementById("speak-score").className = "speak-score";
+  document.querySelectorAll(".wave-bar").forEach(b=>b.classList.remove("active"));
+}
+
+/* ══════════════════════════════════════
+   RECORDING — Web Speech API + MediaRecorder
+══════════════════════════════════════ */
+async function toggleRecording(){
+  if(!isRecording) await startRecording();
+  else stopRecording();
+}
+window.toggleRecording = toggleRecording;
+window.nextPrompt = nextPrompt;
+window.replayAudio = replayAudio;
+window.submitSpeaking = submitSpeaking;
+window.listenWord = listenWord;
+window.practiceWord = practiceWord;
+window.toggleDailyTask = toggleDailyTask;
+
+async function startRecording(){
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      audioBlob = new Blob(audioChunks,{type:"audio/webm"});
+      audioUrl  = URL.createObjectURL(audioBlob);
+      document.getElementById("btn-replay").style.display      = "inline-flex";
+      document.getElementById("btn-submit-rec").style.display  = "inline-flex";
+    };
+    mediaRecorder.start();
+    isRecording = true;
+
+    document.getElementById("mic-btn").classList.add("recording");
+    document.getElementById("mic-btn").textContent = "⏹️";
+    document.getElementById("mic-status").textContent = "🔴 Recording...";
+    document.getElementById("mic-status").classList.add("active");
+    document.getElementById("btn-start").style.display = "none";
+    document.getElementById("btn-stop").style.display  = "inline-flex";
+    document.querySelectorAll(".wave-bar").forEach(b=>b.classList.add("active"));
+
+    // Speech recognition
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SR){
+      recognition = new SR();
+      recognition.lang = "en-US";
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.onresult = e => {
+        let interim = "", final = "";
+        for(let i=e.resultIndex;i<e.results.length;i++){
+          if(e.results[i].isFinal) final += e.results[i][0].transcript;
+          else interim += e.results[i][0].transcript;
+        }
+        transcript += final;
+        const box = document.getElementById("transcript-box");
+        box.textContent = transcript + (interim ? " "+interim : "");
+        box.className   = "transcript-box show" + (box.textContent.trim()?" has-text":"");
+      };
+      recognition.start();
+    }
+  } catch(e){
+    toast("⚠️ Microphone access denied. Browser permission দিন।","error");
+  }
+}
+
+function stopRecording(){
+  if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+  mediaRecorder?.stream?.getTracks().forEach(t=>t.stop());
+  if(recognition) try{ recognition.stop(); }catch(e){}
+  isRecording = false;
+
+  document.getElementById("mic-btn").classList.remove("recording");
+  document.getElementById("mic-btn").textContent = "🎙️";
+  document.getElementById("mic-status").textContent = "✅ Recording saved!";
+  document.getElementById("mic-status").classList.remove("active");
+  document.getElementById("btn-stop").style.display  = "none";
+  document.getElementById("btn-start").style.display = "inline-flex";
+  document.querySelectorAll(".wave-bar").forEach(b=>b.classList.remove("active"));
+}
+
+function replayAudio(){
+  if(!audioUrl){ toast("⚠️ No recording yet.","error"); return; }
+  new Audio(audioUrl).play();
+}
+
+/* ══════════════════════════════════════
+   PRONUNCIATION HELPERS
+══════════════════════════════════════ */
+function listenWord(word){
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = "en-US"; u.rate = 0.8;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+function practiceWord(word){
+  document.getElementById("rec-prompt").textContent    = `Say this word clearly: "${word}"`;
+  document.getElementById("rec-prompt-bn").textContent = "এই word-টি স্পষ্টভাবে বলুন।";
+  document.querySelector(".recorder-section").scrollIntoView({behavior:"smooth"});
+  toast(`Practice: ${word} 🔊`,"info");
+}
+
+/* ══════════════════════════════════════
+   SUBMIT SPEAKING — Firebase
+══════════════════════════════════════ */
+async function submitSpeaking(){
+  if(!audioBlob){ toast("⚠️ Please record first!","error"); return; }
+  if(!currentUser){ toast("⚠️ Login করুন।","error"); return; }
+
+  const prompt  = document.getElementById("rec-prompt").textContent;
+  const xp      = 50;
+  const words   = transcript.trim().split(/\s+/).filter(Boolean).length;
+
+  // Mock score
+  const fluencyScore  = Math.floor(60 + Math.random()*35);
+  const pronunScore   = Math.floor(65 + Math.random()*30);
+  const confidScore   = Math.floor(70 + Math.random()*25);
+  const overallScore  = Math.round((fluencyScore+pronunScore+confidScore)/3);
+
+  try {
+    // Save to Firestore
+    await addDoc(collection(db,"speaking_sessions"),{
+      uid:          currentUser.uid,
+      displayName:  currentUser.displayName||"",
+      prompt:       prompt,
+      transcript:   transcript,
+      wordCount:    words,
+      scores:{fluency:fluencyScore, pronunciation:pronunScore, confidence:confidScore, overall:overallScore},
+      xpEarned:     xp,
+      recordedAt:   serverTimestamp()
+    });
+
+    // Update user XP + speaking stats
+    await updateDoc(doc(db,"users",currentUser.uid),{
+      xp:             increment(xp),
+      speakSessions:  increment(1),
+      speakingXP:     increment(xp)
+    });
+
+    sessionCount++; xpTotal += xp;
+    updateHeroStats();
+    updateFluencyTracker();
+    await loadHistory();
+
+    // Show score card
+    const sc = document.getElementById("speak-score");
+    sc.innerHTML = `
+      <div style="font-weight:800;font-size:14px;margin-bottom:.8rem;">📊 Your Score</div>
+      <div class="ss-row">
+        <div class="ss-item"><div class="ss-val" style="color:#2dd4bf;">${fluencyScore}%</div><div class="ss-label">Fluency</div></div>
+        <div class="ss-item"><div class="ss-val" style="color:#818cf8;">${pronunScore}%</div><div class="ss-label">Pronunciation</div></div>
+        <div class="ss-item"><div class="ss-val" style="color:#fb923c;">${confidScore}%</div><div class="ss-label">Confidence</div></div>
+        <div class="ss-item"><div class="ss-val" style="color:#f5c842;">${overallScore}%</div><div class="ss-label">Overall</div></div>
+      </div>
+      <div class="ss-feedback">${
+        overallScore>=85 ? "🌟 Excellent! আপনার speaking খুব ভালো। এভাবে continue করুন।" :
+        overallScore>=70 ? "👍 Good job! আরো practice করলে আরও উন্নত হবে।" :
+        "💪 Keep going! নিয়মিত practice করলে অবশ্যই ভালো হবে।"
+      }</div>
+      <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);">+${xp} XP earned! 🎉</div>`;
+    sc.classList.add("show");
+    toast(`🎉 Submitted! +${xp} XP · Score: ${overallScore}%`);
+
+  } catch(e){ toast("❌ Submit failed: "+e.message,"error"); }
+}
+
+/* ══════════════════════════════════════
+   HISTORY — Firebase
+══════════════════════════════════════ */
+function fmtAgo(ts){
+  if(!ts) return "";
+  const d = ts.toDate?ts.toDate():new Date(ts);
+  const diff = Math.floor((Date.now()-d)/1000);
+  if(diff<60)    return "এইমাত্র";
+  if(diff<3600)  return Math.floor(diff/60)+" মিনিট আগে";
+  if(diff<86400) return Math.floor(diff/3600)+" ঘণ্টা আগে";
+  return Math.floor(diff/86400)+" দিন আগে";
+}
+
+async function loadHistory(){
+  if(!currentUser) return;
+  const el = document.getElementById("history-list");
+  el.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:1rem;text-align:center;font-family:'Noto Sans Bengali',sans-serif;">Loading...</div>`;
+  try {
+    const snap = await getDocs(query(
+      collection(db,"speaking_sessions"),
+      where("uid","==",currentUser.uid),
+      orderBy("recordedAt","desc"),
+      limit(8)
+    ));
+    if(snap.empty){
+      el.innerHTML=`<div style="color:var(--muted);font-size:13px;text-align:center;padding:1.5rem;font-family:'Noto Sans Bengali',sans-serif;">এখনো কোনো speaking session নেই। উপরে record করুন! 🎙️</div>`;
+      return;
+    }
+    el.innerHTML = snap.docs.map(d=>{
+      const s = d.data();
+      return `
+      <div class="history-item">
+        <div class="hi-icon">🎙️</div>
+        <div class="hi-info">
+          <div class="hi-title">${s.prompt?.substring(0,50)||"Speaking Session"}${s.prompt?.length>50?"...":""}</div>
+          <div class="hi-meta">${fmtAgo(s.recordedAt)} · ${s.wordCount||0} words spoken</div>
+        </div>
+        <div class="hi-score">${s.scores?.overall||0}%</div>
+      </div>`;
+    }).join("");
+  } catch(e){
+    el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:1rem;">Could not load history.</div>`;
+  }
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+const yr = new Date().getFullYear();
+document.getElementById("footer-year").textContent  = yr;
+document.getElementById("footer-year2").textContent = yr;
+
+document.getElementById("btn-logout").onclick = async () => {
+  await signOut(auth);
+  window.location.href = "index.html";
+};
+
+requireAuth(async user => {
+  currentUser = user;
+  document.getElementById("nav-name").textContent = user.displayName || user.email.split("@")[0];
+  const avatar = document.getElementById("nav-avatar");
+  if(user.photoURL){ avatar.style.backgroundImage=`url(${user.photoURL})`;avatar.style.backgroundSize="cover";avatar.textContent=""; }
+
+  // Load user stats
+  try {
+    const snap = await getDoc(doc(db,"users",user.uid));
+    if(snap.exists()){
+      const d = snap.data();
+      sessionCount = d.speakSessions || 0;
+      streakCount  = d.streak        || 0;
+      xpTotal      = d.xp            || 0;
+    }
+  } catch(e){ console.warn(e); }
+
+  updateHeroStats();
+  updateFluencyTracker();
+  buildDailyTasks();
+  buildPronunGrid();
+  buildTopicsGrid();
+  buildChallenges();
+  loadPrompt(0);
+  await loadHistory();
+});
+</script>
+</body>
+</html>
