@@ -63,7 +63,17 @@ service cloud.firestore {
         resource.data.senderId == request.auth.uid;
     }
 
-    // ───── CHAT ROOMS (used by chat.html) ─────
+    // ───── LISTENING SESSIONS ─────
+    // Login thakle nijer session save korte parbe, onner ta porbe na
+    match /listening_sessions/{sessionId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.lessonId is string;
+      allow update, delete: if false;
+    }
+
+        // ───── CHAT ROOMS (used by chat.html) ─────
     match /chat_rooms/{roomId} {
       allow read: if request.auth != null;
       allow write: if false;
@@ -153,24 +163,6 @@ service cloud.firestore {
         request.resource.data.status == "accepted";
       allow delete: if request.auth != null &&
         (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
-    }
-
-    // ───── SPEAKING SESSIONS ─────
-    match /speaking_sessions/{sessionId} {
-      allow read: if request.auth != null &&
-        resource.data.uid == request.auth.uid;
-      allow create: if request.auth != null &&
-        request.resource.data.uid == request.auth.uid;
-      allow update, delete: if false;
-    }
-
-    // ───── LISTENING SESSIONS ─────
-    match /listening_sessions/{sessionId} {
-      allow read: if request.auth != null &&
-        resource.data.uid == request.auth.uid;
-      allow create: if request.auth != null &&
-        request.resource.data.uid == request.auth.uid;
-      allow update, delete: if false;
     }
 
     // ───── DEFAULT: sob kichu deny ─────

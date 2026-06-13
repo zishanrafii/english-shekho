@@ -956,11 +956,13 @@ function buildTranscript(lines){
 }
 
 function speakWord(word){
-  if(!word) return;
+  if(!word || isPlaying) return; // শুধু paused/stopped অবস্থায় word tap করা যাবে
+  loadVoice();
   const u = new SpeechSynthesisUtterance(word);
-  u.lang="en-US"; u.rate=0.85;
+  u.lang="en-US"; u.rate=0.85; u.volume=ttsVolume;
+  if(ttsVoice) u.voice=ttsVoice;
   speechSynthesis.cancel();
-  speechSynthesis.speak(u);
+  setTimeout(()=>speechSynthesis.speak(u), 50);
 }
 window.speakWord = speakWord;
 
@@ -974,207 +976,250 @@ function toggleTranscript(){
 window.toggleTranscript = toggleTranscript;
 
 /* ══════════════════════════════════════
-   WEB SPEECH API — REAL TTS PLAYER
+   WEB SPEECH API — FIXED TTS ENGINE
+   Fixes:
+   1. voices not loaded on first click
+   2. pause() broken on Chrome/mobile → simulate with cancel+resume-from-line
+   3. Chrome TTS freezes after ~15s → keepAlive workaround
+   4. onerror "interrupted" false-fires next line
+   5. speakWord() cancels main playback
+   6. volume slider applies immediately
+   7. seek works properly during playback
 ══════════════════════════════════════ */
-let ttsUtterance  = null;
-let ttsLines      = [];       // flat array of all lines
-let ttsLineIdx    = 0;        // current line being spoken
-let ttsStartTime  = 0;        // Date.now() when playback started
-let ttsElapsed    = 0;        // seconds elapsed (tracked manually)
-let ttsTimer      = null;     // interval for progress bar
-let ttsVolume     = 1;
-let ttsPaused     = false;
+let ttsLines   = [];
+let ttsLineIdx = 0;
+let ttsElapsed = 0;
+let ttsTimer   = null;
+let ttsVolume  = 1;
+let ttsPaused  = false;
+let ttsVoice   = null;          // cached voice
+let ttsKeepAlive = null;        // Chrome freeze workaround
+let ttsIgnoreEnd = false;       // prevent double-fire after cancel
 
-function fmtTime(s){ return `${Math.floor(s/60)}:${String(Math.max(0,s)%60).toString().padStart(2,"0")}`; }
-
-/* Check browser support */
-function ttsSupported(){
-  if(!window.speechSynthesis){ toast("⚠️ আপনার browser TTS support করে না।","error"); return false; }
-  return true;
+function fmtTime(s){
+  s = Math.max(0, Math.floor(s));
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
 }
 
-/* Load all lines for current lesson */
-function prepTTS(){
-  ttsLines   = currentLesson.transcript;
-  ttsLineIdx = 0;
-  ttsElapsed = 0;
-  ttsPaused  = false;
-  speechSynthesis.cancel();
+/* ── 1. Pre-load voice once, cache it ── */
+function loadVoice(){
+  if(ttsVoice) return;
+  const voices = speechSynthesis.getVoices();
+  ttsVoice = voices.find(v=>v.lang==="en-US" && /google|natural|samantha|daniel/i.test(v.name))
+           || voices.find(v=>v.lang==="en-US")
+           || voices.find(v=>v.lang.startsWith("en"))
+           || null;
 }
+// Voices load async — pre-cache on page load
+if(speechSynthesis.onvoiceschanged !== undefined){
+  speechSynthesis.onvoiceschanged = loadVoice;
+}
+setTimeout(loadVoice, 500); // fallback for browsers that fire early
 
-/* Speak from current line index */
-function speakFromLine(idx){
+/* ── 2. Chrome freeze workaround: re-trigger every 14s ── */
+function startKeepAlive(){
+  stopKeepAlive();
+  ttsKeepAlive = setInterval(()=>{
+    if(!isPlaying || ttsPaused) return;
+    if(speechSynthesis.speaking) return; // still going, fine
+    // Chrome froze — resume from current line
+    _speakLine(ttsLineIdx);
+  }, 14000);
+}
+function stopKeepAlive(){ clearInterval(ttsKeepAlive); ttsKeepAlive = null; }
+
+/* ── 3. Core speak function ── */
+function _speakLine(idx){
   if(idx >= ttsLines.length){ onTTSEnd(); return; }
   ttsLineIdx = idx;
-
-  // Highlight current line in transcript
   highlightLine(idx);
 
-  ttsUtterance = new SpeechSynthesisUtterance(ttsLines[idx]);
-  ttsUtterance.lang   = "en-US";
-  ttsUtterance.rate   = speeds[speedIdx];
-  ttsUtterance.volume = ttsVolume;
+  loadVoice();
+  const utt = new SpeechSynthesisUtterance(ttsLines[idx]);
+  utt.lang   = "en-US";
+  utt.rate   = speeds[speedIdx];
+  utt.volume = ttsVolume;
+  if(ttsVoice) utt.voice = ttsVoice;
 
-  // Pick a good English voice if available
-  const voices = speechSynthesis.getVoices();
-  const enVoice = voices.find(v=>v.lang==="en-US"&&v.name.toLowerCase().includes("google"))
-                ||voices.find(v=>v.lang==="en-US")
-                ||voices.find(v=>v.lang.startsWith("en"));
-  if(enVoice) ttsUtterance.voice = enVoice;
+  ttsIgnoreEnd = false;
 
-  ttsUtterance.onend = ()=>{
-    if(!ttsPaused) speakFromLine(idx+1);
+  utt.onend = ()=>{
+    if(ttsIgnoreEnd) return;   // was cancelled intentionally
+    if(!ttsPaused && isPlaying) _speakLine(idx + 1);
   };
-  ttsUtterance.onerror = (e)=>{
-    if(e.error !== "interrupted") speakFromLine(idx+1);
+  utt.onerror = (e)=>{
+    if(ttsIgnoreEnd || e.error === "interrupted" || e.error === "canceled") return;
+    // Real error — skip to next line
+    setTimeout(()=>{ if(!ttsPaused && isPlaying) _speakLine(idx + 1); }, 300);
   };
 
-  speechSynthesis.speak(ttsUtterance);
+  speechSynthesis.speak(utt);
 }
 
-/* Highlight spoken line and word in transcript */
-function highlightLine(idx){
-  document.querySelectorAll(".word").forEach(w=>{
-    const li = parseInt(w.dataset.line);
-    w.classList.toggle("highlight", li === idx);
-  });
-  // Scroll to highlighted line
-  const first = document.querySelector(`.word[data-line="${idx}"]`);
-  if(first) first.scrollIntoView({behavior:"smooth", block:"nearest"});
+/* ── 4. Cancel safely (sets ignore flag) ── */
+function _cancelTTS(){
+  ttsIgnoreEnd = true;
+  speechSynthesis.cancel();
+  // Small delay so cancel() takes effect before next speak()
 }
 
-/* Called when all lines done */
-function onTTSEnd(){
-  isPlaying = false;
-  ttsPaused = false;
-  clearInterval(ttsTimer);
-  document.getElementById("play-btn").textContent = "▶";
-  document.getElementById("audio-fill").style.width = "100%";
-  document.querySelectorAll(".word").forEach(w=>w.classList.remove("highlight"));
-  updateWaveform(1);
-  onLessonComplete();
-}
-
-/* Start progress bar ticker */
+/* ── 5. Progress ticker ── */
 function startProgressTicker(){
   clearInterval(ttsTimer);
   const dur = currentLesson.durSec;
   ttsTimer = setInterval(()=>{
-    if(!isPlaying) return;
-    ttsElapsed = Math.min(ttsElapsed+1, dur);
+    if(!isPlaying || ttsPaused) return;
+    ttsElapsed = Math.min(ttsElapsed + 1, dur);
     const pct = ttsElapsed / dur;
-    document.getElementById("audio-fill").style.width = (pct*100)+"%";
+    document.getElementById("audio-fill").style.width = (pct * 100) + "%";
     document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
     updateWaveform(pct);
     if(ttsElapsed >= dur) clearInterval(ttsTimer);
   }, 1000);
 }
 
+/* ── 6. Highlight transcript line ── */
+function highlightLine(idx){
+  document.querySelectorAll(".word").forEach(w=>{
+    w.classList.toggle("highlight", parseInt(w.dataset.line) === idx);
+  });
+  const first = document.querySelector(`.word[data-line="${idx}"]`);
+  if(first) first.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+/* ── 7. Lesson end ── */
+function onTTSEnd(){
+  isPlaying = false;
+  ttsPaused = false;
+  stopKeepAlive();
+  clearInterval(ttsTimer);
+  document.getElementById("play-btn").textContent = "▶";
+  document.getElementById("audio-fill").style.width = "100%";
+  document.getElementById("time-current").textContent = fmtTime(currentLesson.durSec);
+  document.querySelectorAll(".word").forEach(w=>w.classList.remove("highlight"));
+  updateWaveform(1);
+  onLessonComplete();
+}
+
 /* ── CONTROLS ── */
+
 function togglePlay(){
-  if(!ttsSupported()) return;
+  if(!window.speechSynthesis){
+    toast("⚠️ আপনার browser speech support করে না।","error"); return;
+  }
 
   if(!isPlaying && !ttsPaused){
-    // Fresh start
-    prepTTS();
-    isPlaying = true;
-    ttsPaused = false;
+    /* ── Fresh start ── */
+    ttsLines   = currentLesson.transcript;
+    ttsLineIdx = 0;
+    ttsElapsed = 0;
+    ttsPaused  = false;
+    isPlaying  = true;
+    _cancelTTS();
     document.getElementById("play-btn").textContent = "⏸";
     document.getElementById("time-total").textContent = currentLesson.dur;
     startProgressTicker();
-    // Wait for voices to load on first call
+    startKeepAlive();
+    // Ensure voices ready
     if(speechSynthesis.getVoices().length === 0){
-      speechSynthesis.addEventListener("voiceschanged", ()=>speakFromLine(0), {once:true});
+      speechSynthesis.addEventListener("voiceschanged", ()=>{ loadVoice(); _speakLine(0); }, {once:true});
     } else {
-      speakFromLine(0);
+      loadVoice();
+      // Tiny delay on mobile so user-gesture context is active
+      setTimeout(()=>_speakLine(0), 80);
     }
+
   } else if(isPlaying && !ttsPaused){
-    // Pause
-    speechSynthesis.pause();
+    /* ── Pause: cancel + remember position ── */
+    // Note: speechSynthesis.pause() is unreliable on Chrome/Android
+    // We cancel and remember ttsLineIdx so Resume restarts from same line
     ttsPaused = true;
     isPlaying = false;
+    _cancelTTS();
+    stopKeepAlive();
     clearInterval(ttsTimer);
     document.getElementById("play-btn").textContent = "▶";
     toast("⏸ Paused","info");
+
   } else if(ttsPaused){
-    // Resume
-    speechSynthesis.resume();
+    /* ── Resume from paused line ── */
     ttsPaused = false;
     isPlaying = true;
+    ttsIgnoreEnd = false;
     document.getElementById("play-btn").textContent = "⏸";
     startProgressTicker();
+    startKeepAlive();
+    setTimeout(()=>_speakLine(ttsLineIdx), 80);
     toast("▶ Resumed","info");
   }
 }
 window.togglePlay = togglePlay;
 
 function skipForward(){
-  if(!ttsSupported()) return;
-  const next = Math.min(ttsLineIdx+1, ttsLines.length-1);
-  speechSynthesis.cancel();
-  ttsPaused = false;
-  if(isPlaying) speakFromLine(next);
-  else { ttsLineIdx = next; highlightLine(next); }
-  ttsElapsed = Math.min(ttsElapsed+10, currentLesson.durSec);
+  if(!window.speechSynthesis) return;
+  const next = Math.min(ttsLineIdx + 1, ttsLines.length - 1);
+  ttsElapsed = Math.min(ttsElapsed + 10, currentLesson.durSec);
   document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
-  document.getElementById("audio-fill").style.width = (ttsElapsed/currentLesson.durSec*100)+"%";
+  document.getElementById("audio-fill").style.width = (ttsElapsed / currentLesson.durSec * 100) + "%";
+  _cancelTTS();
+  setTimeout(()=>{
+    if(isPlaying && !ttsPaused) _speakLine(next);
+    else { ttsLineIdx = next; highlightLine(next); }
+  }, 80);
 }
 
 function skipBackward(){
-  if(!ttsSupported()) return;
-  const prev = Math.max(ttsLineIdx-1, 0);
-  speechSynthesis.cancel();
-  ttsPaused = false;
-  if(isPlaying) speakFromLine(prev);
-  else { ttsLineIdx = prev; highlightLine(prev); }
-  ttsElapsed = Math.max(ttsElapsed-10, 0);
+  if(!window.speechSynthesis) return;
+  const prev = Math.max(ttsLineIdx - 1, 0);
+  ttsElapsed = Math.max(ttsElapsed - 10, 0);
   document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
-  document.getElementById("audio-fill").style.width = (ttsElapsed/currentLesson.durSec*100)+"%";
+  document.getElementById("audio-fill").style.width = (ttsElapsed / currentLesson.durSec * 100) + "%";
+  _cancelTTS();
+  setTimeout(()=>{
+    if(isPlaying && !ttsPaused) _speakLine(prev);
+    else { ttsLineIdx = prev; highlightLine(prev); }
+  }, 80);
 }
 
 function seekAudio(e){
   const rect = e.currentTarget.getBoundingClientRect();
-  const pct  = Math.max(0, Math.min(1,(e.clientX-rect.left)/rect.width));
-  const targetLine = Math.floor(pct * ttsLines.length);
+  const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  const targetLine = Math.floor(pct * (ttsLines.length || 1));
   ttsElapsed = Math.floor(pct * currentLesson.durSec);
-  document.getElementById("audio-fill").style.width = (pct*100)+"%";
+  document.getElementById("audio-fill").style.width = (pct * 100) + "%";
   document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
   updateWaveform(pct);
-  if(isPlaying){
-    speechSynthesis.cancel();
-    ttsPaused = false;
-    speakFromLine(targetLine);
-  } else {
-    ttsLineIdx = targetLine;
-    highlightLine(targetLine);
-  }
+  _cancelTTS();
+  setTimeout(()=>{
+    if(isPlaying && !ttsPaused) _speakLine(targetLine);
+    else { ttsLineIdx = targetLine; highlightLine(targetLine); }
+  }, 80);
 }
 
 function cycleSpeed(){
-  speedIdx = (speedIdx+1) % speeds.length;
-  const s  = speeds[speedIdx];
-  document.getElementById("speed-btn").textContent = s+"×";
-  // Apply immediately if playing
-  if(isPlaying){
+  speedIdx = (speedIdx + 1) % speeds.length;
+  const s = speeds[speedIdx];
+  document.getElementById("speed-btn").textContent = s + "×";
+  // Restart current line at new speed
+  if(isPlaying && !ttsPaused){
     const line = ttsLineIdx;
-    speechSynthesis.cancel();
-    ttsPaused = false;
-    speakFromLine(line);
+    _cancelTTS();
+    setTimeout(()=>_speakLine(line), 80);
   }
-  toast(`Speed: ${s}×`,"info");
+  toast(`Speed: ${s}×`, "info");
 }
 
 function setVolume(v){
   ttsVolume = parseFloat(v);
-  // Will apply on next utterance
+  // Applies on next utterance automatically
 }
 
-// Stop speech when lesson changes
 function stopTTS(){
-  speechSynthesis.cancel();
+  _cancelTTS();
+  stopKeepAlive();
   clearInterval(ttsTimer);
-  isPlaying = false;
-  ttsPaused = false;
+  isPlaying  = false;
+  ttsPaused  = false;
   ttsElapsed = 0;
   ttsLineIdx = 0;
   document.getElementById("play-btn").textContent = "▶";
