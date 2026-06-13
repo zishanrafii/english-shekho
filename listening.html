@@ -233,6 +233,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #f5c842;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
 .toast.show{opacity:1;transform:translateY(0);}
 </style>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=c1iSfdbb"></script>
 </head>
 <body>
 <div class="wrap">
@@ -956,13 +957,14 @@ function buildTranscript(lines){
 }
 
 function speakWord(word){
-  if(!word || isPlaying) return; // শুধু paused/stopped অবস্থায় word tap করা যাবে
-  loadVoice();
-  const u = new SpeechSynthesisUtterance(word);
-  u.lang="en-US"; u.rate=0.85; u.volume=ttsVolume;
-  if(ttsVoice) u.voice=ttsVoice;
-  speechSynthesis.cancel();
-  setTimeout(()=>speechSynthesis.speak(u), 50);
+  if(!word || !rvReady()) return;
+  // pause main playback temporarily if playing
+  const wasPlaying = isPlaying && !ttsPaused;
+  if(wasPlaying){ _cancelTTS(); }
+  responsiveVoice.speak(word, RV_VOICE, {
+    rate: 0.85, volume: ttsVolume,
+    onend: ()=>{ if(wasPlaying) _speakLine(ttsLineIdx); }
+  });
 }
 window.speakWord = speakWord;
 
@@ -976,15 +978,8 @@ function toggleTranscript(){
 window.toggleTranscript = toggleTranscript;
 
 /* ══════════════════════════════════════
-   WEB SPEECH API — FIXED TTS ENGINE
-   Fixes:
-   1. voices not loaded on first click
-   2. pause() broken on Chrome/mobile → simulate with cancel+resume-from-line
-   3. Chrome TTS freezes after ~15s → keepAlive workaround
-   4. onerror "interrupted" false-fires next line
-   5. speakWord() cancels main playback
-   6. volume slider applies immediately
-   7. seek works properly during playback
+   RESPONSIVEVOICE ENGINE
+   Works on Brave, Chrome, Firefox, Safari, Mobile
 ══════════════════════════════════════ */
 let ttsLines   = [];
 let ttsLineIdx = 0;
@@ -992,78 +987,43 @@ let ttsElapsed = 0;
 let ttsTimer   = null;
 let ttsVolume  = 1;
 let ttsPaused  = false;
-let ttsVoice   = null;          // cached voice
-let ttsKeepAlive = null;        // Chrome freeze workaround
-let ttsIgnoreEnd = false;       // prevent double-fire after cancel
+const RV_VOICE = "UK English Female"; // clear natural voice
 
 function fmtTime(s){
   s = Math.max(0, Math.floor(s));
   return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
 }
 
-/* ── 1. Pre-load voice once, cache it ── */
-function loadVoice(){
-  if(ttsVoice) return;
-  const voices = speechSynthesis.getVoices();
-  ttsVoice = voices.find(v=>v.lang==="en-US" && /google|natural|samantha|daniel/i.test(v.name))
-           || voices.find(v=>v.lang==="en-US")
-           || voices.find(v=>v.lang.startsWith("en"))
-           || null;
+function rvReady(){
+  return typeof responsiveVoice !== "undefined";
 }
-// Voices load async — pre-cache on page load
-if(speechSynthesis.onvoiceschanged !== undefined){
-  speechSynthesis.onvoiceschanged = loadVoice;
-}
-setTimeout(loadVoice, 500); // fallback for browsers that fire early
 
-/* ── 2. Chrome freeze workaround: re-trigger every 14s ── */
-function startKeepAlive(){
-  stopKeepAlive();
-  ttsKeepAlive = setInterval(()=>{
-    if(!isPlaying || ttsPaused) return;
-    if(speechSynthesis.speaking) return; // still going, fine
-    // Chrome froze — resume from current line
-    _speakLine(ttsLineIdx);
-  }, 14000);
-}
-function stopKeepAlive(){ clearInterval(ttsKeepAlive); ttsKeepAlive = null; }
-
-/* ── 3. Core speak function ── */
+/* ── Speak one line, chain to next on end ── */
 function _speakLine(idx){
+  if(!rvReady()){ toast("⚠️ ResponsiveVoice লোড হয়নি।","error"); return; }
   if(idx >= ttsLines.length){ onTTSEnd(); return; }
   ttsLineIdx = idx;
   highlightLine(idx);
 
-  loadVoice();
-  const utt = new SpeechSynthesisUtterance(ttsLines[idx]);
-  utt.lang   = "en-US";
-  utt.rate   = speeds[speedIdx];
-  utt.volume = ttsVolume;
-  if(ttsVoice) utt.voice = ttsVoice;
-
-  ttsIgnoreEnd = false;
-
-  utt.onend = ()=>{
-    if(ttsIgnoreEnd) return;   // was cancelled intentionally
-    if(!ttsPaused && isPlaying) _speakLine(idx + 1);
-  };
-  utt.onerror = (e)=>{
-    if(ttsIgnoreEnd || e.error === "interrupted" || e.error === "canceled") return;
-    // Real error — skip to next line
-    setTimeout(()=>{ if(!ttsPaused && isPlaying) _speakLine(idx + 1); }, 300);
-  };
-
-  speechSynthesis.speak(utt);
+  responsiveVoice.speak(ttsLines[idx], RV_VOICE, {
+    rate:   speeds[speedIdx],
+    volume: ttsVolume,
+    pitch:  1,
+    onend: ()=>{
+      if(!ttsPaused && isPlaying) _speakLine(idx + 1);
+    },
+    onerror: ()=>{
+      if(!ttsPaused && isPlaying) setTimeout(()=>_speakLine(idx + 1), 200);
+    }
+  });
 }
 
-/* ── 4. Cancel safely (sets ignore flag) ── */
+/* ── Cancel safely ── */
 function _cancelTTS(){
-  ttsIgnoreEnd = true;
-  speechSynthesis.cancel();
-  // Small delay so cancel() takes effect before next speak()
+  if(rvReady()) responsiveVoice.cancel();
 }
 
-/* ── 5. Progress ticker ── */
+/* ── Progress ticker ── */
 function startProgressTicker(){
   clearInterval(ttsTimer);
   const dur = currentLesson.durSec;
@@ -1078,7 +1038,7 @@ function startProgressTicker(){
   }, 1000);
 }
 
-/* ── 6. Highlight transcript line ── */
+/* ── Highlight transcript line ── */
 function highlightLine(idx){
   document.querySelectorAll(".word").forEach(w=>{
     w.classList.toggle("highlight", parseInt(w.dataset.line) === idx);
@@ -1087,11 +1047,10 @@ function highlightLine(idx){
   if(first) first.scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
-/* ── 7. Lesson end ── */
+/* ── Lesson end ── */
 function onTTSEnd(){
   isPlaying = false;
   ttsPaused = false;
-  stopKeepAlive();
   clearInterval(ttsTimer);
   document.getElementById("play-btn").textContent = "▶";
   document.getElementById("audio-fill").style.width = "100%";
@@ -1102,83 +1061,61 @@ function onTTSEnd(){
 }
 
 /* ── CONTROLS ── */
-
 function togglePlay(){
-  if(!window.speechSynthesis){
-    toast("⚠️ আপনার browser speech support করে না।","error"); return;
-  }
+  if(!rvReady()){ toast("⚠️ ResponsiveVoice লোড হয়নি — internet connection check করুন।","error"); return; }
 
   if(!isPlaying && !ttsPaused){
-    /* ── Fresh start ── */
+    // Fresh start
     ttsLines   = currentLesson.transcript;
     ttsLineIdx = 0;
     ttsElapsed = 0;
-    ttsPaused  = false;
     isPlaying  = true;
+    ttsPaused  = false;
     _cancelTTS();
     document.getElementById("play-btn").textContent = "⏸";
     document.getElementById("time-total").textContent = currentLesson.dur;
     startProgressTicker();
-    startKeepAlive();
-    // Ensure voices ready
-    if(speechSynthesis.getVoices().length === 0){
-      speechSynthesis.addEventListener("voiceschanged", ()=>{ loadVoice(); _speakLine(0); }, {once:true});
-    } else {
-      loadVoice();
-      // Tiny delay on mobile so user-gesture context is active
-      setTimeout(()=>_speakLine(0), 80);
-    }
+    _speakLine(0);
 
   } else if(isPlaying && !ttsPaused){
-    /* ── Pause: cancel + remember position ── */
-    // Note: speechSynthesis.pause() is unreliable on Chrome/Android
-    // We cancel and remember ttsLineIdx so Resume restarts from same line
+    // Pause
     ttsPaused = true;
     isPlaying = false;
     _cancelTTS();
-    stopKeepAlive();
     clearInterval(ttsTimer);
     document.getElementById("play-btn").textContent = "▶";
     toast("⏸ Paused","info");
 
   } else if(ttsPaused){
-    /* ── Resume from paused line ── */
+    // Resume from paused line
     ttsPaused = false;
     isPlaying = true;
-    ttsIgnoreEnd = false;
     document.getElementById("play-btn").textContent = "⏸";
     startProgressTicker();
-    startKeepAlive();
-    setTimeout(()=>_speakLine(ttsLineIdx), 80);
+    _speakLine(ttsLineIdx);
     toast("▶ Resumed","info");
   }
 }
 window.togglePlay = togglePlay;
 
 function skipForward(){
-  if(!window.speechSynthesis) return;
   const next = Math.min(ttsLineIdx + 1, ttsLines.length - 1);
   ttsElapsed = Math.min(ttsElapsed + 10, currentLesson.durSec);
   document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
   document.getElementById("audio-fill").style.width = (ttsElapsed / currentLesson.durSec * 100) + "%";
   _cancelTTS();
-  setTimeout(()=>{
-    if(isPlaying && !ttsPaused) _speakLine(next);
-    else { ttsLineIdx = next; highlightLine(next); }
-  }, 80);
+  if(isPlaying && !ttsPaused) _speakLine(next);
+  else { ttsLineIdx = next; highlightLine(next); }
 }
 
 function skipBackward(){
-  if(!window.speechSynthesis) return;
   const prev = Math.max(ttsLineIdx - 1, 0);
   ttsElapsed = Math.max(ttsElapsed - 10, 0);
   document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
   document.getElementById("audio-fill").style.width = (ttsElapsed / currentLesson.durSec * 100) + "%";
   _cancelTTS();
-  setTimeout(()=>{
-    if(isPlaying && !ttsPaused) _speakLine(prev);
-    else { ttsLineIdx = prev; highlightLine(prev); }
-  }, 80);
+  if(isPlaying && !ttsPaused) _speakLine(prev);
+  else { ttsLineIdx = prev; highlightLine(prev); }
 }
 
 function seekAudio(e){
@@ -1190,33 +1127,28 @@ function seekAudio(e){
   document.getElementById("time-current").textContent = fmtTime(ttsElapsed);
   updateWaveform(pct);
   _cancelTTS();
-  setTimeout(()=>{
-    if(isPlaying && !ttsPaused) _speakLine(targetLine);
-    else { ttsLineIdx = targetLine; highlightLine(targetLine); }
-  }, 80);
+  if(isPlaying && !ttsPaused) _speakLine(targetLine);
+  else { ttsLineIdx = targetLine; highlightLine(targetLine); }
 }
 
 function cycleSpeed(){
   speedIdx = (speedIdx + 1) % speeds.length;
   const s = speeds[speedIdx];
   document.getElementById("speed-btn").textContent = s + "×";
-  // Restart current line at new speed
   if(isPlaying && !ttsPaused){
     const line = ttsLineIdx;
     _cancelTTS();
-    setTimeout(()=>_speakLine(line), 80);
+    _speakLine(line);
   }
   toast(`Speed: ${s}×`, "info");
 }
 
 function setVolume(v){
   ttsVolume = parseFloat(v);
-  // Applies on next utterance automatically
 }
 
 function stopTTS(){
   _cancelTTS();
-  stopKeepAlive();
   clearInterval(ttsTimer);
   isPlaying  = false;
   ttsPaused  = false;
