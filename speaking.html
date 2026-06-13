@@ -431,7 +431,7 @@ import {
   query, orderBy, limit, where,
   serverTimestamp, increment,
   signOut
-} from "./firebase-config.js";
+} from "./js/firebase-config.js";
 
 /* ══════════════════════════════════════
    DATA
@@ -762,39 +762,98 @@ async function submitSpeaking(){
   const xp      = 50;
   const words   = transcript.trim().split(/\s+/).filter(Boolean).length;
 
-  // Mock score
-  const fluencyScore  = Math.floor(60 + Math.random()*35);
-  const pronunScore   = Math.floor(65 + Math.random()*30);
-  const confidScore   = Math.floor(70 + Math.random()*25);
-  const overallScore  = Math.round((fluencyScore+pronunScore+confidScore)/3);
+  if(words < 3) {
+    toast("⚠️ কমপক্ষে কিছু কথা বলুন তারপর submit করুন।", "error");
+    return;
+  }
+
+  /* ── Loading state ── */
+  const sc = document.getElementById("speak-score");
+  sc.innerHTML = `
+    <div style="text-align:center;padding:1.5rem;color:var(--muted);">
+      <div style="font-size:2rem;margin-bottom:.6rem;animation:spin 1s linear infinite;">⚙️</div>
+      <div style="font-family:'Noto Sans Bengali',sans-serif;font-size:13px;">AI তোমার speaking বিশ্লেষণ করছে...</div>
+    </div>`;
+  sc.classList.add("show");
+
+  /* ── AI Score via Cloudflare Function ── */
+  let fluencyScore, pronunScore, confidScore, overallScore, aiFeedback;
 
   try {
-    // Save to Firestore
+    const aiRes = await fetch("/api/speaking-check", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ transcript, prompt })
+    });
+
+    if(aiRes.ok) {
+      const aiData = await aiRes.json();
+      if(!aiData.error) {
+        fluencyScore = aiData.fluency;
+        pronunScore  = aiData.pronunciation;
+        confidScore  = aiData.confidence;
+        overallScore = aiData.overall;
+        aiFeedback   = aiData.feedback;
+      }
+    }
+  } catch(e) {
+    console.warn("AI scoring failed, using transcript-based fallback:", e);
+  }
+
+  /* ── Transcript-based fallback (AI না থাকলে) ── */
+  if(!fluencyScore) {
+    const avgWordLen  = transcript.replace(/\s+/g,"").length / Math.max(words,1);
+    const uniqueWords = new Set(transcript.toLowerCase().match(/\b\w+\b/g)||[]).size;
+    const diversity   = Math.min(100, Math.round((uniqueWords / Math.max(words,1)) * 120));
+    fluencyScore  = Math.min(95, Math.max(40, Math.round(words * 1.8 + diversity * 0.3)));
+    pronunScore   = Math.min(95, Math.max(40, Math.round(avgWordLen * 8 + 40)));
+    confidScore   = Math.min(95, Math.max(40, Math.round(words * 1.5 + 35)));
+    overallScore  = Math.round((fluencyScore + pronunScore + confidScore) / 3);
+    aiFeedback    = overallScore >= 85
+      ? "🌟 Excellent! তোমার speaking খুব ভালো। এভাবে continue করো।"
+      : overallScore >= 70
+      ? "👍 Good job! আরো practice করলে আরও উন্নত হবে।"
+      : "💪 Keep going! নিয়মিত practice করলে অবশ্যই ভালো হবে।";
+  }
+
+  try {
+    /* ── Daily XP limit check ── */
+    const todayStr     = new Date().toISOString().slice(0,10);
+    const MAX_DAILY_XP = 200;
+    const todaySnap    = await getDocs(query(
+      collection(db,"users",currentUser.uid,"scores"),
+      where("dateStr","==",todayStr)
+    ));
+    const xpEarnedToday = todaySnap.docs.reduce((sum,d) => sum + (d.data().xpGained||0), 0);
+    const xpGained      = Math.min(xp, Math.max(0, MAX_DAILY_XP - xpEarnedToday));
+
+    /* ── Firestore save ── */
     await addDoc(collection(db,"speaking_sessions"),{
-      uid:          currentUser.uid,
-      displayName:  currentUser.displayName||"",
-      prompt:       prompt,
-      transcript:   transcript,
-      wordCount:    words,
-      scores:{fluency:fluencyScore, pronunciation:pronunScore, confidence:confidScore, overall:overallScore},
-      xpEarned:     xp,
-      recordedAt:   serverTimestamp()
+      uid:         currentUser.uid,
+      displayName: currentUser.displayName||"",
+      prompt,
+      transcript,
+      wordCount:   words,
+      scores:      { fluency:fluencyScore, pronunciation:pronunScore, confidence:confidScore, overall:overallScore },
+      xpEarned:    xpGained,
+      dateStr:     todayStr,
+      recordedAt:  serverTimestamp()
     });
 
-    // Update user XP + speaking stats
-    await updateDoc(doc(db,"users",currentUser.uid),{
-      xp:             increment(xp),
-      speakSessions:  increment(1),
-      speakingXP:     increment(xp)
-    });
+    /* ── User stats update ── */
+    const statUpdate = {
+      speakSessions: increment(1),
+      speakingXP:    increment(xpGained),
+    };
+    if(xpGained > 0) statUpdate.xp = increment(xpGained);
+    await updateDoc(doc(db,"users",currentUser.uid), statUpdate);
 
-    sessionCount++; xpTotal += xp;
+    sessionCount++; xpTotal += xpGained;
     updateHeroStats();
     updateFluencyTracker();
     await loadHistory();
 
-    // Show score card
-    const sc = document.getElementById("speak-score");
+    /* ── Score card দেখাও ── */
     sc.innerHTML = `
       <div style="font-weight:800;font-size:14px;margin-bottom:.8rem;">📊 Your Score</div>
       <div class="ss-row">
@@ -803,16 +862,14 @@ async function submitSpeaking(){
         <div class="ss-item"><div class="ss-val" style="color:#fb923c;">${confidScore}%</div><div class="ss-label">Confidence</div></div>
         <div class="ss-item"><div class="ss-val" style="color:#f5c842;">${overallScore}%</div><div class="ss-label">Overall</div></div>
       </div>
-      <div class="ss-feedback">${
-        overallScore>=85 ? "🌟 Excellent! আপনার speaking খুব ভালো। এভাবে continue করুন।" :
-        overallScore>=70 ? "👍 Good job! আরো practice করলে আরও উন্নত হবে।" :
-        "💪 Keep going! নিয়মিত practice করলে অবশ্যই ভালো হবে।"
-      }</div>
-      <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);">+${xp} XP earned! 🎉</div>`;
+      <div class="ss-feedback">${aiFeedback}</div>
+      <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);">
+        ${xpGained > 0 ? `+${xpGained} XP earned! 🎉` : `⚠️ আজকের XP limit শেষ — কাল আবার XP পাবে।`}
+      </div>`;
     sc.classList.add("show");
-    toast(`🎉 Submitted! +${xp} XP · Score: ${overallScore}%`);
+    toast(`🎉 Submitted! ${xpGained > 0 ? `+${xpGained} XP · ` : ""}Score: ${overallScore}%`);
 
-  } catch(e){ toast("❌ Submit failed: "+e.message,"error"); }
+  } catch(e) { toast("❌ Submit failed: "+e.message, "error"); }
 }
 
 /* ══════════════════════════════════════
