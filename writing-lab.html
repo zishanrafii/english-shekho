@@ -601,6 +601,16 @@ const SB_TASKS = [
   {id:"sb3", label:"Task 3", words:["are","They","hard","studying","very"], answer:"They are studying very hard.", hint:"Subject + be + verb-ing + adverb"},
   {id:"sb4", label:"Task 4", words:["beautiful","city","Dhaka","is","a"], answer:"Dhaka is a beautiful city.", hint:"Proper noun + is + article + adjective + noun"},
   {id:"sb5", label:"Task 5", words:["went","yesterday","market","to","I","the"], answer:"I went to the market yesterday.", hint:"Subject + V2 + place + time"},
+  {id:"sb6", label:"Task 6", words:["playing","children","The","park","are","in","the"], answer:"The children are playing in the park.", hint:"Article + subject + be + verb-ing + place"},
+  {id:"sb7", label:"Task 7", words:["cooks","mother","My","food","delicious","every","morning"], answer:"My mother cooks delicious food every morning.", hint:"Possessive + subject + verb + adjective + object + time"},
+  {id:"sb8", label:"Task 8", words:["never","I","late","to","am","school"], answer:"I am never late to school.", hint:"Subject + be + adverb of frequency + adjective + place"},
+  {id:"sb9", label:"Task 9", words:["preparing","were","students","The","exam","final","their","for"], answer:"The students were preparing for their final exam.", hint:"Article + subject + be (past) + verb-ing + preposition + possessive + adjective + noun"},
+  {id:"sb10", label:"Task 10", words:["call","will","I","home","you","reach","I","as","soon","as"], answer:"I will call you as soon as I reach home.", hint:"Subject + will + verb + object + as soon as + clause"},
+  {id:"sb11", label:"Task 11", words:["been","has","She","Sylhet","to","never"], answer:"She has never been to Sylhet.", hint:"Subject + has/have + never + been + place"},
+  {id:"sb12", label:"Task 12", words:["should","drink","day","water","every","plenty","of","you"], answer:"You should drink plenty of water every day.", hint:"Subject + should + verb + object + time"},
+  {id:"sb13", label:"Task 13", words:["was","thief","The","caught","by","the","police"], answer:"The thief was caught by the police.", hint:"Subject + was + past participle + by + agent (passive voice)"},
+  {id:"sb14", label:"Task 14", words:["have","I","already","finished","my","homework"], answer:"I have already finished my homework.", hint:"Subject + have + already + past participle + object"},
+  {id:"sb15", label:"Task 15", words:["you","Could","please","open","the","window"], answer:"Could you please open the window?", hint:"Could + subject + please + verb + object (polite request)"},
 ];
 
 const PARA_TASKS = [
@@ -628,6 +638,62 @@ const PARA_TASKS = [
      {icon:"🎯", text:"শেষে একটি <b>concluding sentence</b> দিন।"},
    ],
    usefulWords:["global","opportunity","communicate","career","essential","international","fluent","advantage"]},
+  {id:"p4", label:"My Best Friend", level:"A2", words:"60–90", xp:80,
+   prompt:"আপনার সবচেয়ে ভালো বন্ধু সম্পর্কে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"👤", text:"নাম, বয়স ও পরিচয় দিয়ে শুরু করুন।"},
+     {icon:"💬", text:"তার চরিত্র ও স্বভাব নিয়ে ২-৩টি বাক্য লিখুন।"},
+     {icon:"🤝", text:"আপনারা একসাথে কী করেন তা বলুন।"},
+   ],
+   usefulWords:["loyal","supportive","cheerful","trustworthy","childhood","share","companion","bond"]},
+  {id:"p5", label:"A Place I Want to Visit", level:"B1", words:"70–100", xp:100,
+   prompt:"আপনি যে জায়গায় ঘুরতে যেতে চান তা নিয়ে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"📍", text:"জায়গাটির নাম ও এটি কোথায় তা বলুন।"},
+     {icon:"🏞️", text:"কেন সেখানে যেতে চান তার কারণ লিখুন।"},
+     {icon:"🎯", text:"সেখানে গিয়ে কী করবেন তা উল্লেখ করুন।"},
+   ],
+   usefulWords:["destination","scenery","explore","culture","adventure","breathtaking","journey","experience"]},
+  {id:"p6", label:"Advantages of Reading Books", level:"B1", words:"70–100", xp:100,
+   prompt:"বই পড়ার উপকারিতা নিয়ে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"📚", text:"বই পড়লে জ্ঞান ও vocabulary কীভাবে বাড়ে তা বলুন।"},
+     {icon:"🧠", text:"Imagination ও concentration-এর উপর প্রভাব উল্লেখ করুন।"},
+     {icon:"🎯", text:"শেষে একটি personal opinion দিয়ে শেষ করুন।"},
+   ],
+   usefulWords:["knowledge","vocabulary","imagination","concentration","perspective","habit","valuable","insight"]},
+  {id:"p7", label:"My Hometown", level:"A2", words:"60–90", xp:80,
+   prompt:"আপনার hometown সম্পর্কে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"🏘️", text:"hometown-টি কোথায় এবং কেমন তা বর্ণনা করুন।"},
+     {icon:"🍲", text:"সেখানকার বিশেষ কিছু (খাবার, উৎসব, মানুষ) উল্লেখ করুন।"},
+     {icon:"❤️", text:"কেন hometown-টি আপনার কাছে special তা বলুন।"},
+   ],
+   usefulWords:["located","peaceful","tradition","community","famous for","scenic","heritage","memories"]},
+  {id:"p8", label:"My Favourite Food", level:"A2", words:"50–80", xp:75,
+   prompt:"আপনার প্রিয় খাবার সম্পর্কে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"🍛", text:"খাবারটির নাম এবং এটি কেমন দেখতে/স্বাদের তা বলুন।"},
+     {icon:"👩‍🍳", text:"কখন এবং কার সাথে এটি খেতে ভালো লাগে তা উল্লেখ করুন।"},
+     {icon:"✍️", text:"স্বাদ বর্ণনা করতে <b>adjectives</b> ব্যবহার করুন (যেমন: spicy, delicious, crispy)।"},
+   ],
+   usefulWords:["delicious","spicy","favourite","ingredients","homemade","craving","flavor","mouth-watering"]},
+  {id:"p9", label:"How I Spend My Weekends", level:"A2", words:"60–90", xp:80,
+   prompt:"আপনি সাপ্তাহিক ছুটির দিনগুলো কীভাবে কাটান তা নিয়ে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"💡", text:"<b>Topic sentence:</b> 'I look forward to weekends because...'"},
+     {icon:"⏰", text:"সকাল, দুপুর ও সন্ধ্যার activities আলাদা করে বলুন।"},
+     {icon:"🔗", text:"<b>Connectors</b> ব্যবহার করুন: Usually, Sometimes, In the evening"},
+   ],
+   usefulWords:["relax","household chores","hang out","leisure","refresh","family time","outing","recharge"]},
+  {id:"p10", label:"The Importance of Exercise", level:"B1", words:"70–100", xp:100,
+   prompt:"শারীরিক ব্যায়ামের গুরুত্ব নিয়ে একটি paragraph লিখুন।",
+   hints:[
+     {icon:"💡", text:"ব্যায়াম শরীর ও মনের জন্য কীভাবে উপকারী তা বলুন।"},
+     {icon:"🏃", text:"কিছু সাধারণ exercise-এর উদাহরণ দিন (walking, jogging, yoga)।"},
+     {icon:"🎯", text:"নিয়মিত exercise করার জন্য একটি পরামর্শ দিয়ে শেষ করুন।"},
+   ],
+   usefulWords:["fitness","stamina","well-being","routine","reduce stress","muscles","discipline","healthy lifestyle"]},
 ];
 
 const ESSAY_TASKS = [
@@ -649,6 +715,60 @@ const ESSAY_TASKS = [
      {icon:"🎯", text:"<b>Conclusion:</b> সম্মিলিত প্রচেষ্টার গুরুত্ব।"},
    ],
    usefulWords:["greenhouse","emissions","renewable","sustainable","deforestation","catastrophic","mitigation","conservation"]},
+  {id:"e3", label:"Advantages and Disadvantages of Online Education", level:"B1", words:"180–250", xp:175,
+   prompt:"Online education-এর সুবিধা ও অসুবিধা নিয়ে একটি essay লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Introduction:</b> Online education কী এবং কেন জনপ্রিয় হয়ে উঠছে।"},
+     {icon:"✅", text:"<b>Advantages:</b> Flexibility, accessibility, cost-effectiveness।"},
+     {icon:"❌", text:"<b>Disadvantages:</b> Lack of interaction, technical issues, self-discipline।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> Traditional ও online education-এর balance নিয়ে মতামত দিন।"},
+   ],
+   usefulWords:["flexibility","accessibility","interaction","discipline","technology","platform","engagement","drawback"]},
+  {id:"e4", label:"The Role of Youth in Nation Building", level:"B2", words:"200–300", xp:200,
+   prompt:"দেশ গঠনে যুবসমাজের ভূমিকা নিয়ে একটি essay লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Introduction:</b> যুবসমাজ কেন একটি দেশের ভবিষ্যৎ তা তুলে ধরুন।"},
+     {icon:"💪", text:"<b>Body:</b> Education, employment, leadership, social work-এ ভূমিকা।"},
+     {icon:"⚠️", text:"<b>Challenges:</b> Unemployment, lack of opportunities, distractions।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> যুবসমাজকে সঠিক পথে guide করার গুরুত্ব।"},
+   ],
+   usefulWords:["potential","responsibility","leadership","innovation","employment","contribute","empower","progress"]},
+  {id:"e5", label:"Should Mobile Phones Be Allowed in Schools?", level:"B1", words:"180–250", xp:175,
+   prompt:"School-এ mobile phone ব্যবহার অনুমোদিত হওয়া উচিত কিনা তার পক্ষে-বিপক্ষে একটি essay লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Introduction:</b> বিষয়টি সংক্ষেপে তুলে ধরুন এবং আপনার মূল মতামত উল্লেখ করুন।"},
+     {icon:"✅", text:"<b>For:</b> Emergency contact, learning apps, quick research।"},
+     {icon:"❌", text:"<b>Against:</b> Distraction, cheating, social isolation।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> একটি balanced policy-র পরামর্শ দিন (যেমন: শুধু break time-এ ব্যবহার)।"},
+   ],
+   usefulWords:["distraction","emergency","policy","restriction","beneficial","concentration","supervision","appropriate"]},
+  {id:"e6", label:"The Impact of Technology on Education", level:"B2", words:"200–300", xp:200,
+   prompt:"শিক্ষা ক্ষেত্রে প্রযুক্তির প্রভাব নিয়ে একটি essay লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Introduction:</b> Education-এ technology-র ব্যবহার কীভাবে বেড়েছে তা উল্লেখ করুন।"},
+     {icon:"✅", text:"<b>Positive impact:</b> Interactive learning, access to resources, personalized pace।"},
+     {icon:"❌", text:"<b>Negative impact:</b> Screen time, digital divide, reduced face-to-face interaction।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> Technology-কে কীভাবে কার্যকরভাবে ব্যবহার করা যায় তার পরামর্শ দিন।"},
+   ],
+   usefulWords:["interactive","resources","digital divide","personalized","engagement","access","screen time","efficient"]},
+  {id:"e7", label:"Should Students Do Part-Time Jobs?", level:"B1", words:"180–250", xp:175,
+   prompt:"ছাত্রছাত্রীদের পার্ট-টাইম job করা উচিত কিনা তার পক্ষে-বিপক্ষে একটি essay লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Introduction:</b> বিষয়টি সংক্ষেপে তুলে ধরুন।"},
+     {icon:"✅", text:"<b>For:</b> Financial independence, work experience, time management skills।"},
+     {icon:"❌", text:"<b>Against:</b> Studies-এ negative effect, কম বিশ্রাম, stress।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> Balance বজায় রাখার উপায় নিয়ে মতামত দিন।"},
+   ],
+   usefulWords:["independence","responsibility","balance","workload","experience","prioritize","financial","manage time"]},
+  {id:"e8", label:"Environmental Pollution and Its Solutions", level:"B2", words:"200–300", xp:200,
+   prompt:"পরিবেশ দূষণ এবং এর প্রতিকার নিয়ে একটি essay লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Introduction:</b> পরিবেশ দূষণ কী এবং এর প্রধান ধরনগুলো (air, water, plastic) উল্লেখ করুন।"},
+     {icon:"⚡", text:"<b>Causes:</b> Industrial waste, vehicle emissions, plastic use, deforestation।"},
+     {icon:"💡", text:"<b>Solutions:</b> Recycling, public awareness, government regulations, green energy।"},
+     {icon:"🎯", text:"<b>Conclusion:</b> ব্যক্তিগত ও সামাজিক দায়িত্বের উপর জোর দিন।"},
+   ],
+   usefulWords:["pollutant","ecosystem","recycling","awareness","regulation","contamination","hazardous","preserve"]},
 ];
 
 const EMAIL_TASKS = [
@@ -679,6 +799,60 @@ const EMAIL_TASKS = [
      {icon:"❓", text:"বন্ধুকে একটি প্রশ্ন করুন।"},
    ],
    usefulWords:["amazing","settled in","subjects","miss","excited","can't wait","by the way","catch up"]},
+  {id:"em4", label:"Leave Application to Teacher", level:"A2", words:"50–90", xp:75,
+   prompt:"অসুস্থতার কারণে ৩ দিন ছুটির জন্য আপনার class teacher-কে একটি email লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Subject:</b> Leave Application Due to Illness"},
+     {icon:"👋", text:"<b>Opening:</b> 'Dear Sir/Madam,' দিয়ে শুরু করুন।"},
+     {icon:"🤒", text:"কেন ছুটি প্রয়োজন এবং কতদিনের জন্য তা স্পষ্ট করে বলুন।"},
+     {icon:"🙏", text:"<b>Closing:</b> অনুরোধের সাথে ধন্যবাদ জানান।"},
+   ],
+   usefulWords:["unwell","absence","grant leave","recover","inconvenience","grateful","attached","resume"]},
+  {id:"em5", label:"Email to a Hotel for Booking", level:"B1", words:"80–120", xp:125,
+   prompt:"একটি hotel-এ ২ রাতের জন্য room booking করতে একটি email লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Subject:</b> Room Reservation Inquiry — [Dates]"},
+     {icon:"🏨", text:"কতদিনের জন্য, কতটি room এবং কোন ধরনের room চান তা বলুন।"},
+     {icon:"❓", text:"Price, facilities (WiFi, breakfast) নিয়ে প্রশ্ন করুন।"},
+     {icon:"🤝", text:"<b>Closing:</b> দ্রুত reply পাওয়ার আশা প্রকাশ করুন।"},
+   ],
+   usefulWords:["reservation","availability","accommodation","check-in","check-out","facilities","confirm","inquiry"]},
+  {id:"em6", label:"Email Inviting a Friend to an Event", level:"A2", words:"60–100", xp:80,
+   prompt:"আপনার birthday party-তে একজন বন্ধুকে আসার জন্য একটি email লিখুন।",
+   hints:[
+     {icon:"👋", text:"<b>Greeting:</b> Friendly tone-এ শুরু করুন।"},
+     {icon:"🎉", text:"Event-এর তারিখ, সময় ও স্থান উল্লেখ করুন।"},
+     {icon:"😊", text:"কেন তাকে আসা উচিত তা বলুন।"},
+     {icon:"📩", text:"<b>Closing:</b> দ্রুত confirm করতে বলুন।"},
+   ],
+   usefulWords:["invite","celebration","venue","looking forward","RSVP","surprise","join us","memorable"]},
+  {id:"em7", label:"Email Requesting a Recommendation Letter", level:"B1", words:"80–120", xp:125,
+   prompt:"আপনার একজন শিক্ষককে scholarship application-এর জন্য একটি recommendation letter চেয়ে email লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Subject:</b> Request for a Letter of Recommendation"},
+     {icon:"👋", text:"<b>Opening:</b> Polite ভাবে নিজের পরিচয় ও context দিন।"},
+     {icon:"📝", text:"কেন এই letter প্রয়োজন এবং deadline কখন তা উল্লেখ করুন।"},
+     {icon:"🙏", text:"<b>Closing:</b> সময় দেওয়ার জন্য ধন্যবাদ জানান।"},
+   ],
+   usefulWords:["recommendation","scholarship","appreciate","deadline","achievements","grateful","request","submit"]},
+  {id:"em8", label:"Email Apologizing for Being Late", level:"A2", words:"60–100", xp:80,
+   prompt:"একটি meeting-এ late হওয়ার জন্য আপনার বসকে একটি apology email লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Subject:</b> Apology for Being Late to the Meeting"},
+     {icon:"😔", text:"<b>Opening:</b> সরাসরি ক্ষমা চেয়ে শুরু করুন।"},
+     {icon:"💬", text:"সংক্ষেপে কারণ ব্যাখ্যা করুন (যেমন: traffic, emergency)।"},
+     {icon:"✅", text:"<b>Closing:</b> এটি আর হবে না — এই assurance দিন।"},
+   ],
+   usefulWords:["apologize","sincerely","delay","inconvenience","unavoidable","punctual","assure","understanding"]},
+  {id:"em9", label:"Email Proposing a Meeting to a Colleague", level:"B1", words:"80–120", xp:125,
+   prompt:"একটি প্রজেক্ট নিয়ে আলোচনার জন্য আপনার colleague-কে একটি meeting-এর প্রস্তাব দিয়ে email লিখুন।",
+   hints:[
+     {icon:"📌", text:"<b>Subject:</b> Meeting Request — [Project Name]"},
+     {icon:"👋", text:"<b>Opening:</b> Professional ভাবে শুরু করুন।"},
+     {icon:"🗓️", text:"Meeting-এর সম্ভাব্য তারিখ, সময় ও আলোচ্য বিষয় উল্লেখ করুন।"},
+     {icon:"🤝", text:"<b>Closing:</b> তার সুবিধামতো সময় জানাতে অনুরোধ করুন।"},
+   ],
+   usefulWords:["schedule","agenda","availability","discuss","collaborate","proposal","convenient","confirm"]},
 ];
 
 const STORY_TASKS = [
@@ -700,6 +874,59 @@ const STORY_TASKS = [
      {icon:"💭", text:"Reflection দিয়ে শেষ করুন।"},
    ],
    usefulWords:["unexpected","destiny","encounter","transformed","realized","adventure","profound","unforgettable"]},
+  {id:"st3", label:"The Day the Power Went Out", level:"A2", words:"80–130", xp:100,
+   prompt:"এমন একটি দিনের গল্প লিখুন যেদিন সারাদিন বিদ্যুৎ ছিল না।",
+   hints:[
+     {icon:"🎬", text:"<b>Beginning:</b> দিনটি কীভাবে শুরু হলো এবং কখন বিদ্যুৎ চলে গেল তা বলুন।"},
+     {icon:"😅", text:"<b>Middle:</b> বিদ্যুৎ না থাকায় কী কী সমস্যা ও মজার ঘটনা ঘটল।"},
+     {icon:"💡", text:"<b>Ending:</b> বিদ্যুৎ ফিরে আসার পর কেমন লাগল তা বলুন।"},
+   ],
+   usefulWords:["candle","darkness","generator","neighbors","stuffy","flashlight","restored","relief"]},
+  {id:"st4", label:"A Strange Dream", level:"B1", words:"120–170", xp:150,
+   prompt:"একটি অদ্ভুত স্বপ্নের গল্প লিখুন যা পরে বাস্তবে কিছুটা সত্যি হয়েছিল।",
+   hints:[
+     {icon:"🌙", text:"<b>Beginning:</b> স্বপ্নটি কোথায় শুরু হলো এবং কী দেখলেন তা বর্ণনা করুন।"},
+     {icon:"🎭", text:"<b>Middle:</b> স্বপ্নে কী কী অস্বাভাবিক ঘটনা ঘটল তা vivid ভাষায় লিখুন।"},
+     {icon:"😲", text:"<b>Twist:</b> ঘুম ভাঙার পর কীভাবে কিছুটা মিলে গেল তা বলুন।"},
+     {icon:"✨", text:"<b>Ending:</b> এই অভিজ্ঞতা থেকে কী শিখলেন তা বলুন।"},
+   ],
+   usefulWords:["mysterious","vivid","suddenly","coincidence","eerie","woke up","reality","astonished"]},
+  {id:"st5", label:"The New Student", level:"A2", words:"90–140", xp:110,
+   prompt:"একজন নতুন ছাত্র/ছাত্রী ক্লাসে এসেছে — তাকে নিয়ে একটি গল্প লিখুন।",
+   hints:[
+     {icon:"🎬", text:"<b>Beginning:</b> নতুন student-টি কেমন দেখতে এবং প্রথম দিনে কেমন লাগছিল তা বলুন।"},
+     {icon:"🤝", text:"<b>Middle:</b> তার সাথে কীভাবে পরিচয় হলো এবং বন্ধুত্ব শুরু হলো।"},
+     {icon:"⚡", text:"<b>Conflict (optional):</b> কোনো ছোট misunderstanding বা challenge যুক্त করুন।"},
+     {icon:"✨", text:"<b>Ending:</b> গল্পটি একটি ইতিবাচক পরিণতিতে শেষ করুন।"},
+   ],
+   usefulWords:["nervous","introduce","classmate","friendly","welcomed","shy","confident","belonging"]},
+  {id:"st6", label:"A Kind Stranger", level:"A2", words:"90–140", xp:110,
+   prompt:"একজন অপরিচিত ব্যক্তি কীভাবে আপনাকে একটি কঠিন পরিস্থিতিতে সাহায্য করেছিল তা নিয়ে একটি গল্প লিখুন।",
+   hints:[
+     {icon:"🎬", text:"<b>Beginning:</b> কী কঠিন পরিস্থিতিতে পড়েছিলেন তা বর্ণনা করুন।"},
+     {icon:"🤲", text:"<b>Middle:</b> অপরিচিত ব্যক্তি কীভাবে সাহায্য করল তা বলুন।"},
+     {icon:"😊", text:"<b>Feelings:</b> তার সাহায্যের পর আপনার কেমন লেগেছিল তা প্রকাশ করুন।"},
+     {icon:"✨", text:"<b>Ending:</b> এই অভিজ্ঞতা থেকে কী শিক্ষা পেলেন তা বলুন।"},
+   ],
+   usefulWords:["stranger","helpless","kindness","gratitude","unexpected","assistance","touched","humanity"]},
+  {id:"st7", label:"The Day I Won a Competition", level:"A2", words:"90–140", xp:110,
+   prompt:"আপনি যেদিন একটি প্রতিযোগিতায় জিতেছিলেন সেই দিনের গল্প লিখুন।",
+   hints:[
+     {icon:"🎬", text:"<b>Beginning:</b> প্রতিযোগিতাটি কী ছিল এবং কীভাবে প্রস্তুতি নিয়েছিলেন।"},
+     {icon:"😰", text:"<b>Middle:</b> প্রতিযোগিতার দিনের অনুভূতি ও ঘটনা বর্ণনা করুন।"},
+     {icon:"🏆", text:"<b>Climax:</b> ফলাফল ঘোষণার মুহূর্তটি বর্ণনা করুন।"},
+     {icon:"✨", text:"<b>Ending:</b> জয়ের পর কেমন লেগেছিল এবং কী শিখলেন তা বলুন।"},
+   ],
+   usefulWords:["competition","nervous","practice","determination","announced","victory","proud","achievement"]},
+  {id:"st8", label:"A Mystery in the Old House", level:"B2", words:"150–200", xp:175,
+   prompt:"একটি পুরনো বাড়িতে ঘটে যাওয়া একটি রহস্যময় ঘটনা নিয়ে একটি গল্প লিখুন।",
+   hints:[
+     {icon:"🏚️", text:"<b>Setting:</b> পুরনো বাড়িটি কেমন এবং কোথায় তা বিস্তারিত বর্ণনা করুন।"},
+     {icon:"🔍", text:"<b>Mystery:</b> কী রহস্যময় ঘটনা বা শব্দ লক্ষ্য করলেন তা বলুন।"},
+     {icon:"📈", text:"<b>Climax:</b> Suspense বাড়িয়ে রহস্যের সমাধানের দিকে এগিয়ে যান।"},
+     {icon:"✨", text:"<b>Ending:</b> রহস্যের সমাধান এবং একটি twist দিয়ে শেষ করুন।"},
+   ],
+   usefulWords:["abandoned","creaking","shadow","investigate","eerie","secret","revealed","startled"]},
 ];
 
 const CHALLENGES = [
@@ -841,10 +1068,21 @@ function removeWord(word, placedEl, poolEl){
 }
 
 function checkSentence(correct){
-  const attempt = sbPlaced.join(" ").trim();
+  // Normalize: lowercase, remove extra spaces, remove trailing punctuation,
+  // and collapse spacing around commas/periods/question marks for comparison
+  const normalize = (s) => s
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\s*([,.!?])/g, "$1")  // remove space before punctuation
+    .replace(/[.!?]+$/, "");        // remove trailing sentence-ending punctuation
+
+  const attempt   = sbPlaced.join(" ").trim();
+  const isCorrect = normalize(attempt) === normalize(correct);
+
   const res = document.getElementById("sb-result");
   res.style.display = "block";
-  if(attempt.toLowerCase() === correct.toLowerCase()){
+  if(isCorrect){
     res.className = "sb-result correct";
     res.textContent = `✅ সঠিক! "${correct}" — চমৎকার! +25 XP অর্জন করেছ।`;
     toast("🎉 সঠিক! +25 XP");

@@ -559,6 +559,7 @@ async function loadPreview(uid){
 ══════════════════════════════════ */
 function openConversation(uid){
   activeConvUid = uid;
+  clearUnreadBadge(uid); // ← conversation খুললে badge সরাও
   document.querySelectorAll(".conv-item").forEach(el=>{
     el.classList.toggle("active", el.dataset.uid === uid);
   });
@@ -995,6 +996,7 @@ requireAuth(async user => {
   await loadFriends();
   renderConvList();
   listenForIncomingCalls();
+  listenForNewMessages(); // ← নতুন message notification
 
   // open conversation if ?uid= is passed (e.g. from friends.html "Message" button)
   const params = new URLSearchParams(location.search);
@@ -1043,7 +1045,175 @@ document.getElementById("call-mute-btn").addEventListener("click", toggleMute);
 document.getElementById("call-video-toggle-btn").addEventListener("click", toggleVideo);
 document.getElementById("call-screenshare-btn").addEventListener("click", toggleScreenShare);
 
-/* ── Listen for incoming calls across all friend conversations ── */
+/* ══════════════════════════════════════════
+   NEW MESSAGE NOTIFICATION SYSTEM
+   প্রতিটা friend-এর conversation real-time listen করে
+   নতুন message আসলে — toast + unread badge + preview update
+══════════════════════════════════════════ */
+const unsubMsgListeners = [];
+const lastMsgTime = {}; // uid → last seen message timestamp
+
+function listenForNewMessages() {
+  // আগের listeners clean করো
+  unsubMsgListeners.forEach(u => u());
+  unsubMsgListeners.length = 0;
+
+  friendUids.forEach(uid => {
+    const convId = dmId(currentUser.uid, uid);
+    const q = query(
+      collection(db, "conversations", convId, "messages"),
+      orderBy("createdAt", "desc"),
+      limit(1)
+    );
+
+    const unsub = onSnapshot(q, snap => {
+      if(snap.empty) return;
+      const msg  = snap.docs[0].data();
+      const msgId = snap.docs[0].id;
+
+      // নিজের message হলে notification দেখাব না
+      if(msg.senderId === currentUser?.uid) return;
+      // unsent message হলে skip
+      if(msg.unsent) return;
+      // এই conversation এখন open থাকলে skip
+      if(uid === activeConvUid) return;
+
+      // আগে দেখা message হলে skip (page load এ পুরনো message notification না দিতে)
+      const msgTime = msg.createdAt?.seconds || 0;
+      if(lastMsgTime[uid] && msgTime <= lastMsgTime[uid]) return;
+
+      // প্রথমবার load হলে শুধু timestamp save করো, notification দেখাব না
+      if(!lastMsgTime[uid]) {
+        lastMsgTime[uid] = msgTime;
+        updateUnreadBadge(uid, msgId);
+        return;
+      }
+
+      // নতুন message! — notification দেখাও
+      lastMsgTime[uid] = msgTime;
+
+      const sender = userCache[uid] || {};
+      const name   = sender.displayName || "কেউ";
+      let preview  = "";
+      if(msg.unsent)            preview = "🚫 Message unsent";
+      else if(msg.attachmentType === "voice") preview = "🎤 Voice message";
+      else if(msg.attachmentUrl) preview = "📎 File পাঠিয়েছে";
+      else                       preview = (msg.text || "").slice(0, 50);
+
+      // Toast notification
+      showMsgToast(name, preview, uid, sender.photoURL || "");
+
+      // Unread badge update
+      updateUnreadBadge(uid, msgId);
+
+      // Preview text update
+      const previewEl = document.getElementById(`preview-${uid}`);
+      if(previewEl) previewEl.textContent = preview;
+
+      // Browser notification (permission থাকলে)
+      if(Notification.permission === "granted") {
+        new Notification(`💬 ${name}`, {
+          body: preview || "নতুন message",
+          icon: "/assets/icons/icon-192.png",
+          tag:  uid, // একই user-এর notification replace হবে
+        });
+      }
+    });
+
+    unsubMsgListeners.push(unsub);
+  });
+}
+
+/* ── Custom message toast — inbox-এর নিজস্ব toast ── */
+function showMsgToast(name, text, uid, photo) {
+  // পুরনো msg-toast থাকলে সরাও
+  const old = document.getElementById("msg-toast");
+  if(old) old.remove();
+
+  const avatarHtml = photo
+    ? `<img src="${photo}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">`
+    : `<div style="width:36px;height:36px;border-radius:50%;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--gold);">${(name[0]||"?").toUpperCase()}</div>`;
+
+  const el = document.createElement("div");
+  el.id = "msg-toast";
+  el.style.cssText = `
+    position:fixed;top:20px;right:20px;z-index:99999;
+    background:#0c1322;border:1px solid rgba(245,200,66,.25);
+    border-left:3px solid #f5c842;border-radius:14px;
+    padding:.8rem 1rem;display:flex;align-items:center;gap:.75rem;
+    box-shadow:0 8px 32px rgba(0,0,0,.6);cursor:pointer;
+    animation:slideInToast .3s ease;max-width:300px;
+  `;
+  el.innerHTML = `
+    ${avatarHtml}
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:13px;font-weight:700;color:#f0f4f8;margin-bottom:2px;">${esc(name)}</div>
+      <div style="font-size:12px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(text || "নতুন message")}</div>
+    </div>
+    <div style="font-size:10px;color:#64748b;cursor:pointer;" onclick="this.parentElement.remove()">✕</div>
+  `;
+  el.onclick = (e) => {
+    if(e.target.textContent === "✕") return;
+    openConversation(uid);
+    el.remove();
+  };
+  document.body.appendChild(el);
+  setTimeout(() => el?.remove(), 5000);
+}
+
+/* ── Unread badge — conv-list item-এ badge দেখাও ── */
+function updateUnreadBadge(uid, latestMsgId) {
+  const item = document.querySelector(`.conv-item[data-uid="${uid}"]`);
+  if(!item) return;
+
+  // Active conversation-এ badge দেখাব না
+  if(uid === activeConvUid) {
+    const badge = item.querySelector(".conv-unread");
+    if(badge) badge.remove();
+    return;
+  }
+
+  let badge = item.querySelector(".conv-unread");
+  if(!badge) {
+    badge = document.createElement("div");
+    badge.className = "conv-unread";
+    const meta = item.querySelector(".conv-meta");
+    if(meta) meta.appendChild(badge);
+  }
+
+  // Count বাড়াও
+  const current = parseInt(badge.textContent) || 0;
+  badge.textContent = Math.min(current + 1, 99);
+}
+
+/* ── Conversation খুললে badge সরাও ── */
+function clearUnreadBadge(uid) {
+  const item = document.querySelector(`.conv-item[data-uid="${uid}"]`);
+  if(!item) return;
+  const badge = item.querySelector(".conv-unread");
+  if(badge) badge.remove();
+}
+
+/* ── Browser notification permission request ── */
+function requestNotificationPermission() {
+  if("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+/* ── Slideup animation CSS ── */
+if(!document.getElementById("toast-anim-style")) {
+  const style = document.createElement("style");
+  style.id = "toast-anim-style";
+  style.textContent = `@keyframes slideInToast { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }`;
+  document.head.appendChild(style);
+}
+
+/* ── Notification permission চাও ── */
+requestNotificationPermission();
+
+/* ══════════════════════════════════════════
+   LISTEN FOR INCOMING CALLS
 function listenForIncomingCalls(){
   friendUids.forEach(uid=>{
     const convId = dmId(currentUser.uid, uid);
