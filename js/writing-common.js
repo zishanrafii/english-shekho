@@ -282,10 +282,13 @@ export async function submitWriting(type){
   }
   const xp    = currentTask?.xp || 75;
   const words = editor.value.trim().split(/\s+/).filter(Boolean).length;
+  const pubCheckbox = document.getElementById("public-checkbox");
+  const isPublic = pubCheckbox ? pubCheckbox.checked : false;
   try {
     await addDoc(collection(db,"writings"),{
       uid:         window._currentUser.uid,
       displayName: window._currentUser.displayName || "",
+      photoURL:    window._currentUser.photoURL || "",
       type:        type,
       taskId:      currentTask?.id||"",
       taskLabel:   currentTask?.label||"",
@@ -293,6 +296,8 @@ export async function submitWriting(type){
       wordCount:   words,
       xpEarned:    xp,
       score:       null,
+      isPublic:    isPublic,
+      reviewCount: 0,
       submittedAt: serverTimestamp()
     });
     await updateDoc(doc(db,"users", window._currentUser.uid),{
@@ -301,6 +306,8 @@ export async function submitWriting(type){
       totalWords:   increment(words)
     });
     toast(`🎉 Submitted! +${xp} XP অর্জন! (${words} words)`);
+    if(isPublic) toast("🌍 Community-তে public হয়েছে — peer review পাবে!");
+    if(pubCheckbox) pubCheckbox.checked = false;
     editor.value = "";
     const wc = document.getElementById("word-count"); if(wc) wc.textContent="0";
   } catch(e){ toast("❌ Submit failed: "+e.message,"error"); }

@@ -555,22 +555,6 @@ footer::before{
   <div class="section-title">🧭 All Features</div>
   <div class="dashboard-grid">
 
-    <a href="listening.html" class="card">
-      <div class="card-accent ca-teal"></div>
-      <div class="card-icon">👂</div>
-      <h3>Listening Practice</h3>
-      <p>Real conversation শুনুন, quiz দিন এবং listening skill বাড়ান।</p>
-      <span class="card-badge">New</span>
-    </a>
-
-    <a href="writing-lab.html" class="card">
-      <div class="card-accent ca-indigo"></div>
-      <div class="card-icon">✍️</div>
-      <h3>Writing Lab</h3>
-      <p>Paragraph, essay, email লিখুন — AI দিয়ে instant feedback পান।</p>
-      <span class="card-badge">AI</span>
-    </a>
-
     <a href="quiz-beginner.html" class="card">
       <div class="card-accent ca-gold"></div>
       <div class="card-icon">📝</div>
@@ -628,6 +612,22 @@ footer::before{
       <div class="card-icon">✉️</div>
       <h3>Inbox</h3>
       <p>Private message এবং direct chat ব্যবহার করুন।</p>
+    </a>
+
+    <a href="groups.html" class="card">
+      <div class="card-accent ca-teal"></div>
+      <div class="card-icon">🎓</div>
+      <h3>Study Groups</h3>
+      <p>নিজের study group বানাও বা join করো — group chat করো।</p>
+      <span class="card-badge">New</span>
+    </a>
+
+    <a href="community-writings.html" class="card">
+      <div class="card-accent ca-gold"></div>
+      <div class="card-icon">🌍</div>
+      <h3>Community Writings</h3>
+      <p>অন্যদের লেখা পড়ো, star rating দাও — review দিলে XP পাবে।</p>
+      <span class="card-badge">New</span>
     </a>
 
     <a href="progress.html" class="card">
@@ -761,8 +761,7 @@ footer::before{
 import {
   auth, db, signOut, requireAuth,
   doc, getDoc,
-  collection, query, orderBy, limit, getDocs, where,
-  onAuthStateChanged
+  collection, query, orderBy, limit, getDocs
 } from "./js/firebase-config.js";
 
 /* YEAR */
@@ -832,21 +831,6 @@ requireAuth(async user => {
   const sessions= d.sessions    || 0;
   const best    = d.bestScore   || 0;
   const streak  = d.streak      || 0;
-
-  /* ── Streak auto-update — আজকে login করলে streak বাড়াও ── */
-  const todayStr    = new Date().toISOString().slice(0,10);
-  const lastActive  = d.lastActiveDate || "";
-  const yesterday   = new Date(Date.now() - 86400000).toISOString().slice(0,10);
-  if(lastActive !== todayStr) {
-    const newStreak = lastActive === yesterday ? streak + 1 : 1;
-    updateDoc(doc(db,"users",user.uid), {
-      streak: newStreak,
-      lastActiveDate: todayStr
-    }).catch(()=>{});
-    document.getElementById("h-streak").textContent = newStreak + "🔥";
-  } else {
-    document.getElementById("h-streak").textContent = streak + "🔥";
-  }
   const level   = xp >= 5000 ? "B2" : xp >= 2000 ? "B1" : xp >= 500 ? "A2" : "A1";
 
   /* Navbar */
@@ -859,6 +843,7 @@ requireAuth(async user => {
   document.getElementById("hero-name").textContent = name.split(" ")[0];
   document.getElementById("h-level").textContent   = level;
   document.getElementById("h-xp").textContent      = xp;
+  document.getElementById("h-streak").textContent  = streak + "🔥";
 
   /* Stats */
   document.getElementById("s-correct").textContent  = correct;
@@ -873,7 +858,7 @@ requireAuth(async user => {
   updateLevelBadges(xp);
   updateXPBar(xp);
 
-  /* Recent scores */
+  /* Recent scores — from users/{uid}/scores subcollection */
   try {
     const sq = query(
       collection(db, "users", user.uid, "scores"),

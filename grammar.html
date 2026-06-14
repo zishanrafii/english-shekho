@@ -171,6 +171,14 @@ body::after{
 .cat-count{font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
 .cat-done-bar{height:3px;background:rgba(255,255,255,.06);border-radius:20px;overflow:hidden;margin-top:.6rem;}
 .cat-done-fill{height:100%;border-radius:20px;transition:width .6s ease;}
+.cat-open-link{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  margin-top:.7rem;padding:.4rem .5rem;border-radius:10px;
+  font-size:11px;font-weight:700;text-decoration:none;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--sub);transition:.2s;font-family:'Outfit',sans-serif;
+}
+.cat-open-link:hover{background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.3);color:var(--text);}
 
 /* ─── LESSON PANEL ─── */
 .lesson-panel{
@@ -549,11 +557,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import {
-  auth, db, signOut, requireAuth,
-  doc, getDoc, setDoc, updateDoc, increment
-} from "./js/firebase-config.js";
+<script>
 /* ═══════════════════════════════
    GRAMMAR DATA
 ═══════════════════════════════ */
@@ -569,6 +573,20 @@ const CATEGORIES = [
   { id:"wh",          emoji:"❓", name:"WH Questions",    level:"beginner",     color:"#fbbf24",  bar:"rgba(251,191,36,.6)"  },
   { id:"partsOfSpeech",emoji:"🧩",name:"Parts of Speech", level:"beginner",     color:"#2dd4bf",  bar:"rgba(45,212,191,.6)"  },
 ];
+
+/* প্রতিটি category এর জন্য আলাদা বিস্তারিত lesson page (যদি থাকে) */
+const CATEGORY_PAGES = {
+  tenses:        "grammar-tenses.html",
+  articles:      "grammar-articles.html",
+  pronouns:      "grammar-pronouns.html",
+  modals:        "grammar-modals.html",
+  passive:       "grammar-voice.html",
+  narration:     "grammar-narration.html",
+  conditionals:  "grammar-conditionals.html",
+  partsOfSpeech: "grammar-parts-of-speech.html",
+  prepositions:  "grammar-prepositions.html",
+  wh:            "grammar-sentence.html",
+};
 
 const LESSONS = {
   tenses:[
@@ -1232,10 +1250,9 @@ const PROGRESS_STATS = [
   {val:"86%", label:"Avg Quiz Score"},
 ];
 
-/* ─── done topics (loaded from Firestore) ─── */
-let DONE_TOPICS = new Set();
+/* ─── MOCK done topics ─── */
+const DONE_TOPICS = new Set(["t1","t2","ar1","pr1","wh1","pos1","m1"]);
 const ACTIVE_CAT  = "tenses";
-let currentUid = null;
 
 /* ═══════════════════════════════
    BUILD UI
@@ -1273,12 +1290,14 @@ function buildCats(){
     const total = LESSONS[cat.id]?.length || 0;
     const done  = countDone(cat.id);
     const pct   = total ? Math.round((done/total)*100) : 0;
+    const page  = CATEGORY_PAGES[cat.id];
     return `
     <div class="cat-card ${cat.id===currentCat?'active-cat':''}" data-cat="${cat.id}" style="border-color:${cat.id===currentCat?cat.color+'44':''};">
       <div class="cat-emoji">${cat.emoji}</div>
       <div class="cat-name">${cat.name}</div>
       <div class="cat-count">${done}/${total} done</div>
       <div class="cat-done-bar"><div class="cat-done-fill" style="width:${pct}%;background:${cat.bar};"></div></div>
+      ${page ? `<a href="${page}" class="cat-open-link" onclick="event.stopPropagation()">📖 Full Lesson</a>` : ``}
     </div>`;
   }).join("") || `<div style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">No categories found.</div>`;
 
@@ -1349,6 +1368,7 @@ function showLesson(lesson){
         <span class="lc-badge badge-level">${lesson.level}</span>
         <span class="lc-badge badge-xp">+${lesson.xp} XP</span>
         ${done ? '<span class="lc-badge" style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:#2dd4bf;">✓ Done</span>' : ''}
+        ${CATEGORY_PAGES[cat?.id] ? `<a href="${CATEGORY_PAGES[cat.id]}" class="lc-badge" style="background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:#818cf8;text-decoration:none;">📖 পূর্ণ Lesson খুলুন</a>` : ''}
       </div>
     </div>
     <div class="lc-body">
@@ -1394,11 +1414,6 @@ function markDone(id){
   showLesson(currentLesson);
   updateProgress();
   showToast("✓ Lesson marked as done! XP added 🎉");
-  const lesson = allLessons().find(l=>l.id===id);
-  saveProgress();
-  if(currentUid && lesson?.xp){
-    updateDoc(doc(db,"users",currentUid), { xp: increment(lesson.xp) }).catch(()=>{});
-  }
 }
 
 function markUndone(id){
@@ -1407,14 +1422,6 @@ function markUndone(id){
   buildCats(); buildLessonList();
   showLesson(currentLesson);
   updateProgress();
-  saveProgress();
-}
-
-function saveProgress(){
-  if(!currentUid) return;
-  setDoc(doc(db,"users",currentUid), {
-    grammarProgress: { done: Array.from(DONE_TOPICS) }
-  }, { merge:true }).catch(e=>console.warn("save failed",e));
 }
 
 function showNext(){
@@ -1487,44 +1494,25 @@ document.getElementById("search-input").addEventListener("input", e=>{
 });
 
 /* logout */
-document.getElementById("btn-logout").onclick = async ()=>{
-  await signOut(auth);
-  window.location.href="index.html";
-};
+document.getElementById("btn-logout").onclick = ()=>{ window.location.href="index.html"; };
 
 /* footer year */
 const y = new Date().getFullYear();
 document.getElementById("footer-year").textContent  = y;
 document.getElementById("footer-year2").textContent = y;
 
-/* AUTH + INIT */
-requireAuth(async user => {
-  currentUid = user.uid;
-  const snap = await getDoc(doc(db,"users",user.uid));
-  const d = snap.exists() ? snap.data() : {};
+/* init */
+document.getElementById("h-total").textContent = allLessons().length;
+document.getElementById("h-done").textContent  = totalDone();
+document.getElementById("h-xp").textContent    = [...DONE_TOPICS].reduce((sum,id)=>{
+  const l=allLessons().find(l=>l.id===id);return sum+(l?.xp||0);
+},0);
 
-  const name  = d.displayName || user.displayName || "Learner";
-  const photo = d.photoURL    || user.photoURL    || "";
-  document.getElementById("nav-name").textContent = name;
-  const av = document.getElementById("nav-avatar");
-  if(photo) av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`;
-  else av.textContent = name[0]?.toUpperCase() || "?";
-
-  const gp = d.grammarProgress || {};
-  DONE_TOPICS = new Set(gp.done || []);
-
-  document.getElementById("h-total").textContent = allLessons().length;
-  document.getElementById("h-done").textContent  = totalDone();
-  document.getElementById("h-xp").textContent    = [...DONE_TOPICS].reduce((sum,id)=>{
-    const l=allLessons().find(l=>l.id===id);return sum+(l?.xp||0);
-  },0);
-
-  buildCats();
-  buildLessonList();
-  showLesson(LESSONS[ACTIVE_CAT]?.[0]);
-  buildRefCards();
-  updateProgress();
-});
+buildCats();
+buildLessonList();
+showLesson(LESSONS[ACTIVE_CAT]?.[0]);
+buildRefCards();
+updateProgress();
 </script>
 </body>
 </html>
