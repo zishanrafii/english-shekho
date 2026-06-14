@@ -311,7 +311,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <a href="chat.html" class="nav-link">Chat</a>
       </nav>
       <div class="user-section">
-        <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
+        <div class="user-avatar" id="nav-avatar" data-action="go-profile">👤</div>
         <div class="user-name" id="nav-name">Learner</div>
         <button class="btn-logout" id="btn-logout">Logout</button>
       </div>
@@ -339,42 +339,42 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <div id="home-screen">
     <div class="section-title">✍️ Writing Modules</div>
     <div class="module-grid">
-      <div class="module-card" onclick="openModule('sentence')">
+      <div class="module-card" data-module="sentence">
         <div class="mc-accent ca-teal"></div>
         <div class="mc-icon">🔤</div>
         <div class="mc-title">Sentence Builder</div>
         <div class="mc-desc">Words সাজিয়ে সঠিক sentence তৈরি করুন। Grammar rules practice করুন।</div>
-        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:45%;background:linear-gradient(90deg,#2dd4bf,#06b6d4);"></div></div><div class="mc-prog-label">9/20 done</div></div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" id="prog-sentence" style="width:0%;background:linear-gradient(90deg,#2dd4bf,#06b6d4);"></div></div><div class="mc-prog-label" id="prog-sentence-label">0 submissions</div></div>
       </div>
-      <div class="module-card" onclick="openModule('paragraph')">
+      <div class="module-card" data-module="paragraph">
         <div class="mc-accent ca-gold"></div>
         <div class="mc-icon">📝</div>
         <div class="mc-title">Paragraph Writing</div>
         <div class="mc-desc">Topic দেওয়া হবে, ৫–৮ বাক্যের একটি paragraph লিখুন।</div>
         <span class="mc-badge">Popular</span>
-        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:30%;background:linear-gradient(90deg,#f5c842,#fbbf24);"></div></div><div class="mc-prog-label">3/10 done</div></div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" id="prog-paragraph" style="width:0%;background:linear-gradient(90deg,#f5c842,#fbbf24);"></div></div><div class="mc-prog-label" id="prog-paragraph-label">0 submissions</div></div>
       </div>
-      <div class="module-card" onclick="openModule('essay')">
+      <div class="module-card" data-module="essay">
         <div class="mc-accent ca-indigo"></div>
         <div class="mc-icon">📄</div>
         <div class="mc-title">Essay Writing</div>
         <div class="mc-desc">Introduction, body এবং conclusion সহ পূর্ণ essay লিখুন।</div>
-        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:10%;background:linear-gradient(90deg,#818cf8,#6366f1);"></div></div><div class="mc-prog-label">1/10 done</div></div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" id="prog-essay" style="width:0%;background:linear-gradient(90deg,#818cf8,#6366f1);"></div></div><div class="mc-prog-label" id="prog-essay-label">0 submissions</div></div>
       </div>
-      <div class="module-card" onclick="openModule('email')">
+      <div class="module-card" data-module="email">
         <div class="mc-accent ca-rose"></div>
         <div class="mc-icon">📧</div>
         <div class="mc-title">Email Writing</div>
         <div class="mc-desc">Formal ও informal email লিখুন। Professional tone শিখুন।</div>
         <span class="mc-badge">New</span>
-        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:20%;background:linear-gradient(90deg,#fb7185,#f43f5e);"></div></div><div class="mc-prog-label">2/10 done</div></div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" id="prog-email" style="width:0%;background:linear-gradient(90deg,#fb7185,#f43f5e);"></div></div><div class="mc-prog-label" id="prog-email-label">0 submissions</div></div>
       </div>
-      <div class="module-card" onclick="openModule('story')">
+      <div class="module-card" data-module="story">
         <div class="mc-accent ca-emerald"></div>
         <div class="mc-icon">📖</div>
         <div class="mc-title">Story Writing</div>
         <div class="mc-desc">Creative story লিখুন। Imagination এবং vocabulary ব্যবহার করুন।</div>
-        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" style="width:0%;background:linear-gradient(90deg,#34d399,#10b981);"></div></div><div class="mc-prog-label">0/8 done</div></div>
+        <div class="mc-progress"><div class="mc-prog-bar"><div class="mc-prog-fill" id="prog-story" style="width:0%;background:linear-gradient(90deg,#34d399,#10b981);"></div></div><div class="mc-prog-label" id="prog-story-label">0 submissions</div></div>
       </div>
     </div>
 
@@ -390,7 +390,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <!-- SENTENCE BUILDER WORKSPACE -->
   <div class="workspace" id="ws-sentence">
     <div class="breadcrumb">
-      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <a href="#" data-action="goHome">✍️ Writing Lab</a>
       <span class="bc-sep">›</span>
       <span>Sentence Builder</span>
     </div>
@@ -401,7 +401,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <!-- PARAGRAPH WORKSPACE -->
   <div class="workspace" id="ws-paragraph">
     <div class="breadcrumb">
-      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <a href="#" data-action="goHome">✍️ Writing Lab</a>
       <span class="bc-sep">›</span><span>Paragraph Writing</span>
     </div>
     <div class="task-tabs" id="para-task-tabs"></div>
@@ -413,20 +413,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       </div>
       <div class="editor-panel">
         <div class="editor-toolbar">
-          <button class="etool-btn" onclick="insertText('**','**')"><b>B</b></button>
-          <button class="etool-btn" onclick="insertText('_','_')"><i>I</i></button>
-          <button class="etool-btn" onclick="insertText('"','"')">❝❞</button>
+          <button class="etool-btn" data-action="bold"><b>B</b></button>
+          <button class="etool-btn" data-action="italic"><i>I</i></button>
+          <button class="etool-btn" data-action="quote">❝❞</button>
           <div class="etool-sep"></div>
-          <button class="etool-btn" onclick="clearEditor()">🗑 Clear</button>
+          <button class="etool-btn" data-action="clear">🗑 Clear</button>
           <div class="word-counter">Words: <span id="word-count">0</span></div>
         </div>
         <textarea class="editor-textarea" id="main-editor" placeholder="এখানে লিখুন..." oninput="updateWordCount(this)"></textarea>
         <div class="editor-footer">
           <div class="ef-left" id="editor-target">লক্ষ্য: ৫০–৮০ শব্দ</div>
           <div class="ef-actions">
-            <button class="btn-save" onclick="saveDraft()">💾 Save Draft</button>
-            <button class="btn-check" onclick="checkWriting()">🤖 AI Check</button>
-            <button class="btn-submit" onclick="submitWriting()">Submit ✓</button>
+            <button class="btn-save" data-action="save">💾 Save Draft</button>
+            <button class="btn-check" data-action="check">🤖 AI Check</button>
+            <button class="btn-submit" data-action="submit">Submit ✓</button>
           </div>
         </div>
       </div>
@@ -437,7 +437,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <!-- ESSAY WORKSPACE -->
   <div class="workspace" id="ws-essay">
     <div class="breadcrumb">
-      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <a href="#" data-action="goHome">✍️ Writing Lab</a>
       <span class="bc-sep">›</span><span>Essay Writing</span>
     </div>
     <div class="task-tabs" id="essay-task-tabs"></div>
@@ -449,20 +449,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       </div>
       <div class="editor-panel">
         <div class="editor-toolbar">
-          <button class="etool-btn" onclick="insertText('**','**')"><b>B</b></button>
-          <button class="etool-btn" onclick="insertText('_','_')"><i>I</i></button>
-          <button class="etool-btn" onclick="insertText('"','"')">❝❞</button>
+          <button class="etool-btn" data-action="bold"><b>B</b></button>
+          <button class="etool-btn" data-action="italic"><i>I</i></button>
+          <button class="etool-btn" data-action="quote">❝❞</button>
           <div class="etool-sep"></div>
-          <button class="etool-btn" onclick="clearEditor()">🗑 Clear</button>
+          <button class="etool-btn" data-action="clear">🗑 Clear</button>
           <div class="word-counter">Words: <span id="word-count-essay">0</span></div>
         </div>
         <textarea class="editor-textarea" id="essay-editor" placeholder="এখানে essay লিখুন..." oninput="updateWordCount(this,'word-count-essay')" style="min-height:340px;"></textarea>
         <div class="editor-footer">
           <div class="ef-left">লক্ষ্য: ১৫০–২৫০ শব্দ</div>
           <div class="ef-actions">
-            <button class="btn-save" onclick="saveDraft('essay')">💾 Save Draft</button>
-            <button class="btn-check" onclick="checkWriting('essay')">🤖 AI Check</button>
-            <button class="btn-submit" onclick="submitWriting('essay')">Submit ✓</button>
+            <button class="btn-save" data-action="save-essay">💾 Save Draft</button>
+            <button class="btn-check" data-action="check-essay">🤖 AI Check</button>
+            <button class="btn-submit" data-action="submit-essay">Submit ✓</button>
           </div>
         </div>
       </div>
@@ -473,7 +473,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <!-- EMAIL WORKSPACE -->
   <div class="workspace" id="ws-email">
     <div class="breadcrumb">
-      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <a href="#" data-action="goHome">✍️ Writing Lab</a>
       <span class="bc-sep">›</span><span>Email Writing</span>
     </div>
     <div class="task-tabs" id="email-task-tabs"></div>
@@ -485,20 +485,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       </div>
       <div class="editor-panel">
         <div class="editor-toolbar">
-          <button class="etool-btn" onclick="insertText('Subject: ','')">Subject</button>
-          <button class="etool-btn" onclick="insertText('Dear ','')">Dear</button>
-          <button class="etool-btn" onclick="insertText('Regards,\n','')">Regards</button>
+          <button class="etool-btn" data-action="subject-email">Subject</button>
+          <button class="etool-btn" data-action="dear-email">Dear</button>
+          <button class="etool-btn" data-action="regards-email">Regards</button>
           <div class="etool-sep"></div>
-          <button class="etool-btn" onclick="clearEditor('email-editor')">🗑 Clear</button>
+          <button class="etool-btn" data-action="clear-email">🗑 Clear</button>
           <div class="word-counter">Words: <span id="word-count-email">0</span></div>
         </div>
         <textarea class="editor-textarea" id="email-editor" placeholder="Subject: ...\n\nDear [Name],\n\n...\n\nRegards,\n[Your Name]" oninput="updateWordCount(this,'word-count-email')" style="min-height:300px;"></textarea>
         <div class="editor-footer">
           <div class="ef-left">লক্ষ্য: ৮০–১৩০ শব্দ</div>
           <div class="ef-actions">
-            <button class="btn-save" onclick="saveDraft('email')">💾 Save Draft</button>
-            <button class="btn-check" onclick="checkWriting('email')">🤖 AI Check</button>
-            <button class="btn-submit" onclick="submitWriting('email')">Submit ✓</button>
+            <button class="btn-save" data-action="save-email">💾 Save Draft</button>
+            <button class="btn-check" data-action="check-email">🤖 AI Check</button>
+            <button class="btn-submit" data-action="submit-email">Submit ✓</button>
           </div>
         </div>
       </div>
@@ -509,7 +509,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <!-- STORY WORKSPACE -->
   <div class="workspace" id="ws-story">
     <div class="breadcrumb">
-      <a href="#" onclick="goHome()">✍️ Writing Lab</a>
+      <a href="#" data-action="goHome">✍️ Writing Lab</a>
       <span class="bc-sep">›</span><span>Story Writing</span>
     </div>
     <div class="task-tabs" id="story-task-tabs"></div>
@@ -521,20 +521,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       </div>
       <div class="editor-panel">
         <div class="editor-toolbar">
-          <button class="etool-btn" onclick="insertText('**','**')"><b>B</b></button>
-          <button class="etool-btn" onclick="insertText('"','"')">❝❞</button>
-          <button class="etool-btn" onclick="insertText('\n\n','')">¶ Para</button>
+          <button class="etool-btn" data-action="bold-story"><b>B</b></button>
+          <button class="etool-btn" data-action="quote-story">❝❞</button>
+          <button class="etool-btn" data-action="para-story">¶ Para</button>
           <div class="etool-sep"></div>
-          <button class="etool-btn" onclick="clearEditor('story-editor')">🗑 Clear</button>
+          <button class="etool-btn" data-action="clear-story">🗑 Clear</button>
           <div class="word-counter">Words: <span id="word-count-story">0</span></div>
         </div>
         <textarea class="editor-textarea" id="story-editor" placeholder="Once upon a time..." oninput="updateWordCount(this,'word-count-story')" style="min-height:320px;"></textarea>
         <div class="editor-footer">
           <div class="ef-left">লক্ষ্য: ১০০–২০০ শব্দ</div>
           <div class="ef-actions">
-            <button class="btn-save" onclick="saveDraft('story')">💾 Save Draft</button>
-            <button class="btn-check" onclick="checkWriting('story')">🤖 AI Check</button>
-            <button class="btn-submit" onclick="submitWriting('story')">Submit ✓</button>
+            <button class="btn-save" data-action="save-story">💾 Save Draft</button>
+            <button class="btn-check" data-action="check-story">🤖 AI Check</button>
+            <button class="btn-submit" data-action="submit-story">Submit ✓</button>
           </div>
         </div>
       </div>
@@ -793,12 +793,12 @@ function loadSBTask(idx){
       <div class="sb-body">
         <div class="sb-instruction">💡 নিচের words গুলো সঠিক order-এ সাজিয়ে একটি সঠিক sentence তৈরি করুন। Word-এ click করুন।</div>
         <div style="font-size:11px;color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.6rem;">Hint: ${task.hint}</div>
-        <div class="sb-words-pool" id="sb-pool">${shuffleArr([...task.words]).map(w=>`<div class="sb-word" onclick="addWord('${w}',this)">${w}</div>`).join("")}</div>
+        <div class="sb-words-pool" id="sb-pool">${shuffleArr([...task.words]).map(w=>`<div class="sb-word" data-action="add-word" data-word="${w}">${w}</div>`).join("")}</div>
         <div style="font-size:11px;color:var(--muted);margin-bottom:.4rem;font-family:'JetBrains Mono',monospace;">YOUR ANSWER ↓</div>
         <div class="sb-answer-zone" id="sb-zone"></div>
         <div class="sb-controls">
-          <button class="btn-check" onclick="checkSentence('${task.answer}')">✓ Check</button>
-          <button class="btn-save" onclick="resetSB(${idx})">↩ Reset</button>
+          <button class="btn-check" data-action="check-sentence" data-answer="${task.answer}">✓ Check</button>
+          <button class="btn-save" data-action="reset-sb" data-idx="${idx}">↩ Reset</button>
         </div>
         <div class="sb-result" id="sb-result"></div>
       </div>
@@ -808,16 +808,27 @@ function loadSBTask(idx){
 function shuffleArr(arr){ return arr.sort(()=>Math.random()-.5); }
 
 function addWord(word, el){
-  if(el.classList.contains("used")) return;
+  if(!el || el.classList.contains("used")) return;
   el.classList.add("used");
   sbPlaced.push(word);
   const zone = document.getElementById("sb-zone");
   const placed = document.createElement("div");
   placed.className = "sb-placed";
   placed.textContent = word;
-  placed.onclick = ()=>{ removeWord(word, placed, el); };
+  placed.dataset.word = word;
+  placed.dataset.action = "remove-word";
+  placed._poolEl = el;
   zone.appendChild(placed);
 }
+
+// Sentence builder zone delegation
+document.addEventListener("click", function(e){
+  const placed = e.target.closest('[data-action="remove-word"]');
+  if(!placed) return;
+  const word   = placed.dataset.word;
+  const poolEl = placed._poolEl;
+  if(word && poolEl) removeWord(word, placed, poolEl);
+});
 
 function removeWord(word, placedEl, poolEl){
   sbPlaced = sbPlaced.filter((_,i) => {
@@ -890,7 +901,7 @@ function loadEditorTask(type, tasks, idx){
       hintsEl.innerHTML += `
         <div class="useful-words">
           <div class="uw-title">Useful Words</div>
-          <div class="uw-chips">${t.usefulWords.map(w=>`<span class="uw-chip" onclick="insertWord('${w}')">${w}</span>`).join("")}</div>
+          <div class="uw-chips">${t.usefulWords.map(w=>`<span class="uw-chip" data-action="insert-word" data-word="${w}">${w}</span>`).join("")}</div>
         </div>`;
     }
   }
@@ -917,14 +928,19 @@ function updateWordCount(el, counterId="word-count"){
   if(cEl) cEl.textContent = words;
 }
 
-function insertText(before, after){
-  const activeEditor = document.querySelector(".workspace.active textarea");
-  if(!activeEditor) return;
-  const s = activeEditor.selectionStart, e = activeEditor.selectionEnd;
-  const sel = activeEditor.value.substring(s, e);
-  activeEditor.value = activeEditor.value.substring(0,s) + before + sel + after + activeEditor.value.substring(e);
-  activeEditor.focus();
-  updateWordCount(activeEditor, activeEditor.id.includes("essay")?"word-count-essay":activeEditor.id.includes("email")?"word-count-email":activeEditor.id.includes("story")?"word-count-story":"word-count");
+function insertText(before, after, editorId){
+  const el = editorId
+    ? document.getElementById(editorId)
+    : document.querySelector(".workspace.active textarea");
+  if(!el) return;
+  const s = el.selectionStart, e = el.selectionEnd;
+  const sel = el.value.substring(s, e);
+  el.value = el.value.substring(0,s) + before + sel + after + el.value.substring(e);
+  el.focus();
+  const wcId = el.id.includes("essay")?"word-count-essay":
+               el.id.includes("email")?"word-count-email":
+               el.id.includes("story")?"word-count-story":"word-count";
+  updateWordCount(el, wcId);
 }
 
 function insertWord(word){
@@ -1092,6 +1108,7 @@ async function submitWriting(type){
     // Reload history
     await loadHistory();
     toast(`🎉 Submitted! +${xp} XP অর্জন! (${words} words)`);
+    loadModuleProgress();
     editor.value = "";
     const wcId = type==="paragraph"?"word-count":`word-count-${type}`;
     const wc = document.getElementById(wcId); if(wc) wc.textContent="0";
@@ -1110,9 +1127,33 @@ function updateStats(){
 /* ══════════════════════════════════════
    BUILD CHALLENGES + HISTORY
 ══════════════════════════════════════ */
+/* ── Load real module submission counts from Firebase ── */
+async function loadModuleProgress(){
+  if(!window._currentUser) return;
+  const types = ["sentence","paragraph","essay","email","story"];
+  const maxMap = {sentence:20, paragraph:10, essay:10, email:10, story:8};
+  try {
+    const snap = await getDocs(query(
+      collection(db,"writings"),
+      where("uid","==",window._currentUser.uid)
+    ));
+    const counts = {sentence:0,paragraph:0,essay:0,email:0,story:0};
+    snap.forEach(d=>{ const t=d.data().type; if(counts[t]!==undefined) counts[t]++; });
+    types.forEach(type=>{
+      const count = counts[type];
+      const max   = maxMap[type];
+      const pct   = Math.min(100, Math.round(count/max*100));
+      const barEl = document.getElementById("prog-"+type);
+      const lblEl = document.getElementById("prog-"+type+"-label");
+      if(barEl) barEl.style.width = pct+"%";
+      if(lblEl) lblEl.textContent = `${count} submission${count!==1?'s':''}`;
+    });
+  } catch(e){ console.warn("Module progress load failed:",e); }
+}
+
 function buildChallenges(){
   document.getElementById("challenge-grid").innerHTML = CHALLENGES.map(c=>`
-    <div class="challenge-card" style="border-color:${c.border};" onclick="toast('Challenge started! 🚀')">
+    <div class="challenge-card" style="border-color:${c.border};" data-action="start-challenge">
       <div class="challenge-card" style="display:none;"></div>
       <div class="cc-top">
         <span class="cc-icon">${c.icon}</span>
@@ -1127,7 +1168,7 @@ function buildChallenges(){
     </div>`).join("");
   // re-do without nested card
   document.getElementById("challenge-grid").innerHTML = CHALLENGES.map(c=>`
-    <div class="challenge-card" style="border-color:${c.border};" onclick="toast('Challenge started! 🚀')">
+    <div class="challenge-card" style="border-color:${c.border};" data-action="start-challenge">
       <div class="cc-top">
         <span class="cc-icon">${c.icon}</span>
         <span class="cc-xp">${c.xp}</span>
@@ -1221,10 +1262,103 @@ requireAuth(async user => {
 
   buildChallenges();
   buildHistory();
+  loadModuleProgress();
 });
 
 // Also do immediate stat display
 updateStats();
+
+
+/* ══════════════════════════════════════
+   EVENT DELEGATION — replaces all inline onclick
+══════════════════════════════════════ */
+document.addEventListener("click", function(e){
+  const el = e.target.closest("[data-action],[data-module]");
+  if(!el) return;
+
+  // Module cards
+  const mod = el.dataset.module;
+  if(mod){ openModule(mod); return; }
+
+  const action = el.dataset.action;
+  if(!action) return;
+
+  switch(action){
+    // Navigation
+    case "goHome":       goHome(); break;
+    case "go-profile":   window.location.href="profile.html"; break;
+    case "insert-word":  insertWord(el.dataset.word||""); break;
+
+    // Paragraph toolbar
+    case "bold":    insertText("**","**"); break;
+    case "italic":  insertText("_","_");   break;
+    case "quote":   insertText('"','"');   break;
+    case "clear":   clearEditor("main-editor"); break;
+    case "save":    saveDraft(); break;
+    case "check":   checkWriting(); break;
+    case "submit":  submitWriting(); break;
+
+    // Essay toolbar
+    case "bold-essay":   insertText("**","**","essay-editor"); break;
+    case "italic-essay": insertText("_","_","essay-editor");   break;
+    case "quote-essay":  insertText('"','"',"essay-editor");   break;
+    case "clear-essay":  clearEditor("essay-editor"); break;
+    case "save-essay":   saveDraft("essay"); break;
+    case "check-essay":  checkWriting("essay"); break;
+    case "submit-essay": submitWriting("essay"); break;
+
+    // Email toolbar
+    case "subject-email": insertText("Subject: ","","email-editor"); break;
+    case "dear-email":    insertText("Dear ","","email-editor");    break;
+    case "regards-email": insertText("Regards,\n","","email-editor"); break;
+    case "clear-email":   clearEditor("email-editor"); break;
+    case "save-email":    saveDraft("email"); break;
+    case "check-email":   checkWriting("email"); break;
+    case "submit-email":  submitWriting("email"); break;
+
+    // Story toolbar
+    case "bold-story":  insertText("**","**","story-editor"); break;
+    case "quote-story": insertText('"','"',"story-editor");   break;
+    case "para-story":  insertText("\n\n","","story-editor"); break;
+    case "clear-story": clearEditor("story-editor"); break;
+    case "save-story":  saveDraft("story"); break;
+    case "check-story": checkWriting("story"); break;
+    case "submit-story":  submitWriting("story"); break;
+
+    // Sentence builder reset
+    case "reset-sb": {
+      const idx = parseInt(el.dataset.idx||"0");
+      resetSB(idx); break;
+    }
+    case "check-sentence": {
+      checkSentence(el.dataset.answer||"");
+      break;
+    }
+    // Challenge cards
+    case "start-challenge": toast("Challenge started! 🚀"); break;
+    case "add-word": {
+      const poolEl = document.querySelector(`.sb-word[data-word="${el.dataset.word}"]:not(.used)`);
+      addWord(el.dataset.word, el); break;
+    }
+  }
+});
+
+/* ── Expose functions to global scope (required for inline onclick with type=module) ── */
+window.openModule    = openModule;
+window.goHome        = goHome;
+window.checkWriting  = checkWriting;
+window.submitWriting = submitWriting;
+window.saveDraft     = saveDraft;
+window.clearEditor   = clearEditor;
+window.insertText    = insertText;
+window.insertWord    = insertWord;
+window.resetSB       = resetSB;
+window.checkSentence = checkSentence;
+window.addWord       = addWord;
+window.removeWord    = removeWord;
+window.showNext      = showNext;
+window.buildHistory         = buildHistory;
+window.loadModuleProgress   = loadModuleProgress;
 </script>
 </body>
 </html>
