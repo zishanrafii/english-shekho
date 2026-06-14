@@ -681,9 +681,17 @@ footer::before{
 
 <script type="module">
 import {
-  auth, db, signOut, requireAuth,
-  doc, getDoc
-} from "./js/firebase-config.js";
+  requireAuth, auth, db,
+  doc, getDoc, updateDoc,
+  arrayUnion, increment,
+  serverTimestamp, signOut
+} from "./firebase-config.js";
+
+/* ─── DATA ─── */
+/* User data loaded from Firebase in init() */
+let CURRENT_USER   = null;
+let USER_XP        = 0;
+let USER_TOPICS    = [];
 
 /* XP thresholds */
 const XP_LEVELS = {
@@ -912,8 +920,16 @@ function buildRoadmap(xp, doneTopic){
         if(isLocked && !isDone && !isNextUp) cls += " locked-topic";
 
         const card = document.createElement("a");
-        card.href  = isDone || isNextUp ? `topic.html?id=${topic.id}` : "#";
+        card.href  = "#";
         card.className = cls;
+        if(isDone || isNextUp){
+          card.addEventListener("click", async (e)=>{
+            e.preventDefault();
+            if(!isDone){
+              await markTopicDone(topic.id, topic.xp);
+            }
+          });
+        }
         card.style.cssText = isDone
           ? `--ta:${lConf.color};`
           : isNextUp ? `--ta:${lConf.color};` : "";
@@ -1029,52 +1045,76 @@ function updateXPUI(xp, doneTopic){
   }
 }
 
-/* ─── MAIN INIT ─── */
-function init(u){
-  document.getElementById("nav-name").textContent = u.displayName;
-  const photo = u.photoURL || "";
-  const av = document.getElementById("nav-avatar");
-  if(photo) av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`;
-  else av.textContent = u.displayName[0]?.toUpperCase() || "?";
+/* ─── MARK TOPIC DONE — Firebase ─── */
+async function markTopicDone(topicId, topicXP) {
+  if(!CURRENT_USER) return;
+  if(USER_TOPICS.includes(topicId)) return; // already done
 
-  document.getElementById("footer-year").textContent  = new Date().getFullYear();
-  document.getElementById("footer-year2").textContent = new Date().getFullYear();
-
-  updateXPUI(u.xp, u.topicsDone);
-  buildRoadmap(u.xp, u.topicsDone);
-  buildAchievements(u.xp, u.topicsDone);
-  buildGoals();
-
-  document.getElementById("btn-logout").onclick = async () => {
-    await signOut(auth);
-    window.location.href = "index.html";
-  };
-
-  /* Daily motivation */
-  const motivations = [
-    "৩০ মিনিট practice করুন এবং ২টি নতুন topic শেষ করুন।",
-    "আজ ১০টি নতুন vocabulary word মুখস্থ করুন।",
-    "Grammar-এর ১টি tense ভালো করে অনুশীলন করুন।",
-    "Speaking practice-এ ৫টি sentence জোরে বলুন।",
-    "Community chat-এ ৩টি English বাক্য লিখুন।",
-    "Quiz দিন এবং নিজের score beat করুন।",
-    "১টি পুরো level শেষ করুন — আজই!",
-  ];
-  document.getElementById("daily-goal-text").textContent =
-    motivations[new Date().getDay()];
+  try {
+    await updateDoc(doc(db,"users",CURRENT_USER.uid), {
+      topicsDone: arrayUnion(topicId),
+      xp:         increment(topicXP),
+    });
+    USER_TOPICS.push(topicId);
+    USER_XP += topicXP;
+    // Re-render with updated data
+    updateXPUI(USER_XP, USER_TOPICS);
+    buildRoadmap(USER_XP, USER_TOPICS);
+    buildAchievements(USER_XP, USER_TOPICS);
+  } catch(e) {
+    console.warn("markTopicDone failed:", e);
+  }
 }
+window.markTopicDone = markTopicDone;
+
+/* ─── MAIN INIT ─── */
+const yr = new Date().getFullYear();
+document.getElementById("footer-year").textContent  = yr;
+document.getElementById("footer-year2").textContent = yr;
+
+document.getElementById("btn-logout").onclick = async () => {
+  await signOut(auth);
+  window.location.href = "index.html";
+};
+
+const motivations = [
+  "৩০ মিনিট practice করুন এবং ২টি নতুন topic শেষ করুন।",
+  "আজ ১০টি নতুন vocabulary word মুখস্থ করুন।",
+  "Grammar-এর ১টি tense ভালো করে অনুশীলন করুন।",
+  "Speaking practice-এ ৫টি sentence জোরে বলুন।",
+  "Community chat-এ ৩টি English বাক্য লিখুন।",
+  "Quiz দিন এবং নিজের score beat করুন।",
+  "১টি পুরো level শেষ করুন — আজই!",
+];
+document.getElementById("daily-goal-text").textContent =
+  motivations[new Date().getDay()];
 
 requireAuth(async user => {
-  const snap = await getDoc(doc(db,"users",user.uid));
-  const d = snap.exists() ? snap.data() : {};
-  const gp = d.grammarProgress || {};
+  CURRENT_USER = user;
+  document.getElementById("nav-name").textContent =
+    user.displayName || user.email.split("@")[0];
 
-  init({
-    displayName: d.displayName || user.displayName || "Learner",
-    photoURL: d.photoURL || user.photoURL || "",
-    xp: d.xp || 0,
-    topicsDone: gp.done || []
-  });
+  const av = document.getElementById("nav-avatar");
+  if(user.photoURL){
+    av.style.backgroundImage = `url(${user.photoURL})`;
+    av.style.backgroundSize  = "cover";
+    av.textContent = "";
+  }
+
+  // Load from Firestore
+  try {
+    const snap = await getDoc(doc(db,"users",user.uid));
+    if(snap.exists()){
+      const d    = snap.data();
+      USER_XP     = d.xp          || 0;
+      USER_TOPICS = d.topicsDone  || [];
+    }
+  } catch(e){ console.warn("User load failed:",e); }
+
+  updateXPUI(USER_XP, USER_TOPICS);
+  buildRoadmap(USER_XP, USER_TOPICS);
+  buildAchievements(USER_XP, USER_TOPICS);
+  buildGoals();
 });
 </script>
 </body>

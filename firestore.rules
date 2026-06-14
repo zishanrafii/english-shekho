@@ -87,6 +87,34 @@ service cloud.firestore {
       }
     }
 
+    // ───── QUIZ SCORES (root collection — used by progress.html history/chart) ─────
+    // Nijer score read korte parbe, create korte parbe, kintu change/delete kora jabe na
+    match /scores/{scoreId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null &&
+        request.resource.data.uid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // ───── WRITING LAB ─────
+    // writings: submitted writing pieces (sentence/paragraph/essay/email/story)
+    // User nijer submission create korte parbe, nijer ta porte/dekhte parbe
+    match /writings/{writingId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.type is string &&
+        request.resource.data.content is string;
+      allow update, delete: if false;
+    }
+
+    // writing_drafts: auto-saved drafts, doc id = {uid}_{type}_{taskId}
+    // Nijer draft read/write/update korte parbe
+    match /writing_drafts/{draftId} {
+      allow read, write: if request.auth != null &&
+        draftId.matches(request.auth.uid + '_.*');
+    }
+
     // ───── LEADERBOARD ─────
     // Shudhu read-only. Score update hobe users/{uid} document e (xp, totalCorrect etc.)
     // tai alada leaderboard collection lagle eta shudhu read kora hobe.

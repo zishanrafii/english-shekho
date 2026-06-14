@@ -599,12 +599,41 @@ const ACHIEVEMENTS = [
   {id:"b1-unlock",  emoji:"🌳", name:"B1 Unlocked",    desc:"B1 লেভেলে পৌঁছেছেন"},
 ];
 
+/* Certificate earn condition:
+   - minXP: total XP must be >= this
+   - topicsRequired: all topics of this level must be done
+   - levelTopics: topic IDs from roadmap for this level             */
+const CERT_LEVEL_TOPICS = {
+  a1: ["a1-t1","a1-t2","a1-t3","a1-t4","a1-t5","a1-t6","a1-t7","a1-t8"],
+  a2: ["a2-t1","a2-t2","a2-t3","a2-t4","a2-t5","a2-t6","a2-t7","a2-t8"],
+  b1: ["b1-t1","b1-t2","b1-t3","b1-t4","b1-t5","b1-t6","b1-t7","b1-t8"],
+  b2: ["b2-t1","b2-t2","b2-t3","b2-t4","b2-t5","b2-t6","b2-t7","b2-t8"],
+  c1: ["c1-t1","c1-t2","c1-t3","c1-t4","c1-t5","c1-t6","c1-t7","c1-t8"],
+  c2: ["c2-t1","c2-t2","c2-t3","c2-t4","c2-t5","c2-t6","c2-t7","c2-t8"],
+};
+
 const CERTS = [
-  {id:"a1",emoji:"📜",title:"A1 Certificate",sub:"Beginner English",minXP:0},
-  {id:"a2",emoji:"📜",title:"A2 Certificate",sub:"Elementary English",minXP:500},
-  {id:"b1",emoji:"🎓",title:"B1 Certificate",sub:"Intermediate English",minXP:2000},
-  {id:"b2",emoji:"🎓",title:"B2 Certificate",sub:"Upper-Inter English",minXP:5000},
+  {id:"a1",emoji:"📜",title:"A1 Certificate",sub:"Beginner English",     minXP:500,   levelKey:"a1", totalTopics:8},
+  {id:"a2",emoji:"📜",title:"A2 Certificate",sub:"Elementary English",   minXP:2000,  levelKey:"a2", totalTopics:8},
+  {id:"b1",emoji:"🎓",title:"B1 Certificate",sub:"Intermediate English", minXP:5000,  levelKey:"b1", totalTopics:8},
+  {id:"b2",emoji:"🎓",title:"B2 Certificate",sub:"Upper-Inter English",  minXP:10000, levelKey:"b2", totalTopics:8},
+  {id:"c1",emoji:"🏅",title:"C1 Certificate",sub:"Advanced English",     minXP:18000, levelKey:"c1", totalTopics:8},
+  {id:"c2",emoji:"🏆",title:"C2 Certificate",sub:"Mastery English",      minXP:30000, levelKey:"c2", totalTopics:8},
 ];
+
+/* Check if a certificate is earned */
+function isCertEarned(cert, xp, topicsDone=[]) {
+  const levelTopics = CERT_LEVEL_TOPICS[cert.levelKey] || [];
+  const allDone     = levelTopics.every(tid => topicsDone.includes(tid));
+  const xpOk        = xp >= cert.minXP;
+  return allDone && xpOk;
+}
+
+/* Count done topics for a level */
+function countDoneTopics(levelKey, topicsDone=[]) {
+  const levelTopics = CERT_LEVEL_TOPICS[levelKey] || [];
+  return levelTopics.filter(tid => topicsDone.includes(tid)).length;
+}
 
 /* ── GLOBALS ── */
 let meUID = null;
@@ -634,12 +663,28 @@ window.switchEditTab = (tab, el) => {
   el.classList.add("active");
   document.getElementById("panel-" + tab).classList.add("active");
 };
+window.downloadCert   = downloadCert;
+
+/* ── Certificate download delegation ── */
+document.addEventListener("click", function(e){
+  const btn = e.target.closest('[data-action="download-cert"]');
+  if(!btn) return;
+  downloadCert(btn.dataset.certId||"", btn.dataset.certTitle||"");
+});
 window.closeEditModal = () => {
   document.getElementById("edit-modal").classList.remove("open");
   document.getElementById("save-status").textContent = "";
 };
 document.getElementById("edit-modal").onclick = e => {
-  if(e.target === document.getElementById("edit-modal")) window.closeEditModal();
+  if(e.target === document.getElementById("edit-modal")) window.downloadCert   = downloadCert;
+
+/* ── Certificate download delegation ── */
+document.addEventListener("click", function(e){
+  const btn = e.target.closest('[data-action="download-cert"]');
+  if(!btn) return;
+  downloadCert(btn.dataset.certId||"", btn.dataset.certTitle||"");
+});
+window.closeEditModal();
 };
 
 /* ── XP UI ── */
@@ -695,14 +740,151 @@ function buildAchievements(xp, sessions, bestScore, streak) {
 }
 
 /* ── CERTIFICATES ── */
-function buildCerts(xp) {
-  document.getElementById("cert-grid").innerHTML = CERTS.map(c => `
-    <div class="cert-card ${xp>=c.minXP?"earned":""}">
-      <div class="cert-icon">${c.emoji}</div>
-      <div class="cert-title">${c.title}</div>
-      <div class="cert-sub">${c.sub}</div>
-      ${xp>=c.minXP ? `<span class="cert-badge">✓ Earned</span>` : `<div style="font-size:10px;color:var(--muted);margin-top:.4rem;">${c.minXP} XP দরকার</div>`}
-    </div>`).join("");
+function buildCerts(xp, topicsDone=[]) {
+  document.getElementById("cert-grid").innerHTML = CERTS.map(cert => {
+    const earned      = isCertEarned(cert, xp, topicsDone);
+    const doneTopics  = countDoneTopics(cert.levelKey, topicsDone);
+    const totalTopics = cert.totalTopics;
+    const topicsPct   = Math.round(doneTopics / totalTopics * 100);
+    const xpPct       = Math.min(100, Math.round(xp / cert.minXP * 100));
+    const needXP      = Math.max(0, cert.minXP - xp);
+    const needTopics  = Math.max(0, totalTopics - doneTopics);
+    const allTopicsDone = doneTopics >= totalTopics;
+
+    return `
+    <div class="cert-card ${earned ? "earned" : ""}">
+      <div class="cert-icon">${cert.emoji}</div>
+      <div class="cert-title">${cert.title}</div>
+      <div class="cert-sub">${cert.sub}</div>
+
+      ${earned ? `
+        <span class="cert-badge">✓ Earned</span>
+        <div style="margin-top:.7rem;">
+          <button data-cert-id="${cert.id}" data-cert-title="${cert.title}"
+            data-action="download-cert"
+            style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.25);color:#f5c842;
+                   padding:4px 11px;border-radius:8px;cursor:pointer;font-size:10.5px;font-weight:700;
+                   font-family:'Outfit',sans-serif;transition:.2s;width:100%;">
+            ⬇ Download Certificate
+          </button>
+        </div>` : `
+        <div style="margin-top:.7rem;display:flex;flex-direction:column;gap:6px;">
+
+          <!-- Topics progress -->
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:3px;">
+              <span>Topics</span><span>${doneTopics}/${totalTopics}</span>
+            </div>
+            <div style="height:3px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;">
+              <div style="height:100%;width:${topicsPct}%;background:${allTopicsDone?'#34d399':'linear-gradient(90deg,#2dd4bf,#818cf8)'};border-radius:20px;transition:.6s;"></div>
+            </div>
+          </div>
+
+          <!-- XP progress -->
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:3px;">
+              <span>XP</span><span>${xp.toLocaleString()}/${cert.minXP.toLocaleString()}</span>
+            </div>
+            <div style="height:3px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;">
+              <div style="height:100%;width:${xpPct}%;background:linear-gradient(90deg,#f5c842,#fbbf24);border-radius:20px;transition:.6s;"></div>
+            </div>
+          </div>
+
+          <!-- What's missing -->
+          <div style="font-size:9.5px;color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;line-height:1.5;margin-top:1px;">
+            ${!allTopicsDone ? `📚 ${cert.levelKey.toUpperCase()}-এর আরো <b style="color:var(--sub)">${needTopics}টি topic</b> শেষ করুন` : '✅ সব topic done!'}
+            ${needXP > 0 ? `<br>⚡ আরো <b style="color:var(--gold)">${needXP.toLocaleString()} XP</b> দরকার` : '<br>✅ XP যথেষ্ট!'}
+          </div>
+        </div>`
+      }
+    </div>`;
+  }).join("");
+}
+
+/* ── Download Certificate (Canvas) ── */
+function downloadCert(id, title) {
+  const canvas = document.createElement("canvas");
+  canvas.width  = 800;
+  canvas.height = 560;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#04080f";
+  ctx.fillRect(0, 0, 800, 560);
+
+  // Gold border
+  ctx.strokeStyle = "#f5c842";
+  ctx.lineWidth   = 4;
+  ctx.strokeRect(20, 20, 760, 520);
+  ctx.strokeStyle = "rgba(245,200,66,.3)";
+  ctx.lineWidth   = 1;
+  ctx.strokeRect(30, 30, 740, 500);
+
+  // Title
+  ctx.fillStyle   = "#f5c842";
+  ctx.font        = "bold 20px Arial";
+  ctx.textAlign   = "center";
+  ctx.fillText("🇬🇧 ENGLISH SHEKHO", 400, 80);
+
+  // Certificate of Completion
+  ctx.fillStyle = "#f0f4f8";
+  ctx.font      = "bold 32px Arial";
+  ctx.fillText("Certificate of Completion", 400, 140);
+
+  // Divider
+  ctx.strokeStyle = "rgba(245,200,66,.5)";
+  ctx.lineWidth   = 1;
+  ctx.beginPath();
+  ctx.moveTo(100, 160); ctx.lineTo(700, 160);
+  ctx.stroke();
+
+  // This certifies
+  ctx.fillStyle = "#94a3b8";
+  ctx.font      = "16px Arial";
+  ctx.fillText("This certifies that", 400, 210);
+
+  // User name
+  const name = document.getElementById("prof-name")?.textContent || "Learner";
+  ctx.fillStyle = "#f5c842";
+  ctx.font      = "bold 28px Arial";
+  ctx.fillText(name, 400, 260);
+
+  // has successfully completed
+  ctx.fillStyle = "#94a3b8";
+  ctx.font      = "16px Arial";
+  ctx.fillText("has successfully completed", 400, 300);
+
+  // Course title
+  ctx.fillStyle = "#2dd4bf";
+  ctx.font      = "bold 24px Arial";
+  ctx.fillText(title + " — English Shekho", 400, 345);
+
+  // Date
+  ctx.fillStyle = "#64748b";
+  ctx.font      = "14px Arial";
+  const today   = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  ctx.fillText("Issued on: " + today, 400, 400);
+
+  // Signature line
+  ctx.strokeStyle = "rgba(255,255,255,.15)";
+  ctx.lineWidth   = 1;
+  ctx.beginPath();
+  ctx.moveTo(270, 460); ctx.lineTo(530, 460);
+  ctx.stroke();
+  ctx.fillStyle = "#64748b";
+  ctx.font      = "12px Arial";
+  ctx.fillText("Zishan Rafi — Founder, English Shekho", 400, 478);
+
+  // Footer
+  ctx.fillStyle = "rgba(245,200,66,.4)";
+  ctx.font      = "11px Arial";
+  ctx.fillText("english-shekho-bd.firebaseapp.com", 400, 520);
+
+  // Download
+  const link    = document.createElement("a");
+  link.download = `${id}-certificate-english-shekho.png`;
+  link.href     = canvas.toDataURL("image/png");
+  link.click();
 }
 
 /* ── SOCIAL SECTION ── */
@@ -804,7 +986,7 @@ function populateUI(d, user=null) {
   updateXPUI(xp);
   buildCalendar(d.activeDays || []);
   buildAchievements(xp, sessions, best, streak);
-  buildCerts(xp);
+  buildCerts(xp, d.topicsDone || []);
   buildSocial(d.social || {});
 
   /* action buttons */
@@ -954,7 +1136,15 @@ document.getElementById("btn-save-edit").onclick = async () => {
     populateUI({ ...currentData, ...updated });
     status.textContent = "✅ সফলভাবে সেভ হয়েছে!"; status.style.color = "var(--emerald)";
     showToast("Profile আপডেট হয়েছে ✅");
-    setTimeout(() => window.closeEditModal(), 1200);
+    setTimeout(() => window.downloadCert   = downloadCert;
+
+/* ── Certificate download delegation ── */
+document.addEventListener("click", function(e){
+  const btn = e.target.closest('[data-action="download-cert"]');
+  if(!btn) return;
+  downloadCert(btn.dataset.certId||"", btn.dataset.certTitle||"");
+});
+window.closeEditModal(), 1200);
   } catch(err) {
     console.error(err);
     if(err.code === "auth/wrong-password") {
