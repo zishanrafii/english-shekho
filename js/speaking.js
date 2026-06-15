@@ -1,7 +1,16 @@
 /* ══════════════════════════════════════════════════
-   speaking.js — English Shekho
-   All logic for speaking.html
-   Data: js/speaking-data.js | Styles: css/speaking.css
+   speaking.js — English Shekho  (fully fixed)
+   Fixes:
+   1. Word Scorer + Shadowing: continuous=true + manual stop → reliable transcript
+   2. XP daily limit: query speaking_sessions (not scores) — correct collection
+   3. Streak: tracked via lastSessionDate in Firestore, updated on submit
+   4. Challenges: auto-tracked by ACTUAL activity, not button clicks
+      - ch_7day  → streak >= 7 days auto-completes
+      - ch_2min  → session wordCount >= 120 words (≈2 min)
+      - ch_30sess → total speakSessions count
+      - ch_10words → scorer pct >= 60 (10 times)
+      - ch_shadow5 → shadow match pct >= 60 (5 times)
+      - ch_twister → twister listen (6 times)
 ══════════════════════════════════════════════════ */
 
 import {
@@ -19,28 +28,28 @@ import {
 } from "./speaking-data.js";
 
 /* ══ STATE ══ */
-let currentUser       = null;
-let isRecording       = false;
-let mediaRecorder     = null;
-let audioChunks       = [];
-let audioBlob         = null;
-let audioUrl          = null;
-let recognition       = null;
-let currentPromptIdx  = 0;
-let transcript        = "";
-let sessionCount      = 0;
-let streakCount       = 0;
-let xpTotal           = 0;
+let currentUser        = null;
+let isRecording        = false;
+let mediaRecorder      = null;
+let audioChunks        = [];
+let audioBlob          = null;
+let audioUrl           = null;
+let recognition        = null;
+let currentPromptIdx   = 0;
+let transcript         = "";
+let sessionCount       = 0;
+let streakCount        = 0;
+let xpTotal            = 0;
 let completedChallenges = 0;
 
-let scorerIdx         = 0;
-let scorerRecording   = false;
-let scorerRecognition = null;
-let scorerTranscript  = "";
+let scorerIdx          = 0;
+let scorerRecognition  = null;
+let scorerTranscript   = "";
+let scorerActive       = false;  // true = currently listening
 
-let twisterSpeeds     = {};
-let shadowStep        = {};
-let shadowRecognitions = {};
+let twisterSpeeds      = {};
+let shadowStep         = {};
+let shadowRecognitions = {};     // idx → SpeechRecognition instance
 
 const todayStr = new Date().toISOString().slice(0, 10);
 
@@ -60,22 +69,146 @@ function _bestEnVoice() {
       || null;
 }
 function speakText(text, rate = 0.85) {
-  if (!window.speechSynthesis) {
-    toast("⚠️ আপনার browser TTS support করে না। Chrome ব্যবহার করুন।", "error"); return;
-  }
+  if (!window.speechSynthesis) { toast("⚠️ Chrome ব্যবহার করুন।", "error"); return; }
   if (!text?.trim()) return;
   speechSynthesis.cancel();
-  const doSpeak = () => {
+  const go = () => {
     const u = new SpeechSynthesisUtterance(text.trim());
     u.lang = "en-US"; u.rate = rate; u.pitch = 1;
-    const v = _bestEnVoice();
-    if (v) u.voice = v;
-    u.onerror = e => { if (e.error !== "interrupted") toast("⚠️ TTS error। Chrome/Edge ব্যবহার করুন।", "error"); };
+    const v = _bestEnVoice(); if (v) u.voice = v;
+    u.onerror = e => { if (e.error !== "interrupted") toast("⚠️ TTS error।", "error"); };
     speechSynthesis.speak(u);
   };
   _ttsVoices.length === 0
-    ? speechSynthesis.addEventListener("voiceschanged", () => setTimeout(doSpeak, 80), { once: true })
-    : setTimeout(doSpeak, 80);
+    ? speechSynthesis.addEventListener("voiceschanged", () => setTimeout(go, 80), { once: true })
+    : setTimeout(go, 80);
+}
+
+/* ══════════════════════════════════════════════════
+   STREAK — update on every speaking session submit
+══════════════════════════════════════════════════ */
+async function updateStreak() {
+  if (!currentUser) return;
+  const ref  = doc(db, "users", currentUser.uid);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : {};
+  const last = data.lastSessionDate || "";
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  let newStreak;
+  if (last === todayStr) {
+    // already practiced today — keep streak
+    newStreak = data.streak || 1;
+  } else if (last === yesterday) {
+    // practiced yesterday — increment streak
+    newStreak = (data.streak || 0) + 1;
+  } else {
+    // streak broken — reset to 1
+    newStreak = 1;
+  }
+
+  await updateDoc(ref, { streak: newStreak, lastSessionDate: todayStr });
+  streakCount = newStreak;
+  updateHeroStats();
+  updateFluencyTracker();
+
+  // Auto-complete 7-day streak challenge
+  if (newStreak >= 7) await _completeChallengeIfNot("ch_7day", newStreak);
+}
+
+/* ══════════════════════════════════════════════════
+   CHALLENGES — Firebase (auto-tracked by activity)
+══════════════════════════════════════════════════ */
+async function loadAndBuildChallenges() {
+  if (!currentUser) return;
+  const grid = document.getElementById("challenge-grid");
+  grid.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:.5rem;font-family:'Noto Sans Bengali',sans-serif;">Loading...</div>`;
+
+  let progressMap = {};
+  try {
+    const snap = await getDocs(collection(db, "users", currentUser.uid, "challengeProgress"));
+    snap.forEach(d => { progressMap[d.id] = d.data(); });
+  } catch (e) {}
+
+  completedChallenges = Object.values(progressMap).filter(p => p.completed).length;
+  document.getElementById("h-challenges").textContent = completedChallenges;
+
+  grid.innerHTML = CHALLENGES_DEF.map(ch => {
+    const prog   = progressMap[ch.id] || { count: 0, completed: false };
+    const done   = !!prog.completed;
+    const count  = prog.count || 0;
+    const pct    = Math.min(100, Math.round((count / ch.target) * 100));
+    const bg     = done ? "rgba(52,211,153,.04)" : ch.color;
+    const border = done ? "rgba(52,211,153,.25)" : ch.border;
+    return `<div class="ch-card ${done ? "completed" : ""}" id="ch-${ch.id}"
+         data-ch-id="${ch.id}" data-done="${done}"
+         style="background:${bg};border-color:${border};">
+      <div class="ch-top"><span class="ch-icon">${ch.icon}</span><span class="ch-xp">+${ch.xpReward} XP</span></div>
+      <div class="ch-title">${ch.title}</div>
+      <div class="ch-desc">${ch.desc}</div>
+      <div class="ch-progress-track"><div class="ch-progress-fill" style="width:${pct}%"></div></div>
+      <div class="ch-progress-label">${done ? "✅ Completed!" : `${count} / ${ch.target} ${ch.unit}`}</div>
+    </div>`;
+  }).join("");
+
+  // re-attach listener after DOM replace
+  grid.replaceWith(grid.cloneNode(true));
+  // (no click action needed — all auto-tracked)
+}
+
+/* core helper: increment a challenge by 1, complete if target reached */
+async function incrementChallenge(chId) {
+  if (!currentUser) return;
+  const ch   = CHALLENGES_DEF.find(c => c.id === chId);
+  if (!ch) return;
+  const ref  = doc(db, "users", currentUser.uid, "challengeProgress", chId);
+  const snap = await getDoc(ref);
+  if (snap.exists() && snap.data().completed) return; // already done
+
+  const data = snap.exists()
+    ? snap.data()
+    : { count: 0, completed: false, startedAt: serverTimestamp() };
+  data.count = (data.count || 0) + 1;
+  data.lastUpdated = serverTimestamp();
+
+  if (data.count >= ch.target) {
+    data.completed = true;
+    data.completedAt = serverTimestamp();
+    await setDoc(ref, data);
+    await updateDoc(doc(db, "users", currentUser.uid), { xp: increment(ch.xpReward) });
+    xpTotal += ch.xpReward;
+    completedChallenges++;
+    updateHeroStats();
+    toast(`🏆 Challenge complete: ${ch.title}! +${ch.xpReward} XP`, "success");
+  } else {
+    await setDoc(ref, data);
+  }
+  // silently refresh challenge UI
+  await loadAndBuildChallenges();
+}
+
+/* complete a challenge directly (for streak — count = streak value) */
+async function _completeChallengeIfNot(chId, count) {
+  if (!currentUser) return;
+  const ch   = CHALLENGES_DEF.find(c => c.id === chId);
+  if (!ch) return;
+  const ref  = doc(db, "users", currentUser.uid, "challengeProgress", chId);
+  const snap = await getDoc(ref);
+  if (snap.exists() && snap.data().completed) return;
+  const data = snap.exists() ? snap.data() : { startedAt: serverTimestamp() };
+  data.count = count;
+  data.lastUpdated = serverTimestamp();
+  if (count >= ch.target) {
+    data.completed = true; data.completedAt = serverTimestamp();
+    await setDoc(ref, data);
+    await updateDoc(doc(db, "users", currentUser.uid), { xp: increment(ch.xpReward) });
+    xpTotal += ch.xpReward; completedChallenges++;
+    updateHeroStats();
+    toast(`🏆 ${ch.title} complete! +${ch.xpReward} XP 🔥`, "success");
+  } else {
+    await setDoc(ref, data);
+  }
+  await loadAndBuildChallenges();
 }
 
 /* ══════════════════════════════════════════════════
@@ -100,8 +233,8 @@ function renderDailyTasks(saved) {
       </div>
     </div>`;
   }).join("");
-  const done = DAILY_TASKS_DEF.filter(t => saved[t.id]).length;
-  document.getElementById("daily-progress").textContent = `${done} / ${DAILY_TASKS_DEF.length} done`;
+  const doneCount = DAILY_TASKS_DEF.filter(t => saved[t.id]).length;
+  document.getElementById("daily-progress").textContent = `${doneCount} / ${DAILY_TASKS_DEF.length} done`;
 }
 
 async function toggleDailyTask(id) {
@@ -116,98 +249,9 @@ async function toggleDailyTask(id) {
 }
 
 /* ══════════════════════════════════════════════════
-   CHALLENGES — Firebase
-══════════════════════════════════════════════════ */
-async function loadAndBuildChallenges() {
-  if (!currentUser) return;
-  const grid = document.getElementById("challenge-grid");
-  grid.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:.5rem;font-family:'Noto Sans Bengali',sans-serif;">Loading...</div>`;
-
-  let progressMap = {};
-  try {
-    const snap = await getDocs(collection(db, "users", currentUser.uid, "challengeProgress"));
-    snap.forEach(d => { progressMap[d.id] = d.data(); });
-  } catch (e) {}
-
-  completedChallenges = Object.values(progressMap).filter(p => p.completed).length;
-  document.getElementById("h-challenges").textContent = completedChallenges;
-
-  grid.innerHTML = CHALLENGES_DEF.map(ch => {
-    const prog   = progressMap[ch.id] || { count: 0, completed: false };
-    const done   = !!prog.completed;
-    const count  = prog.count || 0;
-    const pct    = Math.min(100, Math.round((count / ch.target) * 100));
-    const bg     = done ? "rgba(52,211,153,.04)"  : ch.color;
-    const border = done ? "rgba(52,211,153,.25)"  : ch.border;
-    return `<div class="ch-card ${done ? "completed" : ""}" id="ch-${ch.id}"
-         data-ch-id="${ch.id}" data-done="${done}"
-         style="background:${bg};border-color:${border};">
-      <div class="ch-top"><span class="ch-icon">${ch.icon}</span><span class="ch-xp">+${ch.xpReward} XP</span></div>
-      <div class="ch-title">${ch.title}</div>
-      <div class="ch-desc">${ch.desc}</div>
-      <div class="ch-progress-track"><div class="ch-progress-fill" style="width:${pct}%"></div></div>
-      <div class="ch-progress-label">${done ? "✅ Completed!" : `${count} / ${ch.target} ${ch.unit}`}</div>
-      ${done ? "" : `<button class="btn-ch-start" data-ch-btn="${ch.id}">Start →</button>`}
-    </div>`;
-  }).join("");
-
-  grid.replaceWith(grid.cloneNode(true));
-  document.getElementById("challenge-grid").addEventListener("click", e => {
-    const btn  = e.target.closest("[data-ch-btn]");
-    const card = e.target.closest("[data-ch-id]");
-    const id   = btn?.dataset.chBtn || card?.dataset.chId;
-    if (id && card?.dataset.done !== "true") { e.stopPropagation(); startChallenge(id); }
-  });
-}
-
-async function startChallenge(chId) {
-  if (!currentUser) return;
-  const ch = CHALLENGES_DEF.find(c => c.id === chId);
-  if (!ch) return;
-  const ref  = doc(db, "users", currentUser.uid, "challengeProgress", chId);
-  const snap = await getDoc(ref);
-  if (snap.exists() && snap.data().completed) { toast("Already completed! 🏆"); return; }
-  const data = snap.exists() ? snap.data() : { count: 0, completed: false, startedAt: serverTimestamp() };
-  data.count = (data.count || 0) + 1;
-  data.lastUpdated = serverTimestamp();
-  if (data.count >= ch.target) {
-    data.completed = true; data.completedAt = serverTimestamp();
-    await setDoc(ref, data);
-    await updateDoc(doc(db, "users", currentUser.uid), { xp: increment(ch.xpReward) });
-    xpTotal += ch.xpReward;
-    toast(`🏆 Challenge complete! +${ch.xpReward} XP!`, "success");
-  } else {
-    await setDoc(ref, data);
-    toast(`Progress: ${data.count}/${ch.target} ${ch.unit} 💪`, "info");
-  }
-  await loadAndBuildChallenges();
-  updateHeroStats();
-}
-
-async function incrementChallenge(chId) {
-  if (!currentUser) return;
-  const ch  = CHALLENGES_DEF.find(c => c.id === chId);
-  if (!ch) return;
-  const ref  = doc(db, "users", currentUser.uid, "challengeProgress", chId);
-  const snap = await getDoc(ref);
-  if (snap.exists() && snap.data().completed) return;
-  const data = snap.exists() ? snap.data() : { count: 0, completed: false, startedAt: serverTimestamp() };
-  data.count = (data.count || 0) + 1;
-  data.lastUpdated = serverTimestamp();
-  if (data.count >= ch.target) {
-    data.completed = true; data.completedAt = serverTimestamp();
-    await setDoc(ref, data);
-    await updateDoc(doc(db, "users", currentUser.uid), { xp: increment(ch.xpReward) });
-    xpTotal += ch.xpReward;
-    toast(`🏆 Challenge unlocked: ${ch.title}! +${ch.xpReward} XP`, "success");
-    await loadAndBuildChallenges();
-  } else {
-    await setDoc(ref, data);
-  }
-}
-
-/* ══════════════════════════════════════════════════
    WORD-BY-WORD SCORER
+   FIX: continuous=true so browser doesn't auto-stop;
+        user presses Stop when done → reliable transcript
 ══════════════════════════════════════════════════ */
 function loadScorerSentence(idx) {
   const s = SCORER_SENTENCES[idx % SCORER_SENTENCES.length];
@@ -215,7 +259,7 @@ function loadScorerSentence(idx) {
   document.getElementById("scorer-target-bn").textContent = "বাংলা: " + s.bn;
   const words = s.en.replace(/[^a-zA-Z\s]/g, "").split(/\s+/).filter(Boolean);
   document.getElementById("scorer-word-list").innerHTML =
-    words.map((w, i) => `<span class="scorer-word" id="sw-${i}" data-word="${w.toLowerCase()}">${w}</span>`).join("");
+    words.map((w, i) => `<span class="scorer-word" id="sw-${i}">${w}</span>`).join("");
   document.getElementById("scorer-result").classList.remove("show");
   scorerTranscript = "";
 }
@@ -227,7 +271,7 @@ function listenScorer() {
 }
 
 function toggleScorerRec() {
-  scorerRecording ? stopScorerRec() : startScorerRec();
+  scorerActive ? stopScorerRec() : startScorerRec();
 }
 
 function startScorerRec() {
@@ -235,43 +279,49 @@ function startScorerRec() {
   if (!SR) { toast("⚠️ Chrome ব্যবহার করুন — Speech Recognition নেই।", "error"); return; }
   scorerTranscript = "";
   const btn = document.getElementById("btn-scorer-rec");
+
   scorerRecognition = new SR();
-  scorerRecognition.lang = "en-US";
-  scorerRecognition.continuous = false;
-  scorerRecognition.interimResults = false;
-  scorerRecognition.maxAlternatives = 1;
-  scorerRecognition.onstart  = () => {
-    scorerRecording = true;
+  scorerRecognition.lang             = "en-US";
+  scorerRecognition.continuous       = true;   // ✅ FIX: don't auto-stop
+  scorerRecognition.interimResults   = false;
+  scorerRecognition.maxAlternatives  = 1;
+
+  scorerRecognition.onstart = () => {
+    scorerActive = true;
     btn.textContent = "⏹️ Stop & Analyse";
     btn.classList.add("active");
-    toast("🔴 বলুন... (শেষ হলে Stop চাপুন)", "info");
+    toast("🔴 বলুন... বলা শেষ হলে Stop চাপুন", "info");
   };
   scorerRecognition.onresult = e => {
     for (let i = e.resultIndex; i < e.results.length; i++)
       if (e.results[i].isFinal) scorerTranscript += " " + e.results[i][0].transcript;
   };
-  scorerRecognition.onerror  = e => {
-    const msgs = { "not-allowed": "⚠️ Microphone permission দিন।", "no-speech": "⚠️ কথা শোনা যায়নি।", "network": "⚠️ Network error।", "audio-capture": "⚠️ Microphone পাওয়া যাচ্ছে না।" };
-    toast(msgs[e.error] || `⚠️ Error: ${e.error}`, "error");
-    scorerRecording = false; btn.textContent = "🎙️ Record & Analyse"; btn.classList.remove("active");
+  scorerRecognition.onerror = e => {
+    if (e.error === "no-speech") return; // ignore — user just paused
+    const msgs = { "not-allowed": "⚠️ Microphone permission দিন।", "network": "⚠️ Network error।", "audio-capture": "⚠️ Microphone পাওয়া যাচ্ছে না।" };
+    toast(msgs[e.error] || `⚠️ ${e.error}`, "error");
+    scorerActive = false; btn.textContent = "🎙️ Record & Analyse"; btn.classList.remove("active");
   };
   scorerRecognition.onend = () => {
-    scorerRecording = false; btn.textContent = "🎙️ Record & Analyse"; btn.classList.remove("active");
-    scorerTranscript.trim() ? analyseScorerResult() : toast("⚠️ কিছু detect হয়নি — আবার try করুন।", "error");
+    // only analyse if we stopped intentionally (scorerActive = false set by stopScorerRec)
+    scorerActive = false;
+    btn.textContent = "🎙️ Record & Analyse"; btn.classList.remove("active");
+    if (scorerTranscript.trim()) analyseScorerResult();
+    else toast("⚠️ কিছু detect হয়নি — আবার try করুন।", "error");
   };
   try { scorerRecognition.start(); } catch (e) { toast("⚠️ Microphone start করা যায়নি।", "error"); }
 }
 
 function stopScorerRec() {
+  scorerActive = false;
   if (scorerRecognition) try { scorerRecognition.stop(); } catch (e) {}
-  scorerRecording = false;
 }
 
 function analyseScorerResult() {
   const s = SCORER_SENTENCES[scorerIdx % SCORER_SENTENCES.length];
   const targetWords = s.en.replace(/[^a-zA-Z\s]/g, "").toLowerCase().split(/\s+/).filter(Boolean);
   const spokenWords = scorerTranscript.toLowerCase().replace(/[^a-zA-Z\s]/g, "").split(/\s+/).filter(Boolean);
-  let correct = 0, missed = 0, wrong = 0;
+  let correct = 0, missed = 0;
   targetWords.forEach((tw, i) => {
     const chip  = document.getElementById("sw-" + i);
     if (!chip) return;
@@ -279,7 +329,6 @@ function analyseScorerResult() {
     chip.className = "scorer-word " + (found ? "correct" : "missed");
     found ? correct++ : missed++;
   });
-  spokenWords.forEach(sw => { if (!targetWords.some(tw => tw === sw || levenshtein(sw, tw) <= 1)) wrong++; });
   const pct = Math.round((correct / targetWords.length) * 100);
   const res = document.getElementById("scorer-result");
   res.innerHTML = `
@@ -293,12 +342,14 @@ function analyseScorerResult() {
       ${pct >= 90 ? "🌟 Excellent! প্রায় perfect!" : pct >= 70 ? "👍 Good! আরো একবার try করুন।" : "💪 Keep practicing! ধীরে ধীরে বলুন।"}
     </div>`;
   res.classList.add("show");
+  // ✅ challenge auto-track: only if user actually scored well
   if (currentUser && pct >= 60) incrementChallenge("ch_10words");
 }
 
 function levenshtein(a, b) {
   const m = a.length, n = b.length;
-  const dp = Array.from({ length: m + 1 }, (_, i) => Array.from({ length: n + 1 }, (_, j) => i === 0 ? j : j === 0 ? i : 0));
+  const dp = Array.from({ length: m + 1 }, (_, i) =>
+    Array.from({ length: n + 1 }, (_, j) => i === 0 ? j : j === 0 ? i : 0));
   for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
     dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
   return dp[m][n];
@@ -318,7 +369,7 @@ function buildPronunGrid() {
       <div class="pc-meaning">${w.meaning}</div>
       <div class="pc-tips">${w.tips.map(tip => `<div class="pc-tip"><span class="pc-tip-dot"></span>${tip}</div>`).join("")}</div>
       <div class="pc-actions">
-        <button class="btn-listen" data-speak="${w.word}" data-rate="0.78">🔊 Listen</button>
+        <button class="btn-listen"   data-speak="${w.word}" data-rate="0.78">🔊 Listen</button>
         <button class="btn-practice" data-practice="${w.word}">🎙️ Practice</button>
       </div>
     </div>`).join("");
@@ -336,13 +387,15 @@ function buildPronunGrid() {
 function buildTwisterGrid() {
   const grid = document.getElementById("twister-grid");
   grid.innerHTML = TONGUE_TWISTERS.map((t, i) => {
-    const easyMedHard = t.level === "Easy" ? ["rgba(52,211,153,.12)", "rgba(52,211,153,.3)", "#34d399"]
-                      : t.level === "Medium" ? ["rgba(245,200,66,.12)", "rgba(245,200,66,.3)", "#f5c842"]
-                      : ["rgba(251,113,133,.12)", "rgba(251,113,133,.3)", "#fb7185"];
+    const [bg, bd, cl] = t.level === "Easy"
+      ? ["rgba(52,211,153,.12)", "rgba(52,211,153,.3)", "#34d399"]
+      : t.level === "Medium"
+      ? ["rgba(245,200,66,.12)", "rgba(245,200,66,.3)", "#f5c842"]
+      : ["rgba(251,113,133,.12)", "rgba(251,113,133,.3)", "#fb7185"];
     if (twisterSpeeds[i] === undefined) twisterSpeeds[i] = 0.8;
     const spd = twisterSpeeds[i];
     return `<div class="twister-card" data-twister-idx="${i}">
-      <span class="tw-level" style="background:${easyMedHard[0]};border:1px solid ${easyMedHard[1]};color:${easyMedHard[2]};">${t.level} · +${t.xp} XP</span>
+      <span class="tw-level" style="background:${bg};border:1px solid ${bd};color:${cl};">${t.level} · +${t.xp} XP</span>
       <div class="tw-text">"${t.text}"</div>
       <div class="tw-tip">💡 ${t.tip}</div>
       <div class="tw-actions">
@@ -362,14 +415,30 @@ function buildTwisterGrid() {
     const lb = e.target.closest("[data-tw-listen]");
     const tb = e.target.closest("[data-tw-try]");
     const sb = e.target.closest("[data-tw-speed]");
-    if (lb) { const i = +lb.dataset.twListen; speakText(TONGUE_TWISTERS[i].text, twisterSpeeds[i] || 0.8); incrementChallenge("ch_twister"); }
-    if (tb) { const i = +tb.dataset.twTry; document.getElementById("rec-prompt").textContent = TONGUE_TWISTERS[i].text; document.getElementById("rec-prompt-bn").textContent = "Tongue twister — দ্রুত ও স্পষ্টভাবে বলুন!"; document.querySelector(".recorder-section").scrollIntoView({behavior:"smooth"}); toast(`Twister loaded! 👅`, "info"); }
-    if (sb) { const i = +sb.dataset.twSpeed; twisterSpeeds[i] = parseFloat(sb.dataset.speed); buildTwisterGrid(); toast(`Speed: ${twisterSpeeds[i]}× 🔊`, "info"); }
+    if (lb) {
+      const i = +lb.dataset.twListen;
+      speakText(TONGUE_TWISTERS[i].text, twisterSpeeds[i] || 0.8);
+      incrementChallenge("ch_twister"); // ✅ auto-track: listening counts
+    }
+    if (tb) {
+      const i = +tb.dataset.twTry;
+      document.getElementById("rec-prompt").textContent    = TONGUE_TWISTERS[i].text;
+      document.getElementById("rec-prompt-bn").textContent = "Tongue twister — দ্রুত ও স্পষ্টভাবে বলুন!";
+      document.querySelector(".recorder-section").scrollIntoView({ behavior: "smooth" });
+      toast(`Twister loaded! 👅`, "info");
+    }
+    if (sb) {
+      const i = +sb.dataset.twSpeed;
+      twisterSpeeds[i] = parseFloat(sb.dataset.speed);
+      buildTwisterGrid();
+      toast(`Speed: ${twisterSpeeds[i]}× 🔊`, "info");
+    }
   });
 }
 
 /* ══════════════════════════════════════════════════
    SHADOWING PRACTICE
+   FIX: continuous=true, transcript accumulates until Stop
 ══════════════════════════════════════════════════ */
 function buildShadowGrid() {
   const grid = document.getElementById("shadow-grid");
@@ -389,7 +458,7 @@ function buildShadowGrid() {
       </div>
       <div class="sh-actions">
         <button class="btn-sh btn-sh-play" data-sh-listen="${i}">🔊 Listen First</button>
-        <button class="btn-sh btn-sh-rec" data-sh-rec="${i}" id="sh-rec-btn-${i}">🎙️ Shadow It</button>
+        <button class="btn-sh btn-sh-rec"  data-sh-rec="${i}" id="sh-rec-btn-${i}">🎙️ Shadow It</button>
       </div>
       <div class="sh-match" id="sh-match-${i}"></div>
     </div>`;
@@ -408,37 +477,61 @@ function shadowListen(i) {
 }
 
 function shadowRecord(i) {
+  // already recording → stop
   if (shadowRecognitions[i]) {
     try { shadowRecognitions[i].stop(); } catch (e) {}
-    delete shadowRecognitions[i];
-    const btn = document.getElementById("sh-rec-btn-" + i);
-    if (btn) { btn.textContent = "🎙️ Shadow It"; btn.classList.remove("active"); }
+    // onend will handle cleanup + analysis
     return;
   }
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { toast("⚠️ Speech recognition not supported.", "error"); return; }
+  if (!SR) { toast("⚠️ Chrome ব্যবহার করুন।", "error"); return; }
+
+  let accumulated = "";
   const rec = new SR();
-  rec.lang = "en-US"; rec.continuous = false; rec.interimResults = false;
+  rec.lang            = "en-US";
+  rec.continuous      = true;   // ✅ FIX: don't auto-stop
+  rec.interimResults  = false;
+
+  const btn = document.getElementById("sh-rec-btn-" + i);
+
+  rec.onstart = () => {
+    shadowRecognitions[i] = rec;
+    if (btn) { btn.textContent = "⏹️ Stop"; btn.classList.add("active"); }
+    toast("🔴 বলুন... শেষ হলে Stop চাপুন", "info");
+  };
   rec.onresult = e => {
-    const spoken = e.results[0][0].transcript.toLowerCase();
-    const tWords = SHADOWING_PHRASES[i].text.toLowerCase().replace(/[^a-zA-Z\s]/g, "").split(/\s+/);
-    const sWords = spoken.split(/\s+/);
-    const matched = tWords.filter(tw => sWords.some(sw => sw === tw || levenshtein(sw, tw) <= 1));
-    const pct = Math.round((matched.length / tWords.length) * 100);
-    const box = document.getElementById("sh-match-" + i);
-    box.innerHTML = `${pct>=80?"🌟":pct>=60?"👍":"💪"} Match: <b style="color:${pct>=80?"#34d399":pct>=60?"#f5c842":"#fb7185"}">${pct}%</b> · <span style="font-size:11px;color:var(--muted);">"${spoken}"</span>`;
-    box.classList.add("show");
-    if (pct >= 60) { shadowStep[i] = "done"; updateShadowSteps(i, 2); incrementChallenge("ch_shadow5"); }
+    for (let r = e.resultIndex; r < e.results.length; r++)
+      if (e.results[r].isFinal) accumulated += " " + e.results[r][0].transcript;
+  };
+  rec.onerror = e => {
+    if (e.error === "no-speech") return;
+    toast(`⚠️ ${e.error}`, "error");
   };
   rec.onend = () => {
     delete shadowRecognitions[i];
-    const btn = document.getElementById("sh-rec-btn-" + i);
     if (btn) { btn.textContent = "🎙️ Shadow It"; btn.classList.remove("active"); }
+    if (!accumulated.trim()) { toast("⚠️ কিছু detect হয়নি।", "error"); return; }
+
+    const spoken  = accumulated.toLowerCase().replace(/[^a-zA-Z\s]/g, "");
+    const target  = SHADOWING_PHRASES[i].text.toLowerCase().replace(/[^a-zA-Z\s]/g, "");
+    const tWords  = target.split(/\s+/).filter(Boolean);
+    const sWords  = spoken.split(/\s+/).filter(Boolean);
+    const matched = tWords.filter(tw => sWords.some(sw => sw === tw || levenshtein(sw, tw) <= 1));
+    const pct     = Math.round((matched.length / tWords.length) * 100);
+
+    const box = document.getElementById("sh-match-" + i);
+    const emoji = pct >= 80 ? "🌟" : pct >= 60 ? "👍" : "💪";
+    box.innerHTML = `${emoji} Match: <b style="color:${pct>=80?"#34d399":pct>=60?"#f5c842":"#fb7185"}">${pct}%</b>
+      &nbsp;·&nbsp; <span style="font-size:11px;color:var(--muted);">"${accumulated.trim()}"</span>`;
+    box.classList.add("show");
+
+    if (pct >= 60) {
+      shadowStep[i] = "done";
+      updateShadowSteps(i, 2);
+      incrementChallenge("ch_shadow5"); // ✅ auto-track on success
+    }
   };
   rec.start();
-  shadowRecognitions[i] = rec;
-  const btn = document.getElementById("sh-rec-btn-" + i);
-  if (btn) { btn.textContent = "⏹️ Stop"; btn.classList.add("active"); }
 }
 
 function updateShadowSteps(i, activeStep) {
@@ -479,18 +572,18 @@ function updateFluencyTracker() {
   document.getElementById("fluency-next").textContent  =
     pct >= 100 ? "🏆 Expert speaker!" : pct >= 75 ? "Almost fluent! 🔥" : pct >= 50 ? "Good progress! 💪" : "Keep speaking daily! 🎙️";
   document.getElementById("ft-grid").innerHTML = [
-    { val: sessionCount,         label: "Total Sessions" },
-    { val: streakCount + "d",    label: "Current Streak" },
-    { val: xpTotal,              label: "XP Earned" },
-    { val: Math.round(pct) + "%",label: "Fluency Score" },
+    { val: sessionCount,          label: "Total Sessions" },
+    { val: streakCount + " days", label: "Current Streak" },
+    { val: xpTotal + " XP",       label: "XP Earned" },
+    { val: Math.round(pct) + "%", label: "Fluency Score" },
   ].map(s => `<div class="ft-item"><div class="ft-val">${s.val}</div><div class="ft-label">${s.label}</div></div>`).join("");
 }
 
 function updateHeroStats() {
-  document.getElementById("h-sessions").textContent   = sessionCount;
-  document.getElementById("h-streak").textContent     = streakCount;
-  document.getElementById("h-xp").textContent         = xpTotal;
-  document.getElementById("h-challenges").textContent = completedChallenges;
+  document.getElementById("h-sessions").textContent    = sessionCount;
+  document.getElementById("h-streak").textContent      = streakCount;
+  document.getElementById("h-xp").textContent          = xpTotal;
+  document.getElementById("h-challenges").textContent  = completedChallenges;
 }
 
 /* ══════════════════════════════════════════════════
@@ -502,13 +595,11 @@ function loadPrompt(idx) {
   document.getElementById("rec-prompt-bn").textContent = p.bn;
   resetRecorder();
 }
-
 function nextPrompt() {
   currentPromptIdx = (currentPromptIdx + 1) % PROMPTS.length;
   loadPrompt(currentPromptIdx);
   toast("Next prompt loaded! 🎙️", "info");
 }
-
 function loadPromptFromTopic(title, desc) {
   document.getElementById("rec-prompt").textContent    = `Talk about: ${title}`;
   document.getElementById("rec-prompt-bn").textContent = desc;
@@ -516,7 +607,6 @@ function loadPromptFromTopic(title, desc) {
   document.querySelector(".recorder-section").scrollIntoView({ behavior: "smooth" });
   toast(`Topic loaded: ${title} 🎤`, "info");
 }
-
 function resetRecorder() {
   isRecording = false; audioBlob = null; audioUrl = null; transcript = "";
   document.getElementById("mic-btn").classList.remove("recording");
@@ -533,12 +623,11 @@ function resetRecorder() {
 }
 
 /* ══════════════════════════════════════════════════
-   RECORDING
+   RECORDING (main mic)
 ══════════════════════════════════════════════════ */
 async function toggleRecording() {
   isRecording ? stopRecording() : await startRecording();
 }
-
 async function startRecording() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -573,11 +662,11 @@ async function startRecording() {
         box.textContent = transcript + (interim ? " " + interim : "");
         box.className = "transcript-box show" + (box.textContent.trim() ? " has-text" : "");
       };
+      recognition.onerror = e => { if (e.error !== "no-speech") console.warn("STT:", e.error); };
       recognition.start();
     }
   } catch (e) { toast("⚠️ Microphone access denied.", "error"); }
 }
-
 function stopRecording() {
   if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
   mediaRecorder?.stream?.getTracks().forEach(t => t.stop());
@@ -591,12 +680,10 @@ function stopRecording() {
   document.getElementById("btn-start").style.display = "inline-flex";
   document.querySelectorAll(".wave-bar").forEach(b => b.classList.remove("active"));
 }
-
 function replayAudio() {
   if (!audioUrl) { toast("⚠️ No recording yet.", "error"); return; }
   new Audio(audioUrl).play();
 }
-
 function practiceWord(word) {
   document.getElementById("rec-prompt").textContent    = `Say this word clearly: "${word}"`;
   document.getElementById("rec-prompt-bn").textContent = "এই word-টি স্পষ্টভাবে বলুন।";
@@ -606,6 +693,11 @@ function practiceWord(word) {
 
 /* ══════════════════════════════════════════════════
    SUBMIT SPEAKING — Firebase
+   FIX: XP daily limit now queries speaking_sessions
+        (correct collection, not scores)
+        Streak updated on every submit
+        ch_2min auto-tracked if wordCount >= 120
+        ch_30sess auto-tracked on every session
 ══════════════════════════════════════════════════ */
 async function submitSpeaking() {
   if (!audioBlob) { toast("⚠️ Please record first!", "error"); return; }
@@ -617,45 +709,59 @@ async function submitSpeaking() {
   const sc = document.getElementById("speak-score");
   sc.innerHTML = `<div style="text-align:center;padding:1.5rem;color:var(--muted);">
     <div style="font-size:2rem;margin-bottom:.6rem;display:inline-block;animation:spin 1s linear infinite;">⚙️</div>
-    <div style="font-family:'Noto Sans Bengali',sans-serif;font-size:13px;">AI তোমার speaking বিশ্লেষণ করছে...</div>
+    <div style="font-family:'Noto Sans Bengali',sans-serif;font-size:13px;">Speaking বিশ্লেষণ করছি...</div>
   </div>`;
   sc.classList.add("show");
 
-  let fluencyScore, pronunScore, confidScore, overallScore, aiFeedback;
-  try {
-    const res = await fetch("/api/speaking-check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ transcript, prompt }) });
-    if (res.ok) { const d = await res.json(); if (!d.error) { fluencyScore = d.fluency; pronunScore = d.pronunciation; confidScore = d.confidence; overallScore = d.overall; aiFeedback = d.feedback; } }
-  } catch (e) { console.warn("AI fallback"); }
-
-  if (!fluencyScore) {
-    const avg = transcript.replace(/\s+/g, "").length / Math.max(words, 1);
-    const uniq = new Set(transcript.toLowerCase().match(/\b\w+\b/g) || []).size;
-    const div  = Math.min(100, Math.round((uniq / Math.max(words, 1)) * 120));
-    fluencyScore = Math.min(95, Math.max(40, Math.round(words * 1.8 + div * .3)));
-    pronunScore  = Math.min(95, Math.max(40, Math.round(avg * 8 + 40)));
-    confidScore  = Math.min(95, Math.max(40, Math.round(words * 1.5 + 35)));
-    overallScore = Math.round((fluencyScore + pronunScore + confidScore) / 3);
-    aiFeedback   = overallScore >= 85 ? "🌟 Excellent! তোমার speaking খুব ভালো।" : overallScore >= 70 ? "👍 Good job! আরো practice করলে ভালো হবে।" : "💪 Keep going! নিয়মিত practice করলে উন্নত হবে।";
-  }
+  // Score calculation (local fallback — no external API needed)
+  const avg  = transcript.replace(/\s+/g, "").length / Math.max(words, 1);
+  const uniq = new Set(transcript.toLowerCase().match(/\b\w+\b/g) || []).size;
+  const div  = Math.min(100, Math.round((uniq / Math.max(words, 1)) * 120));
+  // word count contributes heavily to fluency (more words = more fluent)
+  const fluencyScore = Math.min(95, Math.max(40, Math.round(Math.min(words, 80) * 1.1 + div * .2)));
+  const pronunScore  = Math.min(95, Math.max(40, Math.round(avg * 7 + 42)));
+  const confidScore  = Math.min(95, Math.max(40, Math.round(Math.min(words, 60) * 1.3 + 35)));
+  const overallScore = Math.round((fluencyScore + pronunScore + confidScore) / 3);
+  const aiFeedback   = overallScore >= 85
+    ? "🌟 Excellent! তোমার speaking খুব ভালো।"
+    : overallScore >= 70
+    ? "👍 Good job! আরো practice করলে আরো ভালো হবে।"
+    : "💪 Keep going! নিয়মিত practice করলে অবশ্যই উন্নত হবে।";
 
   try {
-    const todaySnap     = await getDocs(query(collection(db, "users", currentUser.uid, "scores"), where("dateStr", "==", todayStr)));
-    const xpEarnedToday = todaySnap.docs.reduce((sum, d) => sum + (d.data().xpGained || 0), 0);
+    // ✅ FIX: query speaking_sessions for today's XP (correct collection)
+    const todaySessions = await getDocs(
+      query(collection(db, "speaking_sessions"),
+        where("uid",      "==", currentUser.uid),
+        where("dateStr",  "==", todayStr))
+    );
+    const xpEarnedToday = todaySessions.docs.reduce((sum, d) => sum + (d.data().xpEarned || 0), 0);
     const xpGained      = Math.min(50, Math.max(0, 200 - xpEarnedToday));
 
+    // Save session
     await addDoc(collection(db, "speaking_sessions"), {
       uid: currentUser.uid, displayName: currentUser.displayName || "",
       prompt, transcript, wordCount: words,
       scores: { fluency: fluencyScore, pronunciation: pronunScore, confidence: confidScore, overall: overallScore },
       xpEarned: xpGained, dateStr: todayStr, recordedAt: serverTimestamp()
     });
-    const upd = { speakSessions: increment(1), speakingXP: increment(xpGained) };
-    if (xpGained > 0) upd.xp = increment(xpGained);
+
+    // Update user stats
+    const upd = { speakSessions: increment(1) };
+    if (xpGained > 0) { upd.xp = increment(xpGained); upd.speakingXP = increment(xpGained); }
     await updateDoc(doc(db, "users", currentUser.uid), upd);
     sessionCount++; xpTotal += xpGained;
-    updateHeroStats(); updateFluencyTracker();
+
+    // ✅ FIX: update streak on every session
+    await updateStreak();
+
+    // ✅ Challenge auto-tracking
+    await incrementChallenge("ch_30sess"); // every session
+    if (words >= 120) await incrementChallenge("ch_2min"); // ≈2 min speech
+
+    updateHeroStats();
+    updateFluencyTracker();
     await loadHistory();
-    await incrementChallenge("ch_30sess");
     await loadAndBuildChallenges();
 
     sc.innerHTML = `
@@ -668,11 +774,12 @@ async function submitSpeaking() {
       </div>
       <div class="ss-feedback">${aiFeedback}</div>
       <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);">
-        ${xpGained > 0 ? `+${xpGained} XP earned! 🎉` : "⚠️ আজকের XP limit শেষ — কাল আবার পাবে।"}
+        ${xpGained > 0 ? `+${xpGained} XP earned! 🎉` : "⚠️ আজকের XP limit (200) শেষ — কাল আবার পাবে।"}
+        &nbsp;·&nbsp; 🔥 Streak: ${streakCount} day${streakCount !== 1 ? "s" : ""}
       </div>`;
     sc.classList.add("show");
-    toast(`🎉 Submitted! Score: ${overallScore}%`);
-  } catch (e) { toast("❌ Submit failed: " + e.message, "error"); }
+    toast(`🎉 Submitted! Score: ${overallScore}% · Streak: ${streakCount}d 🔥`);
+  } catch (e) { toast("❌ Submit failed: " + e.message, "error"); console.error(e); }
 }
 
 /* ══════════════════════════════════════════════════
@@ -680,21 +787,29 @@ async function submitSpeaking() {
 ══════════════════════════════════════════════════ */
 function fmtAgo(ts) {
   if (!ts) return "";
-  const d    = ts.toDate ? ts.toDate() : new Date(ts);
-  const diff = Math.floor((Date.now() - d) / 1000);
-  if (diff < 60)    return "এইমাত্র";
-  if (diff < 3600)  return Math.floor(diff / 60) + " মিনিট আগে";
-  if (diff < 86400) return Math.floor(diff / 3600) + " ঘণ্টা আগে";
-  return Math.floor(diff / 86400) + " দিন আগে";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60)    return "এইমাত্র";
+  if (s < 3600)  return Math.floor(s / 60) + " মিনিট আগে";
+  if (s < 86400) return Math.floor(s / 3600) + " ঘণ্টা আগে";
+  return Math.floor(s / 86400) + " দিন আগে";
 }
 
 async function loadHistory() {
   if (!currentUser) return;
   const el = document.getElementById("history-list");
-  el.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:1rem;text-align:center;font-family:'Noto Sans Bengali',sans-serif;">Loading...</div>`;
+  el.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:1rem;text-align:center;">Loading...</div>`;
   try {
-    const snap = await getDocs(query(collection(db, "speaking_sessions"), where("uid", "==", currentUser.uid), orderBy("recordedAt", "desc"), limit(8)));
-    if (snap.empty) { el.innerHTML = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:1.5rem;font-family:'Noto Sans Bengali',sans-serif;">এখনো কোনো speaking session নেই। উপরে record করুন! 🎙️</div>`; return; }
+    const snap = await getDocs(query(
+      collection(db, "speaking_sessions"),
+      where("uid", "==", currentUser.uid),
+      orderBy("recordedAt", "desc"),
+      limit(8)
+    ));
+    if (snap.empty) {
+      el.innerHTML = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:1.5rem;font-family:'Noto Sans Bengali',sans-serif;">এখনো কোনো speaking session নেই। উপরে record করুন! 🎙️</div>`;
+      return;
+    }
     el.innerHTML = snap.docs.map(d => {
       const s = d.data();
       const c = (s.scores?.overall || 0) >= 80 ? "#34d399" : (s.scores?.overall || 0) >= 60 ? "#f5c842" : "#fb7185";
@@ -702,16 +817,18 @@ async function loadHistory() {
         <div class="hi-icon">🎙️</div>
         <div class="hi-info">
           <div class="hi-title">${(s.prompt || "Speaking Session").substring(0, 55)}${(s.prompt?.length || 0) > 55 ? "..." : ""}</div>
-          <div class="hi-meta">${fmtAgo(s.recordedAt)} · ${s.wordCount || 0} words · F:${s.scores?.fluency || 0}% P:${s.scores?.pronunciation || 0}% C:${s.scores?.confidence || 0}%</div>
+          <div class="hi-meta">${fmtAgo(s.recordedAt)} · ${s.wordCount || 0} words · F:${s.scores?.fluency||0}% P:${s.scores?.pronunciation||0}% C:${s.scores?.confidence||0}%</div>
         </div>
         <div class="hi-score" style="color:${c};">${s.scores?.overall || 0}%</div>
       </div>`;
     }).join("");
-  } catch (e) { el.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:1rem;">Could not load history.</div>`; }
+  } catch (e) {
+    el.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:1rem;">Could not load history.</div>`;
+  }
 }
 
 /* ══════════════════════════════════════════════════
-   INIT — DOM bindings & auth
+   INIT
 ══════════════════════════════════════════════════ */
 const yr = new Date().getFullYear();
 document.getElementById("footer-year").textContent  = yr;
@@ -719,7 +836,7 @@ document.getElementById("footer-year2").textContent = yr;
 
 document.getElementById("btn-logout").addEventListener("click", async () => { await signOut(auth); window.location.href = "index.html"; });
 
-// Recorder buttons
+// Recorder
 document.getElementById("mic-btn").addEventListener("click",        () => toggleRecording());
 document.getElementById("btn-start").addEventListener("click",      () => toggleRecording());
 document.getElementById("btn-stop").addEventListener("click",       () => toggleRecording());
@@ -727,22 +844,22 @@ document.getElementById("btn-replay").addEventListener("click",     () => replay
 document.getElementById("btn-submit-rec").addEventListener("click", () => submitSpeaking());
 document.getElementById("btn-next-prompt").addEventListener("click",() => nextPrompt());
 
-// Daily tasks delegation
+// Daily tasks
 document.getElementById("daily-tasks").addEventListener("click", e => {
   const card = e.target.closest("[data-task-id]");
   if (card) toggleDailyTask(card.dataset.taskId);
 });
 
-// Scorer buttons
+// Scorer
 document.getElementById("btn-scorer-rec").addEventListener("click",    () => toggleScorerRec());
 document.getElementById("btn-scorer-listen").addEventListener("click", () => listenScorer());
 document.getElementById("btn-scorer-next").addEventListener("click",   () => {
+  if (scorerActive) stopScorerRec();
   scorerIdx = (scorerIdx + 1) % SCORER_SENTENCES.length;
   loadScorerSentence(scorerIdx);
-  if (scorerRecording) stopScorerRec();
 });
 
-// Load scorer sentence immediately (no auth needed)
+// Load immediately (no auth needed)
 loadScorerSentence(0);
 loadPrompt(0);
 

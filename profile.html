@@ -676,15 +676,7 @@ window.closeEditModal = () => {
   document.getElementById("save-status").textContent = "";
 };
 document.getElementById("edit-modal").onclick = e => {
-  if(e.target === document.getElementById("edit-modal")) window.downloadCert   = downloadCert;
-
-/* ── Certificate download delegation ── */
-document.addEventListener("click", function(e){
-  const btn = e.target.closest('[data-action="download-cert"]');
-  if(!btn) return;
-  downloadCert(btn.dataset.certId||"", btn.dataset.certTitle||"");
-});
-window.closeEditModal();
+  if(e.target === document.getElementById("edit-modal")) window.closeEditModal();
 };
 
 /* ── XP UI ── */
@@ -844,7 +836,7 @@ function downloadCert(id, title) {
   ctx.fillText("This certifies that", 400, 210);
 
   // User name
-  const name = document.getElementById("prof-name")?.textContent || "Learner";
+  const name = document.getElementById("p-name")?.textContent || "Learner";
   ctx.fillStyle = "#f5c842";
   ctx.font      = "bold 28px Arial";
   ctx.fillText(name, 400, 260);
@@ -1136,15 +1128,7 @@ document.getElementById("btn-save-edit").onclick = async () => {
     populateUI({ ...currentData, ...updated });
     status.textContent = "✅ সফলভাবে সেভ হয়েছে!"; status.style.color = "var(--emerald)";
     showToast("Profile আপডেট হয়েছে ✅");
-    setTimeout(() => window.downloadCert   = downloadCert;
-
-/* ── Certificate download delegation ── */
-document.addEventListener("click", function(e){
-  const btn = e.target.closest('[data-action="download-cert"]');
-  if(!btn) return;
-  downloadCert(btn.dataset.certId||"", btn.dataset.certTitle||"");
-});
-window.closeEditModal(), 1200);
+    setTimeout(() => window.closeEditModal(), 1200);
   } catch(err) {
     console.error(err);
     if(err.code === "auth/wrong-password") {

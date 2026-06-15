@@ -794,8 +794,7 @@ requireAuth(async user => {
   let scores = [];
   try {
     const sq = query(
-      collection(db, "scores"),
-      where("uid", "==", user.uid),
+      collection(db, "users", user.uid, "scores"),
       orderBy("createdAt", "asc"),
       limit(50)
     );
