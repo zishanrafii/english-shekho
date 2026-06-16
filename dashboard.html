@@ -929,13 +929,15 @@ const todayChallenge = challenges[new Date().getDay()];
 document.getElementById("challenge-desc").textContent = todayChallenge;
 
 /* LEVEL BADGE HELPER */
-function updateLevelBadges(xp) {
-  const badges = {
-    "badge-a1": xp >= 0,
-    "badge-a2": xp >= 500,
-    "badge-b1": xp >= 2000,
-    "badge-b2": xp >= 5000,
-  };
+function updateXPBar(xp) {
+  const levels = [
+    { label:"A1", min:0,    max:5000  },
+    { label:"A2", min:5000,  max:10000  },
+    { label:"B1", min:10000, max:20000  },
+    { label:"B2", min:20000, max:30000 },
+    { label:"C1", min:30000, max:40000  },
+    { label:"C2", min:40000, max:50000 },
+  ];
   Object.entries(badges).forEach(([id, unlocked]) => {
     const el = document.getElementById(id);
     if(el) {
@@ -948,10 +950,12 @@ function updateLevelBadges(xp) {
 /* XP BAR HELPER */
 function updateXPBar(xp) {
   const levels = [
-    { label:"A1", min:0,    max:500  },
-    { label:"A2", min:500,  max:2000 },
-    { label:"B1", min:2000, max:5000 },
-    { label:"B2", min:5000, max:10000 },
+    { label:"A1", min:0,    max:5000  },
+    { label:"A2", min:5000,  max:10000  },
+    { label:"B1", min:10000, max:20000  },
+    { label:"B2", min:20000, max:30000 },
+    { label:"C1", min:30000, max:40000  },
+    { label:"C2", min:40000, max:50000 },
   ];
   let current = levels[levels.length-1];
   for(const lv of levels) {
