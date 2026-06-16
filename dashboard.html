@@ -466,6 +466,7 @@ footer::before{
         <a href="roadmap.html" class="nav-link">Journey</a>
         <a href="quiz-beginner.html" class="nav-link">Quiz</a>
         <a href="grammar.html" class="nav-link">Grammar</a>
+        <a href="reading.html" class="nav-link">Reading</a>
         <a href="speaking.html" class="nav-link">Speaking</a>
         <a href="leaderboard.html" class="nav-link">Leaderboard</a>
         <a href="chat.html" class="nav-link">Chat</a>
@@ -622,13 +623,13 @@ footer::before{
       <span class="card-badge">New</span>
     </a>
 
-    <div class="card" style="cursor:pointer;opacity:.7;" onclick="var t=document.getElementById('reading-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)">
+    <a href="reading.html" class="card">
       <div class="card-accent ca-orange"></div>
       <div class="card-icon">📖</div>
       <h3>Reading Center</h3>
       <p>Short passage, story ও article পড়ে comprehension skill বাড়ান।</p>
-      <span class="card-badge">Soon</span>
-    </div>
+      <span class="card-badge">New</span>
+    </a>
 
     <a href="vocab-dashboard.html" class="card">
       <div class="card-accent ca-teal"></div>
@@ -1070,8 +1071,5 @@ requireAuth(async user => {
 });
 </script>
 
-<div id="reading-toast" style="position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #fb923c;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);pointer-events:none;">
-  📖 Reading Center শীঘ্রই আসছে!
-</div>
 </body>
 </html>

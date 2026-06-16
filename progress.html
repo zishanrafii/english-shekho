@@ -403,6 +403,10 @@ footer{
         <span class="level-badge lb-a2 lb-inactive" id="badge-a2">A2</span>
         <span class="level-badge lb-b1 lb-inactive" id="badge-b1">B1</span>
         <span class="level-badge lb-b2 lb-inactive" id="badge-b2">B2</span>
+        <span class="level-badge lb-c1 lb-inactive" id="badge-c1">C1</span>
+        <span class="level-badge lb-c2 lb-inactive" id="badge-c2">C2</span>
+
+
       </div>
     </div>
     <div class="xp-track">
@@ -410,7 +414,7 @@ footer{
     </div>
     <div class="xp-meta">
       <span id="xp-current">0 XP</span>
-      <span id="xp-next">Next: 500 XP</span>
+      <span id="xp-next">Next: 5000 XP</span>
     </div>
   </div>
 
@@ -551,10 +555,11 @@ document.getElementById("footer-year2").textContent = yr;
 /* ── ACHIEVEMENTS DEFINITION ── */
 const ACHIEVEMENTS = [
   { id:"first_quiz",  icon:"🎓", name:"First Step",      desc:"প্রথম quiz দিয়েছেন",         cond: (u,s) => s.length >= 1 },
-  { id:"xp_100",      icon:"⚡", name:"XP Hunter",       desc:"100 XP অর্জন করেছেন",        cond: (u)   => (u.xp||0) >= 100 },
-  { id:"xp_500",      icon:"🔋", name:"Energy Surge",    desc:"500 XP অর্জন করেছেন",        cond: (u)   => (u.xp||0) >= 500 },
-  { id:"xp_2000",     icon:"🌟", name:"Rising Star",     desc:"2000 XP — A2 Level!",         cond: (u)   => (u.xp||0) >= 2000 },
-  { id:"xp_5000",     icon:"🏆", name:"Champion",        desc:"5000 XP — B1 Level!",         cond: (u)   => (u.xp||0) >= 5000 },
+  { id:"xp_1000",      icon:"⚡", name:"XP Hunter",       desc:"1000 XP অর্জন করেছেন",        cond: (u)   => (u.xp||0) >= 1000 },
+  { id:"xp_5000",      icon:"🔋", name:"Energy Surge",    desc:"5000 XP অর্জন করেছেন",        cond: (u)   => (u.xp||0) >= 5000 },
+  { id:"xp_10000",     icon:"🌟", name:"Rising Star",     desc:"10000 XP — A2 Level!",         cond: (u)   => (u.xp||0) >=10000 },
+  { id:"xp_20000",     icon:"🏆", name:"Champion",        desc:"20000 XP — B1 Level!",         cond: (u)   => (u.xp||0) >= 20000 },
+  { id:"xp_300000",     icon:"🧑‍🎓️", name:"Pro",        desc:"30000 XP — B2 Level!",         cond: (u)   => (u.xp||0) >= 30000 },
   { id:"streak_3",    icon:"🔥", name:"On Fire",         desc:"৩ দিন streak ধরে রেখেছেন",   cond: (u)   => (u.streak||0) >= 3 },
   { id:"streak_7",    icon:"💥", name:"Week Warrior",    desc:"৭ দিন streak!",               cond: (u)   => (u.streak||0) >= 7 },
   { id:"streak_30",   icon:"🌙", name:"Unstoppable",     desc:"৩০ দিন streak!",              cond: (u)   => (u.streak||0) >= 30 },
@@ -566,36 +571,40 @@ const ACHIEVEMENTS = [
 
 /* ── LEVEL HELPERS ── */
 function levelFromXP(xp) {
-  if (xp >= 5000) return "B2";
-  if (xp >= 2000) return "B1";
-  if (xp >= 500)  return "A2";
+  if (xp >= 50000) return "C2";
+  if (xp >= 40000) return "C1";
+  if (xp >= 30000) return "B2";
+  if (xp >= 200000) return "B1";
+  if (xp >= 10000)  return "A2";
   return "A1";
 }
 function updateXPBar(xp) {
   const levels = [
-    { label:"A1", min:0,    max:500   },
-    { label:"A2", min:500,  max:2000  },
-    { label:"B1", min:2000, max:5000  },
-    { label:"B2", min:5000, max:10000 },
+    { label:"A1", min:0,    max:5000  },
+    { label:"A2", min:5000,  max:10000  },
+    { label:"B1", min:10000, max:20000  },
+    { label:"B2", min:20000, max:30000 },
+    { label:"C1", min:30000, max:40000  },
+    { label:"C2", min:40000, max:50000 },
   ];
   let cur = levels[levels.length - 1];
   for (const lv of levels) { if (xp < lv.max) { cur = lv; break; } }
-  const pct = Math.min(100, Math.round((xp - cur.min) / (cur.max - cur.min) * 100));
+  const pct = Math.min(1000, Math.round((xp - cur.min) / (cur.max - cur.min) * 1000));
   document.getElementById("xp-fill").style.width = pct + "%";
   document.getElementById("xp-current").textContent = xp + " XP";
   document.getElementById("xp-next").textContent =
-    xp >= 10000 ? "Max Level 🎉" : `Next: ${cur.max.toLocaleString()} XP`;
+    xp >= 100000 ? "Max Level 🎉" : `Next: ${cur.max.toLocaleString()} XP`;
   document.getElementById("level-title").textContent =
     { A1:"A1 Beginner", A2:"A2 Elementary", B1:"B1 Intermediate", B2:"B2 Upper-Intermediate" }[cur.label];
   document.getElementById("level-sub").textContent =
-    xp >= 10000 ? "সর্বোচ্চ স্তরে পৌঁছে গেছেন! 🎉" :
+    xp >= 100000 ? "সর্বোচ্চ স্তরে পৌঁছে গেছেন! 🎉" :
     `${cur.max - xp} XP বাকি — পরের level: ${
-      { A1:"A2", A2:"B1", B1:"B2", B2:"Max" }[cur.label]
+      { A1:"A2", A2:"B1", B1:"B2", B2:"C1",C2:"C1",C2:"Max" }[cur.label]
     }`;
 
   ["a1","a2","b1","b2"].forEach(id => {
     const el = document.getElementById("badge-" + id);
-    const thresh = { a1:0, a2:500, b1:2000, b2:5000 };
+    const thresh = { a1:5000, a2:10000, b1:20000, b2:30000, c1:40000, c2:50000};
     el.classList.toggle("lb-active",   xp >= thresh[id]);
     el.classList.toggle("lb-inactive", xp < thresh[id]);
   });
