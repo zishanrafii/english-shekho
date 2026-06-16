@@ -226,6 +226,24 @@ body::after{
 .stat-l{font-size:10.5px;color:var(--muted);margin-top:1px;font-family:'Noto Sans Bengali',sans-serif;}
 .sv-1{color:#2dd4bf;}.sv-2{color:#f5c842;}.sv-3{color:#818cf8;}.sv-4{color:#fb7185;}
 
+/* ─── STREAK RING (replaces 4th plain stat card) ─── */
+.stat-card.streak-card{gap:14px;}
+.streak-ring{width:46px;height:46px;flex-shrink:0;position:relative;}
+.streak-ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+.streak-ring-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:4;}
+.streak-ring-fill{fill:none;stroke:#fb923c;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);}
+.streak-ring-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.week-dots{display:flex;gap:4px;margin-top:4px;}
+.week-dot{width:13px;height:13px;border-radius:4px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:7px;display:flex;align-items:center;justify-content:center;color:var(--muted);}
+.week-dot.wd-hit{background:rgba(251,146,60,.18);border-color:rgba(251,146,60,.4);color:#fb923c;}
+.week-dot.wd-today{box-shadow:0 0 0 1px #fb923c;}
+
+/* ─── CARD MINI PROGRESS BAR ─── */
+.card-progress{margin-top:.7rem;}
+.cp-track{height:5px;background:rgba(255,255,255,.06);border-radius:20px;overflow:hidden;}
+.cp-fill{height:100%;border-radius:20px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.cp-label{font-size:9.5px;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.3px;}
+
 /* ─── LEVEL PROGRESS ─── */
 .level-progress-wrap{
   background:var(--surface2);border:1px solid var(--border);
@@ -261,6 +279,7 @@ body::after{
   display:flex;align-items:center;gap:10px;
   letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
 }
+.section-title.st-group{margin-top:2.4rem;}
 .section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
 
 /* ─── MAIN CARDS ─── */
@@ -466,14 +485,14 @@ footer::before{
     <div class="hero-orb2"></div>
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-eyebrow">📍 Your Learning Hub</div>
+        <div class="hero-eyebrow" id="hero-eyebrow">📍 Your Learning Hub</div>
         <h2>Welcome back, <span id="hero-name">there</span>! 👋</h2>
-        <p class="hero-sub">Vocabulary quiz, grammar lessons, speaking practice এবং group chat — সব এক জায়গায়। আজকেও একটু শিখি?</p>
+        <p class="hero-sub" id="hero-sub">Vocabulary quiz, grammar lessons, speaking practice এবং group chat — সব এক জায়গায়। আজকেও একটু শিখি?</p>
       </div>
       <div class="hero-stats">
         <div class="hstat">
           <div class="hstat-v" id="h-level">A1</div>
-          <div class="hstat-l">Level</div>
+          <div class="hstat-l" id="h-level-sub">Level</div>
         </div>
         <div class="hstat">
           <div class="hstat-v" id="h-xp">0</div>
@@ -522,11 +541,18 @@ footer::before{
         <div class="stat-l">সেরা স্কোর</div>
       </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">⚡</div>
+    <div class="stat-card streak-card">
+      <div class="streak-ring">
+        <svg viewBox="0 0 48 48">
+          <circle class="streak-ring-bg" cx="24" cy="24" r="20"></circle>
+          <circle class="streak-ring-fill" id="streak-ring-fill" cx="24" cy="24" r="20"
+                  stroke-dasharray="125.6" stroke-dashoffset="125.6"></circle>
+        </svg>
+        <div class="streak-ring-emoji">🔥</div>
+      </div>
       <div>
-        <div class="stat-v sv-4" id="s-level">Beginner</div>
-        <div class="stat-l">বর্তমান স্তর</div>
+        <div class="stat-v sv-4" id="s-streak">0 দিন</div>
+        <div class="week-dots" id="week-dots"></div>
       </div>
     </div>
   </div>
@@ -551,8 +577,8 @@ footer::before{
     </div>
   </div>
 
-  <!-- NAV CARDS -->
-  <div class="section-title">🧭 All Features</div>
+  <!-- CORE LEARNING -->
+  <div class="section-title">📚 Core Learning</div>
   <div class="dashboard-grid">
 
     <a href="quiz-beginner.html" class="card">
@@ -567,6 +593,18 @@ footer::before{
       <div class="card-icon">📘</div>
       <h3>Grammar Lessons</h3>
       <p>Tense, preposition, article — সব grammar rules বাংলায় শিখুন।</p>
+      <div class="card-progress">
+        <div class="cp-track"><div class="cp-fill" id="cp-grammar" style="width:0%;background:linear-gradient(90deg,#2dd4bf,#06b6d4);"></div></div>
+        <div class="cp-label" id="cp-grammar-label">0/8 topics</div>
+      </div>
+    </a>
+
+    <a href="listening.html" class="card">
+      <div class="card-accent ca-rose"></div>
+      <div class="card-icon">🎧</div>
+      <h3>Listening Center</h3>
+      <p>Audio lesson, story ও conversation শুনে listening skill বাড়ান।</p>
+      <span class="card-badge">New</span>
     </a>
 
     <a href="speaking.html" class="card">
@@ -576,6 +614,39 @@ footer::before{
       <p>Pronunciation guide এবং speaking drill দিয়ে fluency বাড়ান।</p>
     </a>
 
+    <a href="writing-lab.html" class="card">
+      <div class="card-accent ca-emerald"></div>
+      <div class="card-icon">✍️</div>
+      <h3>Writing Lab</h3>
+      <p>Sentence থেকে essay পর্যন্ত — ধাপে ধাপে লেখা শিখুন, AI feedback সহ।</p>
+      <span class="card-badge">New</span>
+    </a>
+
+    <div class="card" style="cursor:pointer;opacity:.7;" onclick="var t=document.getElementById('reading-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)">
+      <div class="card-accent ca-orange"></div>
+      <div class="card-icon">📖</div>
+      <h3>Reading Center</h3>
+      <p>Short passage, story ও article পড়ে comprehension skill বাড়ান।</p>
+      <span class="card-badge">Soon</span>
+    </div>
+
+    <a href="vocab-dashboard.html" class="card">
+      <div class="card-accent ca-teal"></div>
+      <div class="card-icon">📚</div>
+      <h3>Word Bank</h3>
+      <p>Category অনুযায়ী vocabulary browse এবং flashcard practice করুন।</p>
+      <div class="card-progress">
+        <div class="cp-track"><div class="cp-fill" id="cp-vocab" style="width:0%;background:linear-gradient(90deg,#f5c842,#fbbf24);"></div></div>
+        <div class="cp-label" id="cp-vocab-label">0 words learned</div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- PRACTICE & PROGRESS -->
+  <div class="section-title st-group">🎮 Practice &amp; Progress</div>
+  <div class="dashboard-grid">
+
     <a href="challenges.html" class="card">
       <div class="card-accent ca-gold"></div>
       <div class="card-icon">⚡</div>
@@ -583,6 +654,26 @@ footer::before{
       <p>প্রতিদিন নতুন challenge — streak ধরে রাখুন এবং XP জিতুন।</p>
       <span class="card-badge">Daily</span>
     </a>
+
+    <a href="progress.html" class="card">
+      <div class="card-accent ca-orange"></div>
+      <div class="card-icon">📊</div>
+      <h3>Progress Report</h3>
+      <p>Score chart, streak calendar এবং level history এক জায়গায়।</p>
+    </a>
+
+    <a href="leaderboard.html" class="card">
+      <div class="card-accent ca-rose"></div>
+      <div class="card-icon">🏆</div>
+      <h3>Leaderboard</h3>
+      <p>Top learners দেখুন এবং ranking-এ নিজেকে এগিয়ে নিন।</p>
+    </a>
+
+  </div>
+
+  <!-- COMMUNITY & LIVE -->
+  <div class="section-title st-group">🌐 Community &amp; Live</div>
+  <div class="dashboard-grid">
 
     <a href="chat.html" class="card card-live">
       <div class="card-accent ca-teal"></div>
@@ -593,25 +684,11 @@ footer::before{
       <p>সবাই মিলে English practice ও discussion করুন। Call-ও করা যাবে।</p>
     </a>
 
-    <a href="leaderboard.html" class="card">
-      <div class="card-accent ca-rose"></div>
-      <div class="card-icon">🏆</div>
-      <h3>Leaderboard</h3>
-      <p>Top learners দেখুন এবং ranking-এ নিজেকে এগিয়ে নিন।</p>
-    </a>
-
-    <a href="friends.html" class="card">
+    <a href="live-class.html" class="card card-live">
       <div class="card-accent ca-emerald"></div>
-      <div class="card-icon">👥</div>
-      <h3>Friends</h3>
-      <p>অন্য learners-দের follow করুন এবং একসাথে শিখুন।</p>
-    </a>
-
-    <a href="inbox.html" class="card">
-      <div class="card-accent ca-indigo"></div>
-      <div class="card-icon">✉️</div>
-      <h3>Inbox</h3>
-      <p>Private message এবং direct chat ব্যবহার করুন।</p>
+      <div class="card-icon">📡</div>
+      <h3>Live Class</h3>
+      <p>Video ও screenshare দিয়ে real-time English class করুন।</p>
     </a>
 
     <a href="groups.html" class="card">
@@ -622,6 +699,13 @@ footer::before{
       <span class="card-badge">New</span>
     </a>
 
+    <a href="friends.html" class="card">
+      <div class="card-accent ca-emerald"></div>
+      <div class="card-icon">👥</div>
+      <h3>Friends</h3>
+      <p>অন্য learners-দের follow করুন এবং একসাথে শিখুন।</p>
+    </a>
+
     <a href="community-writings.html" class="card">
       <div class="card-accent ca-gold"></div>
       <div class="card-icon">🌍</div>
@@ -630,27 +714,18 @@ footer::before{
       <span class="card-badge">New</span>
     </a>
 
-    <a href="progress.html" class="card">
-      <div class="card-accent ca-orange"></div>
-      <div class="card-icon">📊</div>
-      <h3>Progress Report</h3>
-      <p>Score chart, streak calendar এবং level history এক জায়গায়।</p>
+    <a href="inbox.html" class="card">
+      <div class="card-accent ca-indigo"></div>
+      <div class="card-icon">✉️</div>
+      <h3>Inbox</h3>
+      <p>Private message এবং direct chat ব্যবহার করুন।</p>
     </a>
 
-    <a href="vocab-dashboard.html" class="card">
-      <div class="card-accent ca-teal"></div>
-      <div class="card-icon">📚</div>
-      <h3>Word Bank</h3>
-      <p>Category অনুযায়ী vocabulary browse এবং flashcard practice করুন।</p>
-      <span class="card-badge">New</span>
-    </a>
+  </div>
 
-    <a href="live-class.html" class="card card-live">
-      <div class="card-accent ca-emerald"></div>
-      <div class="card-icon">📡</div>
-      <h3>Live Class</h3>
-      <p>Video ও screenshare দিয়ে real-time English class করুন।</p>
-    </a>
+  <!-- ACCOUNT -->
+  <div class="section-title st-group">⚙️ Account</div>
+  <div class="dashboard-grid">
 
     <a href="profile.html" class="card">
       <div class="card-accent ca-rose"></div>
@@ -769,6 +844,76 @@ const y = new Date().getFullYear();
 document.getElementById("footer-year").textContent  = y;
 document.getElementById("footer-year2").textContent = y;
 
+/* ─── TIME-BASED GREETING ─── */
+function setGreeting(name){
+  const h = new Date().getHours();
+  let part, emoji;
+  if(h < 5)       { part = "শুভ রাত্রি";    emoji = "🌙"; }
+  else if(h < 12) { part = "শুভ সকাল";      emoji = "☀️"; }
+  else if(h < 16) { part = "শুভ দুপুর";      emoji = "🌤️"; }
+  else if(h < 19) { part = "শুভ বিকাল";      emoji = "🌇"; }
+  else            { part = "শুভ সন্ধ্যা";    emoji = "🌃"; }
+
+  document.getElementById("hero-eyebrow").textContent = `${emoji} ${part}, ${name}`;
+
+  const lines = [
+    "নতুন সপ্তাহ, নতুন word — আজ থেকেই শুরু করি! 🚀",
+    "প্রতিদিন একটু একটু শেখাই সবচেয়ে বড় অগ্রগতি। 🌱",
+    "আজ একটা grammar topic শেষ করার চেষ্টা করো। 📘",
+    "Speaking practice করলে confidence বাড়ে — try করো আজ। 🎤",
+    "Vocabulary quiz দিয়ে আজকের session শুরু করি? 📝",
+    "Streak ভাঙবে না — আজও practice করে যাও! 🔥",
+    "সপ্তাহান্তে একটু বেশি practice — পুরো week-টা ঝালাই করো। ✨",
+  ];
+  document.getElementById("hero-sub").textContent = lines[new Date().getDay()];
+}
+
+/* ─── ROADMAP TOPIC MAP (mirrors roadmap.html) ─── */
+const ROADMAP_TOPICS = {
+  A1: ["a1-t1","a1-t2","a1-t3","a1-t4","a1-t5","a1-t6","a1-t7","a1-t8"],
+  A2: ["a2-t1","a2-t2","a2-t3","a2-t4","a2-t5","a2-t6","a2-t7","a2-t8"],
+  B1: ["b1-t1","b1-t2","b1-t3","b1-t4","b1-t5","b1-t6","b1-t7","b1-t8"],
+  B2: ["b2-t1","b2-t2","b2-t3","b2-t4","b2-t5","b2-t6","b2-t7","b2-t8"],
+  C1: ["c1-t1","c1-t2","c1-t3","c1-t4","c1-t5","c1-t6","c1-t7","c1-t8"],
+  C2: ["c2-t1","c2-t2","c2-t3","c2-t4","c2-t5","c2-t6","c2-t7","c2-t8"],
+};
+const ROADMAP_ORDER = ["A1","A2","B1","B2","C1","C2"];
+
+/* Find current level by FIRST level that isn't 100% complete (true mastery progress, not just XP) */
+function getLevelProgress(doneTopics){
+  for(const key of ROADMAP_ORDER){
+    const topics = ROADMAP_TOPICS[key];
+    const done = topics.filter(t => doneTopics.includes(t)).length;
+    if(done < topics.length){
+      return { level:key, done, total:topics.length, pct:Math.round(done/topics.length*100) };
+    }
+  }
+  const last = ROADMAP_ORDER[ROADMAP_ORDER.length-1];
+  return { level:last, done:ROADMAP_TOPICS[last].length, total:ROADMAP_TOPICS[last].length, pct:100 };
+}
+
+/* ─── WEEKLY STREAK DOTS ─── */
+function buildWeekDots(streak){
+  const days = ["র","সো","মঙ্গ","বু","বৃ","শু","শনি"];
+  const todayIdx = new Date().getDay(); // 0=Sun
+  const wrap = document.getElementById("week-dots");
+  wrap.innerHTML = days.map((d, i) => {
+    // approximate: last `streak` days (including today) counted as hit, capped to this week view
+    const isPast = i <= todayIdx;
+    const distFromToday = todayIdx - i;
+    const isHit = isPast && distFromToday >= 0 && distFromToday < streak;
+    return `<div class="week-dot ${isHit ? 'wd-hit' : ''} ${i===todayIdx ? 'wd-today' : ''}">${d[0]}</div>`;
+  }).join("");
+}
+
+function updateStreakRing(streak){
+  const target = Math.min(streak, 7); // ring fills over a 7-day cycle
+  const circumference = 125.6;
+  const offset = circumference - (target/7)*circumference;
+  document.getElementById("streak-ring-fill").style.strokeDashoffset = offset;
+  document.getElementById("s-streak").textContent = `${streak} দিন`;
+}
+
 /* DAILY CHALLENGE TEXT */
 const challenges = [
   "10টি নতুন word শিখুন এবং sentence বানান",
@@ -831,7 +976,14 @@ requireAuth(async user => {
   const sessions= d.sessions    || 0;
   const best    = d.bestScore   || 0;
   const streak  = d.streak      || 0;
-  const level   = xp >= 5000 ? "B2" : xp >= 2000 ? "B1" : xp >= 500 ? "A2" : "A1";
+
+  const gp = d.grammarProgress || {};
+  const doneTopics = gp.done || [];
+  const lp = getLevelProgress(doneTopics); // real, topic-completion-based level
+
+  const vp = d.vocabProgress || {};
+  const wordsLearned = (vp.learned || []).length;
+  const TOTAL_WORDS  = 1144; // js/vocab-a1.js (460) + js/vocab-a2.js (684 worth tracked)
 
   /* Navbar */
   document.getElementById("nav-name").textContent = name;
@@ -839,24 +991,37 @@ requireAuth(async user => {
   if(photo) { av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`; }
   else av.textContent = name[0]?.toUpperCase() || "?";
 
+  /* Greeting */
+  setGreeting(name.split(" ")[0]);
+
   /* Hero */
-  document.getElementById("hero-name").textContent = name.split(" ")[0];
-  document.getElementById("h-level").textContent   = level;
-  document.getElementById("h-xp").textContent      = xp;
-  document.getElementById("h-streak").textContent  = streak + "🔥";
+  document.getElementById("hero-name").textContent   = name.split(" ")[0];
+  document.getElementById("h-level").textContent     = lp.level;
+  document.getElementById("h-level-sub").textContent = `${lp.done}/${lp.total} topics`;
+  document.getElementById("h-xp").textContent        = xp;
+  document.getElementById("h-streak").textContent    = streak + "🔥";
 
   /* Stats */
   document.getElementById("s-correct").textContent  = correct;
   document.getElementById("s-sessions").textContent = sessions;
   document.getElementById("s-best").textContent     = best;
-  document.getElementById("s-level").textContent    =
-    xp >= 5000 ? "B2 Upper-Inter" :
-    xp >= 2000 ? "B1 Intermediate":
-    xp >= 500  ? "A2 Elementary"  : "A1 Beginner";
 
-  /* Level progress */
+  /* Streak ring + weekly dots */
+  updateStreakRing(streak);
+  buildWeekDots(streak);
+
+  /* Level progress (still XP milestone badges — kept as separate "XP journey" indicator) */
   updateLevelBadges(xp);
   updateXPBar(xp);
+
+  /* Card progress bars */
+  const grammarPct = Math.round((lp.done / lp.total) * 100); // current level's own %, since earlier levels are 100% by definition
+  document.getElementById("cp-grammar").style.width = grammarPct + "%";
+  document.getElementById("cp-grammar-label").textContent = `${lp.level} · ${lp.done}/${lp.total} topics`;
+
+  const vocabPct = Math.min(100, Math.round((wordsLearned / TOTAL_WORDS) * 100));
+  document.getElementById("cp-vocab").style.width = vocabPct + "%";
+  document.getElementById("cp-vocab-label").textContent = `${wordsLearned} words learned`;
 
   /* Recent scores — from users/{uid}/scores subcollection */
   try {
@@ -905,5 +1070,8 @@ requireAuth(async user => {
 });
 </script>
 
+<div id="reading-toast" style="position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #fb923c;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);pointer-events:none;">
+  📖 Reading Center শীঘ্রই আসছে!
+</div>
 </body>
 </html>

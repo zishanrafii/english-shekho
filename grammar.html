@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grammar Center — English Shekho</title>
+<title>Grammar Hub — English Shekho</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -30,7 +30,6 @@ body{
   background:var(--bg);color:var(--text);
   font-family:'Outfit',sans-serif;
   min-height:100vh;overflow-x:hidden;
-
 }
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -112,9 +111,9 @@ body::after{
 .hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--indigo);letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;opacity:.8;}
 .hero h2{font-size:2.1rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15;}
 .hero h2 span{background:linear-gradient(135deg,#818cf8,#f5c842);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{color:var(--sub);font-size:13.5px;line-height:1.7;max-width:500px;font-family:'Noto Sans Bengali',sans-serif;}
+.hero-sub{color:var(--sub);font-size:13.5px;line-height:1.7;max-width:520px;font-family:'Noto Sans Bengali',sans-serif;}
 .hero-stats{display:flex;gap:10px;flex-wrap:wrap;}
-.hstat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.75rem 1.2rem;text-align:center;min-width:78px;transition:.2s;position:relative;overflow:hidden;}
+.hstat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.75rem 1.2rem;text-align:center;min-width:90px;transition:.2s;position:relative;overflow:hidden;}
 .hstat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--indigo),transparent);opacity:.5;}
 .hstat:hover{border-color:rgba(129,140,248,.25);transform:translateY(-2px);}
 .hstat-v{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#818cf8,#f5c842);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -127,6 +126,11 @@ body::after{
   letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
 }
 .section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+.topic-count-badge{
+  background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);
+  color:var(--indigo);padding:3px 10px;border-radius:20px;
+  font-size:10px;letter-spacing:.5px;text-transform:none;
+}
 
 /* ─── SEARCH + FILTER BAR ─── */
 .search-bar{
@@ -153,184 +157,53 @@ body::after{
 .ftab:hover{border-color:rgba(129,140,248,.3);color:var(--indigo);}
 .ftab.active{background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.3);color:var(--indigo);}
 
-/* ─── TOPIC CATEGORY GRID ─── */
-.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:1.8rem;}
+/* ─── GRAMMAR TOPIC CARDS ─── */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:1.8rem;}
 .cat-card{
   background:var(--surface2);border:1px solid var(--border);
-  border-radius:16px;padding:1.1rem 1rem;
-  cursor:pointer;transition:.25s;position:relative;overflow:hidden;
-  text-align:center;
+  border-radius:18px;padding:1.3rem 1.35rem;
+  display:flex;flex-direction:column;gap:.8rem;
+  position:relative;overflow:hidden;transition:.25s;
 }
-.cat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:.25s;}
-.cat-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
-.cat-card:hover::after{opacity:.7;}
-.cat-card.active-cat{border-color:rgba(129,140,248,.3);background:rgba(129,140,248,.06);}
-.cat-card.active-cat::after{opacity:1;}
-.cat-emoji{font-size:1.8rem;margin-bottom:.5rem;}
-.cat-name{font-size:12.5px;font-weight:700;margin-bottom:2px;}
-.cat-count{font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
-.cat-done-bar{height:3px;background:rgba(255,255,255,.06);border-radius:20px;overflow:hidden;margin-top:.6rem;}
-.cat-done-fill{height:100%;border-radius:20px;transition:width .6s ease;}
-.cat-open-link{
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  margin-top:.7rem;padding:.4rem .5rem;border-radius:10px;
-  font-size:11px;font-weight:700;text-decoration:none;
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  color:var(--sub);transition:.2s;font-family:'Outfit',sans-serif;
+.cat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--accent);opacity:0;transition:.25s;
 }
-.cat-open-link:hover{background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.3);color:var(--text);}
+.cat-card:not(.cat-soon):hover{transform:translateY(-3px);border-color:rgba(255,255,255,.12);box-shadow:0 12px 30px rgba(0,0,0,.35);}
+.cat-card:not(.cat-soon):hover::before{opacity:.85;}
+.cat-card.cat-soon{opacity:.55;}
 
-/* ─── LESSON PANEL ─── */
-.lesson-panel{
-  display:grid;grid-template-columns:1fr 1.7fr;gap:14px;margin-bottom:1.8rem;
-  align-items:start;
+.cat-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.cat-emoji-box{
+  width:46px;height:46px;border-radius:13px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+  background:var(--accent-soft);border:1px solid var(--accent-border);
 }
-@media(max-width:780px){.lesson-panel{grid-template-columns:1fr;}}
+.cat-level-badge{
+  font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:20px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.6px;text-transform:capitalize;
+  border:1px solid var(--border);color:var(--sub);background:rgba(255,255,255,.03);white-space:nowrap;
+}
+.cat-level-badge.lvl-beginner{color:#2dd4bf;border-color:rgba(45,212,191,.25);background:rgba(45,212,191,.08);}
+.cat-level-badge.lvl-intermediate{color:#fb923c;border-color:rgba(251,146,60,.25);background:rgba(251,146,60,.08);}
+.cat-level-badge.lvl-advanced{color:#a78bfa;border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.08);}
 
-/* lesson list */
-.lesson-list-wrap{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:18px;overflow:hidden;
-}
-.lesson-list-head{
-  padding:1rem 1.2rem;border-bottom:1px solid var(--border);
-  font-size:12px;font-weight:700;color:var(--sub);
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;
-}
-.lesson-item{
-  display:flex;align-items:center;gap:12px;
-  padding:.85rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.03);
-  cursor:pointer;transition:.2s;
-}
-.lesson-item:last-child{border-bottom:none;}
-.lesson-item:hover{background:rgba(255,255,255,.025);padding-left:1.5rem;}
-.lesson-item.active-lesson{background:rgba(129,140,248,.07);border-left:3px solid var(--indigo);}
-.lesson-num{
-  width:28px;height:28px;border-radius:8px;
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:700;color:var(--muted);
-  font-family:'JetBrains Mono',monospace;flex-shrink:0;
-}
-.lesson-item.active-lesson .lesson-num{background:rgba(129,140,248,.12);border-color:rgba(129,140,248,.25);color:var(--indigo);}
-.lesson-item.done-lesson .lesson-num{background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.25);color:#2dd4bf;}
-.lesson-info{flex:1;}
-.lesson-name{font-size:13px;font-weight:700;margin-bottom:1px;}
-.lesson-sub{font-size:10.5px;color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;}
-.lesson-xp{font-size:10px;color:var(--gold);font-family:'JetBrains Mono',monospace;font-weight:600;white-space:nowrap;}
+.cat-name{font-size:1.05rem;font-weight:800;letter-spacing:-.2px;}
+.cat-desc{font-size:12px;color:var(--sub);line-height:1.65;font-family:'Noto Sans Bengali',sans-serif;flex:1;}
 
-/* lesson content */
-.lesson-content{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:18px;overflow:hidden;
+.cat-btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:.65rem 1rem;border-radius:12px;
+  font-size:12.5px;font-weight:700;text-decoration:none;
+  background:var(--accent-soft);border:1px solid var(--accent-border);
+  color:var(--accent);transition:.2s;
 }
-.lc-head{
-  padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
-}
-.lc-title{font-size:1.1rem;font-weight:800;letter-spacing:-.3px;}
-.lc-badges{display:flex;gap:6px;}
-.lc-badge{
-  font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:20px;
-  font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;
-}
-.badge-level{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:var(--indigo);}
-.badge-xp{background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.25);color:var(--gold);}
-.lc-body{padding:1.4rem;}
-
-/* explanation block */
-.explain-block{
-  background:rgba(255,255,255,.02);border:1px solid var(--border);
-  border-radius:14px;padding:1.2rem 1.3rem;margin-bottom:1.2rem;
-}
-.explain-block p{
-  font-size:13.5px;line-height:1.8;color:var(--sub);
-  font-family:'Noto Sans Bengali',sans-serif;
-}
-.explain-block p b{color:var(--text);font-family:'Outfit',sans-serif;}
-
-/* formula box */
-.formula-box{
-  background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.18);
-  border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.2rem;
-}
-.formula-label{
-  font-size:9.5px;font-weight:700;color:var(--indigo);
-  letter-spacing:1.5px;text-transform:uppercase;
-  font-family:'JetBrains Mono',monospace;margin-bottom:.5rem;
-}
-.formula-text{
-  font-family:'JetBrains Mono',monospace;font-size:13px;
-  color:#c4b5fd;line-height:1.7;
-}
-
-/* examples */
-.examples-block{margin-bottom:1.2rem;}
-.ex-title{
-  font-size:10px;font-weight:700;color:var(--muted);
-  letter-spacing:1.2px;text-transform:uppercase;
-  font-family:'JetBrains Mono',monospace;margin-bottom:.6rem;
-}
-.ex-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:.65rem .9rem;border-radius:11px;
+.cat-btn:hover{filter:brightness(1.25);}
+.cat-btn-soon{
   background:rgba(255,255,255,.025);border:1px solid var(--border);
-  margin-bottom:6px;
+  color:var(--muted);cursor:pointer;
 }
-.ex-en{font-size:13px;font-weight:700;color:var(--text);}
-.ex-bn{font-size:12px;color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;margin-top:1px;}
-.ex-dot{width:6px;height:6px;border-radius:50%;background:var(--indigo);flex-shrink:0;margin-top:6px;}
-
-/* table */
-.grammar-table{width:100%;border-collapse:collapse;margin-bottom:1.2rem;font-size:12.5px;}
-.grammar-table th{
-  background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.15);
-  padding:.6rem .9rem;text-align:left;font-weight:700;color:var(--indigo);
-  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.5px;
-}
-.grammar-table td{
-  border:1px solid rgba(255,255,255,.04);
-  padding:.6rem .9rem;color:var(--sub);line-height:1.55;
-}
-.grammar-table tr:hover td{background:rgba(255,255,255,.02);}
-.grammar-table td:first-child{color:var(--text);font-weight:600;}
-
-/* tip box */
-.tip-box{
-  background:rgba(245,200,66,.05);border:1px solid rgba(245,200,66,.18);
-  border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.2rem;
-  display:flex;align-items:flex-start;gap:10px;
-}
-.tip-box-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px;}
-.tip-box-text{font-size:12.5px;color:var(--sub);line-height:1.6;font-family:'Noto Sans Bengali',sans-serif;}
-.tip-box-text b{color:var(--gold);}
-
-/* action buttons */
-.lc-actions{display:flex;gap:10px;flex-wrap:wrap;padding:1rem 1.4rem;border-top:1px solid var(--border);}
-.btn-primary{
-  background:linear-gradient(135deg,rgba(129,140,248,.2),rgba(129,140,248,.1));
-  border:1px solid rgba(129,140,248,.35);color:var(--indigo);
-  padding:.6rem 1.3rem;border-radius:12px;
-  cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;
-  transition:.2s;
-}
-.btn-primary:hover{background:rgba(129,140,248,.25);border-color:var(--indigo);}
-.btn-secondary{
-  background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--sub);
-  padding:.6rem 1.3rem;border-radius:12px;
-  cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:13px;
-  transition:.2s;
-}
-.btn-secondary:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);color:var(--text);}
-.btn-quiz{
-  background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(245,200,66,.08));
-  border:1px solid rgba(245,200,66,.3);color:var(--gold);
-  padding:.6rem 1.3rem;border-radius:12px;
-  cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;
-  transition:.2s;margin-left:auto;
-}
-.btn-quiz:hover{background:rgba(245,200,66,.22);border-color:var(--gold);}
+.cat-btn-soon:hover{color:var(--sub);border-color:rgba(255,255,255,.1);}
 
 /* ─── QUICK REFERENCE CARDS ─── */
 .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:1.8rem;}
@@ -352,21 +225,6 @@ body::after{
 }
 .rc-key{color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;}
 .rc-val{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;}
-
-/* ─── PROGRESS OVERVIEW ─── */
-.progress-overview{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;
-}
-.po-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:1rem;}
-.po-item{
-  background:rgba(255,255,255,.025);border:1px solid var(--border);
-  border-radius:13px;padding:.9rem 1rem;text-align:center;
-}
-.po-val{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#818cf8,#f5c842);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.po-label{font-size:10px;color:var(--muted);margin-top:2px;font-family:'Noto Sans Bengali',sans-serif;}
-
-
 
 /* ─── FOOTER ─── */
 footer{margin-top:3rem;border-top:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;}
@@ -397,11 +255,11 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .footer-heart{color:var(--rose);}
 
 /* ─── RESPONSIVE ─── */
-@media(max-width:800px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}.cat-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start;}.hero h2{font-size:1.6rem;}.footer-bottom{flex-direction:column;align-items:flex-start;}.wrap{padding:1rem .9rem 0;}.cat-grid{grid-template-columns:repeat(2,1fr);}.ref-grid{grid-template-columns:1fr;}}
+@media(max-width:800px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}}
+@media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start;}.hero h2{font-size:1.6rem;}.footer-bottom{flex-direction:column;align-items:flex-start;}.wrap{padding:1rem .9rem 0;}.ref-grid{grid-template-columns:1fr;}}
 
 /* ─── TOAST ─── */
-.toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #818cf8;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #818cf8;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:320px;}
 .toast.show{opacity:1;transform:translateY(0);}
 </style>
 </head>
@@ -443,22 +301,22 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <div class="hero-orb2"></div>
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-eyebrow">📘 Grammar Center</div>
+        <div class="hero-eyebrow">📘 Grammar Hub</div>
         <h2>Master <span>English Grammar</span> 📖</h2>
-        <p class="hero-sub">Tense, articles, modals, prepositions — সব grammar rules বাংলায় সহজে শিখুন। প্রতিটি topic-এ উদাহরণ, formula এবং quiz আছে।</p>
+        <p class="hero-sub">Tense, Article, Modal, Preposition থেকে Sentence Transformation — সব Grammar Topic এক জায়গায়। প্রতিটি Topic-এ বাংলায় বিস্তারিত ব্যাখ্যা, Formula এবং Real-life উদাহরণ আছে।</p>
       </div>
       <div class="hero-stats">
         <div class="hstat">
-          <div class="hstat-v" id="h-done">0</div>
-          <div class="hstat-l">Completed</div>
+          <div class="hstat-v" id="h-total">16</div>
+          <div class="hstat-l">Total Topics</div>
         </div>
         <div class="hstat">
-          <div class="hstat-v" id="h-total">42</div>
-          <div class="hstat-l">Lessons</div>
+          <div class="hstat-v" id="h-ready">10</div>
+          <div class="hstat-l">Ready Guides</div>
         </div>
         <div class="hstat">
-          <div class="hstat-v" id="h-xp">0</div>
-          <div class="hstat-l">XP Earned</div>
+          <div class="hstat-v" id="h-soon">6</div>
+          <div class="hstat-l">Coming Soon</div>
         </div>
       </div>
     </div>
@@ -468,7 +326,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <div class="search-bar">
     <div class="search-input-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" class="search-input" id="search-input" placeholder="Grammar topic খুঁজুন... e.g. Past Tense, Modal Verbs">
+      <input type="text" class="search-input" id="search-input" placeholder="Grammar topic খুঁজুন... e.g. Tenses, Modal Verbs">
     </div>
     <div class="filter-tabs" id="filter-tabs">
       <div class="ftab active" data-filter="all">All</div>
@@ -478,41 +336,13 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     </div>
   </div>
 
-  <!-- CATEGORY GRID -->
-  <div class="section-title">📂 Grammar Categories</div>
+  <!-- TOPIC GRID -->
+  <div class="section-title">📂 Grammar Topics <span class="topic-count-badge" id="rt-count">16 Topics</span></div>
   <div class="cat-grid" id="cat-grid"></div>
-
-  <!-- LESSON PANEL -->
-  <div class="section-title" id="lesson-section-title">📖 Lessons</div>
-  <div class="lesson-panel">
-    <div class="lesson-list-wrap">
-      <div class="lesson-list-head">
-        <span id="list-label">All Lessons</span>
-        <span id="list-count" style="color:var(--muted);font-size:10px;">— topics</span>
-      </div>
-      <div id="lesson-list"></div>
-    </div>
-    <div class="lesson-content" id="lesson-content">
-      <!-- filled by JS -->
-    </div>
-  </div>
 
   <!-- QUICK REFERENCE -->
   <div class="section-title">⚡ Quick Reference</div>
   <div class="ref-grid" id="ref-grid"></div>
-
-  <!-- PROGRESS OVERVIEW -->
-  <div class="section-title">📊 Your Grammar Progress</div>
-  <div class="progress-overview">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
-      <div style="font-weight:700;font-size:15px;">Overall Completion</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);" id="po-pct-label">0 / 42 lessons</div>
-    </div>
-    <div style="height:8px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;margin:.9rem 0 .5rem;">
-      <div id="po-bar" style="height:100%;border-radius:20px;background:linear-gradient(90deg,#818cf8,#f5c842);transition:width .8s ease;width:0%;box-shadow:0 0 12px rgba(129,140,248,.3);"></div>
-    </div>
-    <div class="po-grid" id="po-grid"></div>
-  </div>
 
 </div><!-- end .wrap -->
 
@@ -553,626 +383,69 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   </div>
 </footer>
 
-
-
 <div class="toast" id="toast"></div>
 
 <script>
 /* ═══════════════════════════════
-   GRAMMAR DATA
+   GRAMMAR TOPICS (Grammar Hub)
 ═══════════════════════════════ */
 const CATEGORIES = [
-  { id:"tenses",      emoji:"⏰", name:"Tenses",         level:"beginner",     color:"#2dd4bf",  bar:"rgba(45,212,191,.6)"  },
-  { id:"articles",    emoji:"📌", name:"Articles",        level:"beginner",     color:"#f5c842",  bar:"rgba(245,200,66,.6)"  },
-  { id:"pronouns",    emoji:"👤", name:"Pronouns",        level:"beginner",     color:"#818cf8",  bar:"rgba(129,140,248,.6)" },
-  { id:"modals",      emoji:"🔧", name:"Modal Verbs",     level:"intermediate", color:"#fb923c",  bar:"rgba(251,146,60,.6)"  },
-  { id:"prepositions",emoji:"📍", name:"Prepositions",    level:"intermediate", color:"#34d399",  bar:"rgba(52,211,153,.6)"  },
-  { id:"passive",     emoji:"🔄", name:"Active & Passive",level:"intermediate", color:"#f472b6",  bar:"rgba(244,114,182,.6)" },
-  { id:"narration",   emoji:"💬", name:"Narration",       level:"advanced",     color:"#60a5fa",  bar:"rgba(96,165,250,.6)"  },
-  { id:"conditionals",emoji:"🔀", name:"Conditionals",    level:"advanced",     color:"#a78bfa",  bar:"rgba(167,139,250,.6)" },
-  { id:"wh",          emoji:"❓", name:"WH Questions",    level:"beginner",     color:"#fbbf24",  bar:"rgba(251,191,36,.6)"  },
-  { id:"partsOfSpeech",emoji:"🧩",name:"Parts of Speech", level:"beginner",     color:"#2dd4bf",  bar:"rgba(45,212,191,.6)"  },
+  /* ── Ready (full lesson page available) ── */
+  { id:"tenses", emoji:"⏰", name:"Tenses", level:"beginner", color:"#2dd4bf",
+    desc:"Present, Past ও Future Tense-এর সব Structure, Formula এবং বাস্তব জীবনের উদাহরণ একসাথে।",
+    page:"grammar-tenses.html" },
+  { id:"articles", emoji:"📌", name:"Articles", level:"beginner", color:"#f5c842",
+    desc:"A, An, The এবং Zero Article ব্যবহারের নিয়ম খুব সহজ ভাষায় ব্যাখ্যা করা হয়েছে।",
+    page:"grammar-articles.html" },
+  { id:"pronouns", emoji:"👤", name:"Pronouns", level:"beginner", color:"#818cf8",
+    desc:"Personal, Possessive, Reflexive ও Demonstrative Pronoun-এর পূর্ণ তালিকা ও ব্যবহার।",
+    page:"grammar-pronouns.html" },
+  { id:"partsOfSpeech", emoji:"🧩", name:"Parts of Speech", level:"beginner", color:"#2dd4bf",
+    desc:"Noun থেকে Interjection — ৮টি Parts of Speech চেনার ও বাক্যে ব্যবহারের সহজ কৌশল।",
+    page:"grammar-parts-of-speech.html" },
+  { id:"sentence", emoji:"❓", name:"Sentence Structure", level:"beginner", color:"#fbbf24",
+    desc:"Sentence-এর মূল অংশ, SVO Pattern, Phrase ও Clause-এর পার্থক্য সহজভাবে শিখুন।",
+    page:"grammar-sentence.html" },
+  { id:"modals", emoji:"🔧", name:"Modal Verbs", level:"intermediate", color:"#fb923c",
+    desc:"Can, Could, Must, Should, May, Might — প্রতিটি Modal Verb-এর অর্থ ও সঠিক ব্যবহার।",
+    page:"grammar-modals.html" },
+  { id:"prepositions", emoji:"📍", name:"Prepositions", level:"intermediate", color:"#34d399",
+    desc:"In, On, At, By, With সহ গুরুত্বপূর্ণ সব Preposition-এর প্র্যাকটিক্যাল ব্যবহার।",
+    page:"grammar-prepositions.html" },
+  { id:"passive", emoji:"🔄", name:"Active & Passive", level:"intermediate", color:"#f472b6",
+    desc:"Active Voice থেকে Passive Voice-এ পরিবর্তনের নিয়ম, সব Tense-এর Formula সহ।",
+    page:"grammar-voice.html" },
+  { id:"narration", emoji:"💬", name:"Narration", level:"advanced", color:"#60a5fa",
+    desc:"Direct ও Indirect Speech-এ Tense, Pronoun ও Reporting Verb পরিবর্তনের নিয়ম।",
+    page:"grammar-narration.html" },
+  { id:"conditionals", emoji:"🔀", name:"Conditionals", level:"advanced", color:"#a78bfa",
+    desc:"Zero, First, Second ও Third Conditional — If Clause-এর সব নিয়ম ও উদাহরণ।",
+    page:"grammar-conditionals.html" },
+
+  /* ── Coming Soon ── */
+  { id:"degrees", emoji:"📊", name:"Degrees of Comparison", level:"intermediate", color:"#38bdf8",
+    desc:"Positive, Comparative ও Superlative Degree-এর মধ্যে রূপান্তরের নিয়ম ও উদাহরণ।",
+    page:null },
+  { id:"sva", emoji:"✅", name:"Subject-Verb Agreement", level:"intermediate", color:"#4ade80",
+    desc:"Subject অনুযায়ী Verb-এর সঠিক Form নির্বাচনের গুরুত্বপূর্ণ নিয়মাবলি।",
+    page:null },
+  { id:"punctuation", emoji:"✏️", name:"Punctuation Rules", level:"beginner", color:"#fb7185",
+    desc:"Full Stop, Comma, Capital Letter সহ লেখায় বিরামচিহ্নের সঠিক ব্যবহার।",
+    page:null },
+  { id:"tagq", emoji:"🏷️", name:"Tag Questions", level:"intermediate", color:"#c084fc",
+    desc:"বাক্যের শেষে ছোট প্রশ্ন (Tag) যুক্ত করার নিয়ম — Positive ও Negative ফর্ম।",
+    page:null },
+  { id:"transformation", emoji:"🔁", name:"Sentence Transformation", level:"advanced", color:"#f87171",
+    desc:"Affirmative-Negative, Simple-Complex-Compound রূপান্তরের কৌশল ও Formula।",
+    page:null },
+  { id:"gerund", emoji:"🌀", name:"Gerund & Infinitive", level:"advanced", color:"#22d3ee",
+    desc:"Verb + ing (Gerund) এবং To + Verb (Infinitive)-এর ব্যবহার ও পার্থক্য।",
+    page:null },
 ];
 
-/* প্রতিটি category এর জন্য আলাদা বিস্তারিত lesson page (যদি থাকে) */
-const CATEGORY_PAGES = {
-  tenses:        "grammar-tenses.html",
-  articles:      "grammar-articles.html",
-  pronouns:      "grammar-pronouns.html",
-  modals:        "grammar-modals.html",
-  passive:       "grammar-voice.html",
-  narration:     "grammar-narration.html",
-  conditionals:  "grammar-conditionals.html",
-  partsOfSpeech: "grammar-parts-of-speech.html",
-  prepositions:  "grammar-prepositions.html",
-  wh:            "grammar-sentence.html",
-};
-
-const LESSONS = {
-  tenses:[
-    {
-      id:"t1", name:"Present Simple", level:"A1", xp:50,
-      content:{
-        title:"Present Simple Tense",
-        explanation:"Present Simple Tense ব্যবহার করা হয় এমন কাজের জন্য যা <b>নিয়মিত বা অভ্যাসগতভাবে</b> হয়। যেমন: প্রতিদিনের কাজ, সত্য কথা, বৈজ্ঞানিক তথ্য।",
-        formula:"Subject + V1 (base verb) + Object\nNegative: Subject + do/does + not + V1\nQuestion: Do/Does + Subject + V1?",
-        examples:[
-          {en:"I eat rice every day.", bn:"আমি প্রতিদিন ভাত খাই।"},
-          {en:"She works in a school.", bn:"সে একটি স্কুলে কাজ করে।"},
-          {en:"They don't watch TV.", bn:"তারা টিভি দেখে না।"},
-          {en:"Does he play cricket?", bn:"সে কি ক্রিকেট খেলে?"},
-        ],
-        table:{
-          headers:["Person","Affirmative","Negative","Question"],
-          rows:[
-            ["I / We / They","play","don't play","Do I/we/they play?"],
-            ["He / She / It","plays","doesn't play","Does he/she/it play?"],
-          ]
-        },
-        tip:"💡 He/She/It-এর সাথে verb-এর শেষে <b>-s বা -es</b> যোগ হয়। যেমন: go → goes, watch → watches।"
-      }
-    },
-    {
-      id:"t2", name:"Present Continuous", level:"A1", xp:50,
-      content:{
-        title:"Present Continuous Tense",
-        explanation:"এখন যা <b>চলছে বা হচ্ছে</b> তা বোঝাতে Present Continuous ব্যবহার হয়। এটি দিয়ে বর্তমান মুহূর্তের কাজ বোঝায়।",
-        formula:"Subject + am/is/are + V-ing + Object\nNegative: Subject + am/is/are + not + V-ing\nQuestion: Am/Is/Are + Subject + V-ing?",
-        examples:[
-          {en:"I am reading a book.", bn:"আমি একটি বই পড়ছি।"},
-          {en:"She is cooking dinner.", bn:"সে রাতের খাবার রান্না করছে।"},
-          {en:"They are not playing.", bn:"তারা খেলছে না।"},
-          {en:"Are you listening?", bn:"তুমি কি শুনছ?"},
-        ],
-        table:{
-          headers:["Subject","Be Verb","Example"],
-          rows:[
-            ["I","am","I am going."],
-            ["He/She/It","is","She is sleeping."],
-            ["We/You/They","are","They are working."],
-          ]
-        },
-        tip:"💡 Verb-এর শেষে <b>-ing</b> যোগ হয়। যদি verb 'e' দিয়ে শেষ হয় তাহলে 'e' বাদ দিয়ে -ing যোগ করুন। যেমন: write → writing।"
-      }
-    },
-    {
-      id:"t3", name:"Past Simple", level:"A2", xp:75,
-      content:{
-        title:"Past Simple Tense",
-        explanation:"অতীতে <b>নির্দিষ্ট সময়ে শেষ হয়ে যাওয়া</b> কোনো কাজ বোঝাতে Past Simple ব্যবহার হয়। Regular verb-এ -ed এবং irregular verb-এর ২য় রূপ ব্যবহার হয়।",
-        formula:"Subject + V2 (past form) + Object\nNegative: Subject + did not + V1\nQuestion: Did + Subject + V1?",
-        examples:[
-          {en:"I watched a movie yesterday.", bn:"আমি গতকাল একটি সিনেমা দেখলাম।"},
-          {en:"She went to market.", bn:"সে বাজারে গেল।"},
-          {en:"He didn't come to class.", bn:"সে ক্লাসে আসেনি।"},
-          {en:"Did you eat lunch?", bn:"তুমি কি দুপুরের খাবার খেলে?"},
-        ],
-        table:{
-          headers:["Regular Verb","Past Form","Irregular Verb","Past Form"],
-          rows:[
-            ["play","played","go","went"],
-            ["watch","watched","eat","ate"],
-            ["work","worked","write","wrote"],
-            ["talk","talked","buy","bought"],
-          ]
-        },
-        tip:"💡 Regular verb-এ শুধু <b>-ed</b> যোগ হয়, কিন্তু irregular verb মুখস্থ করতে হয়। সবচেয়ে বেশি ব্যবহৃত ১০০টি irregular verb শিখুন।"
-      }
-    },
-    {
-      id:"t4", name:"Past Continuous", level:"A2", xp:75,
-      content:{
-        title:"Past Continuous Tense",
-        explanation:"অতীতের কোনো সময়ে <b>একটি কাজ চলছিল</b> — এমন বোঝাতে Past Continuous ব্যবহার হয়। প্রায়ই দুটি কাজ একসাথে চলার ক্ষেত্রে ব্যবহার হয়।",
-        formula:"Subject + was/were + V-ing + Object\nNegative: Subject + was/were + not + V-ing\nQuestion: Was/Were + Subject + V-ing?",
-        examples:[
-          {en:"I was sleeping when you called.", bn:"তুমি ফোন করার সময় আমি ঘুমাচ্ছিলাম।"},
-          {en:"They were playing football.", bn:"তারা ফুটবল খেলছিল।"},
-          {en:"She was not studying.", bn:"সে পড়ছিল না।"},
-          {en:"Were you watching TV?", bn:"তুমি কি টিভি দেখছিলে?"},
-        ],
-        table:{
-          headers:["Subject","Be Verb","Example"],
-          rows:[
-            ["I / He / She / It","was","I was running."],
-            ["We / You / They","were","They were talking."],
-          ]
-        },
-        tip:"💡 Past Continuous প্রায়ই Past Simple-এর সাথে ব্যবহার হয়। যেমন: <b>While</b> I was cooking, the phone rang."
-      }
-    },
-    {
-      id:"t5", name:"Present Perfect", level:"B1", xp:100,
-      content:{
-        title:"Present Perfect Tense",
-        explanation:"Present Perfect ব্যবহার হয় যখন অতীতের কোনো কাজ <b>বর্তমানের সাথে সম্পর্কিত</b>। কখন হয়েছে তা জানা না গেলে বা সম্প্রতি হলে এটি ব্যবহার হয়।",
-        formula:"Subject + have/has + V3 (past participle) + Object\nNegative: Subject + have/has + not + V3\nQuestion: Have/Has + Subject + V3?",
-        examples:[
-          {en:"I have eaten lunch.", bn:"আমি দুপুরের খাবার খেয়েছি।"},
-          {en:"She has visited London.", bn:"সে লন্ডন ভ্রমণ করেছে।"},
-          {en:"We haven't finished yet.", bn:"আমরা এখনো শেষ করিনি।"},
-          {en:"Have you ever tried sushi?", bn:"তুমি কি কখনো সুশি খেয়েছ?"},
-        ],
-        table:{
-          headers:["Signal Word","Usage","Example"],
-          rows:[
-            ["just","সম্প্রতি শেষ হওয়া","She has just left."],
-            ["already","আশার আগেই","I have already done it."],
-            ["yet","এখনো (negative/question)","He hasn't called yet."],
-            ["ever","কখনো","Have you ever been to Paris?"],
-            ["never","কখনো না","I have never seen snow."],
-          ]
-        },
-        tip:"💡 Present Perfect-এ <b>yesterday, last year, ago</b> — এগুলো ব্যবহার করা যায় না। এগুলো থাকলে Past Simple ব্যবহার করুন।"
-      }
-    },
-    {
-      id:"t6", name:"Future Simple", level:"A2", xp:75,
-      content:{
-        title:"Future Simple (Will)",
-        explanation:"ভবিষ্যতে কোনো কাজ করার <b>সিদ্ধান্ত, পূর্বাভাস বা প্রতিশ্রুতি</b> বোঝাতে Future Simple ব্যবহার হয়।",
-        formula:"Subject + will + V1 + Object\nNegative: Subject + will not (won't) + V1\nQuestion: Will + Subject + V1?",
-        examples:[
-          {en:"I will call you tomorrow.", bn:"আমি কাল তোমাকে ফোন করব।"},
-          {en:"It will rain tonight.", bn:"আজ রাতে বৃষ্টি হবে।"},
-          {en:"She won't be late.", bn:"সে দেরি করবে না।"},
-          {en:"Will you help me?", bn:"তুমি কি আমাকে সাহায্য করবে?"},
-        ],
-        table:{
-          headers:["Use","Signal Words","Example"],
-          rows:[
-            ["Prediction","probably, I think","I think it will snow."],
-            ["Promise","—","I will always love you."],
-            ["Offer","Shall I...?","I'll carry that for you."],
-            ["Quick decision","—","I'll have the coffee."],
-          ]
-        },
-        tip:"💡 <b>Will</b> সব subject-এর সাথে একই থাকে — কোনো পরিবর্তন হয় না। Going to-এর তুলনায় Will বেশি spontaneous decision-এর জন্য।"
-      }
-    },
-  ],
-  articles:[
-    {
-      id:"ar1", name:"A / An — Indefinite", level:"A1", xp:50,
-      content:{
-        title:"Articles: A and An",
-        explanation:"<b>A</b> এবং <b>An</b> — দুটোই indefinite article। এগুলো ব্যবহার হয় যখন কোনো <b>অনির্দিষ্ট বা প্রথমবার উল্লেখিত</b> কিছু সম্পর্কে বলা হয়।",
-        formula:"A + Consonant sound (b, c, d, f...)\nAn + Vowel sound (a, e, i, o, u)",
-        examples:[
-          {en:"I saw a dog in the park.", bn:"আমি পার্কে একটি কুকুর দেখলাম।"},
-          {en:"She is an engineer.", bn:"সে একজন প্রকৌশলী।"},
-          {en:"He is a university student.", bn:"সে একজন বিশ্ববিদ্যালয়ের ছাত্র। (U = /juː/ → consonant sound)"},
-          {en:"It took an hour.", bn:"এটি এক ঘণ্টা লেগেছিল। (H silent → vowel sound)"},
-        ],
-        table:{
-          headers:["Use 'A'","Use 'An'"],
-          rows:[
-            ["a book, a cat","an apple, an orange"],
-            ["a university (ইউ)","an umbrella (আম্)"],
-            ["a European (ইউ)","an hour (আওয়ার)"],
-            ["a one-way street (ওয়ান)","an honest man (অনেস্ট)"],
-          ]
-        },
-        tip:"💡 <b>Spelling নয়, উচ্চারণ</b> দেখুন! 'University' U দিয়ে শুরু কিন্তু উচ্চারণ 'ইউ' (consonant sound), তাই 'a university'।"
-      }
-    },
-    {
-      id:"ar2", name:"The — Definite Article", level:"A1", xp:50,
-      content:{
-        title:"The — Definite Article",
-        explanation:"<b>The</b> ব্যবহার হয় যখন কোনো নির্দিষ্ট জিনিস সম্পর্কে বলা হয় যা <b>speaker এবং listener উভয়ই জানে</b>।",
-        formula:"The + singular or plural noun (vowel বা consonant — উভয় ক্ষেত্রেই)",
-        examples:[
-          {en:"The sun rises in the east.", bn:"সূর্য পূর্বদিকে ওঠে।"},
-          {en:"Please close the door.", bn:"দরজাটা বন্ধ করো। (নির্দিষ্ট দরজা)"},
-          {en:"The Padma is a big river.", bn:"পদ্মা একটি বড় নদী।"},
-          {en:"She is the best student.", bn:"সে সেরা ছাত্রী।"},
-        ],
-        table:{
-          headers:["Use The","Do NOT Use The"],
-          rows:[
-            ["The Nile (নদীর নাম)","— Bangladesh (দেশের নাম)"],
-            ["The Pacific Ocean","— Mount Everest"],
-            ["The first/second (ordinal)","— breakfast/lunch/dinner"],
-            ["The + superlative","— languages (I speak English)"],
-          ]
-        },
-        tip:"💡 কোনো কিছু <b>দ্বিতীয়বার উল্লেখ</b> করার সময় 'the' ব্যবহার করুন। প্রথমবার 'a/an', দ্বিতীয়বার 'the': I saw a dog. The dog was barking."
-      }
-    },
-    {
-      id:"ar3", name:"Zero Article", level:"A2", xp:50,
-      content:{
-        title:"Zero Article (No Article)",
-        explanation:"অনেক ক্ষেত্রে কোনো article ব্যবহার করা হয় না — এটিকে <b>Zero Article</b> বলে। Proper nouns, plural general nouns, uncountable nouns এবং অনেক fixed expressions-এ article থাকে না।",
-        formula:"No article + proper noun / plural general noun / uncountable noun",
-        examples:[
-          {en:"I love music.", bn:"আমি সঙ্গীত ভালোবাসি।"},
-          {en:"Dogs are loyal animals.", bn:"কুকুর বিশ্বস্ত প্রাণী।"},
-          {en:"She lives in Dhaka.", bn:"সে ঢাকায় থাকে।"},
-          {en:"I go to school every day.", bn:"আমি প্রতিদিন স্কুলে যাই।"},
-        ],
-        table:{
-          headers:["No Article Used For","Example"],
-          rows:[
-            ["Names of people/places","Rahim, Bangladesh, London"],
-            ["Languages","He speaks Bangla and English."],
-            ["Meals","We had dinner together."],
-            ["Sports & games","She plays tennis."],
-            ["Subjects","I study mathematics."],
-          ]
-        },
-        tip:"💡 <b>Go to bed, go to school, go to work, go to hospital</b> — এই expressions-এ কোনো article থাকে না।"
-      }
-    },
-  ],
-  pronouns:[
-    {
-      id:"pr1", name:"Personal Pronouns", level:"A1", xp:50,
-      content:{
-        title:"Personal Pronouns",
-        explanation:"Personal pronoun মানুষ বা জিনিসের <b>নামের পরিবর্তে</b> ব্যবহার হয়। Subject হলে subjective form এবং object হলে objective form ব্যবহার হয়।",
-        formula:"Subject Pronouns: I, You, He, She, It, We, They\nObject Pronouns: Me, You, Him, Her, It, Us, Them",
-        examples:[
-          {en:"She is my friend. I like her.", bn:"সে আমার বন্ধু। আমি তাকে পছন্দ করি।"},
-          {en:"They gave us the books.", bn:"তারা আমাদের বইগুলো দিল।"},
-          {en:"He called me yesterday.", bn:"সে গতকাল আমাকে ফোন করল।"},
-          {en:"We helped them.", bn:"আমরা তাদের সাহায্য করলাম।"},
-        ],
-        table:{
-          headers:["Subject","Object","Possessive Adj","Possessive Pronoun","Reflexive"],
-          rows:[
-            ["I","me","my","mine","myself"],
-            ["You","you","your","yours","yourself"],
-            ["He","him","his","his","himself"],
-            ["She","her","her","hers","herself"],
-            ["We","us","our","ours","ourselves"],
-            ["They","them","their","theirs","themselves"],
-          ]
-        },
-        tip:"💡 <b>Subject pronoun</b> verb-এর আগে আসে, <b>Object pronoun</b> verb-এর পরে আসে। 'She gave me the book' — She=subject, me=object।"
-      }
-    },
-    {
-      id:"pr2", name:"Reflexive Pronouns", level:"A2", xp:75,
-      content:{
-        title:"Reflexive Pronouns",
-        explanation:"Reflexive pronoun ব্যবহার হয় যখন <b>subject এবং object একই</b> ব্যক্তি বা জিনিস। শেষে -self বা -selves থাকে।",
-        formula:"Subject + verb + reflexive pronoun\nমনে রাখুন: myself, yourself, himself, herself, itself, ourselves, yourselves, themselves",
-        examples:[
-          {en:"I hurt myself.", bn:"আমি নিজেকে আঘাত করলাম।"},
-          {en:"She taught herself English.", bn:"সে নিজেই English শিখল।"},
-          {en:"They enjoyed themselves.", bn:"তারা নিজেরাই মজা করল।"},
-          {en:"He did it himself.", bn:"সে নিজেই এটি করল। (emphasis)"},
-        ],
-        table:{
-          headers:["Pronoun","Reflexive"],
-          rows:[
-            ["I","myself"],["You (singular)","yourself"],["He","himself"],
-            ["She","herself"],["It","itself"],["We","ourselves"],
-            ["You (plural)","yourselves"],["They","themselves"],
-          ]
-        },
-        tip:"💡 Reflexive pronoun দুইভাবে ব্যবহার হয়: (1) Subject = Object: 'I cut myself.' (2) Emphasis: 'The president himself came.'"
-      }
-    },
-  ],
-  modals:[
-    {
-      id:"m1", name:"Can & Could", level:"A1", xp:75,
-      content:{
-        title:"Modal Verbs: Can & Could",
-        explanation:"<b>Can</b> বর্তমানের সক্ষমতা বা অনুমতি বোঝায়। <b>Could</b> অতীতের সক্ষমতা, ভদ্র অনুরোধ বা সম্ভাবনা বোঝায়।",
-        formula:"Subject + can/could + V1 (base form)\nNegative: cannot (can't) / could not (couldn't)\nNote: Modal verb-এর পরে সবসময় base form আসে",
-        examples:[
-          {en:"I can swim very well.", bn:"আমি খুব ভালো সাঁতার কাটতে পারি।"},
-          {en:"She could speak French as a child.", bn:"সে ছোটবেলায় French বলতে পারত।"},
-          {en:"Could you help me, please?", bn:"আপনি কি দয়া করে আমাকে সাহায্য করতে পারবেন?"},
-          {en:"Can I use your pen?", bn:"আমি কি তোমার কলম ব্যবহার করতে পারি?"},
-        ],
-        table:{
-          headers:["Modal","Use","Example"],
-          rows:[
-            ["can","Ability (present)","I can drive a car."],
-            ["can","Permission","Can I go out?"],
-            ["could","Ability (past)","He could run fast."],
-            ["could","Polite request","Could you open the window?"],
-            ["could","Possibility","It could rain later."],
-          ]
-        },
-        tip:"💡 অনুরোধ করার সময় <b>Could</b> ব্যবহার করলে সেটি <b>Can</b>-এর চেয়ে বেশি ভদ্র শোনায়।"
-      }
-    },
-    {
-      id:"m2", name:"Must & Have to", level:"B1", xp:100,
-      content:{
-        title:"Must & Have to — Obligation",
-        explanation:"<b>Must</b> ব্যবহার হয় যখন কোনো নিয়ম বা নৈতিক বাধ্যবাধকতা থাকে (speaker impose করে)। <b>Have to</b> ব্যবহার হয় বাহ্যিক নিয়মের জন্য।",
-        formula:"Subject + must + V1\nSubject + have to / has to + V1\nNegative: mustn't (prohibition) vs don't have to (not necessary)",
-        examples:[
-          {en:"You must wear a seatbelt.", bn:"আপনাকে অবশ্যই সিটবেল্ট পরতে হবে।"},
-          {en:"I have to submit this by Friday.", bn:"আমাকে শুক্রবারের মধ্যে এটি জমা দিতে হবে।"},
-          {en:"You mustn't smoke here.", bn:"এখানে ধূমপান করা যাবে না।"},
-          {en:"You don't have to come.", bn:"তোমাকে আসতে হবে না। (optional)"},
-        ],
-        table:{
-          headers:["Form","Meaning","Example"],
-          rows:[
-            ["must","Internal obligation","I must study harder."],
-            ["have to","External obligation","I have to follow the rules."],
-            ["mustn't","Prohibition","You mustn't lie."],
-            ["don't have to","No necessity","You don't have to hurry."],
-          ]
-        },
-        tip:"💡 <b>Mustn't ≠ Don't have to!</b> Mustn't মানে 'করা যাবে না' (prohibited), Don't have to মানে 'করার দরকার নেই' (not necessary)।"
-      }
-    },
-    {
-      id:"m3", name:"Should & Ought to", level:"B1", xp:100,
-      content:{
-        title:"Should & Ought to — Advice",
-        explanation:"<b>Should</b> পরামর্শ, সুপারিশ বা মতামত বোঝায়। <b>Ought to</b> প্রায় একই অর্থে ব্যবহার হয় তবে একটু বেশি formal।",
-        formula:"Subject + should + V1\nSubject + ought to + V1\nNegative: shouldn't / ought not to",
-        examples:[
-          {en:"You should drink more water.", bn:"তোমার বেশি পানি পান করা উচিত।"},
-          {en:"She shouldn't stay up late.", bn:"তার রাত করে জাগা উচিত নয়।"},
-          {en:"You ought to apologize.", bn:"তোমার ক্ষমা চাওয়া উচিত।"},
-          {en:"Should I call him?", bn:"আমার কি তাকে ফোন করা উচিত?"},
-        ],
-        table:{
-          headers:["Use","Example"],
-          rows:[
-            ["Advice","You should see a doctor."],
-            ["Recommendation","You should try this restaurant."],
-            ["Expectation","The bus should arrive soon."],
-            ["Past regret","You should have studied more."],
-          ]
-        },
-        tip:"💡 <b>Should have + V3</b> ব্যবহার করা হয় অতীতের ভুলের আফসোস বোঝাতে। যেমন: 'I should have listened to you.' (আমার তোমার কথা শোনা উচিত ছিল।)"
-      }
-    },
-  ],
-  prepositions:[
-    {
-      id:"pp1", name:"Prepositions of Place", level:"A1", xp:50,
-      content:{
-        title:"Prepositions of Place",
-        explanation:"Prepositions of Place ব্যবহার করা হয় কোনো ব্যক্তি বা জিনিস <b>কোথায় আছে</b> তা বোঝাতে। এগুলো noun বা pronoun-এর আগে বসে।",
-        formula:"Noun/Pronoun + preposition + noun\nসবচেয়ে বেশি ব্যবহৃত: in, on, at, under, above, between, behind, in front of, next to",
-        examples:[
-          {en:"The book is on the table.", bn:"বইটি টেবিলের উপরে আছে।"},
-          {en:"She is in the room.", bn:"সে ঘরের ভেতরে আছে।"},
-          {en:"The cat is under the chair.", bn:"বিড়ালটি চেয়ারের নিচে আছে।"},
-          {en:"He is standing between two trees.", bn:"সে দুটি গাছের মাঝে দাঁড়িয়ে আছে।"},
-        ],
-        table:{
-          headers:["Preposition","ব্যবহার","Example"],
-          rows:[
-            ["in","ভেতরে (enclosed space)","in the box, in Dhaka"],
-            ["on","উপরে (surface)","on the table, on the wall"],
-            ["at","নির্দিষ্ট স্থানে (point)","at the door, at home"],
-            ["under","নিচে","under the bed"],
-            ["above","উপরে (not touching)","above the clouds"],
-            ["between","দুটির মাঝে","between the two chairs"],
-          ]
-        },
-        tip:"💡 <b>In/On/At</b> তিনটি confusing — মনে রাখুন: in (বড় জায়গা/ভেতরে), on (surface), at (নির্দিষ্ট বিন্দু)। In Dhaka, on Main Street, at 5 Baker Street।"
-      }
-    },
-    {
-      id:"pp2", name:"Prepositions of Time", level:"A1", xp:50,
-      content:{
-        title:"Prepositions of Time: In, On, At",
-        explanation:"সময় বোঝাতেও <b>in, on, at</b> ব্যবহার হয় — কিন্তু নিয়ম আলাদা। এই তিনটি preposition সময়ের ক্ষেত্রে সবচেয়ে বেশি ব্যবহৃত।",
-        formula:"AT → নির্দিষ্ট সময়\nON → দিন ও তারিখ\nIN → দীর্ঘ সময় (মাস, বছর, ঋতু)",
-        examples:[
-          {en:"The class starts at 9 AM.", bn:"ক্লাস ৯টায় শুরু হয়।"},
-          {en:"I was born on March 15.", bn:"আমি ১৫ মার্চে জন্মেছিলাম।"},
-          {en:"She arrived in 2020.", bn:"সে ২০২০ সালে এসেছিল।"},
-          {en:"We go to the beach in summer.", bn:"আমরা গ্রীষ্মে সমুদ্র সৈকতে যাই।"},
-        ],
-        table:{
-          headers:["Preposition","ব্যবহার","উদাহরণ"],
-          rows:[
-            ["at","সময় (specific time)","at 3 PM, at midnight, at noon"],
-            ["on","দিন/তারিখ","on Monday, on July 4th"],
-            ["in","দীর্ঘ সময়","in July, in 1990, in winter, in the morning"],
-          ]
-        },
-        tip:"💡 Exception: <b>at night</b> (রাতে) কিন্তু <b>in the morning/afternoon/evening</b>। আর: 'on Monday morning' — দিন থাকলে 'on' ব্যবহার হয়।"
-      }
-    },
-  ],
-  passive:[
-    {
-      id:"pv1", name:"Active to Passive — Present", level:"B1", xp:100,
-      content:{
-        title:"Active & Passive Voice — Present Simple",
-        explanation:"<b>Active Voice</b>-এ subject কাজটি করে। <b>Passive Voice</b>-এ object-এর উপর কাজটি হয় — কে করল তা গুরুত্বপূর্ণ নয় বা অজানা।",
-        formula:"Active:  Subject + V1/V2 + Object\nPassive: Object + am/is/are + V3 + (by + Subject)",
-        examples:[
-          {en:"Active: The teacher teaches English.", bn:"শিক্ষক English পড়ান।"},
-          {en:"Passive: English is taught by the teacher.", bn:"English শিক্ষক দ্বারা পড়ানো হয়।"},
-          {en:"Active: She writes letters.", bn:"সে চিঠি লেখে।"},
-          {en:"Passive: Letters are written by her.", bn:"চিঠি তার দ্বারা লেখা হয়।"},
-        ],
-        table:{
-          headers:["Tense","Active","Passive"],
-          rows:[
-            ["Present Simple","He eats rice.","Rice is eaten by him."],
-            ["Past Simple","She wrote a letter.","A letter was written by her."],
-            ["Present Continuous","They are building a house.","A house is being built."],
-            ["Present Perfect","He has done the work.","The work has been done."],
-          ]
-        },
-        tip:"💡 Passive-এ <b>'by'</b> ব্যবহার optional। যদি কে করল জানা না যায় বা গুরুত্বপূর্ণ না হয়, 'by' বাদ দেওয়া যায়।"
-      }
-    },
-  ],
-  narration:[
-    {
-      id:"nr1", name:"Direct to Indirect Speech", level:"B2", xp:125,
-      content:{
-        title:"Narration: Direct to Indirect Speech",
-        explanation:"কারো কথা হুবহু উদ্ধৃত করলে <b>Direct Speech</b>, আর ভাব প্রকাশ করলে <b>Indirect Speech</b>। Indirect-এ tense, pronoun এবং time/place-এর শব্দ পরিবর্তন হয়।",
-        formula:"Direct:   He said, \"I am happy.\"\nIndirect: He said that he was happy.\n\nনিয়ম: Reporting verb past হলে tense একধাপ পিছিয়ে যায়",
-        examples:[
-          {en:"Direct: She said, \"I love this book.\"", bn:"Direct: সে বলল, \"আমি এই বইটি ভালোবাসি।\""},
-          {en:"Indirect: She said that she loved that book.", bn:"Indirect: সে বলল যে সে ওই বইটি ভালোবাসত।"},
-          {en:"Direct: He said, \"I will come.\"", bn:"Direct: সে বলল, \"আমি আসব।\""},
-          {en:"Indirect: He said that he would come.", bn:"Indirect: সে বলল যে সে আসবে।"},
-        ],
-        table:{
-          headers:["Direct (Tense)","Indirect (Tense)"],
-          rows:[
-            ["Present Simple","Past Simple"],
-            ["Present Continuous","Past Continuous"],
-            ["Present Perfect","Past Perfect"],
-            ["Past Simple","Past Perfect"],
-            ["will","would"],
-            ["can","could"],
-            ["may","might"],
-          ]
-        },
-        tip:"💡 Time ও Place শব্দও পরিবর্তন হয়: now → then, today → that day, here → there, tomorrow → the next day, yesterday → the previous day।"
-      }
-    },
-  ],
-  conditionals:[
-    {
-      id:"c1", name:"Zero Conditional", level:"B1", xp:100,
-      content:{
-        title:"Zero Conditional",
-        explanation:"Zero Conditional ব্যবহার হয় <b>সাধারণ সত্য বা বৈজ্ঞানিক তথ্য</b> বোঝাতে। সবসময় যা হয় তার জন্য।",
-        formula:"If + Present Simple, + Present Simple\nউভয় clause-এ Present Simple ব্যবহার হয়",
-        examples:[
-          {en:"If you heat water to 100°C, it boils.", bn:"যদি পানি ১০০°C-এ গরম কর, তাহলে এটি ফুটে।"},
-          {en:"If it rains, the ground gets wet.", bn:"যদি বৃষ্টি হয়, মাটি ভিজে যায়।"},
-          {en:"Plants die if they don't get water.", bn:"গাছ মারা যায় যদি পানি না পায়।"},
-        ],
-        table:{
-          headers:["Type","If Clause","Main Clause","Use"],
-          rows:[
-            ["Zero","Present Simple","Present Simple","General truth"],
-            ["First","Present Simple","will + V1","Real possibility"],
-            ["Second","Past Simple","would + V1","Unreal/hypothetical"],
-            ["Third","Past Perfect","would have + V3","Past unreal"],
-          ]
-        },
-        tip:"💡 Zero Conditional-এ 'if'-এর পরিবর্তে <b>'when'</b>ও ব্যবহার করা যায়: 'When you heat ice, it melts.'"
-      }
-    },
-    {
-      id:"c2", name:"First Conditional", level:"B1", xp:100,
-      content:{
-        title:"First Conditional — Real Future",
-        explanation:"First Conditional ব্যবহার হয় ভবিষ্যতের <b>বাস্তবসম্মত সম্ভাবনা</b> বোঝাতে। এটি ঘটতে পারে।",
-        formula:"If + Present Simple, + will + V1\nবিকল্প: Unless + Present Simple, + will + V1",
-        examples:[
-          {en:"If it rains, I will stay home.", bn:"যদি বৃষ্টি হয়, আমি বাড়িতে থাকব।"},
-          {en:"She will pass if she studies hard.", bn:"সে পাস করবে যদি কঠোর পরিশ্রম করে।"},
-          {en:"Unless you hurry, you'll miss the bus.", bn:"তুমি যদি না দ্রুত না যাও, বাস মিস করবে।"},
-          {en:"If I have time, I'll call you.", bn:"যদি আমার সময় থাকে, তোমাকে ফোন করব।"},
-        ],
-        table:{
-          headers:["Part","Tense","Example"],
-          rows:[
-            ["If clause","Present Simple","If it rains..."],
-            ["Main clause","will + base verb","...I will carry an umbrella."],
-            ["Alternative","can/may/might + V1","...I might stay home."],
-          ]
-        },
-        tip:"💡 If clause-এ কখনো 'will' ব্যবহার করবেন না। ভুল: 'If it will rain...' সঠিক: 'If it rains...'"
-      }
-    },
-  ],
-  wh:[
-    {
-      id:"wh1", name:"WH Question Words", level:"A1", xp:50,
-      content:{
-        title:"WH Question Words",
-        explanation:"WH Questions দিয়ে <b>নির্দিষ্ট তথ্য জানা</b> যায়। এগুলো হ্যাঁ/না-এর উত্তর নয়, বরং বিস্তারিত উত্তর চাই।",
-        formula:"WH word + auxiliary verb + subject + main verb?\nWho/What (subject হলে): WH word + verb + ?",
-        examples:[
-          {en:"What is your name?", bn:"তোমার নাম কী?"},
-          {en:"Where do you live?", bn:"তুমি কোথায় থাকো?"},
-          {en:"Why are you late?", bn:"তুমি কেন দেরি করলে?"},
-          {en:"How did you get here?", bn:"তুমি কীভাবে এখানে এলে?"},
-        ],
-        table:{
-          headers:["WH Word","জিজ্ঞাসা","Example"],
-          rows:[
-            ["What","কী / কোনটা","What do you want?"],
-            ["Who","কে","Who is she?"],
-            ["Where","কোথায়","Where do you live?"],
-            ["When","কখন","When did you arrive?"],
-            ["Why","কেন","Why are you sad?"],
-            ["How","কীভাবে","How do you spell it?"],
-            ["Which","কোনটি","Which bag is yours?"],
-            ["Whose","কার","Whose phone is this?"],
-          ]
-        },
-        tip:"💡 <b>Who/What</b> subject হলে auxiliary verb লাগে না। যেমন: 'Who called you?' (Who = subject, so no 'did'). কিন্তু: 'Who did you call?' (You = subject, so 'did' লাগে।)"
-      }
-    },
-  ],
-  partsOfSpeech:[
-    {
-      id:"pos1", name:"Nouns", level:"A1", xp:50,
-      content:{
-        title:"Parts of Speech: Nouns",
-        explanation:"<b>Noun</b> হলো ব্যক্তি, স্থান, বস্তু বা ধারণার নাম। Noun বাক্যে subject, object বা complement হিসেবে কাজ করে।",
-        formula:"Proper Noun: নির্দিষ্ট নাম (Rahim, Dhaka)\nCommon Noun: সাধারণ নাম (boy, city)\nAbstract Noun: অদৃশ্য ধারণা (love, happiness)\nCollective Noun: দলের নাম (team, class)",
-        examples:[
-          {en:"Rahim is a good student.", bn:"রহিম একজন ভালো ছাত্র। (Proper + Common)"},
-          {en:"Happiness is the key to life.", bn:"সুখই জীবনের চাবিকাঠি। (Abstract)"},
-          {en:"Our team won the match.", bn:"আমাদের দল ম্যাচ জিতেছে। (Collective)"},
-          {en:"The water in the river is clean.", bn:"নদীর পানি পরিষ্কার। (Material)"},
-        ],
-        table:{
-          headers:["Type","Description","Examples"],
-          rows:[
-            ["Proper","নির্দিষ্ট নাম","Rahim, Dhaka, Monday"],
-            ["Common","সাধারণ নাম","boy, city, book"],
-            ["Abstract","অনুভূতি/ধারণা","love, freedom, beauty"],
-            ["Collective","দল/গোষ্ঠী","army, flock, class"],
-            ["Material","পদার্থ","water, gold, wood"],
-            ["Countable","গণনাযোগ্য","pen (pens), book (books)"],
-            ["Uncountable","গণনা অযোগ্য","water, information, advice"],
-          ]
-        },
-        tip:"💡 <b>Uncountable noun</b>-এ plural হয় না এবং a/an ব্যবহার হয় না। ভুল: 'an advice', 'two informations' → সঠিক: 'a piece of advice', 'two pieces of information'।"
-      }
-    },
-    {
-      id:"pos2", name:"Adjectives", level:"A1", xp:50,
-      content:{
-        title:"Parts of Speech: Adjectives",
-        explanation:"<b>Adjective</b> noun বা pronoun-কে বিশেষায়িত করে — কেমন, কতটুকু, কোনটি ইত্যাদি বোঝায়। Adjective সাধারণত noun-এর আগে বা linking verb-এর পরে বসে।",
-        formula:"Adjective + Noun (attributive)\nSubject + linking verb + adjective (predicative)\nComparison: Adj + -er / more + Adj / most + Adj",
-        examples:[
-          {en:"She is a beautiful girl.", bn:"সে একটি সুন্দর মেয়ে। (attributive)"},
-          {en:"The weather is hot today.", bn:"আজ আবহাওয়া গরম। (predicative)"},
-          {en:"He is taller than his brother.", bn:"সে তার ভাইয়ের চেয়ে লম্বা। (comparative)"},
-          {en:"She is the most intelligent student.", bn:"সে সবচেয়ে মেধাবী ছাত্রী। (superlative)"},
-        ],
-        table:{
-          headers:["Degree","Rule","Example"],
-          rows:[
-            ["Positive","Adj (basic form)","tall, beautiful"],
-            ["Comparative (short)","Adj + -er + than","taller than"],
-            ["Comparative (long)","more + Adj + than","more beautiful than"],
-            ["Superlative (short)","the + Adj + -est","the tallest"],
-            ["Superlative (long)","the most + Adj","the most beautiful"],
-          ]
-        },
-        tip:"💡 ১ বা ২ syllable-এর adjective-এ সাধারণত <b>-er/-est</b> হয়। ৩ বা তার বেশি syllable-এ <b>more/most</b> ব্যবহার হয়।"
-      }
-    },
-  ],
-};
-
-/* ─── Quick Reference Cards ─── */
+/* ═══════════════════════════════
+   QUICK REFERENCE CARDS
+═══════════════════════════════ */
 const REF_CARDS = [
   {
     title:"Tense Cheat Sheet", icon:"⏰",
@@ -1242,42 +515,23 @@ const REF_CARDS = [
   },
 ];
 
-/* ─── PROGRESS stats ─── */
-const PROGRESS_STATS = [
-  {val:"7", label:"Topics Completed"},
-  {val:"3", label:"Categories Done"},
-  {val:"525", label:"XP Earned"},
-  {val:"86%", label:"Avg Quiz Score"},
-];
-
-/* ─── MOCK done topics ─── */
-const DONE_TOPICS = new Set(["t1","t2","ar1","pr1","wh1","pos1","m1"]);
-const ACTIVE_CAT  = "tenses";
-
 /* ═══════════════════════════════
    BUILD UI
 ═══════════════════════════════ */
-let currentCat    = ACTIVE_CAT;
-let currentLesson = null;
 let currentFilter = "all";
 let searchQuery   = "";
 
-function allLessons(){
-  return Object.values(LESSONS).flat();
+function hexToRgba(hex, alpha){
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
 }
 
-function countDone(catId){
-  if(!LESSONS[catId]) return 0;
-  return LESSONS[catId].filter(l => DONE_TOPICS.has(l.id)).length;
-}
-
-function totalDone(){
-  return [...DONE_TOPICS].length;
-}
-
-/* build category grid */
+/* build topic card grid */
 function buildCats(){
   const grid = document.getElementById("cat-grid");
+
   const filtered = currentFilter === "all"
     ? CATEGORIES
     : CATEGORIES.filter(c => c.level === currentFilter);
@@ -1287,151 +541,30 @@ function buildCats(){
     : filtered;
 
   grid.innerHTML = searched.map(cat => {
-    const total = LESSONS[cat.id]?.length || 0;
-    const done  = countDone(cat.id);
-    const pct   = total ? Math.round((done/total)*100) : 0;
-    const page  = CATEGORY_PAGES[cat.id];
+    const ready = !!cat.page;
+    const accentStyle = `--accent:${cat.color};--accent-soft:${hexToRgba(cat.color,.14)};--accent-border:${hexToRgba(cat.color,.32)};`;
     return `
-    <div class="cat-card ${cat.id===currentCat?'active-cat':''}" data-cat="${cat.id}" style="border-color:${cat.id===currentCat?cat.color+'44':''};">
-      <div class="cat-emoji">${cat.emoji}</div>
+    <div class="cat-card ${ready ? '' : 'cat-soon'}" data-cat="${cat.id}" style="${accentStyle}">
+      <div class="cat-top">
+        <div class="cat-emoji-box">${cat.emoji}</div>
+        <span class="cat-level-badge lvl-${cat.level}">${cat.level}</span>
+      </div>
       <div class="cat-name">${cat.name}</div>
-      <div class="cat-count">${done}/${total} done</div>
-      <div class="cat-done-bar"><div class="cat-done-fill" style="width:${pct}%;background:${cat.bar};"></div></div>
-      ${page ? `<a href="${page}" class="cat-open-link" onclick="event.stopPropagation()">📖 Full Lesson</a>` : ``}
+      <div class="cat-desc">${cat.desc}</div>
+      ${ready
+        ? `<a href="${cat.page}" class="cat-btn">Lesson শুরু করুন <span>→</span></a>`
+        : `<div class="cat-btn cat-btn-soon" data-soon="1">🔒 Coming Soon</div>`}
     </div>`;
-  }).join("") || `<div style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">No categories found.</div>`;
+  }).join("") || `<div style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">কোনো topic পাওয়া যায়নি।</div>`;
 
-  /* events */
-  grid.querySelectorAll(".cat-card").forEach(el => {
-    el.addEventListener("click", () => {
-      currentCat = el.dataset.cat;
-      buildCats();
-      buildLessonList();
-      showLesson(LESSONS[currentCat]?.[0]);
-    });
+  document.getElementById("rt-count").textContent = `${searched.length} Topics`;
+
+  grid.querySelectorAll("[data-soon]").forEach(el => {
+    el.addEventListener("click", () => showToast("🚧 এই Topic-টির Lesson Page শীঘ্রই যুক্ত হবে!"));
   });
 }
 
-/* build lesson list */
-function buildLessonList(){
-  const list   = document.getElementById("lesson-list");
-  const cat    = CATEGORIES.find(c => c.id === currentCat);
-  const lessons= LESSONS[currentCat] || [];
-
-  const searched = searchQuery
-    ? lessons.filter(l => l.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    : lessons;
-
-  document.getElementById("list-label").textContent  = cat?.name || "Lessons";
-  document.getElementById("list-count").textContent  = `${searched.length} topics`;
-
-  list.innerHTML = searched.map((l,i) => {
-    const done = DONE_TOPICS.has(l.id);
-    const active = currentLesson?.id === l.id;
-    return `
-    <div class="lesson-item ${active?'active-lesson':''} ${done?'done-lesson':''}" data-id="${l.id}">
-      <div class="lesson-num">${done ? "✓" : String(i+1).padStart(2,"0")}</div>
-      <div class="lesson-info">
-        <div class="lesson-name">${l.name}</div>
-        <div class="lesson-sub">${l.level} Level</div>
-      </div>
-      <div class="lesson-xp">+${l.xp} XP</div>
-    </div>`;
-  }).join("") || `<div style="color:var(--muted);font-size:13px;padding:1.5rem;text-align:center;">No lessons found.</div>`;
-
-  list.querySelectorAll(".lesson-item").forEach(el => {
-    el.addEventListener("click", () => {
-      const lesson = (LESSONS[currentCat]||[]).find(l => l.id === el.dataset.id);
-      if(lesson){ showLesson(lesson); buildLessonList(); }
-    });
-  });
-}
-
-/* show lesson content */
-function showLesson(lesson){
-  if(!lesson) return;
-  currentLesson = lesson;
-  const c = lesson.content;
-  const done = DONE_TOPICS.has(lesson.id);
-  const cat  = CATEGORIES.find(cat => (LESSONS[cat.id]||[]).some(l=>l.id===lesson.id));
-
-  const tableHtml = c.table ? `
-    <table class="grammar-table">
-      <thead><tr>${c.table.headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
-      <tbody>${c.table.rows.map(row=>`<tr>${row.map(cell=>`<td>${cell}</td>`).join("")}</tr>`).join("")}</tbody>
-    </table>` : "";
-
-  document.getElementById("lesson-content").innerHTML = `
-    <div class="lc-head">
-      <div class="lc-title">${c.title}</div>
-      <div class="lc-badges">
-        <span class="lc-badge badge-level">${lesson.level}</span>
-        <span class="lc-badge badge-xp">+${lesson.xp} XP</span>
-        ${done ? '<span class="lc-badge" style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:#2dd4bf;">✓ Done</span>' : ''}
-        ${CATEGORY_PAGES[cat?.id] ? `<a href="${CATEGORY_PAGES[cat.id]}" class="lc-badge" style="background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:#818cf8;text-decoration:none;">📖 পূর্ণ Lesson খুলুন</a>` : ''}
-      </div>
-    </div>
-    <div class="lc-body">
-      <div class="explain-block"><p>${c.explanation}</p></div>
-      <div class="formula-box">
-        <div class="formula-label">📐 Formula / Structure</div>
-        <div class="formula-text">${c.formula.replace(/\n/g,'<br>')}</div>
-      </div>
-      <div class="examples-block">
-        <div class="ex-title">💬 Examples</div>
-        ${c.examples.map(ex=>`
-          <div class="ex-item">
-            <div class="ex-dot"></div>
-            <div>
-              <div class="ex-en">${ex.en}</div>
-              <div class="ex-bn">${ex.bn}</div>
-            </div>
-          </div>`).join("")}
-      </div>
-      ${tableHtml}
-      <div class="tip-box">
-        <span class="tip-box-icon">💡</span>
-        <div class="tip-box-text">${c.tip}</div>
-      </div>
-    </div>
-    <div class="lc-actions">
-      ${done
-        ? `<button class="btn-secondary" onclick="markUndone('${lesson.id}')">↩ Mark Undone</button>`
-        : `<button class="btn-primary" onclick="markDone('${lesson.id}')">✓ Mark as Done</button>`}
-      <button class="btn-secondary" onclick="showNext()">Next Lesson →</button>
-      <button class="btn-quiz" onclick="showToast('Quiz feature coming in Part 5! 🎯')">Take Quiz ⚡</button>
-    </div>`;
-}
-
-function markDone(id){
-  DONE_TOPICS.add(id);
-  document.getElementById("h-done").textContent = totalDone();
-  document.getElementById("h-xp").textContent = [...DONE_TOPICS].reduce((sum,id)=>{
-    const l = allLessons().find(l=>l.id===id);
-    return sum + (l?.xp||0);
-  },0);
-  buildCats(); buildLessonList();
-  showLesson(currentLesson);
-  updateProgress();
-  showToast("✓ Lesson marked as done! XP added 🎉");
-}
-
-function markUndone(id){
-  DONE_TOPICS.delete(id);
-  document.getElementById("h-done").textContent = totalDone();
-  buildCats(); buildLessonList();
-  showLesson(currentLesson);
-  updateProgress();
-}
-
-function showNext(){
-  const lessons = LESSONS[currentCat] || [];
-  const idx = lessons.findIndex(l => l.id === currentLesson?.id);
-  if(idx < lessons.length - 1){ showLesson(lessons[idx+1]); buildLessonList(); }
-  else showToast("🎉 You've reached the end of this category!");
-}
-
-/* ref cards */
+/* build quick reference cards */
 function buildRefCards(){
   const grid = document.getElementById("ref-grid");
   grid.innerHTML = REF_CARDS.map(rc => `
@@ -1440,31 +573,6 @@ function buildRefCards(){
       <div class="rc-rows">
         ${rc.rows.map(r=>`<div class="rc-row"><span class="rc-key">${r.key}</span><span class="rc-val">${r.val}</span></div>`).join("")}
       </div>
-    </div>`).join("");
-}
-
-/* progress overview */
-function updateProgress(){
-  const total = allLessons().length;
-  const done  = totalDone();
-  const pct   = Math.round((done/total)*100);
-  document.getElementById("po-bar").style.width = pct + "%";
-  document.getElementById("po-pct-label").textContent = `${done} / ${total} lessons`;
-
-  const grid = document.getElementById("po-grid");
-  const xpEarned = [...DONE_TOPICS].reduce((sum,id)=>{
-    const l = allLessons().find(l=>l.id===id); return sum+(l?.xp||0);
-  },0);
-  const stats = [
-    {val:done,      label:"Lessons Done"},
-    {val:xpEarned,  label:"XP Earned"},
-    {val:CATEGORIES.filter(c=>countDone(c.id)===(LESSONS[c.id]||[]).length&&(LESSONS[c.id]||[]).length>0).length, label:"Categories Mastered"},
-    {val:pct+"%",   label:"Completion"},
-  ];
-  grid.innerHTML = stats.map(s=>`
-    <div class="po-item">
-      <div class="po-val">${s.val}</div>
-      <div class="po-label">${s.label}</div>
     </div>`).join("");
 }
 
@@ -1490,7 +598,6 @@ document.getElementById("filter-tabs").addEventListener("click", e=>{
 document.getElementById("search-input").addEventListener("input", e=>{
   searchQuery = e.target.value.trim();
   buildCats();
-  buildLessonList();
 });
 
 /* logout */
@@ -1502,17 +609,12 @@ document.getElementById("footer-year").textContent  = y;
 document.getElementById("footer-year2").textContent = y;
 
 /* init */
-document.getElementById("h-total").textContent = allLessons().length;
-document.getElementById("h-done").textContent  = totalDone();
-document.getElementById("h-xp").textContent    = [...DONE_TOPICS].reduce((sum,id)=>{
-  const l=allLessons().find(l=>l.id===id);return sum+(l?.xp||0);
-},0);
+document.getElementById("h-total").textContent = CATEGORIES.length;
+document.getElementById("h-ready").textContent = CATEGORIES.filter(c=>c.page).length;
+document.getElementById("h-soon").textContent  = CATEGORIES.filter(c=>!c.page).length;
 
 buildCats();
-buildLessonList();
-showLesson(LESSONS[ACTIVE_CAT]?.[0]);
 buildRefCards();
-updateProgress();
 </script>
 </body>
 </html>

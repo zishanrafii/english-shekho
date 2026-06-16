@@ -1,794 +1,742 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vocabulary Hub — English Shekho</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#38bdf8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="English Shekho">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<title>Vocabulary Dashboard — English Shekho</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
 :root{
-  --bg:#04080f;
-  --surface:#080e1a;
-  --surface2:#0c1322;
-  --surface3:#101828;
-  --border:rgba(255,255,255,.055);
-  --gold:#f5c842;
-  --gold2:#e0a820;
-  --teal:#2dd4bf;
-  --rose:#fb7185;
-  --indigo:#818cf8;
-  --emerald:#34d399;
-  --orange:#fb923c;
-  --muted:#64748b;
-  --sub:#94a3b8;
-  --text:#f0f4f8;
+  --bg:#080c14;--s1:#0f172a;--s2:#111827;--s3:#1e293b;
+  --border:rgba(255,255,255,.07);--muted:#64748b;--text:#f1f5f9;
+
+  /* A1 — Sky Blue */
+  --a1-c1:#38bdf8;--a1-c2:#0ea5e9;--a1-c3:#7dd3fc;
+  --a1-bg1:#051c2e;--a1-bg2:#0a2d45;
+  --a1-glow:rgba(56,189,248,.22);
+
+  /* A2 — Violet */
+  --a2-c1:#a78bfa;--a2-c2:#7c3aed;--a2-c3:#c4b5fd;
+  --a2-bg1:#120826;--a2-bg2:#1e0d3b;
+  --a2-glow:rgba(167,139,250,.22);
+
+  /* B1 — Amber */
+  --b1-c1:#fb923c;--b1-c2:#ea580c;--b1-c3:#fed7aa;
+  --b1-bg1:#1c0d02;--b1-bg2:#2d1608;
+  --b1-glow:rgba(251,146,60,.22);
+
+  /* B2 — Emerald */
+  --b2-c1:#34d399;--b2-c2:#059669;--b2-c3:#6ee7b7;
+  --b2-bg1:#021c12;--b2-bg2:#052e1c;
+  --b2-glow:rgba(52,211,153,.22);
+
+  /* C1 — Rose */
+  --c1-c1:#f472b6;--c1-c2:#db2777;--c1-c3:#fbcfe8;
+  --c1-bg1:#1f0414;--c1-bg2:#320720;
+  --c1-glow:rgba(244,114,182,.22);
+
+  /* C2 — Gold */
+  --c2-c1:#fbbf24;--c2-c2:#d97706;--c2-c3:#fde68a;
+  --c2-bg1:#1c1000;--c2-bg2:#2d1a00;
+  --c2-glow:rgba(251,191,36,.22);
 }
 
 body{
-  background:var(--bg);color:var(--text);
-  font-family:'Outfit',sans-serif;
-  min-height:100vh;overflow-x:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Noto Sans Bengali',sans-serif;
+  min-height:100vh;
 }
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 80% 60% at 0% 0%,rgba(245,200,66,.055),transparent 60%),
-    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(45,212,191,.045),transparent 55%),
-    radial-gradient(ellipse 50% 50% at 50% 50%,rgba(129,140,248,.025),transparent 60%);
+    radial-gradient(ellipse 50% 40% at 0% 0%,   rgba(56,189,248,.07),transparent 60%),
+    radial-gradient(ellipse 45% 45% at 100% 100%,rgba(251,191,36,.07),transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%,  rgba(167,139,250,.05),transparent 60%);
 }
-body::after{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.008) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.008) 1px,transparent 1px);
-  background-size:52px 52px;
-}
-.wrap{max-width:1160px;margin:auto;padding:1.6rem 1.4rem 0;position:relative;z-index:1;}
 
-/* ─── TOPBAR ─── */
+/* ── TOPBAR ── */
 .topbar{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:2rem;gap:1rem;flex-wrap:wrap;
-  background:rgba(8,14,26,.8);border:1px solid var(--border);
-  border-radius:18px;padding:.9rem 1.4rem;
-  backdrop-filter:blur(24px);box-shadow:0 4px 32px rgba(0,0,0,.4);
-  position:sticky;top:16px;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 1.5rem;
+  background:rgba(8,12,20,.88);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:99;
 }
-.logo{display:flex;align-items:center;gap:14px;}
-.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(45,212,191,.1));border:1px solid rgba(245,200,66,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 0 18px rgba(245,200,66,.12);flex-shrink:0;}
-.logo-text h1{font-size:1.55rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px;}
-.logo-text p{font-size:10px;color:var(--muted);margin-top:1px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-.nav-links{display:flex;gap:6px;}
-.nav-link{padding:.4rem .9rem;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--sub);text-decoration:none;transition:.2s;border:1px solid transparent;}
-.nav-link:hover{background:rgba(255,255,255,.05);color:var(--text);border-color:var(--border);}
-.user-section{display:flex;align-items:center;gap:10px;}
-.user-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(45,212,191,.15));display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden;border:2px solid rgba(245,200,66,.3);cursor:pointer;flex-shrink:0;transition:.2s;box-shadow:0 0 14px rgba(245,200,66,.1);}
-.user-avatar:hover{border-color:var(--gold);box-shadow:0 0 22px rgba(245,200,66,.25);}
-.user-name{font-size:13.5px;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.btn-logout{border:1px solid rgba(251,113,133,.2);background:rgba(251,113,133,.07);color:var(--rose);padding:.4rem .9rem;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:12.5px;transition:.2s;}
-.btn-logout:hover{background:rgba(251,113,133,.15);border-color:var(--rose);}
-
-/* ─── HERO ─── */
-.hero{border-radius:24px;padding:2.2rem 2.4rem;margin-bottom:1.8rem;position:relative;overflow:hidden;background:linear-gradient(135deg,#080e18,#0a1220);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 48px rgba(0,0,0,.45);}
-.hero-stripe{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f5c842 30%,#2dd4bf 70%,transparent);}
-.hero-orb1{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,.1),transparent 70%);top:-100px;left:-80px;pointer-events:none;}
-.hero-orb2{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.09),transparent 70%);bottom:-80px;right:-60px;pointer-events:none;}
-.hero-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
-.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;opacity:.8;}
-.hero h2{font-size:2.1rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15;}
-.hero h2 span{background:linear-gradient(135deg,#f5c842,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{color:var(--sub);font-size:13.5px;line-height:1.7;max-width:500px;font-family:'Noto Sans Bengali',sans-serif;}
-.hero-stats{display:flex;gap:10px;flex-wrap:wrap;}
-.hstat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.75rem 1.2rem;text-align:center;min-width:78px;transition:.2s;position:relative;overflow:hidden;}
-.hstat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;}
-.hstat:hover{border-color:rgba(245,200,66,.25);transform:translateY(-2px);}
-.hstat-v{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hstat-l{font-size:9.5px;color:var(--muted);margin-top:2px;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
-
-/* ─── SECTION TITLE ─── */
-.section-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
-.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
-
-/* ─── SEARCH + TOOLBAR ─── */
-.toolbar{display:flex;gap:10px;margin-bottom:1.8rem;flex-wrap:wrap;align-items:center;}
-.search-wrap{flex:1;min-width:200px;position:relative;}
-.search-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:.75rem 1.1rem .75rem 2.8rem;color:var(--text);font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;transition:.2s;}
-.search-input:focus{border-color:rgba(245,200,66,.35);box-shadow:0 0 0 3px rgba(245,200,66,.07);}
-.search-input::placeholder{color:var(--muted);}
-.search-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
-.toolbar-btns{display:flex;gap:6px;flex-wrap:wrap;}
-.tbtn{padding:.55rem 1rem;border-radius:11px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;white-space:nowrap;font-family:'Outfit',sans-serif;}
-.tbtn:hover{border-color:rgba(245,200,66,.25);color:var(--gold);}
-.tbtn.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.28);color:var(--gold);}
-.tbtn-mode{display:flex;gap:4px;}
-.mode-btn{padding:.5rem .75rem;border-radius:9px;font-size:1rem;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:.2s;line-height:1;}
-.mode-btn:hover,.mode-btn.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.28);}
-
-/* ─── CATEGORY PILLS ─── */
-.cat-pills{display:flex;gap:8px;margin-bottom:1.6rem;flex-wrap:wrap;}
-.pill{padding:.45rem 1.1rem;border-radius:20px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-.pill:hover{border-color:rgba(245,200,66,.25);color:var(--text);}
-.pill.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.3);color:var(--gold);}
-.pill-count{font-family:'JetBrains Mono',monospace;font-size:9.5px;opacity:.7;}
-
-/* ─── WORD GRID ─── */
-.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:1.8rem;}
-
-/* ─── WORD CARD ─── */
-.word-card{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:18px;padding:1.2rem 1.1rem;
-  position:relative;overflow:hidden;transition:.25s;cursor:pointer;
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.back-btn{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--muted);padding:.5rem .95rem;border-radius:10px;
+  text-decoration:none;font-size:13px;font-weight:600;transition:.2s;
 }
-.word-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:.25s;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.word-card:hover{transform:translateY(-3px);border-color:rgba(245,200,66,.15);box-shadow:0 10px 32px rgba(0,0,0,.3);}
-.word-card:hover::after{opacity:.7;}
-.word-card.favorited{border-color:rgba(251,113,133,.2);}
-.word-card.favorited::after{background:linear-gradient(90deg,transparent,var(--rose),transparent);opacity:.5;}
-.wc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.6rem;}
-.wc-diff{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
-.diff-easy{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);color:#34d399;}
-.diff-medium{background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);color:#f5c842;}
-.diff-hard{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.2);color:#fb7185;}
-.fav-btn{background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;padding:0;transition:.2s;opacity:.4;}
-.fav-btn:hover,.fav-btn.active{opacity:1;}
-.wc-word{font-size:1.25rem;font-weight:800;letter-spacing:-.3px;margin-bottom:3px;}
-.wc-phonetic{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal);margin-bottom:.5rem;opacity:.8;}
-.wc-meaning{font-size:12px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;line-height:1.55;margin-bottom:.7rem;}
-.wc-example{font-size:11px;color:var(--muted);font-style:italic;line-height:1.5;border-left:2px solid rgba(245,200,66,.2);padding-left:.6rem;margin-bottom:.7rem;}
-.wc-footer{display:flex;align-items:center;justify-content:space-between;}
-.wc-cat{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.3px;}
-.pronounce-btn{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.18);color:var(--teal);padding:3px 9px;border-radius:8px;cursor:pointer;font-size:10.5px;font-weight:600;font-family:'Outfit',sans-serif;transition:.2s;display:flex;align-items:center;gap:4px;}
-.pronounce-btn:hover{background:rgba(45,212,191,.15);border-color:var(--teal);}
-
-/* ─── LIST VIEW ─── */
-.word-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.8rem;}
-.word-row{display:flex;align-items:center;gap:14px;padding:.85rem 1.1rem;background:var(--surface2);border:1px solid var(--border);border-radius:14px;transition:.2s;cursor:pointer;}
-.word-row:hover{border-color:rgba(245,200,66,.15);background:rgba(255,255,255,.025);padding-left:1.4rem;}
-.wr-word{font-size:14px;font-weight:800;min-width:120px;}
-.wr-phonetic{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--teal);min-width:100px;opacity:.8;}
-.wr-meaning{font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;flex:1;}
-.wr-diff{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
-.wr-actions{display:flex;gap:6px;align-items:center;}
-
-/* ─── FLASHCARD MODE ─── */
-.flashcard-wrap{margin-bottom:1.8rem;display:flex;flex-direction:column;align-items:center;gap:1.2rem;}
-.flashcard-nav{display:flex;align-items:center;gap:14px;}
-.fc-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
-.fc-btn{background:var(--surface2);border:1px solid var(--border);color:var(--sub);padding:.5rem 1.1rem;border-radius:11px;cursor:pointer;font-size:1rem;transition:.2s;font-family:'Outfit',sans-serif;}
-.fc-btn:hover{border-color:rgba(245,200,66,.25);color:var(--gold);}
-.flashcard{
-  width:100%;max-width:520px;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:24px;padding:2.5rem 2rem;text-align:center;
-  position:relative;overflow:hidden;min-height:220px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
-  transition:.35s;cursor:pointer;
-  box-shadow:0 8px 40px rgba(0,0,0,.35);
+.back-btn:hover{background:rgba(255,255,255,.08);color:var(--text);}
+.topbar-title{
+  font-family:'Baloo Da 2',cursive;font-size:1.15rem;font-weight:800;
+  background:linear-gradient(135deg,#38bdf8,#a78bfa,#fbbf24);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.flashcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f5c842,#2dd4bf,transparent);}
-.flashcard:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4);}
-.fc-hint{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem;}
-.fc-front-word{font-size:2.2rem;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.fc-front-phonetic{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);opacity:.8;}
-.fc-back{display:none;flex-direction:column;align-items:center;gap:.6rem;width:100%;}
-.fc-back.show{display:flex;}
-.fc-back-meaning{font-size:1.1rem;font-weight:700;font-family:'Noto Sans Bengali',sans-serif;color:var(--text);}
-.fc-back-example{font-size:12px;color:var(--muted);font-style:italic;max-width:340px;text-align:center;line-height:1.6;}
-.fc-actions{display:flex;gap:10px;}
-.fc-know{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:#34d399;padding:.5rem 1.3rem;border-radius:11px;cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;transition:.2s;}
-.fc-know:hover{background:rgba(52,211,153,.18);}
-.fc-skip{background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.2);color:var(--rose);padding:.5rem 1.3rem;border-radius:11px;cursor:pointer;font-weight:700;font-family:'Outfit',sans-serif;font-size:13px;transition:.2s;}
-.fc-skip:hover{background:rgba(251,113,133,.15);}
-.fc-progress-wrap{width:100%;max-width:520px;}
-.fc-progress-track{height:5px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;}
-.fc-progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f5c842,#2dd4bf);transition:width .5s ease;}
-.fc-score{display:flex;gap:1.5rem;justify-content:center;}
-.fc-score-item{text-align:center;}
-.fc-score-v{font-size:1.3rem;font-weight:800;}
-.fc-score-l{font-size:9.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.8px;}
+.nav-av{
+  width:34px;height:34px;border-radius:50%;background:var(--s2);
+  border:1.5px solid rgba(56,189,248,.3);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;cursor:pointer;flex-shrink:0;transition:border-color .2s;
+}
+.nav-av:hover{border-color:#38bdf8;}
+.nav-av img{width:100%;height:100%;object-fit:cover;}
 
-/* ─── PROGRESS PANEL ─── */
-.progress-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;}
-.pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:1rem;}
-.pp-item{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:13px;padding:.9rem 1rem;text-align:center;}
-.pp-val{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.pp-label{font-size:10.5px;color:var(--muted);margin-top:2px;font-family:'Noto Sans Bengali',sans-serif;}
-.progress-track{height:7px;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;margin:.7rem 0 .4rem;}
-.progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f5c842,#2dd4bf);transition:width .8s ease;box-shadow:0 0 10px rgba(245,200,66,.25);}
-.progress-meta{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;}
+/* ── WRAP ── */
+.wrap{max-width:1100px;margin:0 auto;padding:3rem 1.5rem 5rem;position:relative;z-index:1;}
 
-/* ─── FOOTER ─── */
-footer{margin-top:3rem;border-top:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;}
-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.35),rgba(45,212,191,.35),transparent);}
-.footer-inner{max-width:1160px;margin:auto;padding:2.2rem 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;}
-.footer-brand .brand-name{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
-.footer-brand .brand-sub{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:.9rem;font-family:'Noto Sans Bengali',sans-serif;}
-.copyright-text{font-size:11px;color:#2a3545;line-height:1.8;font-family:'JetBrains Mono',monospace;}
-.copyright-text span{color:#374151;}
-.footer-col h4{font-size:.9rem;font-weight:700;color:var(--sub);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
-.dev-card{background:linear-gradient(135deg,rgba(245,200,66,.04),rgba(45,212,191,.04));border:1px solid rgba(245,200,66,.12);border-radius:14px;padding:1.1rem;}
-.dev-name{font-size:1.05rem;font-weight:800;color:#f0f4f8;margin-bottom:.1rem;}
-.dev-title{font-size:10px;color:var(--gold);letter-spacing:.8px;margin-bottom:.8rem;font-family:'JetBrains Mono',monospace;}
-.dev-contact{display:flex;flex-direction:column;gap:.45rem;}
-.contact-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);}
-.contact-row a{color:var(--sub);text-decoration:none;transition:.15s;}
-.contact-row a:hover{color:var(--gold);}
-.contact-icon{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;background:rgba(255,255,255,.05);}
-.social-links{display:flex;flex-direction:column;gap:.55rem;}
-.social-link{display:flex;align-items:center;gap:10px;padding:.55rem .85rem;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--border);text-decoration:none;color:var(--sub);font-size:12px;transition:.2s;}
-.social-link:hover{background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.2);color:#f0f4f8;transform:translateX(3px);}
-.sl-icon{font-size:.9rem;width:20px;text-align:center;}
-.sl-label{font-weight:600;}
-.sl-handle{color:var(--muted);font-size:10.5px;margin-left:auto;font-family:'JetBrains Mono',monospace;}
-.footer-bottom{max-width:1160px;margin:auto;padding:.8rem 1.4rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;border-top:1px solid rgba(255,255,255,.04);font-size:11px;color:#2d3748;font-family:'JetBrains Mono',monospace;}
-.footer-bottom a{color:#374151;text-decoration:none;}
-.footer-bottom a:hover{color:var(--muted);}
-.footer-heart{color:var(--rose);}
+/* ── HERO ── */
+.hero{text-align:center;margin-bottom:3.5rem;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 16px;border-radius:20px;margin-bottom:1.1rem;
+  background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;
+}
+.hero h1{
+  font-family:'Baloo Da 2',cursive;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;
+  line-height:1.15;margin-bottom:.75rem;
+  background:linear-gradient(135deg,#f1f5f9 0%,#94a3b8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{font-size:14px;color:var(--muted);line-height:1.75;max-width:560px;margin:0 auto 1.5rem;}
 
-/* ─── RESPONSIVE ─── */
-@media(max-width:800px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}.word-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start;}.hero h2{font-size:1.6rem;}.word-grid{grid-template-columns:1fr;}.wrap{padding:1rem .9rem 0;}.footer-bottom{flex-direction:column;align-items:flex-start;}.wr-phonetic,.wr-diff{display:none;}}
+/* Level path strip */
+.level-path{
+  display:flex;align-items:center;justify-content:center;gap:0;
+  flex-wrap:wrap;gap:4px;margin-top:.5rem;
+}
+.path-chip{
+  font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;
+  border:1px solid;letter-spacing:.06em;
+}
 
-/* ─── TOAST ─── */
-.toast{position:fixed;top:20px;right:20px;background:#0c1322;color:#f0f4f8;padding:.9rem 1.2rem;border-radius:14px;border-left:3px solid #f5c842;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;font-size:13.5px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
-.toast.show{opacity:1;transform:translateY(0);}
+/* ── GRID ── */
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:22px;
+}
 
-/* ─── EMPTY STATE ─── */
-.empty-state{text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1;}
-.empty-state .es-icon{font-size:2.5rem;margin-bottom:.8rem;}
-.empty-state p{font-size:13px;font-family:'Noto Sans Bengali',sans-serif;}
+/* ── BASE CARD ── */
+.level-card{
+  position:relative;border-radius:24px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+  cursor:pointer;text-decoration:none;display:block;
+}
+.level-card:hover{transform:translateY(-10px) scale(1.02);}
 
-/* flip animation */
-.flashcard.flipped .fc-hint,
-.flashcard.flipped .fc-front-word,
-.flashcard.flipped .fc-front-phonetic{display:none;}
-.flashcard.flipped .fc-back{display:flex;}
-.flashcard.flipped .fc-actions{display:flex;}
-.fc-actions{display:none;}
+/* ── PER-LEVEL CARD THEMES ── */
+/* A1 */
+.card-a1{background:linear-gradient(145deg,var(--a1-bg1),var(--a1-bg2),var(--a1-bg1));}
+.card-a1:hover{box-shadow:0 28px 60px var(--a1-glow),0 0 0 1px rgba(56,189,248,.3);}
+.card-a1 .card-glow{background:radial-gradient(circle,rgba(56,189,248,.28),transparent 70%);}
+.card-a1 .card-border-top{background:linear-gradient(90deg,var(--a1-c1),var(--a1-c3),transparent);}
+.card-a1 .level-badge{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);color:var(--a1-c1);}
+.card-a1 .card-icon-bg{background:linear-gradient(135deg,rgba(56,189,248,.15),rgba(14,165,233,.08));}
+.card-a1 .card-icon-el{color:var(--a1-c1);}
+.card-a1 .card-title{color:var(--a1-c1);}
+.card-a1 .tag{background:rgba(56,189,248,.1);color:var(--a1-c3);border-color:rgba(56,189,248,.2);}
+.card-a1 .card-btn{background:linear-gradient(135deg,var(--a1-c2),#0369a1);}
+.card-a1 .card-btn:hover{background:linear-gradient(135deg,var(--a1-c1),var(--a1-c2));}
+.card-a1 .prog-fill{background:linear-gradient(90deg,var(--a1-c1),var(--a1-c3));}
+.card-a1 .meta-val-main{color:var(--a1-c1);}
+
+/* A2 */
+.card-a2{background:linear-gradient(145deg,var(--a2-bg1),var(--a2-bg2),var(--a2-bg1));}
+.card-a2:hover{box-shadow:0 28px 60px var(--a2-glow),0 0 0 1px rgba(167,139,250,.3);}
+.card-a2 .card-glow{background:radial-gradient(circle,rgba(167,139,250,.28),transparent 70%);}
+.card-a2 .card-border-top{background:linear-gradient(90deg,var(--a2-c1),var(--a2-c3),transparent);}
+.card-a2 .level-badge{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3);color:var(--a2-c1);}
+.card-a2 .card-icon-bg{background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(124,58,237,.08));}
+.card-a2 .card-icon-el{color:var(--a2-c1);}
+.card-a2 .card-title{color:var(--a2-c1);}
+.card-a2 .tag{background:rgba(167,139,250,.1);color:var(--a2-c3);border-color:rgba(167,139,250,.2);}
+.card-a2 .card-btn{background:linear-gradient(135deg,var(--a2-c2),#5b21b6);}
+.card-a2 .card-btn:hover{background:linear-gradient(135deg,var(--a2-c1),var(--a2-c2));}
+.card-a2 .prog-fill{background:linear-gradient(90deg,var(--a2-c1),var(--a2-c3));}
+.card-a2 .meta-val-main{color:var(--a2-c1);}
+
+/* B1 */
+.card-b1{background:linear-gradient(145deg,var(--b1-bg1),var(--b1-bg2),var(--b1-bg1));}
+.card-b1:hover{box-shadow:0 28px 60px var(--b1-glow),0 0 0 1px rgba(251,146,60,.3);}
+.card-b1 .card-glow{background:radial-gradient(circle,rgba(251,146,60,.28),transparent 70%);}
+.card-b1 .card-border-top{background:linear-gradient(90deg,var(--b1-c1),var(--b1-c3),transparent);}
+.card-b1 .level-badge{background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--b1-c1);}
+.card-b1 .card-icon-bg{background:linear-gradient(135deg,rgba(251,146,60,.15),rgba(234,88,12,.08));}
+.card-b1 .card-icon-el{color:var(--b1-c1);}
+.card-b1 .card-title{color:var(--b1-c1);}
+.card-b1 .tag{background:rgba(251,146,60,.1);color:var(--b1-c3);border-color:rgba(251,146,60,.2);}
+.card-b1 .card-btn{background:linear-gradient(135deg,var(--b1-c2),#9a3412);}
+.card-b1 .card-btn:hover{background:linear-gradient(135deg,var(--b1-c1),var(--b1-c2));}
+.card-b1 .prog-fill{background:linear-gradient(90deg,var(--b1-c1),var(--b1-c3));}
+.card-b1 .meta-val-main{color:var(--b1-c1);}
+
+/* B2 */
+.card-b2{background:linear-gradient(145deg,var(--b2-bg1),var(--b2-bg2),var(--b2-bg1));}
+.card-b2:hover{box-shadow:0 28px 60px var(--b2-glow),0 0 0 1px rgba(52,211,153,.3);}
+.card-b2 .card-glow{background:radial-gradient(circle,rgba(52,211,153,.28),transparent 70%);}
+.card-b2 .card-border-top{background:linear-gradient(90deg,var(--b2-c1),var(--b2-c3),transparent);}
+.card-b2 .level-badge{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:var(--b2-c1);}
+.card-b2 .card-icon-bg{background:linear-gradient(135deg,rgba(52,211,153,.15),rgba(5,150,105,.08));}
+.card-b2 .card-icon-el{color:var(--b2-c1);}
+.card-b2 .card-title{color:var(--b2-c1);}
+.card-b2 .tag{background:rgba(52,211,153,.1);color:var(--b2-c3);border-color:rgba(52,211,153,.2);}
+.card-b2 .card-btn{background:linear-gradient(135deg,var(--b2-c2),#047857);}
+.card-b2 .card-btn:hover{background:linear-gradient(135deg,var(--b2-c1),var(--b2-c2));}
+.card-b2 .prog-fill{background:linear-gradient(90deg,var(--b2-c1),var(--b2-c3));}
+.card-b2 .meta-val-main{color:var(--b2-c1);}
+
+/* C1 */
+.card-c1{background:linear-gradient(145deg,var(--c1-bg1),var(--c1-bg2),var(--c1-bg1));}
+.card-c1:hover{box-shadow:0 28px 60px var(--c1-glow),0 0 0 1px rgba(244,114,182,.3);}
+.card-c1 .card-glow{background:radial-gradient(circle,rgba(244,114,182,.28),transparent 70%);}
+.card-c1 .card-border-top{background:linear-gradient(90deg,var(--c1-c1),var(--c1-c3),transparent);}
+.card-c1 .level-badge{background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);color:var(--c1-c1);}
+.card-c1 .card-icon-bg{background:linear-gradient(135deg,rgba(244,114,182,.15),rgba(219,39,119,.08));}
+.card-c1 .card-icon-el{color:var(--c1-c1);}
+.card-c1 .card-title{color:var(--c1-c1);}
+.card-c1 .tag{background:rgba(244,114,182,.1);color:var(--c1-c3);border-color:rgba(244,114,182,.2);}
+.card-c1 .card-btn{background:linear-gradient(135deg,var(--c1-c2),#9d174d);}
+.card-c1 .card-btn:hover{background:linear-gradient(135deg,var(--c1-c1),var(--c1-c2));}
+.card-c1 .prog-fill{background:linear-gradient(90deg,var(--c1-c1),var(--c1-c3));}
+.card-c1 .meta-val-main{color:var(--c1-c1);}
+
+/* C2 */
+.card-c2{background:linear-gradient(145deg,var(--c2-bg1),var(--c2-bg2),var(--c2-bg1));}
+.card-c2:hover{box-shadow:0 28px 60px var(--c2-glow),0 0 0 1px rgba(251,191,36,.3);}
+.card-c2 .card-glow{background:radial-gradient(circle,rgba(251,191,36,.28),transparent 70%);}
+.card-c2 .card-border-top{background:linear-gradient(90deg,var(--c2-c1),var(--c2-c3),transparent);}
+.card-c2 .level-badge{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:var(--c2-c1);}
+.card-c2 .card-icon-bg{background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(217,119,6,.08));}
+.card-c2 .card-icon-el{color:var(--c2-c1);}
+.card-c2 .card-title{color:var(--c2-c1);}
+.card-c2 .tag{background:rgba(251,191,36,.1);color:var(--c2-c3);border-color:rgba(251,191,36,.2);}
+.card-c2 .card-btn{background:linear-gradient(135deg,var(--c2-c2),#92400e);}
+.card-c2 .card-btn:hover{background:linear-gradient(135deg,var(--c2-c1),var(--c2-c2));}
+.card-c2 .prog-fill{background:linear-gradient(90deg,var(--c2-c1),var(--c2-c3));}
+.card-c2 .meta-val-main{color:var(--c2-c1);}
+
+/* ── CARD INNER PARTS ── */
+.card-glow{
+  position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;pointer-events:none;
+}
+.card-border-top{position:absolute;top:0;left:0;right:0;height:3px;}
+.card-inner{padding:1.75rem;}
+.card-top-row{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:1.3rem;
+}
+.card-icon-bg{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.card-icon-el{font-size:1.6rem;line-height:1;}
+.level-badge{
+  font-size:11px;font-weight:800;letter-spacing:.08em;
+  padding:4px 12px;border-radius:20px;
+}
+.card-title{
+  font-family:'Baloo Da 2',cursive;font-size:1.35rem;font-weight:800;margin-bottom:.35rem;
+}
+.card-subtitle{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1.1rem;}
+
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.3rem;}
+.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;border:1px solid;}
+
+/* Progress */
+.prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;}
+.prog-track{height:5px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;margin-bottom:1.3rem;}
+.prog-fill{height:100%;border-radius:6px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+
+/* Meta row */
+.meta-row{display:flex;gap:20px;margin-bottom:1.5rem;}
+.meta-item{display:flex;flex-direction:column;gap:2px;}
+.meta-val{font-family:'Baloo Da 2',cursive;font-size:1.05rem;font-weight:700;}
+.meta-lbl{font-size:10px;color:var(--muted);}
+
+/* Button */
+.card-btn{
+  width:100%;padding:.8rem;border:none;border-radius:14px;
+  font-family:'Noto Sans Bengali',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .25s;color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.card-btn .arrow{transition:transform .2s;}
+.level-card:hover .arrow{transform:translateX(5px);}
+
+/* Locked overlay */
+.locked-overlay{
+  position:absolute;inset:0;background:rgba(8,12,20,.65);backdrop-filter:blur(4px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  border-radius:24px;z-index:10;
+}
+.lock-icon{font-size:2.5rem;}
+.lock-text{font-size:13px;color:var(--muted);font-weight:700;}
+.lock-req{font-size:11px;color:#374151;}
+
+/* ── BOTTOM STATS ── */
+.bottom-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;margin-top:3.5rem;
+}
+.bstat{
+  background:var(--s2);border:1px solid var(--border);border-radius:16px;
+  padding:1.1rem;display:flex;align-items:center;gap:12px;
+}
+.bstat-icon{font-size:1.5rem;flex-shrink:0;}
+.bstat-v{font-family:'Baloo Da 2',cursive;font-size:1.3rem;font-weight:800;}
+.bstat-l{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .wrap{padding:2rem 1rem 4rem;}
+  .hero h1{font-size:1.7rem;}
+  .cards-grid{grid-template-columns:1fr;}
+  .card-inner{padding:1.4rem;}
+}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="logo">
-      <div class="logo-icon">🇬🇧</div>
-      <div class="logo-text">
-        <h1>English Shekho</h1>
-        <p>ENGLISH LEARNING PLATFORM · A1 TO C2</p>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <nav class="nav-links">
-        <a href="dashboard.html" class="nav-link">Home</a>
-        <a href="roadmap.html" class="nav-link">Journey</a>
-        <a href="quiz-dashboard.html" class="nav-link">Quiz</a>
-        <a href="grammar.html" class="nav-link">Grammar</a>
-        <a href="speaking.html" class="nav-link">Speaking</a>
-        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-        <a href="chat.html" class="nav-link">Chat</a>
-      </nav>
-      <div class="user-section">
-        <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
-        <div class="user-name" id="nav-name">Learner</div>
-        <button class="btn-logout" id="btn-logout">Logout</button>
-      </div>
-    </div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="dashboard.html" class="back-btn">← Dashboard</a>
   </div>
+  <span class="topbar-title">📖 Vocabulary</span>
+  <div class="nav-av" id="nav-av" onclick="location.href='profile.html'">👤</div>
+</div>
+
+<div class="wrap">
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-stripe"></div>
-    <div class="hero-orb1"></div>
-    <div class="hero-orb2"></div>
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-eyebrow">📚 Vocabulary Hub</div>
-        <h2>আপনার <span>Word Bank</span> 🔤</h2>
-        <p class="hero-sub">Category অনুযায়ী শব্দ শিখুন, flashcard দিয়ে practice করুন এবং favorite করে রাখুন। প্রতিটি শব্দে pronunciation ও বাংলা অর্থ আছে।</p>
-      </div>
-      <div class="hero-stats">
-        <div class="hstat">
-          <div class="hstat-v" id="h-learned">0</div>
-          <div class="hstat-l">Learned</div>
+    <div class="hero-tag">🇬🇧 English Learning Path</div>
+    <h1>তোমার Vocabulary Level বেছে নাও</h1>
+    <p>
+      Beginner থেকে শুরু করো, ধাপে ধাপে Master হও।
+      প্রতিটি level পার করে নতুন শব্দের জগতে প্রবেশ করো।
+    </p>
+    <div class="level-path">
+      <span class="path-chip" style="background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.3);color:#38bdf8;">A1</span>
+      <span style="color:var(--muted);font-size:12px;padding:0 4px;">→</span>
+      <span class="path-chip" style="background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.3);color:#a78bfa;">A2</span>
+      <span style="color:var(--muted);font-size:12px;padding:0 4px;">→</span>
+      <span class="path-chip" style="background:rgba(251,146,60,.12);border-color:rgba(251,146,60,.3);color:#fb923c;">B1</span>
+      <span style="color:var(--muted);font-size:12px;padding:0 4px;">→</span>
+      <span class="path-chip" style="background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.3);color:#34d399;">B2</span>
+      <span style="color:var(--muted);font-size:12px;padding:0 4px;">→</span>
+      <span class="path-chip" style="background:rgba(244,114,182,.12);border-color:rgba(244,114,182,.3);color:#f472b6;">C1</span>
+      <span style="color:var(--muted);font-size:12px;padding:0 4px;">→</span>
+      <span class="path-chip" style="background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.3);color:#fbbf24;">C2</span>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards-grid">
+
+    <!-- A1 -->
+    <a href="vocab-a1.html" class="level-card card-a1">
+      <div class="card-glow"></div>
+      <div class="card-border-top"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon-el">🌱</div></div>
+          <span class="level-badge">A1</span>
         </div>
-        <div class="hstat">
-          <div class="hstat-v" id="h-total">0</div>
-          <div class="hstat-l">Total Words</div>
+        <div class="card-title">Beginner</div>
+        <div class="card-subtitle">
+          রং, সংখ্যা, পরিবার, খাবার — একদম মৌলিক শব্দ দিয়ে শুরু করো।
         </div>
-        <div class="hstat">
-          <div class="hstat-v" id="h-fav">0</div>
-          <div class="hstat-l">Favorites</div>
+        <div class="tags">
+          <span class="tag">Colors</span>
+          <span class="tag">Numbers</span>
+          <span class="tag">Family</span>
+          <span class="tag">Food</span>
+          <span class="tag">Body Parts</span>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROGRESS -->
-  <div class="progress-panel">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
-      <div style="font-weight:700;font-size:15px;">📈 Vocabulary Progress</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);" id="prog-label">0 / 0 words learned</div>
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
-    <div class="progress-meta"><span id="prog-pct">0% complete</span><span id="prog-next">Keep going! 💪</span></div>
-    <div class="pp-grid" id="pp-grid"></div>
-  </div>
-
-  <!-- SEARCH + TOOLBAR -->
-  <div class="toolbar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" class="search-input" id="search-input" placeholder="শব্দ খুঁজুন... e.g. beautiful, achieve">
-    </div>
-    <div class="toolbar-btns">
-      <button class="tbtn active" data-diff="all">All Levels</button>
-      <button class="tbtn" data-diff="easy">Easy</button>
-      <button class="tbtn" data-diff="medium">Medium</button>
-      <button class="tbtn" data-diff="hard">Hard</button>
-      <button class="tbtn" data-fav="true" id="fav-filter-btn">❤️ Favorites</button>
-    </div>
-    <div class="tbtn-mode">
-      <button class="mode-btn active" id="mode-grid" title="Grid View">▦</button>
-      <button class="mode-btn" id="mode-list" title="List View">☰</button>
-      <button class="mode-btn" id="mode-flash" title="Flashcard Mode">🃏</button>
-    </div>
-  </div>
-
-  <!-- CATEGORY PILLS -->
-  <div class="cat-pills" id="cat-pills"></div>
-
-  <!-- WORD GRID VIEW -->
-  <div id="view-grid">
-    <div class="section-title" id="words-section-title">📖 Words</div>
-    <div class="word-grid" id="word-grid"></div>
-  </div>
-
-  <!-- WORD LIST VIEW -->
-  <div id="view-list" style="display:none;">
-    <div class="section-title">📋 Word List</div>
-    <div class="word-list" id="word-list"></div>
-  </div>
-
-  <!-- FLASHCARD VIEW -->
-  <div id="view-flash" style="display:none;">
-    <div class="section-title">🃏 Flashcard Practice</div>
-    <div class="flashcard-wrap">
-      <div class="fc-score">
-        <div class="fc-score-item"><div class="fc-score-v" id="fc-know-count" style="color:#34d399;">0</div><div class="fc-score-l">Known</div></div>
-        <div class="fc-score-item"><div class="fc-score-v" id="fc-skip-count" style="color:var(--rose);">0</div><div class="fc-score-l">Review</div></div>
-      </div>
-      <div class="fc-progress-wrap">
-        <div class="fc-progress-track"><div class="fc-progress-fill" id="fc-prog" style="width:0%"></div></div>
-      </div>
-      <div class="flashcard" id="flashcard" onclick="flipCard()">
-        <div class="fc-hint">👆 tap to reveal meaning</div>
-        <div class="fc-front-word" id="fc-word">—</div>
-        <div class="fc-front-phonetic" id="fc-phonetic"></div>
-        <div class="fc-back" id="fc-back">
-          <div class="fc-back-meaning" id="fc-meaning"></div>
-          <div class="fc-back-example" id="fc-example"></div>
-          <div class="fc-actions">
-            <button class="fc-know" onclick="event.stopPropagation();fcKnow()">✓ জানি</button>
-            <button class="fc-skip" onclick="event.stopPropagation();fcSkip()">↩ Review</button>
+        <div class="prog-label"><span>অগ্রগতি</span><span id="a1-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="a1-bar" style="width:0%"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val meta-val-main">500+</span>
+            <span class="meta-lbl">মোট শব্দ</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#34d399" id="a1-learned">0</span>
+            <span class="meta-lbl">শেখা হয়েছে</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#facc15" id="a1-streak">0</span>
+            <span class="meta-lbl">Streak 🔥</span>
           </div>
         </div>
+        <button class="card-btn">শুরু করো <span class="arrow">→</span></button>
       </div>
-      <div class="flashcard-nav">
-        <button class="fc-btn" onclick="fcPrev()">← Prev</button>
-        <span class="fc-count" id="fc-count">1 / 1</span>
-        <button class="fc-btn" onclick="fcNext()">Next →</button>
-      </div>
-    </div>
-  </div>
+    </a>
 
-</div><!-- end .wrap -->
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="brand-name">🇬🇧 English Shekho</div>
-      <div class="brand-sub">একটি বাংলা-মাধ্যম English ভাষা শেখার প্ল্যাটফর্ম। A1 থেকে C2 পর্যন্ত vocabulary, grammar, speaking এবং live chat সুবিধা।</div>
-      <div class="copyright-text">© <span id="footer-year"></span> English Shekho<br><span>All rights reserved.</span><br><span>Unauthorized reproduction</span><br><span>is strictly prohibited.</span></div>
-    </div>
-    <div class="footer-col">
-      <h4>👨‍💻 Developer</h4>
-      <div class="dev-card">
-        <div class="dev-name">Zishan Rafi</div>
-        <div class="dev-title">WEB DEVELOPER · EDUCATOR</div>
-        <div class="dev-contact">
-          <div class="contact-row"><div class="contact-icon">📧</div><a href="mailto:zishanrafii@gmail.com">zishanrafii@gmail.com</a></div>
-          <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+8801877083978">+8801877083978</a></div>
-          <div class="contact-row"><div class="contact-icon">💬</div><a href="https://wa.me/8801877083978" target="_blank">WhatsApp</a></div>
+    <!-- A2 -->
+    <a href="vocab-a2.html" class="level-card card-a2" id="card-a2">
+      <div class="card-glow"></div>
+      <div class="card-border-top"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon-el">📚</div></div>
+          <span class="level-badge">A2</span>
         </div>
+        <div class="card-title">Elementary</div>
+        <div class="card-subtitle">
+          কাজকর্ম, সময়, আবহাওয়া, ভ্রমণ — দৈনন্দিন জীবনের শব্দ।
+        </div>
+        <div class="tags">
+          <span class="tag">Daily Life</span>
+          <span class="tag">Weather</span>
+          <span class="tag">Travel</span>
+          <span class="tag">Shopping</span>
+          <span class="tag">Feelings</span>
+        </div>
+        <div class="prog-label"><span>অগ্রগতি</span><span id="a2-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="a2-bar" style="width:0%"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val meta-val-main">600+</span>
+            <span class="meta-lbl">মোট শব্দ</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#34d399" id="a2-learned">0</span>
+            <span class="meta-lbl">শেখা হয়েছে</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#facc15" id="a2-streak">0</span>
+            <span class="meta-lbl">Streak 🔥</span>
+          </div>
+        </div>
+        <button class="card-btn">শুরু করো <span class="arrow">→</span></button>
       </div>
-    </div>
-    <div class="footer-col">
-      <h4>🔗 Social Media</h4>
-      <div class="social-links">
-        <a href="https://facebook.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">📘</span><span class="sl-label">Facebook</span><span class="sl-handle">Zishan Rafi</span></a>
-        <a href="https://www.youtube.com/@Cyrus_rush" target="_blank" class="social-link"><span class="sl-icon">▶️</span><span class="sl-label">YouTube</span><span class="sl-handle">Cy-Rush</span></a>
-        <a href="https://instagram.com/sodium_neon" target="_blank" class="social-link"><span class="sl-icon">📸</span><span class="sl-label">Instagram</span><span class="sl-handle">Zishan Rafi</span></a>
-        <a href="https://github.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">🐙</span><span class="sl-label">GitHub</span><span class="sl-handle">zishanrafi</span></a>
-        <a href="https://t.me/zissueissue" target="_blank" class="social-link"><span class="sl-icon">✈️</span><span class="sl-label">Telegram</span><span class="sl-handle">itz cyrus</span></a>
+      <div class="locked-overlay" id="a2-lock" style="display:none;">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">A2 Locked</div>
+        <div class="lock-req">A1 সম্পন্ন করো</div>
       </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div>© <span id="footer-year2"></span> English Shekho · Developed by <a href="https://facebook.com/zishanrafii" target="_blank">Zishan Rafi</a></div>
-    <div>Built with <span class="footer-heart">♥</span> for Bengali learners &nbsp;·&nbsp; Version 1.0</div>
-  </div>
-</footer>
+    </a>
 
-<div class="toast" id="toast"></div>
+    <!-- B1 -->
+    <a href="vocab-b1.html" class="level-card card-b1" id="card-b1">
+      <div class="card-glow"></div>
+      <div class="card-border-top"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon-el">⚡</div></div>
+          <span class="level-badge">B1</span>
+        </div>
+        <div class="card-title">Intermediate</div>
+        <div class="card-subtitle">
+          সংবাদ, মতামত, বিতর্ক — আরও জটিল ও বিচিত্র শব্দভাণ্ডার।
+        </div>
+        <div class="tags">
+          <span class="tag">News</span>
+          <span class="tag">Opinion</span>
+          <span class="tag">Health</span>
+          <span class="tag">Work</span>
+          <span class="tag">Environment</span>
+        </div>
+        <div class="prog-label"><span>অগ্রগতি</span><span id="b1-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="b1-bar" style="width:0%"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val meta-val-main">700+</span>
+            <span class="meta-lbl">মোট শব্দ</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#34d399" id="b1-learned">0</span>
+            <span class="meta-lbl">শেখা হয়েছে</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#facc15" id="b1-streak">0</span>
+            <span class="meta-lbl">Streak 🔥</span>
+          </div>
+        </div>
+        <button class="card-btn">শুরু করো <span class="arrow">→</span></button>
+      </div>
+      <div class="locked-overlay" id="b1-lock" style="display:none;">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">B1 Locked</div>
+        <div class="lock-req">A2 সম্পন্ন করো</div>
+      </div>
+    </a>
+
+    <!-- B2 -->
+    <a href="vocab-b2.html" class="level-card card-b2" id="card-b2">
+      <div class="card-glow"></div>
+      <div class="card-border-top"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon-el">🎯</div></div>
+          <span class="level-badge">B2</span>
+        </div>
+        <div class="card-title">Upper-Intermediate</div>
+        <div class="card-subtitle">
+          Academic, professional — বিশ্ববিদ্যালয় ও কর্মক্ষেত্রের ভাষা।
+        </div>
+        <div class="tags">
+          <span class="tag">Academic</span>
+          <span class="tag">Business</span>
+          <span class="tag">Idioms</span>
+          <span class="tag">Phrasal Verbs</span>
+          <span class="tag">Abstract</span>
+        </div>
+        <div class="prog-label"><span>অগ্রগতি</span><span id="b2-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="b2-bar" style="width:0%"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val meta-val-main">800+</span>
+            <span class="meta-lbl">মোট শব্দ</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#34d399" id="b2-learned">0</span>
+            <span class="meta-lbl">শেখা হয়েছে</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#facc15" id="b2-streak">0</span>
+            <span class="meta-lbl">Streak 🔥</span>
+          </div>
+        </div>
+        <button class="card-btn">শুরু করো <span class="arrow">→</span></button>
+      </div>
+      <div class="locked-overlay" id="b2-lock" style="display:none;">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">B2 Locked</div>
+        <div class="lock-req">B1 সম্পন্ন করো</div>
+      </div>
+    </a>
+
+    <!-- C1 -->
+    <a href="vocab-c1.html" class="level-card card-c1" id="card-c1">
+      <div class="card-glow"></div>
+      <div class="card-border-top"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon-el">🔬</div></div>
+          <span class="level-badge">C1</span>
+        </div>
+        <div class="card-title">Advanced</div>
+        <div class="card-subtitle">
+          সাহিত্য, বিজ্ঞান, দর্শন — উচ্চমানের intellectual শব্দসম্ভার।
+        </div>
+        <div class="tags">
+          <span class="tag">Literature</span>
+          <span class="tag">Science</span>
+          <span class="tag">Philosophy</span>
+          <span class="tag">Nuance</span>
+          <span class="tag">Collocations</span>
+        </div>
+        <div class="prog-label"><span>অগ্রগতি</span><span id="c1-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="c1-bar" style="width:0%"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val meta-val-main">900+</span>
+            <span class="meta-lbl">মোট শব্দ</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#34d399" id="c1-learned">0</span>
+            <span class="meta-lbl">শেখা হয়েছে</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#facc15" id="c1-streak">0</span>
+            <span class="meta-lbl">Streak 🔥</span>
+          </div>
+        </div>
+        <button class="card-btn">শুরু করো <span class="arrow">→</span></button>
+      </div>
+      <div class="locked-overlay" id="c1-lock" style="display:none;">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">C1 Locked</div>
+        <div class="lock-req">B2 সম্পন্ন করো</div>
+      </div>
+    </a>
+
+    <!-- C2 -->
+    <a href="vocab-c2.html" class="level-card card-c2" id="card-c2">
+      <div class="card-glow"></div>
+      <div class="card-border-top"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon-el">👑</div></div>
+          <span class="level-badge">C2</span>
+        </div>
+        <div class="card-title">Mastery</div>
+        <div class="card-subtitle">
+          Native-level precision — বিরল, সূক্ষ্ম ও শক্তিশালী শব্দের সর্বোচ্চ স্তর।
+        </div>
+        <div class="tags">
+          <span class="tag">Rare Words</span>
+          <span class="tag">Rhetoric</span>
+          <span class="tag">Precision</span>
+          <span class="tag">Register</span>
+          <span class="tag">Native Use</span>
+        </div>
+        <div class="prog-label"><span>অগ্রগতি</span><span id="c2-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="c2-bar" style="width:0%"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val meta-val-main">1000+</span>
+            <span class="meta-lbl">মোট শব্দ</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#34d399" id="c2-learned">0</span>
+            <span class="meta-lbl">শেখা হয়েছে</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:#facc15" id="c2-streak">0</span>
+            <span class="meta-lbl">Streak 🔥</span>
+          </div>
+        </div>
+        <button class="card-btn">শুরু করো <span class="arrow">→</span></button>
+      </div>
+      <div class="locked-overlay" id="c2-lock" style="display:none;">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">C2 Locked</div>
+        <div class="lock-req">C1 সম্পন্ন করো</div>
+      </div>
+    </a>
+
+  </div><!-- /cards-grid -->
+
+  <!-- BOTTOM STATS -->
+  <div class="bottom-stats">
+    <div class="bstat">
+      <div class="bstat-icon">📝</div>
+      <div>
+        <div class="bstat-v" style="color:#38bdf8" id="total-words">0</div>
+        <div class="bstat-l">মোট শব্দ শেখা</div>
+      </div>
+    </div>
+    <div class="bstat">
+      <div class="bstat-icon">✅</div>
+      <div>
+        <div class="bstat-v" style="color:#34d399" id="total-correct">0</div>
+        <div class="bstat-l">সঠিক উত্তর</div>
+      </div>
+    </div>
+    <div class="bstat">
+      <div class="bstat-icon">⚡</div>
+      <div>
+        <div class="bstat-v" style="color:#a78bfa" id="total-xp">0</div>
+        <div class="bstat-l">মোট XP</div>
+      </div>
+    </div>
+    <div class="bstat">
+      <div class="bstat-icon">🔥</div>
+      <div>
+        <div class="bstat-v" style="color:#fb923c" id="best-streak">0</div>
+        <div class="bstat-l">সেরা Streak</div>
+      </div>
+    </div>
+    <div class="bstat">
+      <div class="bstat-icon">🏆</div>
+      <div>
+        <div class="bstat-v" style="color:#fbbf24" id="current-level">A1</div>
+        <div class="bstat-l">বর্তমান Level</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
 
 <script type="module">
 import {
-  auth, db, signOut, requireAuth,
-  doc, getDoc, setDoc, updateDoc, increment
+  auth, db, requireAuth,
+  doc, getDoc,
+  collection, query, where, getDocs
 } from "./js/firebase-config.js";
 
-/* ══════════════════════════════════
-   VOCABULARY DATA
-══════════════════════════════════ */
+const LEVELS = ["a1","a2","b1","b2","c1","c2"];
+const LOCK_ORDER = ["a2","b1","b2","c1","c2"]; // need prev passed
 
-import { VOCAB_A1 } from "./js/vocab-a1.js";
-import { VOCAB_A2 } from "./js/vocab-a2.js";
-
-// শুধু A1 দেখাতে চাইলে:
-const VOCAB = VOCAB_A1;
-
-// A1 + A2 একসাথে দেখাতে চাইলে:
-// const VOCAB = [...VOCAB_A1, ...VOCAB_A2];
-
-const CATEGORIES = ["All", ...new Set(VOCAB.map(w => w.category))];
-
-/* ══════════════════════════════════
-   STATE
-══════════════════════════════════ */
-let favorites   = new Set();
-let learned     = new Set();
-let currentUid  = null;
-let activeCat   = "All";
-let activeDiff  = "all";
-let showFavOnly = false;
-let searchQ     = "";
-let viewMode    = "grid"; // grid | list | flash
-let fcIndex     = 0;
-let fcKnownSet  = new Set();
-let fcSkipSet   = new Set();
-let fcFlipped   = false;
-
-/* ══════════════════════════════════
-   HELPERS
-══════════════════════════════════ */
-function filtered(){
-  return VOCAB.filter(w => {
-    if(activeCat !== "All" && w.category !== activeCat) return false;
-    if(activeDiff !== "all" && w.difficulty !== activeDiff) return false;
-    if(showFavOnly && !favorites.has(w.id)) return false;
-    if(searchQ && !w.word.toLowerCase().includes(searchQ) && !w.meaning.includes(searchQ)) return false;
-    return true;
-  });
+function lockCard(id) {
+  const overlay = document.getElementById(id + "-lock");
+  const card    = document.getElementById("card-" + id);
+  if (overlay) overlay.style.display = "flex";
+  if (card)    { card.style.pointerEvents = "none"; card.style.opacity = ".45"; card.href = "#"; }
 }
 
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 2800);
-}
-
-function speak(word){
-  if(!window.speechSynthesis) return toast("Browser speech not supported");
-  const u = new SpeechSynthesisUtterance(word);
-  u.lang = "en-US"; u.rate = 0.85;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
-}
-
-function toggleFav(id, e){
-  e && e.stopPropagation();
-  if(favorites.has(id)) favorites.delete(id);
-  else { favorites.add(id); toast("❤️ Added to favorites!"); }
-  document.getElementById("h-fav").textContent = favorites.size;
-  saveProgress();
-  render();
-}
-
-function toggleLearned(id){
-  if(learned.has(id)) learned.delete(id);
-  else {
-    learned.add(id); toast("✅ Marked as learned! +10 XP");
-    if(currentUid){
-      updateDoc(doc(db,"users",currentUid), { xp: increment(10) }).catch(()=>{});
-    }
-  }
-  updateProgress();
-  saveProgress();
-  render();
-}
-
-/* ══════════════════════════════════
-   FIRESTORE SYNC
-══════════════════════════════════ */
-function saveProgress(){
-  if(!currentUid) return;
-  setDoc(doc(db,"users",currentUid), {
-    vocabProgress: {
-      learned:   Array.from(learned),
-      favorites: Array.from(favorites)
-    }
-  }, { merge:true }).catch(e=>console.warn("save failed",e));
-}
-
-/* ══════════════════════════════════
-   RENDER
-══════════════════════════════════ */
-function render(){
-  const list = filtered();
-  document.getElementById("words-section-title").textContent =
-    `📖 ${activeCat === "All" ? "All Words" : activeCat} · ${list.length} words`;
-
-  if(viewMode === "grid") renderGrid(list);
-  else if(viewMode === "list") renderList(list);
-  else renderFlash(list);
-}
-
-function diffBadge(d){
-  const map = {easy:"diff-easy",medium:"diff-medium",hard:"diff-hard"};
-  const label = {easy:"Easy",medium:"Medium",hard:"Hard"};
-  return `<span class="wc-diff ${map[d]}">${label[d]}</span>`;
-}
-
-function renderGrid(list){
-  const grid = document.getElementById("word-grid");
-  if(!list.length){
-    grid.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><p>কোনো word পাওয়া যায়নি।</p></div>`;
-    return;
-  }
-  grid.innerHTML = list.map(w => `
-    <div class="word-card ${favorites.has(w.id)?'favorited':''}" data-id="${w.id}">
-      <div class="wc-top">
-        ${diffBadge(w.difficulty)}
-        <button class="fav-btn ${favorites.has(w.id)?'active':''}" onclick="toggleFav('${w.id}',event)" title="Favorite">${favorites.has(w.id)?'❤️':'🤍'}</button>
-      </div>
-      <div class="wc-word">${w.word}</div>
-      <div class="wc-phonetic">${w.phonetic}</div>
-      <div class="wc-meaning">${w.meaning}</div>
-      <div class="wc-example">"${w.example}"</div>
-      <div class="wc-footer">
-        <span class="wc-cat">${w.category}</span>
-        <button class="pronounce-btn" onclick="speak('${w.word}')">🔊 Play</button>
-      </div>
-    </div>`).join("");
-
-  grid.querySelectorAll(".word-card").forEach(el => {
-    el.addEventListener("click", ()=> toggleLearned(el.dataset.id));
-  });
-}
-
-function renderList(list){
-  const container = document.getElementById("word-list");
-  if(!list.length){
-    container.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><p>কোনো word পাওয়া যায়নি।</p></div>`;
-    return;
-  }
-  container.innerHTML = list.map(w => `
-    <div class="word-row" data-id="${w.id}">
-      <div class="wr-word">${w.word} ${learned.has(w.id)?'<span style="color:#34d399;font-size:.75rem;">✓</span>':''}</div>
-      <div class="wr-phonetic">${w.phonetic}</div>
-      <div class="wr-meaning">${w.meaning}</div>
-      <span class="wr-diff ${w.difficulty==='easy'?'diff-easy':w.difficulty==='medium'?'diff-medium':'diff-hard'}">${w.difficulty}</span>
-      <div class="wr-actions">
-        <button class="pronounce-btn" onclick="event.stopPropagation();speak('${w.word}')">🔊</button>
-        <button class="fav-btn ${favorites.has(w.id)?'active':''}" onclick="toggleFav('${w.id}',event)">${favorites.has(w.id)?'❤️':'🤍'}</button>
-      </div>
-    </div>`).join("");
-
-  container.querySelectorAll(".word-row").forEach(el => {
-    el.addEventListener("click", ()=> toggleLearned(el.dataset.id));
-  });
-}
-
-function renderFlash(list){
-  if(!list.length){ fcSetWord(null); return; }
-  const w = list[fcIndex] || list[0];
-  fcIndex = Math.min(fcIndex, list.length - 1);
-  fcSetWord(w, list.length);
-}
-
-function fcSetWord(w, total){
-  const card = document.getElementById("flashcard");
-  card.classList.remove("flipped");
-  fcFlipped = false;
-  if(!w){
-    document.getElementById("fc-word").textContent = "—";
-    document.getElementById("fc-phonetic").textContent = "";
-    document.getElementById("fc-meaning").textContent = "";
-    document.getElementById("fc-example").textContent = "";
-    document.getElementById("fc-count").textContent = "0 / 0";
-    return;
-  }
-  document.getElementById("fc-word").textContent = w.word;
-  document.getElementById("fc-phonetic").textContent = w.phonetic;
-  document.getElementById("fc-meaning").textContent = w.meaning;
-  document.getElementById("fc-example").textContent = `"${w.example}"`;
-  document.getElementById("fc-count").textContent = `${fcIndex+1} / ${total}`;
-  const pct = total ? Math.round((fcIndex+1)/total*100) : 0;
-  document.getElementById("fc-prog").style.width = pct + "%";
-}
-
-function flipCard(){
-  const card = document.getElementById("flashcard");
-  fcFlipped = !fcFlipped;
-  card.classList.toggle("flipped", fcFlipped);
-}
-
-function fcNext(){
-  const list = filtered();
-  if(fcIndex < list.length - 1){ fcIndex++; renderFlash(list); }
-  else toast("🎉 সব cards শেষ! আবার শুরু করতে পারো।");
-}
-
-function fcPrev(){
-  if(fcIndex > 0){ fcIndex--; renderFlash(filtered()); }
-}
-
-function fcKnow(){
-  const list = filtered();
-  const w = list[fcIndex];
-  if(w){ fcKnownSet.add(w.id); learned.add(w.id); }
-  document.getElementById("fc-know-count").textContent = fcKnownSet.size;
-  updateProgress();
-  if(fcIndex < list.length - 1){ fcIndex++; renderFlash(list); }
-  else toast(`🏆 Session done! ${fcKnownSet.size} known, ${fcSkipSet.size} to review.`);
-}
-
-function fcSkip(){
-  const list = filtered();
-  const w = list[fcIndex];
-  if(w) fcSkipSet.add(w.id);
-  document.getElementById("fc-skip-count").textContent = fcSkipSet.size;
-  if(fcIndex < list.length - 1){ fcIndex++; renderFlash(list); }
-  else toast(`Session done! ${fcKnownSet.size} known, ${fcSkipSet.size} to review.`);
-}
-
-/* ══════════════════════════════════
-   PROGRESS + STATS
-══════════════════════════════════ */
-function updateProgress(){
-  const total = VOCAB.length;
-  const done  = learned.size;
-  const pct   = Math.round(done/total*100);
-
-  document.getElementById("h-learned").textContent = done;
-  document.getElementById("h-total").textContent   = total;
-  document.getElementById("h-fav").textContent     = favorites.size;
-
-  document.getElementById("prog-bar").style.width    = pct + "%";
-  document.getElementById("prog-label").textContent  = `${done} / ${total} words learned`;
-  document.getElementById("prog-pct").textContent    = pct + "% complete";
-  document.getElementById("prog-next").textContent   =
-    pct >= 100 ? "🏆 All words learned!" :
-    pct >= 75  ? "Almost there! 🔥" :
-    pct >= 50  ? "Halfway there! 💪" : "Keep going! 📚";
-
-  const cats = [...new Set(VOCAB.map(w=>w.category))];
-  const catDone = cats.filter(c => VOCAB.filter(w=>w.category===c).every(w=>learned.has(w.id))).length;
-  document.getElementById("pp-grid").innerHTML = [
-    {val:done,          label:"শব্দ শেখা হয়েছে"},
-    {val:favorites.size,label:"Favorites"},
-    {val:catDone,       label:"Categories Done"},
-    {val:pct+"%",       label:"Completion"},
-  ].map(s=>`<div class="pp-item"><div class="pp-val">${s.val}</div><div class="pp-label">${s.label}</div></div>`).join("");
-}
-
-/* ══════════════════════════════════
-   BUILD CATEGORY PILLS
-══════════════════════════════════ */
-function buildPills(){
-  const wrap = document.getElementById("cat-pills");
-  wrap.innerHTML = CATEGORIES.map(c => {
-    const count = c === "All" ? VOCAB.length : VOCAB.filter(w=>w.category===c).length;
-    return `<div class="pill ${c===activeCat?'active':''}" data-cat="${c}">
-      ${c} <span class="pill-count">${count}</span>
-    </div>`;
-  }).join("");
-  wrap.querySelectorAll(".pill").forEach(el => {
-    el.addEventListener("click", ()=>{
-      activeCat = el.dataset.cat;
-      fcIndex = 0; fcKnownSet.clear(); fcSkipSet.clear();
-      document.getElementById("fc-know-count").textContent = 0;
-      document.getElementById("fc-skip-count").textContent = 0;
-      buildPills(); render();
-    });
-  });
-}
-
-/* ══════════════════════════════════
-   VIEW MODE SWITCH
-══════════════════════════════════ */
-function setView(mode){
-  viewMode = mode;
-  ["grid","list","flash"].forEach(m => {
-    document.getElementById("view-"+m).style.display = m===mode ? "block" : "none";
-    document.getElementById("mode-"+m)?.classList.toggle("active", m===mode);
-  });
-  if(mode==="flash"){ fcIndex=0; fcKnownSet.clear(); fcSkipSet.clear();
-    document.getElementById("fc-know-count").textContent=0;
-    document.getElementById("fc-skip-count").textContent=0;
-  }
-  render();
-}
-
-/* ══════════════════════════════════
-   EVENTS
-══════════════════════════════════ */
-document.getElementById("mode-grid").onclick  = ()=> setView("grid");
-document.getElementById("mode-list").onclick  = ()=> setView("list");
-document.getElementById("mode-flash").onclick = ()=> setView("flash");
-
-document.getElementById("search-input").addEventListener("input", e => {
-  searchQ = e.target.value.trim().toLowerCase();
-  fcIndex = 0; render();
-});
-
-document.querySelectorAll(".tbtn[data-diff]").forEach(btn => {
-  btn.addEventListener("click", ()=>{
-    activeDiff = btn.dataset.diff;
-    document.querySelectorAll(".tbtn[data-diff]").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    fcIndex=0; render();
-  });
-});
-
-document.getElementById("fav-filter-btn").addEventListener("click", function(){
-  showFavOnly = !showFavOnly;
-  this.classList.toggle("active", showFavOnly);
-  fcIndex=0; render();
-});
-
-/* ══════════════════════════════════
-   AUTH + INIT
-══════════════════════════════════ */
 requireAuth(async user => {
-  currentUid = user.uid;
-  const snap = await getDoc(doc(db,"users",user.uid));
-  const d = snap.exists() ? snap.data() : {};
+  // Avatar
+  const navAv = document.getElementById("nav-av");
+  const snap  = await getDoc(doc(db, "users", user.uid));
+  const d     = snap.exists() ? snap.data() : {};
+  const photo = d.photoURL || user.photoURL || "";
+  const name  = d.displayName || user.displayName || "?";
+  if (photo) navAv.innerHTML = `<img src="${photo}">`;
+  else navAv.textContent = name[0]?.toUpperCase() || "?";
 
-  const name  = d.displayName || user.displayName || "Learner";
-  const photo = d.photoURL    || user.photoURL    || "";
-  document.getElementById("nav-name").textContent = name;
-  const av = document.getElementById("nav-avatar");
-  if(photo) av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`;
-  else av.textContent = name[0]?.toUpperCase() || "?";
+  // Bottom stats
+  document.getElementById("total-correct").textContent = d.totalCorrect || 0;
+  document.getElementById("total-xp").textContent      = d.xp || 0;
+  document.getElementById("best-streak").textContent   = d.bestStreak || 0;
+  document.getElementById("total-words").textContent   = d.totalWordsLearned || 0;
 
-  const vp = d.vocabProgress || {};
-  learned   = new Set(vp.learned   || []);
-  favorites = new Set(vp.favorites || []);
+  // Current level indicator
+  const passedLevels = LEVELS.filter(l => d["passed_" + l] === true);
+  const currentLvl   = passedLevels.length > 0
+    ? LEVELS[Math.min(passedLevels.length, LEVELS.length - 1)]
+    : "A1";
+  document.getElementById("current-level").textContent = currentLvl.toUpperCase();
 
-  document.getElementById("btn-logout").onclick = async () => {
-    await signOut(auth);
-    window.location.href = "index.html";
-  };
+  // Lock logic — each level requires prev to be passed
+  const pairs = [
+    ["a1","a2"], ["a2","b1"], ["b1","b2"], ["b2","c1"], ["c1","c2"]
+  ];
+  for (const [prev, next] of pairs) {
+    if (!d["passed_" + prev]) lockCard(next);
+  }
 
-  const yr = new Date().getFullYear();
-  document.getElementById("footer-year").textContent  = yr;
-  document.getElementById("footer-year2").textContent = yr;
+  // Per-level progress from vocab_progress collection
+  try {
+    for (const lvl of LEVELS) {
+      const q = query(
+        collection(db, "vocab_progress"),
+        where("uid", "==", user.uid),
+        where("level", "==", lvl)
+      );
+      const ssnap = await getDocs(q);
+      let learned = 0, correct = 0, streak = 0;
+      ssnap.forEach(sd => {
+        const s = sd.data();
+        if (s.mastered) learned++;
+        correct += s.correctCount || 0;
+        streak   = Math.max(streak, s.streak || 0);
+      });
 
-  buildPills();
-  updateProgress();
-  render();
+      const totalMap = {a1:500,a2:600,b1:700,b2:800,c1:900,c2:1000};
+      const pct = Math.min(100, Math.round((learned / totalMap[lvl]) * 100));
+
+      const elL   = document.getElementById(lvl + "-learned");
+      const elS   = document.getElementById(lvl + "-streak");
+      const elPct = document.getElementById(lvl + "-pct");
+      const elBar = document.getElementById(lvl + "-bar");
+      if (elL)   elL.textContent   = learned;
+      if (elS)   elS.textContent   = streak;
+      if (elPct) elPct.textContent = pct + "%";
+      if (elBar) setTimeout(() => elBar.style.width = pct + "%", 200);
+    }
+  } catch(e) {
+    console.warn("vocab_progress load error:", e);
+  }
 });
-
 </script>
 </body>
 </html>
