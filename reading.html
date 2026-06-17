@@ -92,6 +92,7 @@
         <input type="text" class="search-input" id="search-input" placeholder="Passage খুঁজুন... e.g. Bees, Habit, Climate">
       </div>
       <div class="cat-tabs" id="cat-tabs"></div>
+      <div class="bookmark-filter-btn" id="bookmark-filter-btn" title="শুধু Bookmarked passage দেখুন">🔖 Bookmarked</div>
     </div>
     <div class="level-tabs" id="level-tabs"></div>
 
@@ -109,6 +110,7 @@
     <div class="reader-top">
       <button class="btn-back" data-action="back-to-list">← সব Passage</button>
       <div class="reader-controls">
+        <div class="icon-btn" id="reader-bookmark-btn" title="Bookmark করুন">🏷️</div>
         <div class="icon-btn" title="Font size +" data-action="noop">🔠</div>
       </div>
     </div>
@@ -124,6 +126,25 @@
           <div class="reader-title" id="reader-title">Title</div>
           <div class="reader-meta" id="reader-meta"></div>
         </div>
+      </div>
+
+      <!-- AUDIO NARRATION BAR -->
+      <div class="audio-bar" id="audio-bar">
+        <button class="audio-play-btn" id="tts-play-btn" data-action="tts-toggle" title="Play/Pause narration">▶</button>
+        <div class="audio-bar-mid">
+          <div class="audio-bar-track" id="audio-bar-track">
+            <div class="audio-bar-fill" id="audio-bar-fill"></div>
+          </div>
+          <div class="audio-bar-time">
+            <span id="tts-current-sentence">0</span>/<span id="tts-total-sentence">0</span> sentences
+          </div>
+        </div>
+        <div class="audio-speed-group">
+          <button class="speed-btn" data-speed="0.75">0.75x</button>
+          <button class="speed-btn active" data-speed="1">1x</button>
+          <button class="speed-btn" data-speed="1.25">1.25x</button>
+        </div>
+        <div class="icon-btn" id="tts-stop-btn" data-action="tts-stop" title="Stop">⏹</div>
       </div>
 
       <div class="passage-text" id="passage-text"></div>

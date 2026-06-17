@@ -918,6 +918,502 @@ export const LESSONS = [
     ]
   },
 
+
+  /* ════════════════════════════════
+     NEW A1 LESSONS — 10 added
+  ════════════════════════════════ */
+
+  // A1 — Conversation
+  { id:"a1n1", title:"At the Supermarket", category:"Conversation", level:"A1", dur:"3:15", durSec:195, xp:50,
+    icon:"🛒", color:"rgba(45,212,191,.12)", border:"rgba(45,212,191,.25)",
+    transcript:[
+      "Good morning! Can I help you find something?",
+      "Yes, please. Where is the bread?",
+      "The bread is in aisle three, next to the butter.",
+      "Thank you. And where can I find milk?",
+      "The milk is in the fridge at the back of the store.",
+      "Oh, and do you have fresh eggs?",
+      "Yes, we do. They are near the milk.",
+      "Great. How much is this orange juice?",
+      "That one is one pound fifty.",
+      "Perfect. I'll take two bottles, please.",
+      "Of course. Anything else I can help you with?",
+      "No, thank you. That's everything!",
+    ],
+    quiz:[
+      {q:"Where is the bread?", opts:["Aisle one","Aisle two","Aisle three","Aisle four"], ans:2, exp:"'The bread is in aisle three, next to the butter.'"},
+      {q:"Where is the milk kept?", opts:["On a shelf","In the fridge at the back","Near the entrance","In aisle three"], ans:1, exp:"'The milk is in the fridge at the back of the store.'"},
+      {q:"How much is the orange juice?", opts:["£1.00","£1.50","£2.00","£2.50"], ans:1, exp:"'That one is one pound fifty.'"},
+    ]
+  },
+
+  { id:"a1n2", title:"My Family", category:"Conversation", level:"A1", dur:"3:05", durSec:185, xp:50,
+    icon:"👨‍👩‍👧‍👦", color:"rgba(251,113,133,.12)", border:"rgba(251,113,133,.25)",
+    transcript:[
+      "Tell me about your family.",
+      "Sure! I have a small family. There are four of us.",
+      "Who are they?",
+      "My father, my mother, my younger sister, and me.",
+      "How old is your sister?",
+      "She is twelve years old. She goes to school.",
+      "What does your father do?",
+      "He is a teacher. He teaches mathematics.",
+      "And your mother?",
+      "She is a doctor. She works at a hospital.",
+      "That sounds like a wonderful family!",
+      "Yes, I love them very much.",
+    ],
+    quiz:[
+      {q:"How many people are in the family?", opts:["Three","Four","Five","Six"], ans:1, exp:"'There are four of us.'"},
+      {q:"What does the father do?", opts:["He is a doctor","He is a driver","He is a teacher","He is an engineer"], ans:2, exp:"'He is a teacher. He teaches mathematics.'"},
+      {q:"Where does the mother work?", opts:["At a school","At a bank","At a hospital","At a shop"], ans:2, exp:"'She works at a hospital.'"},
+    ]
+  },
+
+  { id:"a1n3", title:"The Weather Today", category:"Conversation", level:"A1", dur:"2:55", durSec:175, xp:50,
+    icon:"🌤️", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Good morning! What is the weather like today?",
+      "It is sunny but a little windy.",
+      "Is it hot or cold?",
+      "It is warm. About twenty-five degrees.",
+      "Oh, that's nice! Is it good weather for a walk?",
+      "Yes, it is perfect for walking in the park.",
+      "What about tomorrow? Will it rain?",
+      "The forecast says it will be cloudy in the morning.",
+      "Will it rain in the afternoon?",
+      "There is a small chance of rain in the evening.",
+      "I will bring my umbrella just in case.",
+      "Good idea! Better safe than sorry.",
+    ],
+    quiz:[
+      {q:"What is the weather like today?", opts:["Rainy and cold","Sunny and windy","Cloudy and warm","Stormy"], ans:1, exp:"'It is sunny but a little windy.'"},
+      {q:"What is the temperature?", opts:["15 degrees","20 degrees","25 degrees","30 degrees"], ans:2, exp:"'About twenty-five degrees.'"},
+      {q:"When might it rain?", opts:["In the morning","At noon","In the afternoon","In the evening"], ans:3, exp:"'There is a small chance of rain in the evening.'"},
+    ]
+  },
+
+  // A1 — Story
+  { id:"a1n4", title:"The Lost Kitten", category:"Story", level:"A1", dur:"4:20", durSec:260, xp:75,
+    icon:"🐱", color:"rgba(251,113,133,.12)", border:"rgba(251,113,133,.25)",
+    transcript:[
+      "One day, a small kitten got lost in the park.",
+      "She walked and walked, but she could not find her home.",
+      "She was cold, hungry, and very scared.",
+      "A little girl named Mia was playing near the fountain.",
+      "She saw the kitten and ran towards it.",
+      "The kitten was shaking. Its fur was wet from the rain.",
+      "Mia picked up the kitten gently and held it close.",
+      "She took the kitten home and gave it some warm milk.",
+      "Her mother helped her make a small bed from a cardboard box.",
+      "The kitten slept all night, safe and warm.",
+      "The next morning, they put up posters around the neighbourhood.",
+      "By afternoon, the kitten's owner had called. She was so happy.",
+      "Mia felt proud. She had helped someone that day.",
+    ],
+    quiz:[
+      {q:"Where did Mia find the kitten?", opts:["In the garden","Near the fountain in the park","Outside the shop","At school"], ans:1, exp:"'A little girl named Mia was playing near the fountain.'"},
+      {q:"What did Mia give the kitten first?", opts:["Food","Warm milk","A toy","A blanket"], ans:1, exp:"'She gave it some warm milk.'"},
+      {q:"How did they find the kitten's owner?", opts:["They called the police","They posted on social media","They put up posters","They asked neighbours"], ans:2, exp:"'They put up posters around the neighbourhood.'"},
+    ]
+  },
+
+  { id:"a1n5", title:"The Boy Who Cried Wolf", category:"Story", level:"A1", dur:"4:00", durSec:240, xp:75,
+    icon:"🐺", color:"rgba(129,140,248,.12)", border:"rgba(129,140,248,.25)",
+    transcript:[
+      "Once upon a time, there was a young shepherd boy.",
+      "Every day, he watched the sheep on the hill near his village.",
+      "He was bored and wanted some excitement.",
+      "One day, he ran to the village and shouted, 'Wolf! Wolf! A wolf is attacking the sheep!'",
+      "All the villagers ran up the hill to help him.",
+      "But when they arrived, there was no wolf.",
+      "The boy laughed. He thought it was very funny.",
+      "The next week, he did the same thing again.",
+      "The villagers ran up again, but again there was no wolf.",
+      "They were very angry this time.",
+      "Then one day, a real wolf came.",
+      "The boy screamed, 'Wolf! Wolf! Please help me!'",
+      "But this time, nobody came. Nobody believed him.",
+      "The wolf chased all the sheep away.",
+      "The boy learned an important lesson that day: never lie.",
+    ],
+    quiz:[
+      {q:"Why did the boy shout 'Wolf!' the first time?", opts:["A wolf came","He was scared","He was bored and wanted excitement","He lost a sheep"], ans:2, exp:"'He was bored and wanted some excitement.'"},
+      {q:"What happened when a real wolf came?", opts:["The villagers came quickly","Nobody came to help","The wolf ran away","The shepherd caught the wolf"], ans:1, exp:"'Nobody came. Nobody believed him.'"},
+      {q:"What is the lesson of this story?", opts:["Always watch your sheep","Never lie","Be brave","Ask for help"], ans:1, exp:"The boy lied twice, so nobody believed him when he told the truth."},
+    ]
+  },
+
+  // A1 — Audio Lesson
+  { id:"a1n6", title:"The Alphabet & Phonics", category:"Audio Lesson", level:"A1", dur:"5:00", durSec:300, xp:50,
+    icon:"🔤", color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)",
+    transcript:[
+      "Welcome to your first English lesson! Today we learn the alphabet.",
+      "English has twenty-six letters. Let us go through them slowly.",
+      "A is for Apple. B is for Ball. C is for Cat.",
+      "D is for Dog. E is for Egg. F is for Fish.",
+      "G is for Girl. H is for House. I is for Ice.",
+      "J is for Juice. K is for Kite. L is for Lion.",
+      "M is for Mango. N is for Night. O is for Orange.",
+      "P is for Pencil. Q is for Queen. R is for Rain.",
+      "S is for Sun. T is for Tree. U is for Umbrella.",
+      "V is for Village. W is for Water. X is for X-ray.",
+      "Y is for Yellow. Z is for Zebra.",
+      "Now say each letter out loud. Practise every day.",
+      "Remember: the more you practise, the faster you will learn.",
+    ],
+    quiz:[
+      {q:"How many letters are in the English alphabet?", opts:["24","25","26","27"], ans:2, exp:"'English has twenty-six letters.'"},
+      {q:"What does V stand for in the lesson?", opts:["Valley","Voice","Violin","Village"], ans:3, exp:"'V is for Village.'"},
+      {q:"What is the best way to learn faster?", opts:["Read books","Watch videos","Practise every day","Listen to music"], ans:2, exp:"'The more you practise, the faster you will learn.'"},
+    ]
+  },
+
+  { id:"a1n7", title:"Classroom Language", category:"Audio Lesson", level:"A1", dur:"5:10", durSec:310, xp:50,
+    icon:"🏫", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Today we learn useful phrases for the classroom.",
+      "If you do not understand, say: 'Sorry, can you repeat that please?'",
+      "If you want to ask a question, say: 'Excuse me, I have a question.'",
+      "To ask for help, say: 'Can you help me, please?'",
+      "If you are finished, say: 'I have finished. What do I do next?'",
+      "To ask the meaning of a word, say: 'What does this word mean?'",
+      "To ask how to spell something, say: 'How do you spell that?'",
+      "If you need more time, say: 'Can I have a little more time, please?'",
+      "Always say 'please' and 'thank you'. It is polite.",
+      "Good manners make the classroom a better place for everyone.",
+      "Now let us practise these phrases together.",
+      "Repeat after me: Sorry, can you repeat that please?",
+      "Well done! You are doing great!",
+    ],
+    quiz:[
+      {q:"What do you say if you don't understand?", opts:["I don't know","Sorry, can you repeat that please?","Please stop","I am confused"], ans:1, exp:"'If you do not understand, say: Sorry, can you repeat that please?'"},
+      {q:"How do you ask about the meaning of a word?", opts:["Can you help me?","What does this word mean?","How do you spell that?","I have a question"], ans:1, exp:"'What does this word mean?' is the correct phrase."},
+      {q:"Why should you say please and thank you?", opts:["Because the teacher says so","Because it is polite","Because it helps you learn","Because it is a rule"], ans:1, exp:"'Always say please and thank you. It is polite.'"},
+    ]
+  },
+
+  // A1 — News (simple)
+  { id:"a1n8", title:"A New Park Opens in the City", category:"News", level:"A1", dur:"3:20", durSec:200, xp:50,
+    icon:"🌳", color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)",
+    transcript:[
+      "Good morning! Here is the news for today.",
+      "A big new park has opened in the city centre.",
+      "The park has beautiful gardens and a large lake.",
+      "There are also swings and slides for children.",
+      "Hundreds of families visited the park on its first day.",
+      "The mayor of the city cut the ribbon to open it.",
+      "She said the park is a gift for the people of the city.",
+      "The park is open every day from seven in the morning.",
+      "It closes at nine o'clock at night.",
+      "Entry to the park is completely free for everyone.",
+      "Many people say it is the best park in the country.",
+      "We hope you enjoy your visit!",
+    ],
+    quiz:[
+      {q:"Where is the new park?", opts:["In the countryside","In the city centre","Near the airport","By the river"], ans:1, exp:"'A big new park has opened in the city centre.'"},
+      {q:"What time does the park close?", opts:["8:00 pm","9:00 pm","10:00 pm","11:00 pm"], ans:1, exp:"'It closes at nine o'clock at night.'"},
+      {q:"How much does it cost to enter the park?", opts:["£1","£5","£10","It is free"], ans:3, exp:"'Entry to the park is completely free for everyone.'"},
+    ]
+  },
+
+  { id:"a1n9", title:"A School Wins a Science Prize", category:"News", level:"A1", dur:"3:10", durSec:190, xp:50,
+    icon:"🏆", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Here is today's top story.",
+      "A school in Dhaka has won a big science prize.",
+      "The students made a small robot that can clean the floor.",
+      "The robot uses solar energy. It does not need batteries.",
+      "Twenty students worked together on the project for six months.",
+      "Their teacher, Mr Karim, helped them every step of the way.",
+      "The prize is one hundred thousand taka.",
+      "The school will use the money to buy new computers.",
+      "The students are very happy and proud.",
+      "One student said, 'We never gave up. We kept trying.'",
+      "The science minister gave them the prize at a ceremony.",
+      "This is a great day for science in our country!",
+    ],
+    quiz:[
+      {q:"What did the students make?", opts:["A solar car","A robot that cleans the floor","A weather machine","A computer"], ans:1, exp:"'The students made a small robot that can clean the floor.'"},
+      {q:"How long did they work on the project?", opts:["Three months","Four months","Six months","One year"], ans:2, exp:"'Twenty students worked together on the project for six months.'"},
+      {q:"What will the school buy with the prize money?", opts:["Books","New computers","A new classroom","Lab equipment"], ans:1, exp:"'The school will use the money to buy new computers.'"},
+    ]
+  },
+
+  { id:"a1n10", title:"A Baby Elephant at the Zoo", category:"News", level:"A1", dur:"3:00", durSec:180, xp:50,
+    icon:"🐘", color:"rgba(129,140,248,.12)", border:"rgba(129,140,248,.25)",
+    transcript:[
+      "Good news from the city zoo today!",
+      "A baby elephant was born last night.",
+      "The baby elephant is a girl. She weighs one hundred and ten kilograms.",
+      "She has big brown eyes and soft grey skin.",
+      "Her mother's name is Maya. Maya is twelve years old.",
+      "The zookeepers say both mother and baby are healthy and happy.",
+      "Visitors can see the baby elephant from Saturday.",
+      "The zoo is asking the public to suggest a name for her.",
+      "You can send your suggestions to the zoo's website.",
+      "The winning name will be announced next week.",
+      "Thousands of people have already visited to see them.",
+      "It is a very special day at the zoo!",
+    ],
+    quiz:[
+      {q:"How much does the baby elephant weigh?", opts:["90 kg","100 kg","110 kg","120 kg"], ans:2, exp:"'She weighs one hundred and ten kilograms.'"},
+      {q:"What is the mother elephant's name?", opts:["Mia","Maya","Mala","Mona"], ans:1, exp:"'Her mother's name is Maya.'"},
+      {q:"How can people suggest a name for the baby elephant?", opts:["By calling the zoo","By visiting in person","By sending to the zoo's website","By writing a letter"], ans:2, exp:"'You can send your suggestions to the zoo's website.'"},
+    ]
+  },
+
+  /* ════════════════════════════════
+     NEW A2 LESSONS — 10 added
+  ════════════════════════════════ */
+
+  // A2 — Conversation
+  { id:"a2n1", title:"Booking a Hotel Room", category:"Conversation", level:"A2", dur:"4:15", durSec:255, xp:75,
+    icon:"🏨", color:"rgba(45,212,191,.12)", border:"rgba(45,212,191,.25)",
+    transcript:[
+      "Good afternoon, Grand Hotel. How can I help you?",
+      "Hello, I'd like to book a room for two nights, please.",
+      "Of course. What dates would you like?",
+      "The fifteenth and sixteenth of July.",
+      "Let me check availability. Would you like a single or double room?",
+      "A double room, please. Do you have one with a sea view?",
+      "Yes, we have one available. It's one hundred and twenty pounds per night.",
+      "That sounds good. Does the price include breakfast?",
+      "Yes, breakfast is included. Check-in is at two in the afternoon.",
+      "And what time is check-out?",
+      "Check-out is at eleven in the morning.",
+      "Perfect. Can I pay by credit card?",
+      "Absolutely. May I take your name and card details, please?",
+    ],
+    quiz:[
+      {q:"How many nights does the guest want to book?", opts:["One","Two","Three","Four"], ans:1, exp:"'I'd like to book a room for two nights.'"},
+      {q:"How much does the room cost per night?", opts:["£100","£110","£120","£130"], ans:2, exp:"'It's one hundred and twenty pounds per night.'"},
+      {q:"What time is check-out?", opts:["9:00 am","10:00 am","11:00 am","12:00 pm"], ans:2, exp:"'Check-out is at eleven in the morning.'"},
+    ]
+  },
+
+  { id:"a2n2", title:"Talking About Hobbies", category:"Conversation", level:"A2", dur:"4:05", durSec:245, xp:75,
+    icon:"🎨", color:"rgba(251,113,133,.12)", border:"rgba(251,113,133,.25)",
+    transcript:[
+      "What do you like to do in your free time?",
+      "I enjoy painting and reading books. What about you?",
+      "I love playing football. I play every weekend with my friends.",
+      "That sounds fun! How long have you been playing?",
+      "Since I was about eight years old. So around fifteen years.",
+      "Wow, that's a long time! Are you good at it?",
+      "I'm not professional, but I'm quite good. I score goals sometimes.",
+      "Do you follow any football teams?",
+      "Yes, I support Manchester City. Which books do you like to read?",
+      "I enjoy mystery novels. I just finished a very exciting one.",
+      "Maybe I should try reading. I don't read much.",
+      "You should! It helps your English too. We can swap recommendations.",
+      "Great idea! Let's do that.",
+    ],
+    quiz:[
+      {q:"What are the first speaker's hobbies?", opts:["Football and music","Painting and reading","Cooking and dancing","Cycling and swimming"], ans:1, exp:"'I enjoy painting and reading books.'"},
+      {q:"How long has the second speaker been playing football?", opts:["Ten years","Twelve years","Around fifteen years","Twenty years"], ans:2, exp:"'Since I was about eight years old. So around fifteen years.'"},
+      {q:"What kind of books does the first speaker like?", opts:["Horror novels","Romance novels","Mystery novels","Science fiction"], ans:2, exp:"'I enjoy mystery novels.'"},
+    ]
+  },
+
+  { id:"a2n3", title:"At the Post Office", category:"Conversation", level:"A2", dur:"3:50", durSec:230, xp:75,
+    icon:"📮", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Good morning. How can I help you today?",
+      "I'd like to send this package to Australia, please.",
+      "Of course. Can I weigh it for you?",
+      "Sure, go ahead.",
+      "It weighs two point five kilograms. How would you like to send it?",
+      "What are my options?",
+      "Standard delivery takes ten to fourteen days and costs twelve pounds.",
+      "Express delivery takes three to five days and costs twenty-eight pounds.",
+      "I'll go with express, please. It's important.",
+      "No problem. Would you like to add insurance?",
+      "Yes, please. What does that cost?",
+      "Insurance is an extra three pounds for items up to fifty pounds in value.",
+      "That's fine. Here's my card.",
+      "Thank you. Your tracking number is on the receipt.",
+    ],
+    quiz:[
+      {q:"How much does the package weigh?", opts:["1.5 kg","2 kg","2.5 kg","3 kg"], ans:2, exp:"'It weighs two point five kilograms.'"},
+      {q:"How long does express delivery take?", opts:["One to two days","Three to five days","Five to seven days","Ten to fourteen days"], ans:1, exp:"'Express delivery takes three to five days.'"},
+      {q:"How much does insurance cost?", opts:["£1","£2","£3","£5"], ans:2, exp:"'Insurance is an extra three pounds.'"},
+    ]
+  },
+
+  { id:"a2n4", title:"Talking About Your Job", category:"Conversation", level:"A2", dur:"4:20", durSec:260, xp:75,
+    icon:"💼", color:"rgba(129,140,248,.12)", border:"rgba(129,140,248,.25)",
+    transcript:[
+      "So, what do you do for work?",
+      "I'm a graphic designer. I work for a small creative agency.",
+      "That sounds really interesting! What exactly do you design?",
+      "Mostly logos and social media content for businesses.",
+      "How long have you been doing that?",
+      "About three years now. I started right after university.",
+      "Do you enjoy it?",
+      "Yes, most of the time. Sometimes the deadlines are stressful.",
+      "I can imagine. Do you work from home or in an office?",
+      "I work from home three days a week and go to the office twice.",
+      "That sounds like a good balance.",
+      "It is. I save a lot of time on commuting.",
+      "What software do you use for designing?",
+      "Mainly Adobe Illustrator and Photoshop.",
+    ],
+    quiz:[
+      {q:"What is the speaker's job?", opts:["Web developer","Photographer","Graphic designer","Marketing manager"], ans:2, exp:"'I'm a graphic designer.'"},
+      {q:"How many days a week does the speaker go to the office?", opts:["Once","Twice","Three times","Every day"], ans:1, exp:"'I go to the office twice.'"},
+      {q:"What does the speaker find stressful?", opts:["The clients","The software","The deadlines","The commute"], ans:2, exp:"'Sometimes the deadlines are stressful.'"},
+    ]
+  },
+
+  // A2 — Story
+  { id:"a2n5", title:"The Old Man's Garden", category:"Story", level:"A2", dur:"5:15", durSec:315, xp:75,
+    icon:"🌻", color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)",
+    transcript:[
+      "Old Mr Hassan lived alone at the end of a quiet street.",
+      "Every morning, he woke up early and walked to his garden.",
+      "His garden was the most beautiful in the whole neighbourhood.",
+      "He grew tomatoes, roses, sunflowers, and herbs of every kind.",
+      "The children who passed by always stopped to look through the gate.",
+      "One day, a young girl named Priya knocked on his door.",
+      "'Excuse me,' she said. 'Can you teach me how to grow flowers?'",
+      "Mr Hassan smiled. He had not had a visitor in a long time.",
+      "'Of course,' he said. 'Come in. The garden will teach you everything.'",
+      "Every Saturday after that, Priya came to learn.",
+      "She learned about watering, pruning, and the importance of patience.",
+      "By the end of the year, her own small balcony was full of colour.",
+      "Mr Hassan was proud. He had shared something he loved.",
+      "And Priya had learned that kindness, like a garden, grows when you nurture it.",
+    ],
+    quiz:[
+      {q:"What did Priya ask Mr Hassan to teach her?", opts:["How to cook","How to grow flowers","How to paint","How to read"], ans:1, exp:"'Can you teach me how to grow flowers?' Priya asked."},
+      {q:"When did Priya come to learn?", opts:["Every Sunday","Every Friday","Every Saturday","Every Wednesday"], ans:2, exp:"'Every Saturday after that, Priya came to learn.'"},
+      {q:"What lesson does the story teach?", opts:["Hard work always pays off","Kindness grows when you nurture it","Old people are wiser","Gardens need lots of water"], ans:1, exp:"'Kindness, like a garden, grows when you nurture it.'"},
+    ]
+  },
+
+  { id:"a2n6", title:"The Missing Bicycle", category:"Story", level:"A2", dur:"5:30", durSec:330, xp:75,
+    icon:"🚲", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "Tariq loved his bicycle more than anything else he owned.",
+      "It was bright red with a silver bell and a small basket in front.",
+      "One Tuesday morning, he came outside to find it was gone.",
+      "He looked up and down the street, but there was no sign of it.",
+      "He felt a cold wave of panic. He had saved for six months to buy it.",
+      "He told his mother, who said calmly, 'Let's think before we worry.'",
+      "They checked the backyard, the garage, and the neighbour's gate.",
+      "Nothing. His mother suggested he ask the neighbours.",
+      "An elderly woman across the street said she had seen a boy with a red bike.",
+      "'He went towards the park,' she said. 'About an hour ago.'",
+      "Tariq ran to the park and found his little cousin riding the bicycle in circles.",
+      "'I borrowed it!' his cousin said with a big smile. 'I was going to bring it back!'",
+      "Tariq laughed with relief. 'Next time, please ask first!'",
+      "His cousin nodded seriously. It was a lesson learned by both of them.",
+    ],
+    quiz:[
+      {q:"How long did Tariq save money to buy the bicycle?", opts:["Three months","Four months","Six months","One year"], ans:2, exp:"'He had saved for six months to buy it.'"},
+      {q:"Who had seen someone with the red bicycle?", opts:["A child","An elderly woman","His mother","A shopkeeper"], ans:1, exp:"'An elderly woman across the street said she had seen a boy with a red bike.'"},
+      {q:"Who had taken the bicycle?", opts:["A stranger","A classmate","His little cousin","His neighbour"], ans:2, exp:"'Tariq ran to the park and found his little cousin riding the bicycle.'"},
+    ]
+  },
+
+  // A2 — Audio Lesson
+  { id:"a2n7", title:"Countable & Uncountable Nouns", category:"Audio Lesson", level:"A2", dur:"6:30", durSec:390, xp:75,
+    icon:"📦", color:"rgba(129,140,248,.12)", border:"rgba(129,140,248,.25)",
+    transcript:[
+      "Today we are going to learn about countable and uncountable nouns.",
+      "Countable nouns are things you can count. For example: one apple, two apples, three apples.",
+      "Other examples: a book, two books. A chair, three chairs. A student, many students.",
+      "Uncountable nouns are things you cannot count individually.",
+      "Examples: water, rice, music, information, advice, luggage.",
+      "We do not say 'one water' or 'two waters'. We say 'some water' or 'a glass of water'.",
+      "With countable nouns, use 'a' or 'an' for singular: a cat, an egg.",
+      "With uncountable nouns, never use 'a' or 'an'. Just use the noun alone or with 'some'.",
+      "Compare: I need some sugar. Correct! I need a sugar. Wrong!",
+      "Some words can be both countable and uncountable depending on meaning.",
+      "For example: 'I'd like a coffee' — one cup of coffee. That is countable.",
+      "'Coffee is grown in Brazil' — the general substance. That is uncountable.",
+      "Practice tip: when learning a new noun, always note whether it is countable or not.",
+    ],
+    quiz:[
+      {q:"Which of these is an uncountable noun?", opts:["Apple","Chair","Information","Student"], ans:2, exp:"'Information' cannot be counted. You cannot say 'one information' or 'two informations'."},
+      {q:"Which sentence is correct?", opts:["I need a water","I need some water","I need one water","I need waters"], ans:1, exp:"Uncountable nouns use 'some', not 'a/an'. So 'some water' is correct."},
+      {q:"When can 'coffee' be countable?", opts:["When it is grown in a farm","When it means one cup of coffee","When it is mixed with milk","When it is hot"], ans:1, exp:"'I'd like a coffee' means one cup of coffee — that is countable."},
+    ]
+  },
+
+  { id:"a2n8", title:"Asking Questions in English", category:"Audio Lesson", level:"A2", dur:"6:00", durSec:360, xp:75,
+    icon:"❓", color:"rgba(45,212,191,.12)", border:"rgba(45,212,191,.25)",
+    transcript:[
+      "Knowing how to ask questions is very important in English.",
+      "There are two main types: yes/no questions and wh-questions.",
+      "Yes or no questions expect the answer 'yes' or 'no'.",
+      "For example: Are you hungry? Is she a teacher? Do they live here?",
+      "Wh-questions ask for specific information. They start with: what, where, when, why, who, how.",
+      "For example: What is your name? Where do you live? Why are you late?",
+      "To form a question in the present simple, use do or does.",
+      "'He plays football' becomes 'Does he play football?'",
+      "In the past simple, use did: 'She went home' becomes 'Did she go home?'",
+      "Notice that after did, we use the base form of the verb, not the past form.",
+      "Incorrect: Did she went home? Correct: Did she go home?",
+      "For questions with 'be', just swap the subject and verb.",
+      "'You are happy' becomes 'Are you happy?' Simple!",
+      "Practice making questions every day. It will become natural very quickly.",
+    ],
+    quiz:[
+      {q:"What type of question starts with 'where' or 'why'?", opts:["Yes/No question","Tag question","Wh-question","Indirect question"], ans:2, exp:"Questions starting with what, where, when, why, who, and how are called wh-questions."},
+      {q:"Which is the correct question form?", opts:["Did she went home?","Did she goes home?","Did she go home?","Does she went home?"], ans:2, exp:"After 'did', we always use the base form of the verb: 'go', not 'went'."},
+      {q:"How do you form a question using 'be'?", opts:["Add do before the verb","Swap the subject and verb","Add did at the end","Use have instead"], ans:1, exp:"'You are happy' becomes 'Are you happy?' — just swap subject and verb."},
+    ]
+  },
+
+  // A2 — News
+  { id:"a2n9", title:"New Bus Routes for the City", category:"News", level:"A2", dur:"4:00", durSec:240, xp:75,
+    icon:"🚌", color:"rgba(52,211,153,.12)", border:"rgba(52,211,153,.25)",
+    transcript:[
+      "The city transport authority has announced ten new bus routes starting next month.",
+      "The new routes will connect outer neighbourhoods to the city centre more efficiently.",
+      "At the moment, many residents have to take two or three buses to reach their workplace.",
+      "With the new routes, most journeys will be possible on a single bus.",
+      "The authority says the change will reduce travel time by up to forty percent.",
+      "New electric buses will be used on six of the ten routes.",
+      "These buses produce no direct emissions and are significantly quieter.",
+      "Monthly travel passes will also be available at a reduced price for students and senior citizens.",
+      "The transport minister said this is part of a broader plan to reduce traffic congestion.",
+      "A mobile app will be launched to help passengers plan their journeys in real time.",
+      "Public feedback on the new routes can be submitted on the authority's website until Friday.",
+      "The changes are expected to benefit over half a million daily commuters.",
+    ],
+    quiz:[
+      {q:"How much will the new routes reduce travel time?", opts:["Up to 20%","Up to 30%","Up to 40%","Up to 50%"], ans:2, exp:"'The change will reduce travel time by up to forty percent.'"},
+      {q:"What type of buses will be used on six of the routes?", opts:["Hybrid buses","Electric buses","Double-decker buses","Mini-buses"], ans:1, exp:"'New electric buses will be used on six of the ten routes.'"},
+      {q:"Who will get travel passes at a reduced price?", opts:["Workers","Children under 12","Students and senior citizens","Government employees"], ans:2, exp:"'Monthly travel passes will also be available at a reduced price for students and senior citizens.'"},
+    ]
+  },
+
+  { id:"a2n10", title:"A Farmer Uses Technology to Grow More Food", category:"News", level:"A2", dur:"4:10", durSec:250, xp:75,
+    icon:"🌾", color:"rgba(245,200,66,.12)", border:"rgba(245,200,66,.25)",
+    transcript:[
+      "A farmer from a small village in northern Bangladesh is making headlines.",
+      "Rahim Mia has started using smartphone apps and sensors to manage his crops.",
+      "The sensors measure soil moisture, temperature, and nutrients in real time.",
+      "The data is sent to his phone, where an app tells him exactly when to water or fertilise.",
+      "Before using the technology, Rahim lost about thirty percent of his crop every year.",
+      "Last season, his losses dropped to just five percent.",
+      "His rice and vegetable yields have also increased by nearly sixty percent.",
+      "Rahim says he now spends less time guessing and more time planning.",
+      "A local agricultural NGO helped him get the equipment at a subsidised cost.",
+      "They have trained fifty other farmers in the region to use the same system.",
+      "Rahim hopes that technology will help more farmers escape poverty.",
+      "'Our land is the same,' he says. 'But now we know how to listen to it.'",
+    ],
+    quiz:[
+      {q:"What do the sensors measure?", opts:["Rainfall and wind speed","Soil moisture, temperature, and nutrients","Air quality and humidity","Plant height and colour"], ans:1, exp:"'The sensors measure soil moisture, temperature, and nutrients in real time.'"},
+      {q:"By how much did Rahim's losses drop after using the technology?", opts:["From 30% to 10%","From 30% to 5%","From 20% to 5%","From 40% to 10%"], ans:1, exp:"'His losses dropped to just five percent' from thirty percent."},
+      {q:"How many other farmers have been trained to use the system?", opts:["Twenty","Thirty","Forty","Fifty"], ans:3, exp:"'They have trained fifty other farmers in the region.'"},
+    ]
+  },
+
 ];
 
 /* ── Category list (auto-derived) ── */

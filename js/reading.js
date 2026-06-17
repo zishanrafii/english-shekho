@@ -6,7 +6,7 @@ import {
   doc, getDoc, updateDoc, setDoc,
   collection, addDoc, getDocs,
   query, orderBy, limit, where,
-  serverTimestamp, increment, arrayUnion,
+  serverTimestamp, increment, arrayUnion, arrayRemove,
   signOut
 } from "./firebase-config.js";
 
@@ -20,7 +20,9 @@ let currentPassage    = null;
 let activeCat         = "All";
 let activeLevel       = "All";
 let searchQuery       = "";
+let showBookmarkedOnly = false;
 let completedReadings = new Set();   // passage ids done (persisted in Firestore)
+let bookmarkedPassages = new Set();  // passage ids bookmarked (persisted in Firestore)
 let totalXP           = 0;
 let totalReadCount    = 0;
 
@@ -29,6 +31,14 @@ let quizScore     = 0;
 let quizAnswered  = false;
 
 let readStartTime = null;            // for reading-speed calculation
+
+/* TTS narration state */
+let ttsSentences   = [];   // flat array of sentence strings for current passage
+let ttsIdx         = 0;
+let ttsPlaying     = false;
+let ttsPaused      = false;
+let ttsRate        = 1;
+let ttsUtterance    = null;
 
 const LEVELS = ["All","A1","A2","B1","B2","C1"];
 
@@ -78,11 +88,14 @@ function buildPassageGrid() {
   if (activeCat !== "All")   list = list.filter(p => p.category === activeCat);
   if (activeLevel !== "All") list = list.filter(p => p.level === activeLevel);
   if (searchQuery)            list = list.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  if (showBookmarkedOnly)     list = list.filter(p => bookmarkedPassages.has(p.id));
 
   grid.innerHTML = list.map(p => {
     const done = completedReadings.has(p.id);
+    const bookmarked = bookmarkedPassages.has(p.id);
     return `
     <div class="passage-card ${done ? "completed" : ""}" data-id="${p.id}" style="--pc-color:${p.border};--pc-soft:${p.color};--pc-border:${p.border};">
+      <div class="pc-bookmark-btn ${bookmarked ? "active" : ""}" data-bookmark-id="${p.id}" title="${bookmarked ? "Bookmark সরান" : "Bookmark করুন"}">${bookmarked ? "🔖" : "🏷️"}</div>
       <div class="pc-top">
         <div class="pc-icon-box">${p.icon}</div>
         ${done ? `<div class="pc-check">✓</div>` : `<span class="pc-level-badge">${p.level}</span>`}
@@ -94,7 +107,7 @@ function buildPassageGrid() {
         <span class="pc-xp">+${p.xp} XP</span>
       </div>
     </div>`;
-  }).join("") || `<div style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">কোনো passage পাওয়া যায়নি।</div>`;
+  }).join("") || `<div style="color:var(--muted);font-size:13px;grid-column:1/-1;text-align:center;padding:2rem;">${showBookmarkedOnly ? "এখনও কোনো passage bookmark করা হয়নি।" : "কোনো passage পাওয়া যায়নি।"}</div>`;
 
   document.getElementById("rt-count").textContent = `${list.length} Passages`;
 }
@@ -111,6 +124,32 @@ function highlightVocab(text, vocab) {
   return result;
 }
 
+/* Split a paragraph into sentences (simple punctuation-based split,
+   good enough for our passage texts which use standard punctuation). */
+function splitSentences(text) {
+  const matches = text.match(/[^.!?]+[.!?]+(\s+|$)|[^.!?]+$/g);
+  return matches ? matches.map(s => s.trim()).filter(Boolean) : [text];
+}
+
+/* Build the full passage HTML: each paragraph -> sentences wrapped in
+   <span class="tts-sentence" data-sidx="N"> with vocab highlighting inside. */
+function buildPassageHTML(passage) {
+  let sIdx = 0;
+  const flatSentences = [];
+  const html = passage.text.map(para => {
+    const sentences = splitSentences(para);
+    const spanned = sentences.map(s => {
+      const withVocab = highlightVocab(s, passage.vocab);
+      const span = `<span class="tts-sentence" data-sidx="${sIdx}">${withVocab}</span>`;
+      flatSentences.push(s.replace(/<[^>]+>/g, "")); // plain text for TTS
+      sIdx++;
+      return span;
+    }).join(" ");
+    return `<p>${spanned}</p>`;
+  }).join("");
+  return { html, sentences: flatSentences };
+}
+
 function openPassage(id) {
   const p = PASSAGES.find(p => p.id === id);
   if (!p) return;
@@ -119,6 +158,8 @@ function openPassage(id) {
   quizIdx        = 0;
   quizScore      = 0;
   quizAnswered   = false;
+
+  stopTTS(); // reset any ongoing narration from a previous passage
 
   document.getElementById("reader-icon").textContent  = p.icon;
   document.getElementById("reader-title").textContent = p.title;
@@ -129,9 +170,18 @@ function openPassage(id) {
     <span class="rm-pill">⭐ ${p.xp} XP</span>
   `;
 
-  document.getElementById("passage-text").innerHTML = p.text
-    .map(para => `<p>${highlightVocab(para, p.vocab)}</p>`)
-    .join("");
+  const readerBookmarkBtn = document.getElementById("reader-bookmark-btn");
+  const isBookmarked = bookmarkedPassages.has(p.id);
+  readerBookmarkBtn.classList.toggle("active", isBookmarked);
+  readerBookmarkBtn.textContent = isBookmarked ? "🔖" : "🏷️";
+
+  const built = buildPassageHTML(p);
+  document.getElementById("passage-text").innerHTML = built.html;
+  ttsSentences = built.sentences;
+  ttsIdx = 0;
+  document.getElementById("tts-total-sentence").textContent = ttsSentences.length;
+  document.getElementById("tts-current-sentence").textContent = "0";
+  document.getElementById("audio-bar-fill").style.width = "0%";
 
   document.getElementById("quiz-panel").classList.remove("show");
   document.getElementById("quiz-result").classList.remove("show");
@@ -147,6 +197,7 @@ function openPassage(id) {
 }
 
 function closeReader() {
+  stopTTS();
   document.querySelector(".list-screen").classList.remove("hide");
   document.getElementById("reader-screen").classList.remove("show");
   buildPassageGrid();
@@ -172,6 +223,128 @@ function trackScrollProgress() {
 }
 
 /* ══════════════════════════════════════
+   TTS NARRATION (browser SpeechSynthesis)
+══════════════════════════════════════ */
+function ttsSupported() {
+  if (!window.speechSynthesis) { toast("⚠️ আপনার browser TTS support করে না।", "error"); return false; }
+  return true;
+}
+
+function pickEnglishVoice() {
+  const voices = speechSynthesis.getVoices();
+  return voices.find(v => v.lang === "en-US" && v.name.toLowerCase().includes("google"))
+      || voices.find(v => v.lang === "en-US")
+      || voices.find(v => v.lang && v.lang.startsWith("en"))
+      || null;
+}
+
+function highlightSentence(idx) {
+  document.querySelectorAll(".tts-sentence").forEach(el => {
+    el.classList.toggle("tts-active", parseInt(el.dataset.sidx) === idx);
+  });
+  const el = document.querySelector(`.tts-sentence[data-sidx="${idx}"]`);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  document.getElementById("tts-current-sentence").textContent = Math.min(idx + 1, ttsSentences.length);
+  const pct = ttsSentences.length ? Math.round(((idx + 1) / ttsSentences.length) * 100) : 0;
+  document.getElementById("audio-bar-fill").style.width = pct + "%";
+}
+
+function speakSentence(idx) {
+  if (idx >= ttsSentences.length) { onTTSEnd(); return; }
+  ttsIdx = idx;
+  highlightSentence(idx);
+
+  ttsUtterance = new SpeechSynthesisUtterance(ttsSentences[idx]);
+  ttsUtterance.lang   = "en-US";
+  ttsUtterance.rate   = ttsRate;
+  const voice = pickEnglishVoice();
+  if (voice) ttsUtterance.voice = voice;
+
+  ttsUtterance.onend = () => { if (!ttsPaused) speakSentence(idx + 1); };
+  ttsUtterance.onerror = (e) => { if (e.error !== "interrupted" && !ttsPaused) speakSentence(idx + 1); };
+
+  speechSynthesis.speak(ttsUtterance);
+}
+
+function toggleTTS() {
+  if (!ttsSupported()) return;
+  if (!ttsSentences.length) return;
+
+  const btn = document.getElementById("tts-play-btn");
+
+  if (!ttsPlaying && !ttsPaused) {
+    // fresh start
+    ttsPlaying = true;
+    ttsPaused = false;
+    btn.textContent = "⏸";
+    if (speechSynthesis.getVoices().length === 0) {
+      speechSynthesis.addEventListener("voiceschanged", () => speakSentence(0), { once: true });
+    } else {
+      speakSentence(0);
+    }
+  } else if (ttsPlaying && !ttsPaused) {
+    // pause
+    speechSynthesis.pause();
+    ttsPaused = true;
+    ttsPlaying = false;
+    btn.textContent = "▶";
+  } else if (ttsPaused) {
+    // resume
+    speechSynthesis.resume();
+    ttsPaused = false;
+    ttsPlaying = true;
+    btn.textContent = "⏸";
+  }
+}
+
+function stopTTS() {
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  ttsPlaying = false;
+  ttsPaused = false;
+  ttsIdx = 0;
+  const btn = document.getElementById("tts-play-btn");
+  if (btn) btn.textContent = "▶";
+  document.querySelectorAll(".tts-sentence").forEach(el => el.classList.remove("tts-active"));
+  const fill = document.getElementById("audio-bar-fill");
+  if (fill) fill.style.width = "0%";
+  const cur = document.getElementById("tts-current-sentence");
+  if (cur) cur.textContent = "0";
+}
+
+function onTTSEnd() {
+  ttsPlaying = false;
+  ttsPaused = false;
+  const btn = document.getElementById("tts-play-btn");
+  if (btn) btn.textContent = "▶";
+  document.querySelectorAll(".tts-sentence").forEach(el => el.classList.remove("tts-active"));
+  document.getElementById("audio-bar-fill").style.width = "100%";
+  toast("🎧 Narration শেষ হয়েছে।", "info");
+}
+
+function setTTSRate(rate) {
+  ttsRate = rate;
+  document.querySelectorAll(".speed-btn").forEach(b => {
+    b.classList.toggle("active", parseFloat(b.dataset.speed) === rate);
+  });
+  // If currently speaking, restart current sentence at new rate
+  if (ttsPlaying && !ttsPaused) {
+    speechSynthesis.cancel();
+    speakSentence(ttsIdx);
+  }
+}
+
+/* Clicking a sentence directly jumps narration there */
+function jumpToSentence(idx) {
+  if (!ttsSupported() || !ttsSentences.length) return;
+  speechSynthesis.cancel();
+  ttsPlaying = true;
+  ttsPaused = false;
+  document.getElementById("tts-play-btn").textContent = "⏸";
+  speakSentence(idx);
+}
+
+/* ══════════════════════════════════════
    VOCAB TOOLTIP
 ══════════════════════════════════════ */
 function showVocabTooltip(el) {
@@ -193,6 +366,7 @@ function closeAllTooltips() {
    FINISH READING → SHOW QUIZ
 ══════════════════════════════════════ */
 function finishReading() {
+  stopTTS();
   document.getElementById("btn-finish-reading").disabled = true;
   document.getElementById("btn-finish-reading").textContent = "✓ সম্পন্ন";
   document.getElementById("quiz-panel").classList.add("show");
@@ -280,6 +454,56 @@ async function showQuizResult() {
 }
 
 /* ══════════════════════════════════════
+   BOOKMARK TOGGLE
+══════════════════════════════════════ */
+async function toggleBookmark(passageId) {
+  if (!currentUser) return;
+  const isBookmarked = bookmarkedPassages.has(passageId);
+
+  // optimistic UI update
+  if (isBookmarked) bookmarkedPassages.delete(passageId);
+  else bookmarkedPassages.add(passageId);
+  refreshBookmarkUI(passageId);
+
+  try {
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      "readingProgress.bookmarks": isBookmarked ? arrayRemove(passageId) : arrayUnion(passageId)
+    });
+    toast(isBookmarked ? "🏷️ Bookmark সরানো হয়েছে।" : "🔖 Bookmark করা হয়েছে।", "info");
+  } catch (e) {
+    // revert on failure
+    if (isBookmarked) bookmarkedPassages.add(passageId);
+    else bookmarkedPassages.delete(passageId);
+    refreshBookmarkUI(passageId);
+    toast("❌ Bookmark save failed: " + e.message, "error");
+  }
+}
+
+function refreshBookmarkUI(passageId) {
+  const bookmarked = bookmarkedPassages.has(passageId);
+
+  // card icon (only present if this passage is currently rendered in the grid)
+  const cardBtn = document.querySelector(`.pc-bookmark-btn[data-bookmark-id="${passageId}"]`);
+  if (cardBtn) {
+    cardBtn.classList.toggle("active", bookmarked);
+    cardBtn.textContent = bookmarked ? "🔖" : "🏷️";
+    cardBtn.title = bookmarked ? "Bookmark সরান" : "Bookmark করুন";
+  }
+
+  // reader screen icon (only relevant if this is the currently open passage)
+  if (currentPassage && currentPassage.id === passageId) {
+    const readerBtn = document.getElementById("reader-bookmark-btn");
+    if (readerBtn) {
+      readerBtn.classList.toggle("active", bookmarked);
+      readerBtn.textContent = bookmarked ? "🔖" : "🏷️";
+    }
+  }
+
+  // if the "bookmarked only" filter is active and we just unbookmarked, refresh grid
+  if (showBookmarkedOnly) buildPassageGrid();
+}
+
+/* ══════════════════════════════════════
    SAVE COMPLETION → FIRESTORE
 ══════════════════════════════════════ */
 async function saveCompletion() {
@@ -332,9 +556,33 @@ function updateLastWpm(wpm) {
    EVENT DELEGATION
 ══════════════════════════════════════ */
 document.addEventListener("click", function (e) {
+  // bookmark icon on a passage card (must check before passage-card click so it doesn't also open the reader)
+  const bookmarkIcon = e.target.closest(".pc-bookmark-btn");
+  if (bookmarkIcon) {
+    e.stopPropagation();
+    toggleBookmark(bookmarkIcon.dataset.bookmarkId);
+    return;
+  }
+
+  // bookmark icon inside the reader screen
+  const readerBookmarkBtn = e.target.closest("#reader-bookmark-btn");
+  if (readerBookmarkBtn && currentPassage) {
+    toggleBookmark(currentPassage.id);
+    return;
+  }
+
   // passage card click
   const card = e.target.closest(".passage-card");
   if (card) { openPassage(card.dataset.id); return; }
+
+  // bookmark filter toggle
+  const bookmarkFilterBtn = e.target.closest("#bookmark-filter-btn");
+  if (bookmarkFilterBtn) {
+    showBookmarkedOnly = !showBookmarkedOnly;
+    bookmarkFilterBtn.classList.toggle("active", showBookmarkedOnly);
+    buildPassageGrid();
+    return;
+  }
 
   // category tab
   const catTab = e.target.closest(".cat-tab");
@@ -357,6 +605,26 @@ document.addEventListener("click", function (e) {
   if (vocabWord) { showVocabTooltip(vocabWord); e.stopPropagation(); return; }
   if (!e.target.closest(".vocab-tooltip")) closeAllTooltips();
 
+  // click a sentence to jump narration there (ignore if clicking inside vocab word, handled above)
+  const sentenceEl = e.target.closest(".tts-sentence");
+  if (sentenceEl && document.getElementById("reader-screen").classList.contains("show")) {
+    jumpToSentence(parseInt(sentenceEl.dataset.sidx));
+  }
+
+  // audio progress track click → seek
+  const track = e.target.closest("#audio-bar-track");
+  if (track && ttsSentences.length) {
+    const rect = track.getBoundingClientRect();
+    const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    const idx = Math.min(ttsSentences.length - 1, Math.floor(pct * ttsSentences.length));
+    jumpToSentence(idx);
+    return;
+  }
+
+  // speed buttons
+  const speedBtn = e.target.closest(".speed-btn");
+  if (speedBtn) { setTTSRate(parseFloat(speedBtn.dataset.speed)); return; }
+
   // quiz option
   const quizOpt = e.target.closest(".quiz-opt");
   if (quizOpt && !quizOpt.classList.contains("disabled")) {
@@ -373,6 +641,8 @@ document.addEventListener("click", function (e) {
       case "next-q":         nextQuestion(); break;
       case "go-profile":     window.location.href = "profile.html"; break;
       case "logout":         signOut(auth).then(() => window.location.href = "index.html"); break;
+      case "tts-toggle":     toggleTTS(); break;
+      case "tts-stop":       stopTTS(); break;
     }
   }
 });
@@ -406,6 +676,7 @@ requireAuth(async user => {
       totalReadCount = d.readCount || 0;
       const rp = d.readingProgress || {};
       (rp.done || []).forEach(id => completedReadings.add(id));
+      (rp.bookmarks || []).forEach(id => bookmarkedPassages.add(id));
     }
   } catch (e) { console.warn(e); }
 

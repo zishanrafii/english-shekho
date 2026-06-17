@@ -100,12 +100,29 @@ service cloud.firestore {
     // writings: submitted writing pieces (sentence/paragraph/essay/email/story)
     // User nijer submission create korte parbe, nijer ta porte/dekhte parbe
     match /writings/{writingId} {
-      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      // Nijer lekha othoba public-e share kora lekha — keu porte parbe
+      allow read: if request.auth != null &&
+        (resource.data.uid == request.auth.uid || resource.data.isPublic == true);
       allow create: if request.auth != null &&
         request.resource.data.uid == request.auth.uid &&
         request.resource.data.type is string &&
         request.resource.data.content is string;
-      allow update, delete: if false;
+      // Shudhu reviewCount/avgRating aggregate update korte parbe (community review-er por)
+      allow update: if request.auth != null &&
+        resource.data.isPublic == true &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reviewCount','avgRating']);
+      allow delete: if false;
+
+      // Community review-gulo
+      match /reviews/{reviewId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null &&
+          request.resource.data.reviewerUid == request.auth.uid &&
+          request.resource.data.rating is number &&
+          request.resource.data.text is string &&
+          get(/databases/$(database)/documents/writings/$(writingId)).data.uid != request.auth.uid;
+        allow update, delete: if false;
+      }
     }
 
     // writing_drafts: auto-saved drafts, doc id = {uid}_{type}_{taskId}
@@ -141,6 +158,20 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null && request.auth.uid == userId;
       allow update, delete: if false; // score immutable — ekbar save hoile change hobe na
+    }
+
+    // User-specific quiz analytics — overall/level stats, category progress, wrong words/questions
+    match /users/{userId}/quizStats/{statId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /users/{userId}/categoryProgress/{catId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /users/{userId}/wrongWords/{wordId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /users/{userId}/wrongQuestions/{qId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
     // ───── LIVE CLASS ROOMS ─────
@@ -191,6 +222,47 @@ service cloud.firestore {
         request.resource.data.status == "accepted";
       allow delete: if request.auth != null &&
         (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+    }
+
+    // ───── STUDY GROUPS (used by groups.html) ─────
+    match /studyGroups/{groupId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.members.hasOnly([request.auth.uid]);
+      // join/leave member-list update, ba member count
+      allow update: if request.auth != null;
+      // shudhu group-er creator delete korte parbe
+      allow delete: if request.auth != null && resource.data.createdBy == request.auth.uid;
+
+      match /messages/{messageId} {
+        allow read: if request.auth != null &&
+          request.auth.uid in get(/databases/$(database)/documents/studyGroups/$(groupId)).data.members;
+        allow create: if request.auth != null &&
+          request.resource.data.uid == request.auth.uid &&
+          request.auth.uid in get(/databases/$(database)/documents/studyGroups/$(groupId)).data.members;
+        allow update, delete: if false;
+      }
+    }
+
+    // ───── SPEAKING SESSIONS ─────
+    // User nijer speaking session save korte o porte parbe
+    // Onner session porte parbe na, update/delete kora jabe na
+    match /speaking_sessions/{sessionId} {
+      allow read: if request.auth != null &&
+        resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.prompt is string &&
+        request.resource.data.dateStr is string;
+      allow update, delete: if false;
+    }
+
+    // ───── DAILY TASKS (speaking page) ─────
+    // User nijer ajoker task complete/uncomplete korte parbe
+    // Document id = YYYY-MM-DD (date string)
+    match /users/{userId}/dailyTasks/{dateId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
     // ───── DEFAULT: sob kichu deny ─────

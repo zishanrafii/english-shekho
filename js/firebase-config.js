@@ -22,7 +22,7 @@ import {
   doc, setDoc, getDoc, updateDoc, deleteDoc,
   collection, query, orderBy, limit, getDocs,
   addDoc, serverTimestamp, onSnapshot,
-  where, increment, arrayUnion
+  where, increment, arrayUnion, arrayRemove
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
@@ -173,7 +173,7 @@ export {
   doc, setDoc, getDoc, updateDoc, deleteDoc,
   collection, query, orderBy, limit, getDocs,
   addDoc, serverTimestamp, onSnapshot,
-  where, increment, arrayUnion,
+  where, increment, arrayUnion, arrayRemove,
   uploadToCloud, toast, makeAvatar,
   requireAuth, getUserData, dmId, esc, fmtTime, fmtDate
 };

@@ -98,6 +98,8 @@ body::after{
 .level-tab{padding:.6rem 1.3rem;border-radius:14px;font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;text-decoration:none;display:flex;align-items:center;gap:8px;}
 .level-tab:hover{border-color:rgba(245,200,66,.25);color:var(--text);}
 .level-tab.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.3);color:var(--gold);}
+.level-tab.locked{opacity:.4;cursor:not-allowed;filter:grayscale(.6);}
+.level-tab.locked:hover{border-color:var(--border);color:var(--sub);}
 
 /* ─── PROGRESS PANEL ─── */
 .progress-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;}
@@ -227,7 +229,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <nav class="nav-links">
         <a href="dashboard.html" class="nav-link">Home</a>
         <a href="roadmap.html" class="nav-link">Journey</a>
-        <a href="quiz-beginner.html" class="nav-link active">Quiz</a>
+        <a href="quiz-dashboard.html" class="nav-link active">Quiz</a>
         <a href="grammar.html" class="nav-link">Grammar</a>
         <a href="vocab-dashboard.html" class="nav-link">Vocabulary</a>
         <a href="writing-lab.html" class="nav-link">Writing</a>
@@ -270,9 +272,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
   <!-- LEVEL TABS -->
   <div class="level-tabs">
+    <a href="quiz-dashboard.html" class="level-tab">← Quiz Dashboard</a>
     <a href="quiz-beginner.html" class="level-tab active">🟢 Beginner (A1-A2)</a>
-    <a href="quiz-intermediate.html" class="level-tab">🟡 Intermediate (B1-B2)</a>
-    <a href="quiz-advanced.html" class="level-tab">🔴 Advanced (C1-C2)</a>
   </div>
 
   <!-- SUBLEVEL TABS -->
@@ -280,29 +281,29 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <a href="quiz-beginner.html" class="level-tab" id="sl-all">📋 All Topics</a>
     <a href="quiz-beginner.html?level=A1" class="level-tab" id="sl-a1">🔵 A1 Only</a>
     <a href="quiz-beginner.html?level=A2" class="level-tab" id="sl-a2">🟣 A2 Only</a>
-    <a href="quiz-beginner.html?cat=Greetings" class="level-tab">👋 Greetings</a>
-    <a href="quiz-beginner.html?cat=Family" class="level-tab">👨‍👩‍👧 Family</a>
-    <a href="quiz-beginner.html?cat=Food" class="level-tab">🍚 Food</a>
-    <a href="quiz-beginner.html?cat=Verbs" class="level-tab">⚡ Verbs</a>
-    <a href="quiz-beginner.html?cat=Adjectives" class="level-tab">🎨 Adjectives</a>
-    <a href="quiz-beginner.html?cat=Body" class="level-tab">🫀 Body</a>
-    <a href="quiz-beginner.html?cat=Animals" class="level-tab">🐾 Animals</a>
-    <a href="quiz-beginner.html?cat=Home" class="level-tab">🏠 Home</a>
-    <a href="quiz-beginner.html?cat=School" class="level-tab">📚 School</a>
-    <a href="quiz-beginner.html?cat=Transport" class="level-tab">🚌 Transport</a>
-    <a href="quiz-beginner.html?cat=Time" class="level-tab">⏰ Time</a>
-    <a href="quiz-beginner.html?cat=Weather" class="level-tab">🌤️ Weather</a>
-    <a href="quiz-beginner.html?cat=Health" class="level-tab">💊 Health</a>
-    <a href="quiz-beginner.html?cat=Travel" class="level-tab">✈️ Travel</a>
-    <a href="quiz-beginner.html?cat=Work" class="level-tab">💼 Work</a>
-    <a href="quiz-beginner.html?cat=Technology" class="level-tab">📱 Technology</a>
-    <a href="quiz-beginner.html?cat=Shopping" class="level-tab">🛍️ Shopping</a>
-    <a href="quiz-beginner.html?cat=Places" class="level-tab">📍 Places</a>
-    <a href="quiz-beginner.html?cat=Emotions" class="level-tab">😊 Emotions</a>
-    <a href="quiz-beginner.html?cat=Character" class="level-tab">🌟 Character</a>
-    <a href="quiz-beginner.html?cat=Daily Life" class="level-tab">☀️ Daily Life</a>
-    <a href="quiz-beginner.html?cat=Numbers" class="level-tab">🔢 Numbers</a>
-    <a href="quiz-beginner.html?cat=Colors" class="level-tab">🎨 Colors</a>
+    <a href="quiz-beginner.html?cat=Greetings"  class="level-tab" data-cat="Greetings">👋 Greetings</a>
+    <a href="quiz-beginner.html?cat=Family"     class="level-tab" data-cat="Family">👨‍👩‍👧 Family</a>
+    <a href="quiz-beginner.html?cat=Colors"     class="level-tab" data-cat="Colors">🎨 Colors</a>
+    <a href="quiz-beginner.html?cat=Numbers"    class="level-tab" data-cat="Numbers">🔢 Numbers</a>
+    <a href="quiz-beginner.html?cat=Animals"    class="level-tab" data-cat="Animals">🐾 Animals</a>
+    <a href="quiz-beginner.html?cat=Food"       class="level-tab" data-cat="Food">🍚 Food</a>
+    <a href="quiz-beginner.html?cat=Body"       class="level-tab" data-cat="Body">🫀 Body</a>
+    <a href="quiz-beginner.html?cat=Home"       class="level-tab" data-cat="Home">🏠 Home</a>
+    <a href="quiz-beginner.html?cat=School"     class="level-tab" data-cat="School">📚 School</a>
+    <a href="quiz-beginner.html?cat=Daily Life" class="level-tab" data-cat="Daily Life">☀️ Daily Life</a>
+    <a href="quiz-beginner.html?cat=Work"       class="level-tab" data-cat="Work">💼 Work</a>
+    <a href="quiz-beginner.html?cat=Time"       class="level-tab" data-cat="Time">⏰ Time</a>
+    <a href="quiz-beginner.html?cat=Shopping"   class="level-tab" data-cat="Shopping">🛍️ Shopping</a>
+    <a href="quiz-beginner.html?cat=Transport"  class="level-tab" data-cat="Transport">🚌 Transport</a>
+    <a href="quiz-beginner.html?cat=Travel"     class="level-tab" data-cat="Travel">✈️ Travel</a>
+    <a href="quiz-beginner.html?cat=Places"     class="level-tab" data-cat="Places">📍 Places</a>
+    <a href="quiz-beginner.html?cat=Weather"    class="level-tab" data-cat="Weather">🌤️ Weather</a>
+    <a href="quiz-beginner.html?cat=Health"     class="level-tab" data-cat="Health">💊 Health</a>
+    <a href="quiz-beginner.html?cat=Emotions"   class="level-tab" data-cat="Emotions">😊 Emotions</a>
+    <a href="quiz-beginner.html?cat=Character"  class="level-tab" data-cat="Character">🌟 Character</a>
+    <a href="quiz-beginner.html?cat=Adjectives" class="level-tab" data-cat="Adjectives">✨ Adjectives</a>
+    <a href="quiz-beginner.html?cat=Verbs"      class="level-tab" data-cat="Verbs">⚡ Verbs</a>
+    <a href="quiz-beginner.html?cat=Technology" class="level-tab" data-cat="Technology">📱 Technology</a>
   </div>
 
   <!-- PROGRESS -->
@@ -401,474 +402,18 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <script type="module">
 import {
   auth, db, signOut, requireAuth,
-  doc, getDoc, setDoc, updateDoc, increment,
-  collection, addDoc, serverTimestamp
+  doc, getDoc, setDoc, updateDoc, deleteDoc, increment,
+  collection, addDoc, serverTimestamp,
+  onAuthStateChanged
 } from "./js/firebase-config.js";
+
+import { WB } from "./js/data/quiz-beginner-data.js";
 
 /* ══════════════════════════════════════════════
    WORD BANK — A1 + A2 (300+ pairs, auto-quiz)
    Format: {bn, en, cat, level}
    cat = sublevel / topic pill name
 ══════════════════════════════════════════════ */
-const WB = [
-  /* ── Greetings ── */
-  {bn:"হ্যালো",            en:"Hello",           cat:"Greetings", level:"A1"},
-  {bn:"শুভ সকাল",          en:"Good morning",    cat:"Greetings", level:"A1"},
-  {bn:"শুভ বিকেল",         en:"Good afternoon",  cat:"Greetings", level:"A1"},
-  {bn:"শুভ সন্ধ্যা",        en:"Good evening",    cat:"Greetings", level:"A1"},
-  {bn:"শুভ রাত",           en:"Good night",      cat:"Greetings", level:"A1"},
-  {bn:"বিদায়",             en:"Goodbye",         cat:"Greetings", level:"A1"},
-  {bn:"আপনি কেমন আছেন?",   en:"How are you?",    cat:"Greetings", level:"A1"},
-  {bn:"আমি ভালো আছি",      en:"I am fine",       cat:"Greetings", level:"A1"},
-  {bn:"ধন্যবাদ",            en:"Thank you",       cat:"Greetings", level:"A1"},
-  {bn:"স্বাগতম",            en:"Welcome",         cat:"Greetings", level:"A1"},
-  {bn:"দয়া করে",           en:"Please",          cat:"Greetings", level:"A1"},
-  {bn:"দুঃখিত",             en:"Sorry",           cat:"Greetings", level:"A1"},
-  {bn:"কোনো সমস্যা নেই",    en:"No problem",      cat:"Greetings", level:"A1"},
-  {bn:"ঠিক আছে",           en:"Okay",            cat:"Greetings", level:"A1"},
-  {bn:"অবশ্যই",             en:"Of course",       cat:"Greetings", level:"A1"},
-  {bn:"শুভকামনা",           en:"Good luck",       cat:"Greetings", level:"A1"},
-  {bn:"শাবাশ",              en:"Well done",       cat:"Greetings", level:"A1"},
-  {bn:"অভিনন্দন",           en:"Congratulations", cat:"Greetings", level:"A2"},
-  {bn:"পরে দেখা হবে",       en:"See you later",   cat:"Greetings", level:"A2"},
-  {bn:"আপনার সাথে পরিচিত হয়ে ভালো লাগলো", en:"Nice to meet you", cat:"Greetings", level:"A1"},
-
-  /* ── Family ── */
-  {bn:"মা",        en:"Mother",      cat:"Family", level:"A1"},
-  {bn:"বাবা",      en:"Father",      cat:"Family", level:"A1"},
-  {bn:"ভাই",       en:"Brother",     cat:"Family", level:"A1"},
-  {bn:"বোন",       en:"Sister",      cat:"Family", level:"A1"},
-  {bn:"দাদি/নানি", en:"Grandmother", cat:"Family", level:"A1"},
-  {bn:"দাদা/নানা", en:"Grandfather", cat:"Family", level:"A1"},
-  {bn:"ছেলে",      en:"Son",         cat:"Family", level:"A1"},
-  {bn:"মেয়ে",      en:"Daughter",    cat:"Family", level:"A1"},
-  {bn:"চাচা/মামা", en:"Uncle",       cat:"Family", level:"A1"},
-  {bn:"চাচি/মামি", en:"Aunt",        cat:"Family", level:"A1"},
-  {bn:"কাজিন",     en:"Cousin",      cat:"Family", level:"A1"},
-  {bn:"শিশু",      en:"Baby",        cat:"Family", level:"A1"},
-  {bn:"পরিবার",    en:"Family",      cat:"Family", level:"A1"},
-  {bn:"বাবা-মা",   en:"Parents",     cat:"Family", level:"A1"},
-  {bn:"স্বামী",    en:"Husband",     cat:"Family", level:"A2"},
-  {bn:"স্ত্রী",    en:"Wife",        cat:"Family", level:"A2"},
-  {bn:"আত্মীয়",   en:"Relative",    cat:"Family", level:"A2"},
-  {bn:"বিবাহিত",   en:"Married",     cat:"Family", level:"A2"},
-  {bn:"অবিবাহিত",  en:"Single",      cat:"Family", level:"A2"},
-  {bn:"যমজ",       en:"Twin",        cat:"Family", level:"A2"},
-
-  /* ── Numbers ── */
-  {bn:"এক",      en:"One",      cat:"Numbers", level:"A1"},
-  {bn:"দুই",      en:"Two",      cat:"Numbers", level:"A1"},
-  {bn:"তিন",      en:"Three",    cat:"Numbers", level:"A1"},
-  {bn:"চার",      en:"Four",     cat:"Numbers", level:"A1"},
-  {bn:"পাঁচ",     en:"Five",     cat:"Numbers", level:"A1"},
-  {bn:"দশ",       en:"Ten",      cat:"Numbers", level:"A1"},
-  {bn:"বিশ",      en:"Twenty",   cat:"Numbers", level:"A1"},
-  {bn:"একশো",     en:"Hundred",  cat:"Numbers", level:"A1"},
-  {bn:"হাজার",    en:"Thousand", cat:"Numbers", level:"A2"},
-  {bn:"মিলিয়ন",  en:"Million",  cat:"Numbers", level:"A2"},
-  {bn:"প্রথম",    en:"First",    cat:"Numbers", level:"A1"},
-  {bn:"শেষ",      en:"Last",     cat:"Numbers", level:"A1"},
-  {bn:"অর্ধেক",   en:"Half",     cat:"Numbers", level:"A2"},
-  {bn:"দ্বিগুণ",  en:"Double",   cat:"Numbers", level:"A2"},
-  {bn:"শতাংশ",    en:"Percent",  cat:"Numbers", level:"A2"},
-
-  /* ── Colors ── */
-  {bn:"লাল",      en:"Red",    cat:"Colors", level:"A1"},
-  {bn:"নীল",      en:"Blue",   cat:"Colors", level:"A1"},
-  {bn:"সবুজ",     en:"Green",  cat:"Colors", level:"A1"},
-  {bn:"হলুদ",     en:"Yellow", cat:"Colors", level:"A1"},
-  {bn:"কালো",     en:"Black",  cat:"Colors", level:"A1"},
-  {bn:"সাদা",     en:"White",  cat:"Colors", level:"A1"},
-  {bn:"কমলা",     en:"Orange", cat:"Colors", level:"A1"},
-  {bn:"গোলাপি",   en:"Pink",   cat:"Colors", level:"A1"},
-  {bn:"বেগুনি",   en:"Purple", cat:"Colors", level:"A1"},
-  {bn:"বাদামি",   en:"Brown",  cat:"Colors", level:"A1"},
-  {bn:"ধূসর",     en:"Grey",   cat:"Colors", level:"A1"},
-
-  /* ── Food & Drink ── */
-  {bn:"ভাত",              en:"Rice",       cat:"Food", level:"A1"},
-  {bn:"রুটি",             en:"Bread",      cat:"Food", level:"A1"},
-  {bn:"পানি",             en:"Water",      cat:"Food", level:"A1"},
-  {bn:"দুধ",              en:"Milk",       cat:"Food", level:"A1"},
-  {bn:"ডিম",              en:"Egg",        cat:"Food", level:"A1"},
-  {bn:"মাছ",              en:"Fish",       cat:"Food", level:"A1"},
-  {bn:"মাংস",             en:"Meat",       cat:"Food", level:"A1"},
-  {bn:"সবজি",             en:"Vegetable",  cat:"Food", level:"A1"},
-  {bn:"ফল",               en:"Fruit",      cat:"Food", level:"A1"},
-  {bn:"চা",               en:"Tea",        cat:"Food", level:"A1"},
-  {bn:"কফি",              en:"Coffee",     cat:"Food", level:"A1"},
-  {bn:"চিনি",             en:"Sugar",      cat:"Food", level:"A1"},
-  {bn:"লবণ",              en:"Salt",       cat:"Food", level:"A1"},
-  {bn:"সকালের খাবার",     en:"Breakfast",  cat:"Food", level:"A1"},
-  {bn:"দুপুরের খাবার",    en:"Lunch",      cat:"Food", level:"A1"},
-  {bn:"রাতের খাবার",      en:"Dinner",     cat:"Food", level:"A1"},
-  {bn:"সুস্বাদু",          en:"Delicious",  cat:"Food", level:"A2"},
-  {bn:"ঝাল",              en:"Spicy",      cat:"Food", level:"A2"},
-  {bn:"মিষ্টি",           en:"Sweet",      cat:"Food", level:"A2"},
-  {bn:"টক",               en:"Sour",       cat:"Food", level:"A2"},
-  {bn:"তিক্ত",            en:"Bitter",     cat:"Food", level:"A2"},
-  {bn:"তাজা",             en:"Fresh",      cat:"Food", level:"A2"},
-  {bn:"রেসিপি",           en:"Recipe",     cat:"Food", level:"A2"},
-  {bn:"অর্ডার করা",       en:"Order",      cat:"Food", level:"A2"},
-  {bn:"মেনু",             en:"Menu",       cat:"Food", level:"A2"},
-
-  /* ── Body Parts ── */
-  {bn:"মাথা",    en:"Head",     cat:"Body", level:"A1"},
-  {bn:"চোখ",     en:"Eye",      cat:"Body", level:"A1"},
-  {bn:"কান",     en:"Ear",      cat:"Body", level:"A1"},
-  {bn:"নাক",     en:"Nose",     cat:"Body", level:"A1"},
-  {bn:"মুখ",     en:"Mouth",    cat:"Body", level:"A1"},
-  {bn:"দাঁত",    en:"Teeth",    cat:"Body", level:"A1"},
-  {bn:"হাত",     en:"Hand",     cat:"Body", level:"A1"},
-  {bn:"পা",      en:"Foot",     cat:"Body", level:"A1"},
-  {bn:"পিঠ",     en:"Back",     cat:"Body", level:"A1"},
-  {bn:"পেট",     en:"Stomach",  cat:"Body", level:"A1"},
-  {bn:"চুল",     en:"Hair",     cat:"Body", level:"A1"},
-  {bn:"আঙুল",   en:"Finger",   cat:"Body", level:"A1"},
-  {bn:"হাঁটু",   en:"Knee",     cat:"Body", level:"A1"},
-  {bn:"কাঁধ",    en:"Shoulder", cat:"Body", level:"A1"},
-  {bn:"রক্ত",    en:"Blood",    cat:"Body", level:"A2"},
-  {bn:"হৃদয়",   en:"Heart",    cat:"Body", level:"A2"},
-  {bn:"হাড়",    en:"Bone",     cat:"Body", level:"A2"},
-  {bn:"চামড়া",  en:"Skin",     cat:"Body", level:"A2"},
-
-  /* ── Animals ── */
-  {bn:"বিড়াল",   en:"Cat",       cat:"Animals", level:"A1"},
-  {bn:"কুকুর",   en:"Dog",       cat:"Animals", level:"A1"},
-  {bn:"পাখি",    en:"Bird",      cat:"Animals", level:"A1"},
-  {bn:"গরু",     en:"Cow",       cat:"Animals", level:"A1"},
-  {bn:"ছাগল",    en:"Goat",      cat:"Animals", level:"A1"},
-  {bn:"মুরগি",   en:"Chicken",   cat:"Animals", level:"A1"},
-  {bn:"হাঁস",    en:"Duck",      cat:"Animals", level:"A1"},
-  {bn:"ঘোড়া",   en:"Horse",     cat:"Animals", level:"A1"},
-  {bn:"হাতি",    en:"Elephant",  cat:"Animals", level:"A1"},
-  {bn:"সিংহ",    en:"Lion",      cat:"Animals", level:"A1"},
-  {bn:"বাঘ",     en:"Tiger",     cat:"Animals", level:"A1"},
-  {bn:"বানর",    en:"Monkey",    cat:"Animals", level:"A1"},
-  {bn:"সাপ",     en:"Snake",     cat:"Animals", level:"A1"},
-  {bn:"খরগোশ",  en:"Rabbit",    cat:"Animals", level:"A1"},
-  {bn:"ব্যাঙ",   en:"Frog",      cat:"Animals", level:"A1"},
-  {bn:"প্রজাপতি",en:"Butterfly", cat:"Animals", level:"A1"},
-  {bn:"ডলফিন",  en:"Dolphin",   cat:"Animals", level:"A2"},
-  {bn:"তিমি",    en:"Whale",     cat:"Animals", level:"A2"},
-  {bn:"হাঙর",    en:"Shark",     cat:"Animals", level:"A2"},
-  {bn:"নেকড়ে",  en:"Wolf",      cat:"Animals", level:"A2"},
-
-  /* ── Home ── */
-  {bn:"বাড়ি",     en:"House",    cat:"Home", level:"A1"},
-  {bn:"ঘর",       en:"Room",     cat:"Home", level:"A1"},
-  {bn:"দরজা",     en:"Door",     cat:"Home", level:"A1"},
-  {bn:"জানালা",   en:"Window",   cat:"Home", level:"A1"},
-  {bn:"বিছানা",   en:"Bed",      cat:"Home", level:"A1"},
-  {bn:"চেয়ার",    en:"Chair",    cat:"Home", level:"A1"},
-  {bn:"টেবিল",    en:"Table",    cat:"Home", level:"A1"},
-  {bn:"রান্নাঘর",  en:"Kitchen",  cat:"Home", level:"A1"},
-  {bn:"বাথরুম",   en:"Bathroom", cat:"Home", level:"A1"},
-  {bn:"বাগান",    en:"Garden",   cat:"Home", level:"A1"},
-  {bn:"চাবি",     en:"Key",      cat:"Home", level:"A1"},
-  {bn:"আয়না",    en:"Mirror",   cat:"Home", level:"A1"},
-  {bn:"বালিশ",    en:"Pillow",   cat:"Home", level:"A1"},
-  {bn:"কম্বল",    en:"Blanket",  cat:"Home", level:"A1"},
-  {bn:"সোফা",     en:"Sofa",     cat:"Home", level:"A2"},
-  {bn:"ফ্রিজ",    en:"Fridge",   cat:"Home", level:"A2"},
-  {bn:"ভাড়া",    en:"Rent",     cat:"Home", level:"A2"},
-  {bn:"প্রতিবেশী",en:"Neighbour",cat:"Home", level:"A2"},
-  {bn:"আসবাবপত্র",en:"Furniture",cat:"Home", level:"A2"},
-  {bn:"মেরামত করা",en:"Repair",  cat:"Home", level:"A2"},
-
-  /* ── School ── */
-  {bn:"স্কুল",       en:"School",     cat:"School", level:"A1"},
-  {bn:"শিক্ষক",      en:"Teacher",    cat:"School", level:"A1"},
-  {bn:"ছাত্র",       en:"Student",    cat:"School", level:"A1"},
-  {bn:"বই",          en:"Book",       cat:"School", level:"A1"},
-  {bn:"কলম",         en:"Pen",        cat:"School", level:"A1"},
-  {bn:"পেন্সিল",     en:"Pencil",     cat:"School", level:"A1"},
-  {bn:"ব্যাগ",        en:"Bag",        cat:"School", level:"A1"},
-  {bn:"পরীক্ষা",     en:"Exam",       cat:"School", level:"A1"},
-  {bn:"হোমওয়ার্ক",  en:"Homework",   cat:"School", level:"A1"},
-  {bn:"খাতা",        en:"Notebook",   cat:"School", level:"A1"},
-  {bn:"লাইব্রেরি",   en:"Library",    cat:"School", level:"A1"},
-  {bn:"প্রশ্ন",      en:"Question",   cat:"School", level:"A1"},
-  {bn:"উত্তর",       en:"Answer",     cat:"School", level:"A1"},
-  {bn:"বিশ্ববিদ্যালয়",en:"University",cat:"School", level:"A2"},
-  {bn:"ডিগ্রি",      en:"Degree",     cat:"School", level:"A2"},
-  {bn:"পাস করা",     en:"Pass",       cat:"School", level:"A2"},
-  {bn:"বৃত্তি",      en:"Scholarship",cat:"School", level:"A2"},
-  {bn:"অ্যাসাইনমেন্ট",en:"Assignment",cat:"School", level:"A2"},
-  {bn:"লেকচার",      en:"Lecture",    cat:"School", level:"A2"},
-  {bn:"অভিধান",      en:"Dictionary", cat:"School", level:"A2"},
-
-  /* ── Transport ── */
-  {bn:"বাস",      en:"Bus",      cat:"Transport", level:"A1"},
-  {bn:"গাড়ি",    en:"Car",      cat:"Transport", level:"A1"},
-  {bn:"ট্রেন",    en:"Train",    cat:"Transport", level:"A1"},
-  {bn:"নৌকা",    en:"Boat",     cat:"Transport", level:"A1"},
-  {bn:"সাইকেল",  en:"Bicycle",  cat:"Transport", level:"A1"},
-  {bn:"রিকশা",   en:"Rickshaw", cat:"Transport", level:"A1"},
-  {bn:"বিমান",   en:"Plane",    cat:"Transport", level:"A1"},
-  {bn:"টিকেট",   en:"Ticket",   cat:"Transport", level:"A1"},
-  {bn:"যানজট",   en:"Traffic",  cat:"Transport", level:"A2"},
-  {bn:"পার্কিং",  en:"Parking",  cat:"Transport", level:"A2"},
-  {bn:"পেট্রোল",  en:"Petrol",   cat:"Transport", level:"A2"},
-  {bn:"যাত্রী",   en:"Passenger",cat:"Transport", level:"A2"},
-  {bn:"ভাড়া",    en:"Fare",     cat:"Transport", level:"A2"},
-  {bn:"বিমানবন্দর",en:"Airport", cat:"Transport", level:"A2"},
-  {bn:"ফ্লাইট",  en:"Flight",   cat:"Transport", level:"A2"},
-
-  /* ── Time ── */
-  {bn:"দিন",           en:"Day",         cat:"Time", level:"A1"},
-  {bn:"রাত",           en:"Night",       cat:"Time", level:"A1"},
-  {bn:"সকাল",          en:"Morning",     cat:"Time", level:"A1"},
-  {bn:"বিকেল",         en:"Afternoon",   cat:"Time", level:"A1"},
-  {bn:"সন্ধ্যা",        en:"Evening",     cat:"Time", level:"A1"},
-  {bn:"আজ",            en:"Today",       cat:"Time", level:"A1"},
-  {bn:"আগামীকাল",      en:"Tomorrow",    cat:"Time", level:"A1"},
-  {bn:"গতকাল",         en:"Yesterday",   cat:"Time", level:"A1"},
-  {bn:"সপ্তাহ",        en:"Week",        cat:"Time", level:"A1"},
-  {bn:"মাস",           en:"Month",       cat:"Time", level:"A1"},
-  {bn:"বছর",           en:"Year",        cat:"Time", level:"A1"},
-  {bn:"ঘণ্টা",          en:"Hour",        cat:"Time", level:"A1"},
-  {bn:"মিনিট",         en:"Minute",      cat:"Time", level:"A1"},
-  {bn:"সোমবার",        en:"Monday",      cat:"Time", level:"A1"},
-  {bn:"শুক্রবার",       en:"Friday",      cat:"Time", level:"A1"},
-  {bn:"রবিবার",        en:"Sunday",      cat:"Time", level:"A1"},
-  {bn:"সম্প্রতি",       en:"Recently",    cat:"Time", level:"A2"},
-  {bn:"হঠাৎ",          en:"Suddenly",    cat:"Time", level:"A2"},
-  {bn:"অবশেষে",        en:"Finally",     cat:"Time", level:"A2"},
-  {bn:"এই মুহূর্তে",   en:"At the moment",cat:"Time",level:"A2"},
-
-  /* ── Weather ── */
-  {bn:"সূর্য",          en:"Sun",         cat:"Weather", level:"A1"},
-  {bn:"বৃষ্টি",         en:"Rain",        cat:"Weather", level:"A1"},
-  {bn:"বাতাস",          en:"Wind",        cat:"Weather", level:"A1"},
-  {bn:"মেঘ",            en:"Cloud",       cat:"Weather", level:"A1"},
-  {bn:"গরম",            en:"Hot",         cat:"Weather", level:"A1"},
-  {bn:"ঠান্ডা",         en:"Cold",        cat:"Weather", level:"A1"},
-  {bn:"উষ্ণ",           en:"Warm",        cat:"Weather", level:"A1"},
-  {bn:"ঝড়",            en:"Storm",       cat:"Weather", level:"A1"},
-  {bn:"আকাশ",           en:"Sky",         cat:"Weather", level:"A1"},
-  {bn:"রৌদ্রোজ্জ্বল",  en:"Sunny",       cat:"Weather", level:"A1"},
-  {bn:"মেঘলা",          en:"Cloudy",      cat:"Weather", level:"A2"},
-  {bn:"কুয়াশাচ্ছন্ন",  en:"Foggy",       cat:"Weather", level:"A2"},
-  {bn:"ঝোড়ো",          en:"Windy",       cat:"Weather", level:"A2"},
-  {bn:"বজ্রপাত",        en:"Thunder",     cat:"Weather", level:"A2"},
-  {bn:"পূর্বাভাস",      en:"Forecast",    cat:"Weather", level:"A2"},
-
-  /* ── Adjectives ── */
-  {bn:"বড়",         en:"Big",         cat:"Adjectives", level:"A1"},
-  {bn:"ছোট",        en:"Small",       cat:"Adjectives", level:"A1"},
-  {bn:"লম্বা",       en:"Tall",        cat:"Adjectives", level:"A1"},
-  {bn:"খাটো",       en:"Short",       cat:"Adjectives", level:"A1"},
-  {bn:"ভালো",       en:"Good",        cat:"Adjectives", level:"A1"},
-  {bn:"খারাপ",      en:"Bad",         cat:"Adjectives", level:"A1"},
-  {bn:"নতুন",       en:"New",         cat:"Adjectives", level:"A1"},
-  {bn:"পুরনো",      en:"Old",         cat:"Adjectives", level:"A1"},
-  {bn:"খুশি",       en:"Happy",       cat:"Adjectives", level:"A1"},
-  {bn:"দুঃখী",      en:"Sad",         cat:"Adjectives", level:"A1"},
-  {bn:"ক্লান্ত",    en:"Tired",       cat:"Adjectives", level:"A1"},
-  {bn:"শক্তিশালী",  en:"Strong",      cat:"Adjectives", level:"A1"},
-  {bn:"দ্রুত",      en:"Fast",        cat:"Adjectives", level:"A1"},
-  {bn:"সহজ",        en:"Easy",        cat:"Adjectives", level:"A1"},
-  {bn:"কঠিন",       en:"Difficult",   cat:"Adjectives", level:"A1"},
-  {bn:"পরিষ্কার",   en:"Clean",       cat:"Adjectives", level:"A1"},
-  {bn:"নোংরা",      en:"Dirty",       cat:"Adjectives", level:"A1"},
-  {bn:"উজ্জ্বল",    en:"Bright",      cat:"Adjectives", level:"A2"},
-  {bn:"অন্ধকার",    en:"Dark",        cat:"Adjectives", level:"A2"},
-  {bn:"আরামদায়ক",  en:"Comfortable", cat:"Adjectives", level:"A2"},
-  {bn:"বিপজ্জনক",  en:"Dangerous",   cat:"Adjectives", level:"A2"},
-  {bn:"নিরাপদ",    en:"Safe",        cat:"Adjectives", level:"A2"},
-  {bn:"দারুণ",      en:"Wonderful",   cat:"Adjectives", level:"A2"},
-  {bn:"ভয়ংকর",    en:"Terrible",    cat:"Adjectives", level:"A2"},
-  {bn:"অবিশ্বাস্য", en:"Amazing",     cat:"Adjectives", level:"A2"},
-
-  /* ── Verbs (Common) ── */
-  {bn:"যাওয়া",          en:"Go",       cat:"Verbs", level:"A1"},
-  {bn:"আসা",            en:"Come",     cat:"Verbs", level:"A1"},
-  {bn:"খাওয়া",          en:"Eat",      cat:"Verbs", level:"A1"},
-  {bn:"পান করা",        en:"Drink",    cat:"Verbs", level:"A1"},
-  {bn:"ঘুমানো",         en:"Sleep",    cat:"Verbs", level:"A1"},
-  {bn:"হাঁটা",          en:"Walk",     cat:"Verbs", level:"A1"},
-  {bn:"দৌড়ানো",        en:"Run",      cat:"Verbs", level:"A1"},
-  {bn:"বসা",            en:"Sit",      cat:"Verbs", level:"A1"},
-  {bn:"দেখা",           en:"See",      cat:"Verbs", level:"A1"},
-  {bn:"শোনা",           en:"Hear",     cat:"Verbs", level:"A1"},
-  {bn:"বলা",            en:"Say",      cat:"Verbs", level:"A1"},
-  {bn:"কথা বলা",        en:"Speak",    cat:"Verbs", level:"A1"},
-  {bn:"লেখা",           en:"Write",    cat:"Verbs", level:"A1"},
-  {bn:"পড়া",           en:"Read",     cat:"Verbs", level:"A1"},
-  {bn:"রান্না করা",     en:"Cook",     cat:"Verbs", level:"A1"},
-  {bn:"ধোয়া",           en:"Wash",     cat:"Verbs", level:"A1"},
-  {bn:"খেলা",           en:"Play",     cat:"Verbs", level:"A1"},
-  {bn:"কাজ করা",        en:"Work",     cat:"Verbs", level:"A1"},
-  {bn:"সাহায্য করা",    en:"Help",     cat:"Verbs", level:"A1"},
-  {bn:"ভালোবাসা",       en:"Love",     cat:"Verbs", level:"A1"},
-  {bn:"পছন্দ করা",      en:"Like",     cat:"Verbs", level:"A1"},
-  {bn:"চাওয়া",          en:"Want",     cat:"Verbs", level:"A1"},
-  {bn:"জানা",           en:"Know",     cat:"Verbs", level:"A1"},
-  {bn:"ভুলে যাওয়া",    en:"Forget",   cat:"Verbs", level:"A2"},
-  {bn:"মনে রাখা",       en:"Remember", cat:"Verbs", level:"A2"},
-  {bn:"সিদ্ধান্ত নেওয়া",en:"Decide",  cat:"Verbs", level:"A2"},
-  {bn:"বেছে নেওয়া",    en:"Choose",   cat:"Verbs", level:"A2"},
-  {bn:"উপভোগ করা",      en:"Enjoy",    cat:"Verbs", level:"A2"},
-  {bn:"কল্পনা করা",     en:"Imagine",  cat:"Verbs", level:"A2"},
-  {bn:"বিশ্বাস করা",    en:"Believe",  cat:"Verbs", level:"A2"},
-
-  /* ── Health ── */
-  {bn:"ডাক্তার",         en:"Doctor",      cat:"Health", level:"A1"},
-  {bn:"ওষুধ",            en:"Medicine",    cat:"Health", level:"A1"},
-  {bn:"ব্যথা",           en:"Pain",        cat:"Health", level:"A1"},
-  {bn:"জ্বর",            en:"Fever",       cat:"Health", level:"A1"},
-  {bn:"কাশি",            en:"Cough",       cat:"Health", level:"A1"},
-  {bn:"বিশ্রাম",         en:"Rest",        cat:"Health", level:"A1"},
-  {bn:"সুস্থ",           en:"Healthy",     cat:"Health", level:"A1"},
-  {bn:"মাথাব্যথা",       en:"Headache",    cat:"Health", level:"A2"},
-  {bn:"দাঁতব্যথা",       en:"Toothache",   cat:"Health", level:"A2"},
-  {bn:"অ্যালার্জি",      en:"Allergy",     cat:"Health", level:"A2"},
-  {bn:"ইনজেকশন",        en:"Injection",   cat:"Health", level:"A2"},
-  {bn:"ব্যান্ডেজ",       en:"Bandage",     cat:"Health", level:"A2"},
-  {bn:"অ্যাম্বুলেন্স",   en:"Ambulance",   cat:"Health", level:"A2"},
-  {bn:"টিকা",            en:"Vaccine",     cat:"Health", level:"A2"},
-  {bn:"খাদ্যাভ্যাস",     en:"Diet",        cat:"Health", level:"A2"},
-
-  /* ── Travel ── */
-  {bn:"পাসপোর্ট",    en:"Passport",    cat:"Travel", level:"A2"},
-  {bn:"ভিসা",        en:"Visa",        cat:"Travel", level:"A2"},
-  {bn:"মালপত্র",     en:"Luggage",     cat:"Travel", level:"A2"},
-  {bn:"হোটেল",       en:"Hotel",       cat:"Travel", level:"A2"},
-  {bn:"বুকিং",       en:"Reservation", cat:"Travel", level:"A2"},
-  {bn:"মানচিত্র",    en:"Map",         cat:"Travel", level:"A2"},
-  {bn:"ভ্রমণ",       en:"Tour",        cat:"Travel", level:"A2"},
-  {bn:"গাইড",        en:"Guide",       cat:"Travel", level:"A2"},
-  {bn:"গন্তব্য",     en:"Destination", cat:"Travel", level:"A2"},
-  {bn:"যাত্রা",      en:"Journey",     cat:"Travel", level:"A2"},
-  {bn:"বিদেশে",      en:"Abroad",      cat:"Travel", level:"A2"},
-  {bn:"দেরি",        en:"Delay",       cat:"Travel", level:"A2"},
-  {bn:"স্মারক",      en:"Souvenir",    cat:"Travel", level:"A2"},
-
-  /* ── Work ── */
-  {bn:"চাকরি",           en:"Job",        cat:"Work", level:"A2"},
-  {bn:"বেতন",            en:"Salary",     cat:"Work", level:"A2"},
-  {bn:"সাক্ষাৎকার",      en:"Interview",  cat:"Work", level:"A2"},
-  {bn:"আবেদন করা",       en:"Apply",      cat:"Work", level:"A2"},
-  {bn:"সভা",             en:"Meeting",    cat:"Work", level:"A2"},
-  {bn:"বস",              en:"Boss",       cat:"Work", level:"A2"},
-  {bn:"সহকর্মী",         en:"Colleague",  cat:"Work", level:"A2"},
-  {bn:"অভিজ্ঞতা",        en:"Experience", cat:"Work", level:"A2"},
-  {bn:"দক্ষতা",          en:"Skill",      cat:"Work", level:"A2"},
-  {bn:"পদোন্নতি দেওয়া",  en:"Promote",    cat:"Work", level:"A2"},
-  {bn:"অবসর নেওয়া",      en:"Retire",     cat:"Work", level:"A2"},
-  {bn:"স্বেচ্ছাসেবক",    en:"Volunteer",  cat:"Work", level:"A2"},
-
-  /* ── Technology ── */
-  {bn:"ফোন",           en:"Phone",         cat:"Technology", level:"A1"},
-  {bn:"কম্পিউটার",     en:"Computer",      cat:"Technology", level:"A1"},
-  {bn:"ইন্টারনেট",     en:"Internet",      cat:"Technology", level:"A1"},
-  {bn:"পাসওয়ার্ড",    en:"Password",      cat:"Technology", level:"A2"},
-  {bn:"ইমেইল",        en:"Email",         cat:"Technology", level:"A2"},
-  {bn:"ডাউনলোড",      en:"Download",      cat:"Technology", level:"A2"},
-  {bn:"আপলোড",        en:"Upload",        cat:"Technology", level:"A2"},
-  {bn:"ওয়েবসাইট",     en:"Website",       cat:"Technology", level:"A2"},
-  {bn:"অ্যাপ",        en:"App",           cat:"Technology", level:"A2"},
-  {bn:"ওয়াইফাই",      en:"Wifi",          cat:"Technology", level:"A2"},
-  {bn:"ব্যাটারি",      en:"Battery",       cat:"Technology", level:"A2"},
-  {bn:"চার্জার",       en:"Charger",       cat:"Technology", level:"A2"},
-  {bn:"ল্যাপটপ",       en:"Laptop",        cat:"Technology", level:"A2"},
-  {bn:"ভিডিও কল",     en:"Video call",    cat:"Technology", level:"A2"},
-  {bn:"সোশ্যাল মিডিয়া",en:"Social media", cat:"Technology", level:"A2"},
-
-  /* ── Shopping ── */
-  {bn:"দাম",       en:"Price",      cat:"Shopping", level:"A1"},
-  {bn:"টাকা",      en:"Money",      cat:"Shopping", level:"A1"},
-  {bn:"সস্তা",     en:"Cheap",      cat:"Shopping", level:"A1"},
-  {bn:"দামি",      en:"Expensive",  cat:"Shopping", level:"A1"},
-  {bn:"রসিদ",      en:"Receipt",    cat:"Shopping", level:"A1"},
-  {bn:"ছাড়",      en:"Discount",   cat:"Shopping", level:"A2"},
-  {bn:"ব্র্যান্ড",  en:"Brand",      cat:"Shopping", level:"A2"},
-  {bn:"মান",       en:"Quality",    cat:"Shopping", level:"A2"},
-  {bn:"ক্রেতা",    en:"Customer",   cat:"Shopping", level:"A2"},
-  {bn:"বাজেট",     en:"Budget",     cat:"Shopping", level:"A2"},
-  {bn:"সঞ্চয়",    en:"Savings",    cat:"Shopping", level:"A2"},
-  {bn:"ফেরত",      en:"Refund",     cat:"Shopping", level:"A2"},
-  {bn:"মানিব্যাগ", en:"Wallet",     cat:"Shopping", level:"A2"},
-
-  /* ── Places ── */
-  {bn:"বাজার",         en:"Market",      cat:"Places", level:"A1"},
-  {bn:"হাসপাতাল",      en:"Hospital",    cat:"Places", level:"A1"},
-  {bn:"ব্যাংক",         en:"Bank",        cat:"Places", level:"A1"},
-  {bn:"পার্ক",         en:"Park",        cat:"Places", level:"A1"},
-  {bn:"শহর",           en:"City",        cat:"Places", level:"A1"},
-  {bn:"গ্রাম",         en:"Village",     cat:"Places", level:"A1"},
-  {bn:"দেশ",           en:"Country",     cat:"Places", level:"A1"},
-  {bn:"রেস্তোরাঁ",     en:"Restaurant",  cat:"Places", level:"A1"},
-  {bn:"অফিস",          en:"Office",      cat:"Places", level:"A1"},
-  {bn:"জাদুঘর",        en:"Museum",      cat:"Places", level:"A2"},
-  {bn:"সিনেমা হল",     en:"Cinema",      cat:"Places", level:"A2"},
-  {bn:"ফার্মেসি",      en:"Pharmacy",    cat:"Places", level:"A2"},
-  {bn:"সুপারমার্কেট",  en:"Supermarket", cat:"Places", level:"A2"},
-  {bn:"স্টেডিয়াম",    en:"Stadium",     cat:"Places", level:"A2"},
-  {bn:"সমুদ্র সৈকত",  en:"Beach",       cat:"Places", level:"A2"},
-
-  /* ── Emotions ── */
-  {bn:"হাসি",        en:"Smile",        cat:"Emotions", level:"A1"},
-  {bn:"কান্না",      en:"Cry",          cat:"Emotions", level:"A1"},
-  {bn:"রাগান্বিত",   en:"Angry",        cat:"Emotions", level:"A1"},
-  {bn:"ভয়ার্ত",     en:"Scared",       cat:"Emotions", level:"A1"},
-  {bn:"অবাক",       en:"Surprised",    cat:"Emotions", level:"A1"},
-  {bn:"উত্তেজিত",   en:"Excited",      cat:"Emotions", level:"A1"},
-  {bn:"বিরক্ত",     en:"Bored",        cat:"Emotions", level:"A1"},
-  {bn:"গর্বিত",     en:"Proud",        cat:"Emotions", level:"A1"},
-  {bn:"চিন্তিত",    en:"Worried",      cat:"Emotions", level:"A1"},
-  {bn:"নার্ভাস",    en:"Nervous",      cat:"Emotions", level:"A2"},
-  {bn:"বিব্রত",     en:"Embarrassed",  cat:"Emotions", level:"A2"},
-  {bn:"হতাশ",       en:"Disappointed", cat:"Emotions", level:"A2"},
-  {bn:"স্বস্তিবোধ", en:"Relieved",     cat:"Emotions", level:"A2"},
-  {bn:"ঈর্ষান্বিত", en:"Jealous",      cat:"Emotions", level:"A2"},
-  {bn:"কৃতজ্ঞ",     en:"Grateful",     cat:"Emotions", level:"A2"},
-
-  /* ── Character ── */
-  {bn:"সৎ",           en:"Honest",       cat:"Character", level:"A2"},
-  {bn:"সাহসী",        en:"Brave",        cat:"Character", level:"A2"},
-  {bn:"চালাক",        en:"Clever",       cat:"Character", level:"A2"},
-  {bn:"অলস",          en:"Lazy",         cat:"Character", level:"A2"},
-  {bn:"পরিশ্রমী",     en:"Hardworking",  cat:"Character", level:"A2"},
-  {bn:"ভদ্র",         en:"Polite",       cat:"Character", level:"A2"},
-  {bn:"অভদ্র",        en:"Rude",         cat:"Character", level:"A2"},
-  {bn:"উদার",         en:"Generous",     cat:"Character", level:"A2"},
-  {bn:"স্বার্থপর",    en:"Selfish",      cat:"Character", level:"A2"},
-  {bn:"ধৈর্যশীল",     en:"Patient",      cat:"Character", level:"A2"},
-  {bn:"লাজুক",        en:"Shy",          cat:"Character", level:"A2"},
-  {bn:"দায়িত্বশীল",  en:"Responsible",  cat:"Character", level:"A2"},
-  {bn:"সৃজনশীল",      en:"Creative",     cat:"Character", level:"A2"},
-  {bn:"বিশ্বস্ত",     en:"Reliable",     cat:"Character", level:"A2"},
-  {bn:"উচ্চাকাঙ্ক্ষী",en:"Ambitious",   cat:"Character", level:"A2"},
-
-  /* ── Daily Life ── */
-  {bn:"বন্ধু",          en:"Friend",       cat:"Daily Life", level:"A1"},
-  {bn:"নাম",            en:"Name",         cat:"Daily Life", level:"A1"},
-  {bn:"বয়স",           en:"Age",          cat:"Daily Life", level:"A1"},
-  {bn:"জন্মদিন",        en:"Birthday",     cat:"Daily Life", level:"A1"},
-  {bn:"ছুটি",           en:"Holiday",      cat:"Daily Life", level:"A1"},
-  {bn:"উপহার",          en:"Gift",         cat:"Daily Life", level:"A1"},
-  {bn:"সমস্যা",         en:"Problem",      cat:"Daily Life", level:"A1"},
-  {bn:"গুরুত্বপূর্ণ",   en:"Important",    cat:"Daily Life", level:"A1"},
-  {bn:"সুন্দর",         en:"Beautiful",    cat:"Daily Life", level:"A1"},
-  {bn:"মজার",          en:"Funny",        cat:"Daily Life", level:"A1"},
-  {bn:"দয়ালু",         en:"Kind",         cat:"Daily Life", level:"A1"},
-  {bn:"ব্যস্ত",         en:"Busy",         cat:"Daily Life", level:"A1"},
-  {bn:"প্রস্তুত",       en:"Ready",        cat:"Daily Life", level:"A1"},
-  {bn:"পরামর্শ",        en:"Advice",       cat:"Daily Life", level:"A2"},
-  {bn:"ভুল",            en:"Mistake",      cat:"Daily Life", level:"A2"},
-  {bn:"সাফল্য",         en:"Success",      cat:"Daily Life", level:"A2"},
-  {bn:"স্বপ্ন",         en:"Dream",        cat:"Daily Life", level:"A2"},
-  {bn:"লক্ষ্য",         en:"Goal",         cat:"Daily Life", level:"A2"},
-  {bn:"সিদ্ধান্ত",      en:"Decision",     cat:"Daily Life", level:"A2"},
-  {bn:"মতামত",          en:"Opinion",      cat:"Daily Life", level:"A2"},
-  {bn:"পরিকল্পনা",      en:"Plan",         cat:"Daily Life", level:"A2"},
-  {bn:"ফলাফল",          en:"Result",       cat:"Daily Life", level:"A2"},
-  {bn:"কারণ",           en:"Reason",       cat:"Daily Life", level:"A2"},
-  {bn:"সুযোগ",          en:"Chance",       cat:"Daily Life", level:"A2"},
-  {bn:"অগ্রগতি",        en:"Progress",     cat:"Daily Life", level:"A2"},
-];
 
 /* ══════════════════════════════════════════════
    SUBLEVEL SUPPORT — ?cat=Family&level=A1
@@ -930,6 +475,74 @@ function buildQuizPool(){
 let QUIZ = buildQuizPool();
 const ALL_CATS = ["All", ...new Set(WB.map(w => w.cat))];
 
+/* ══════════════════════════════════════════════
+   SUBLEVEL ORDER & LOCK SYSTEM
+══════════════════════════════════════════════ */
+const BEGINNER_ORDER = [
+  { cat:"Greetings",  icon:"👋" },
+  { cat:"Family",     icon:"👨‍👩‍👧" },
+  { cat:"Colors",     icon:"🎨" },
+  { cat:"Numbers",    icon:"🔢" },
+  { cat:"Animals",    icon:"🐾" },
+  { cat:"Food",       icon:"🍚" },
+  { cat:"Body",       icon:"🫀" },
+  { cat:"Home",       icon:"🏠" },
+  { cat:"School",     icon:"📚" },
+  { cat:"Daily Life", icon:"☀️" },
+  { cat:"Work",       icon:"💼" },
+  { cat:"Time",       icon:"⏰" },
+  { cat:"Shopping",   icon:"🛍️" },
+  { cat:"Transport",  icon:"🚌" },
+  { cat:"Travel",     icon:"✈️" },
+  { cat:"Places",     icon:"📍" },
+  { cat:"Weather",    icon:"🌤️" },
+  { cat:"Health",     icon:"💊" },
+  { cat:"Emotions",   icon:"😊" },
+  { cat:"Character",  icon:"🌟" },
+  { cat:"Adjectives", icon:"✨" },
+  { cat:"Verbs",      icon:"⚡" },
+  { cat:"Technology", icon:"📱" },
+];
+
+let passedCats = []; // loaded from Firestore
+
+function applySubLevelLocks() {
+  const tabs = document.querySelectorAll("#sublevel-tabs .level-tab[data-cat]");
+  tabs.forEach(tab => {
+    const cat = tab.dataset.cat;
+    const idx = BEGINNER_ORDER.findIndex(x => x.cat === cat);
+    if (idx <= 0) return; // Greetings (first) always unlocked
+    const prevCat = BEGINNER_ORDER[idx - 1].cat;
+    const isLocked = !passedCats.includes(prevCat);
+    if (isLocked) {
+      tab.classList.add("locked");
+      tab.removeAttribute("href");
+      tab.title = `"${prevCat}" শেষ করলে unlock হবে`;
+      tab.onclick = e => {
+        e.preventDefault();
+        showToast(`🔒 আগে "${prevCat}" সম্পন্ন করো`);
+      };
+    }
+  });
+}
+
+function showToast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+async function markCatPassed(cat) {
+  if (passedCats.includes(cat)) return;
+  passedCats.push(cat);
+  if (!fbUser) return;
+  try {
+    await setDoc(doc(db, "users", fbUser.uid), { passed_beginner_cats: passedCats }, { merge: true });
+  } catch(e) { console.warn("markCatPassed failed", e); }
+}
+
 /* ── if sublevel mode: hide cat pills, show sublevel label ── */
 if(isSublevel){
   const catWrap = document.getElementById("cat-pills");
@@ -952,6 +565,103 @@ let wrongCount = 0;
 let streak = 0;
 let bestStreak = 0;
 let currentUid = null;
+let fbUser = null;
+onAuthStateChanged(auth, u => { fbUser = u; });
+
+/* ══════════════════════════════════════════════
+   SAVE / RESUME PROGRESS (Firestore)
+══════════════════════════════════════════════ */
+const PROGRESS_KEY = () => fbUser ? fbUser.uid + '_beginner' + (subCat ? '_' + subCat.replace(/\s+/g,'_') : '') : null;
+
+async function saveProgress() {
+  if (!fbUser) return;
+  try {
+    await setDoc(doc(db, 'quiz_progress', PROGRESS_KEY()), {
+      qIndex, correctCount, wrongCount, bestStreak,
+      order: order.map(q => q.id),
+      activeTopic,
+      ts: Date.now(),
+      updatedAt: serverTimestamp()
+    });
+  } catch(e) { console.warn('saveProgress failed', e); }
+}
+
+async function loadSaved() {
+  if (!fbUser) return null;
+  try {
+    const snap = await getDoc(doc(db, 'quiz_progress', PROGRESS_KEY()));
+    if (!snap.exists()) return null;
+    return snap.data();
+  } catch(e) { return null; }
+}
+
+async function clearProgress() {
+  if (!fbUser) return;
+  try { await deleteDoc(doc(db, 'quiz_progress', PROGRESS_KEY())); } catch(e) {}
+}
+
+/* ══════════════════════════════════════════════
+   RESUME BANNER
+══════════════════════════════════════════════ */
+function showResumeBanner(saved) {
+  const existing = document.getElementById('resume-banner');
+  if (existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'resume-banner';
+  banner.style.cssText = `
+    background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);
+    border-radius:16px;padding:.85rem 1.2rem;margin-bottom:1.4rem;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    flex-wrap:wrap;
+  `;
+  banner.innerHTML = `
+    <span style="font-size:13px;color:#fde68a;font-family:'Noto Sans Bengali',sans-serif;">
+      ⏸️ আগের session পাওয়া গেছে —
+      <b style="color:var(--gold)">${saved.qIndex} / ${saved.order.length}</b> প্রশ্ন সম্পন্ন
+    </span>
+    <div style="display:flex;gap:8px;">
+      <button id="btn-resume" style="
+        background:rgba(245,200,66,.14);border:1px solid rgba(245,200,66,.35);
+        color:var(--gold);border-radius:10px;padding:5px 18px;font-size:12.5px;
+        cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;">
+        ▶ Continue
+      </button>
+      <button id="btn-fresh" style="
+        background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+        color:var(--muted);border-radius:10px;padding:5px 14px;font-size:12.5px;
+        cursor:pointer;font-family:'Outfit',sans-serif;">
+        নতুন করে
+      </button>
+    </div>`;
+
+  const quizWrap = document.querySelector('.quiz-card-wrap');
+  quizWrap.parentNode.insertBefore(banner, quizWrap);
+
+  document.getElementById('btn-resume').onclick = () => {
+    banner.remove();
+    // Restore order from saved IDs
+    const idMap = {};
+    QUIZ.forEach(q => { idMap[q.id] = q; });
+    const restored = saved.order.map(id => idMap[id]).filter(Boolean);
+    if (!restored.length) { startQuiz(); return; }
+    order        = restored;
+    qIndex       = saved.qIndex;
+    correctCount = saved.correctCount;
+    wrongCount   = saved.wrongCount;
+    bestStreak   = saved.bestStreak || 0;
+    answered     = {};
+    streak       = 0;
+    updateStats();
+    renderQuestion();
+  };
+
+  document.getElementById('btn-fresh').onclick = () => {
+    clearProgress();
+    banner.remove();
+    startQuiz();
+  };
+}
 
 function poolQ(){
   if(activeTopic === "All") return QUIZ;
@@ -1050,6 +760,7 @@ function selectOption(q, i){
   document.getElementById("btn-next").disabled = false;
   document.getElementById("btn-skip").style.display = "none";
   updateStats();
+  saveProgress(); // auto-save after each answer
 }
 
 function lockOptions(q, selectedIdx){
@@ -1149,7 +860,88 @@ function showResult(){
   }
 
   updateStats();
+  clearProgress(); // session done — clear saved progress
   saveScoreToFirestore(correctCount, total, pct);
+
+  // Mark this sublevel as passed if score >= 60%
+  if (isSublevel && subCat && pct >= 60) {
+    await markCatPassed(subCat);
+  }
+
+  /* ── Pass banner ── */
+  const passBanner = document.getElementById('pass-banner');
+  if(passBanner) passBanner.remove();
+
+  // Sublevel passed — show next unlock banner
+  if(isSublevel && subCat && pct >= 60){
+    const idx = BEGINNER_ORDER.findIndex(x => x.cat === subCat);
+    const nextLevel = BEGINNER_ORDER[idx + 1];
+    const banner = document.createElement('div');
+    banner.id = 'pass-banner';
+    banner.style.cssText = `
+      background:linear-gradient(135deg,rgba(52,211,153,.08),rgba(245,200,66,.06));
+      border:1px solid rgba(52,211,153,.3);border-radius:16px;
+      padding:1.1rem 1.4rem;margin-top:1.2rem;text-align:center;
+    `;
+    if(nextLevel){
+      banner.innerHTML = `
+        <div style="font-size:1.6rem;margin-bottom:.4rem;">🔓</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--emerald);margin-bottom:.3rem;">
+          "${subCat}" Passed! ${pct}% স্কোর
+        </div>
+        <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
+          পরের sublevel "${nextLevel.cat}" এখন unlock হয়েছে!
+        </div>
+        <button onclick="location.href='quiz-beginner.html?cat='+encodeURIComponent(nextLevel.cat)"
+          style="background:linear-gradient(135deg,rgba(245,200,66,.16),rgba(251,191,36,.12));
+            border:1px solid rgba(245,200,66,.35);color:var(--gold);
+            border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
+            cursor:pointer;font-family:'Outfit',sans-serif;">
+          ${nextLevel.icon} ${nextLevel.cat} শুরু করো →
+        </button>`;
+    } else {
+      banner.innerHTML = `
+        <div style="font-size:1.6rem;margin-bottom:.4rem;">🏆</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--gold);margin-bottom:.3rem;">
+          সব Beginner Sublevel Completed!
+        </div>
+        <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
+          দারুণ! এখন Intermediate quiz-এ যাওয়ার সময়!
+        </div>
+        <button onclick="location.href='quiz-intermediate.html'"
+          style="background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(6,182,212,.12));
+            border:1px solid rgba(45,212,191,.35);color:var(--teal);
+            border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
+            cursor:pointer;font-family:'Outfit',sans-serif;">
+          🚀 Intermediate শুরু করো →
+        </button>`;
+    }
+    document.getElementById('result-card').appendChild(banner);
+  } else if(!isSublevel && pct >= 70){
+    const banner = document.createElement('div');
+    banner.id = 'pass-banner';
+    banner.style.cssText = `
+      background:linear-gradient(135deg,rgba(52,211,153,.08),rgba(245,200,66,.06));
+      border:1px solid rgba(52,211,153,.3);border-radius:16px;
+      padding:1.1rem 1.4rem;margin-top:1.2rem;text-align:center;
+    `;
+    banner.innerHTML = `
+      <div style="font-size:1.6rem;margin-bottom:.4rem;">🎉</div>
+      <div style="font-size:1rem;font-weight:800;color:var(--emerald);margin-bottom:.3rem;">
+        Beginner Level Passed!
+      </div>
+      <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
+        তুমি ${pct}% স্কোর করে Beginner পার করেছো। Intermediate quiz-এর জন্য প্রস্তুত!
+      </div>
+      <button onclick="location.href='quiz-intermediate.html'"
+        style="background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(6,182,212,.12));
+          border:1px solid rgba(45,212,191,.35);color:var(--teal);
+          border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
+          cursor:pointer;font-family:'Outfit',sans-serif;">
+        🚀 Intermediate শুরু করো →
+      </button>`;
+    document.getElementById('result-card').appendChild(banner);
+  }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1325,6 +1117,7 @@ document.getElementById("footer-year2").textContent = yr;
 
 requireAuth(async user => {
   currentUid = user.uid;
+  fbUser = user;
   const snap = await getDoc(doc(db,"users",user.uid));
   const d = snap.exists() ? snap.data() : {};
 
@@ -1335,8 +1128,20 @@ requireAuth(async user => {
   if(photo) av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`;
   else av.textContent = name[0]?.toUpperCase() || "?";
 
+  // Load passed cats and apply sublevel locks
+  passedCats = d.passed_beginner_cats || [];
+  applySubLevelLocks();
+
   buildPills();
-  startQuiz();
+
+  // Check for saved progress
+  const saved = await loadSaved();
+  if(saved && saved.qIndex > 0 && saved.qIndex < (saved.order?.length || 0)){
+    startQuiz(); // build QUIZ array first
+    showResumeBanner(saved);
+  } else {
+    startQuiz();
+  }
 });
 </script>
 </body>
