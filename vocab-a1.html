@@ -3,525 +3,598 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#38bdf8">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="English Shekho">
-<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
-<title>English A1 Vocabulary — English Shekho</title>
+<title>A1 Vocabulary — English Shekho</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#080c14;--s1:#0f1623;--s2:#161f30;--s3:#1d2840;
-  --border:rgba(255,255,255,0.07);--text:#eef2ff;--muted:#6b7fa3;
-  --c1:#38bdf8;--c2:#a78bfa;--c3:#34d399;--c4:#fb923c;--c5:#f472b6;
-  --c6:#facc15;--green:#34d399;--red:#f87171;--r:14px;--rs:8px;
+  --border:rgba(255,255,255,.07);--text:#eef2ff;--muted:#6b7fa3;
+  --c1:#38bdf8;--c2:#a78bfa;--green:#34d399;--red:#f87171;--gold:#fbbf24;
+  --r:14px;--rs:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans Bengali',sans-serif;min-height:100vh}
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 60% 40% at 10% 10%,rgba(56,189,248,.1),transparent 60%),
-    radial-gradient(ellipse 50% 50% at 90% 80%,rgba(167,139,250,.1),transparent 60%),
-    radial-gradient(ellipse 40% 40% at 55% 45%,rgba(52,211,153,.06),transparent 55%);
+    radial-gradient(ellipse 55% 40% at 5% 10%,rgba(56,189,248,.09),transparent 60%),
+    radial-gradient(ellipse 50% 50% at 95% 90%,rgba(167,139,250,.09),transparent 60%);
 }
 
 /* TOPBAR */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:.85rem 1.5rem;background:rgba(8,12,20,.9);backdrop-filter:blur(18px);
+  padding:.85rem 1.4rem;background:rgba(8,12,20,.92);backdrop-filter:blur(18px);
   border-bottom:1px solid var(--border);position:sticky;top:0;z-index:99;
 }
 .back-btn{
   display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);
-  border:1px solid var(--border);color:var(--muted);padding:.5rem .95rem;
-  border-radius:10px;text-decoration:none;font-size:13px;font-weight:600;transition:.2s;
+  border:1px solid var(--border);color:var(--muted);padding:.45rem .9rem;
+  border-radius:10px;text-decoration:none;font-size:13px;font-weight:600;transition:.2s;cursor:pointer;
 }
 .back-btn:hover{background:rgba(255,255,255,.08);color:var(--text);}
-.topbar-title{
-  font-family:'Baloo Da 2',cursive;font-size:1.05rem;font-weight:800;
+.topbar-center{
+  font-family:'Baloo Da 2',cursive;font-size:1rem;font-weight:800;
   background:linear-gradient(135deg,#38bdf8,#a78bfa);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.nav-av{
-  width:34px;height:34px;border-radius:50%;background:var(--s2);
-  border:1.5px solid rgba(56,189,248,.3);display:flex;align-items:center;
-  justify-content:center;font-size:.9rem;cursor:pointer;
-}
-.nav-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 
-.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:2rem 1.25rem 5rem}
+/* VIEWS */
+.view{display:none;position:relative;z-index:1;}
+.view.active{display:block;}
 
-/* HEADER */
-.hdr{text-align:center;margin-bottom:2rem;animation:fd .6s ease both}
-.hdr-tag{
-  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  padding:5px 18px;border-radius:20px;margin-bottom:1rem;
-  background:linear-gradient(135deg,#0c2340,#1e1040);
-  border:1px solid rgba(56,189,248,.3);color:var(--c1);
+/* ══════════════════════════════════
+   VIEW 1: LEVEL MAP
+══════════════════════════════════ */
+#view-map .wrap{max-width:680px;margin:0 auto;padding:2rem 1.25rem 5rem;}
+
+.map-hero{text-align:center;margin-bottom:2rem;}
+.map-hero-tag{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 16px;border-radius:20px;margin-bottom:.75rem;
+  background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:var(--c1);
 }
-h1{
-  font-family:'Baloo Da 2',cursive;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;line-height:1.15;
-  background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 50%,var(--c5) 100%);
+.map-hero h1{
+  font-family:'Baloo Da 2',cursive;font-size:clamp(1.6rem,5vw,2.2rem);font-weight:800;line-height:1.2;
+  background:linear-gradient(135deg,var(--c1),var(--c2));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:.35rem;
+  margin-bottom:.3rem;
 }
-.hdr-sub{font-size:13px;color:var(--muted)}
+.map-hero p{font-size:13px;color:var(--muted);}
 
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem;animation:fu .5s .1s ease both}
-.scard{background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);padding:.65rem .5rem;text-align:center}
-.sv{font-family:'Baloo Da 2',cursive;font-size:1.45rem;font-weight:700;line-height:1}
-.sl{font-size:10px;color:var(--muted);margin-top:2px}
-.sc-ok .sv{color:var(--green)} .sc-no .sv{color:var(--red)}
-.sc-tot .sv{color:var(--c1)} .sc-pts .sv{color:var(--c6)}
-
-/* PROGRESS */
-.prog-wrap{margin-bottom:1.25rem;animation:fu .5s .15s ease both}
-.prog-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
-.prog-bar{height:6px;background:var(--s2);border-radius:6px;overflow:hidden}
-.prog-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .5s cubic-bezier(.4,0,.2,1)}
-
-/* DIFFICULTY TABS */
-.diff-row{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;animation:fu .5s .2s ease both}
-.dbtn{
-  flex:1;min-width:90px;padding:8px 10px;border-radius:30px;
-  border:1px solid var(--border);background:var(--s1);
-  color:var(--muted);font-family:'Noto Sans Bengali',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;
+/* overall progress bar */
+.overall-prog{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);
+  padding:1rem 1.2rem;margin-bottom:1.5rem;
 }
-.dbtn:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
-.dbtn.on{background:linear-gradient(135deg,#0a4a6e,#4c1d95);border-color:transparent;color:#fff;font-weight:600}
-.dbtn .cnt{font-size:11px;opacity:.7;margin-left:4px;}
+.op-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;}
+.op-label{font-size:13px;font-weight:600;color:var(--text);}
+.op-val{font-family:'Baloo Da 2',cursive;font-size:1rem;font-weight:700;color:var(--c1);}
+.op-bar{height:8px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;}
+.op-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .6s cubic-bezier(.4,0,.2,1);}
+.op-stats{display:flex;gap:16px;margin-top:.7rem;}
+.op-stat{font-size:11px;color:var(--muted);}
+.op-stat b{color:var(--text);}
 
-/* CATEGORY FILTER */
-.cat-section{margin-bottom:1.5rem;animation:fu .5s .25s ease both}
-.cat-section-title{font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.cat-section-title span{flex:1;height:1px;background:var(--border)}
-.cat-grid{display:flex;flex-wrap:wrap;gap:6px}
-.cpill{
-  font-size:11px;padding:4px 11px;border-radius:20px;border:1px solid;cursor:pointer;
-  font-family:'Noto Sans Bengali',sans-serif;font-weight:500;transition:all .2s;opacity:.4;
+/* level grid */
+.level-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:12px;
 }
-.cpill.on{opacity:1}
-.cpill-all{
-  font-size:11px;padding:4px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;
-  font-family:'Noto Sans Bengali',sans-serif;font-weight:600;transition:all .2s
+.lcard{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);
+  padding:1.1rem .9rem;cursor:pointer;transition:all .22s;
+  position:relative;overflow:hidden;text-align:center;
 }
-.cpill-all:hover,.cpill-all.on{background:rgba(255,255,255,.12)}
+.lcard:hover:not(.locked){background:var(--s2);border-color:rgba(255,255,255,.15);transform:translateY(-3px);}
+.lcard.locked{opacity:.45;cursor:not-allowed;}
+.lcard.done{border-color:rgba(52,211,153,.3);}
+.lcard.done::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);}
+.lcard.current{border-color:rgba(56,189,248,.5);box-shadow:0 0 0 2px rgba(56,189,248,.1);}
+.lcard.current::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c1),var(--c2));}
 
-/* QUESTION CARD */
-.qcard{
+.lcard-num{font-family:'Baloo Da 2',cursive;font-size:1.4rem;font-weight:800;line-height:1;margin-bottom:4px;}
+.lcard.done .lcard-num{color:var(--green);}
+.lcard.current .lcard-num{color:var(--c1);}
+.lcard.locked .lcard-num{color:var(--muted);}
+.lcard:not(.done):not(.current):not(.locked) .lcard-num{color:var(--muted);}
+
+.lcard-label{font-size:11px;color:var(--muted);line-height:1.3;}
+.lcard-words{font-size:10px;color:var(--muted);margin-top:3px;}
+.lcard-badge{
+  position:absolute;top:6px;right:6px;font-size:11px;
+}
+.lcard-prog{
+  margin-top:8px;height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;
+}
+.lcard-prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--c1));border-radius:3px;}
+
+/* ══════════════════════════════════
+   VIEW 2: LEARN (flashcard)
+══════════════════════════════════ */
+#view-learn .wrap{max-width:520px;margin:0 auto;padding:1.75rem 1.25rem 5rem;}
+
+/* learn header */
+.lh{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.25rem;
+}
+.lh-title{font-family:'Baloo Da 2',cursive;font-size:1rem;font-weight:700;color:var(--c1);}
+.lh-count{font-size:12px;color:var(--muted);}
+
+/* step tabs */
+.steps{display:flex;gap:6px;margin-bottom:1.4rem;}
+.step-dot{
+  flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.07);transition:background .3s;
+}
+.step-dot.done-s{background:var(--green);}
+.step-dot.active-s{background:var(--c1);}
+
+/* FLASHCARD */
+.fc{
+  perspective:1000px;margin-bottom:1.25rem;cursor:pointer;
+}
+.fc-inner{
+  position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);
+  border-radius:var(--r);
+}
+.fc.flipped .fc-inner{transform:rotateY(180deg);}
+.fc-front,.fc-back{
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
   background:var(--s1);border:1px solid var(--border);border-radius:var(--r);
-  padding:2rem 1.5rem;margin-bottom:1.25rem;text-align:center;
-  position:relative;overflow:hidden;animation:fu .35s ease both;
+  padding:2rem 1.5rem;min-height:230px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;position:relative;overflow:hidden;
 }
-.qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c5))}
+.fc-front::before,.fc-back::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--c1),var(--c2));
+}
+.fc-back{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  transform:rotateY(180deg);
+}
+.fc-back::before{background:linear-gradient(90deg,var(--green),var(--c1));}
+.fc-cat{
+  font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;
+  background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);color:var(--c1);
+  margin-bottom:.9rem;
+}
+.fc-word{font-family:'Baloo Da 2',cursive;font-size:clamp(2rem,8vw,3rem);font-weight:800;line-height:1;color:var(--text);margin-bottom:.35rem;}
+.fc-phonetic{font-size:14px;color:var(--c1);letter-spacing:.03em;margin-bottom:.2rem;}
+.fc-hint{font-size:12px;color:var(--muted);margin-top:.5rem;}
+.fc-tap{font-size:12px;color:var(--muted);margin-top:1rem;opacity:.6;}
 
-/* Difficulty badge inside card */
-.diff-badge{
-  display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
-  letter-spacing:.06em;padding:4px 12px;border-radius:20px;margin-bottom:.7rem;
+.fc-meaning{font-family:'Baloo Da 2',cursive;font-size:2rem;font-weight:800;color:var(--green);margin-bottom:.6rem;}
+.fc-example{
+  font-size:13px;color:var(--muted);text-align:center;line-height:1.6;
+  padding:.6rem .9rem;background:rgba(255,255,255,.03);border-radius:8px;
+  border-left:2px solid rgba(56,189,248,.3);text-align:left;
 }
-.diff-easy{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.3)}
-.diff-medium{background:rgba(251,191,36,.12);color:var(--c6);border:1px solid rgba(251,191,36,.3)}
-.diff-hard{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.fc-example em{color:var(--c1);font-style:normal;}
 
-.ctag{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:.9rem;font-weight:600}
-.qword{font-family:'Baloo Da 2',cursive;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.3rem;color:var(--text)}
-.qphonetic{font-size:13px;color:var(--c1);margin-bottom:.3rem;letter-spacing:.03em}
-.qhint{font-size:12px;color:var(--muted);margin-bottom:.6rem}
-.qexample{
-  font-size:12px;color:var(--muted);margin-top:.6rem;padding:.55rem .9rem;
-  background:rgba(255,255,255,.03);border-radius:8px;border-left:2px solid rgba(56,189,248,.3);
-  text-align:left;display:none;line-height:1.6;
+/* nav buttons */
+.fc-nav{display:flex;gap:10px;justify-content:center;margin-bottom:1rem;}
+.fc-btn{
+  flex:1;padding:.75rem;border:none;border-radius:12px;font-family:'Noto Sans Bengali',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;max-width:160px;
 }
-.qexample.show{display:block;}
-.qexample em{color:var(--c1);font-style:normal;}
+.fc-btn-skip{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);}
+.fc-btn-skip:hover{background:rgba(255,255,255,.1);color:var(--text);}
+.fc-btn-got{background:linear-gradient(135deg,rgba(52,211,153,.15),rgba(52,211,153,.08));border:1px solid rgba(52,211,153,.3);color:var(--green);}
+.fc-btn-got:hover{background:rgba(52,211,153,.22);}
+.fc-btn-next{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;}
+.fc-btn-next:hover{opacity:.9;transform:translateY(-1px);}
 
-/* POINT FLASH */
-.pt-flash{
-  position:absolute;top:1rem;right:1rem;
-  font-family:'Baloo Da 2',cursive;font-size:1.1rem;font-weight:800;
-  opacity:0;transform:translateY(0);transition:none;pointer-events:none;
-}
-.pt-flash.show{animation:ptpop .8s ease forwards;}
-@keyframes ptpop{
-  0%{opacity:1;transform:translateY(0)}
-  60%{opacity:1;transform:translateY(-18px)}
-  100%{opacity:0;transform:translateY(-30px)}
-}
+.fc-progress{font-size:12px;color:var(--muted);text-align:center;margin-bottom:1.25rem;}
+.fc-prog-bar{height:4px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:.5rem;}
+.fc-prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .35s;}
 
-/* OPTIONS */
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
-.opt{
+/* QUICK CHECK (mini quiz after flashcards) */
+.qc-header{text-align:center;margin-bottom:1.5rem;}
+.qc-header h2{font-family:'Baloo Da 2',cursive;font-size:1.4rem;font-weight:800;color:var(--text);margin-bottom:.3rem;}
+.qc-header p{font-size:13px;color:var(--muted);}
+.qc-card{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--r);
+  padding:1.75rem 1.4rem;margin-bottom:1.1rem;text-align:center;position:relative;overflow:hidden;
+}
+.qc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c2),var(--c5,#f472b6));}
+.qc-q{font-size:12px;color:var(--muted);margin-bottom:.5rem;}
+.qc-word{font-family:'Baloo Da 2',cursive;font-size:2rem;font-weight:800;color:var(--text);margin-bottom:.4rem;}
+.qc-phonetic{font-size:13px;color:var(--c1);margin-bottom:.3rem;}
+.qc-task{font-size:13px;color:var(--muted);}
+.qc-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:1rem;}
+.qc-opt{
   background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);
-  padding:.85rem .75rem;font-family:'Noto Sans Bengali',sans-serif;font-size:13px;
-  color:var(--text);cursor:pointer;text-align:center;transition:all .18s;line-height:1.4;
+  padding:.8rem .7rem;font-family:'Noto Sans Bengali',sans-serif;font-size:13px;
+  color:var(--text);cursor:pointer;transition:all .18s;text-align:center;line-height:1.4;
 }
-.opt:hover:not(:disabled){background:var(--s2);border-color:rgba(255,255,255,.18);transform:translateY(-1px)}
-.opt:disabled{cursor:default;transform:none}
-.opt.correct{background:rgba(52,211,153,.12);border-color:var(--green);color:var(--green);font-weight:600}
-.opt.wrong{background:rgba(248,113,113,.12);border-color:var(--red);color:var(--red)}
-.opt.reveal{background:rgba(56,189,248,.12);border-color:var(--c1);color:var(--c1);font-weight:600}
+.qc-opt:hover:not(:disabled){background:var(--s2);border-color:rgba(255,255,255,.18);}
+.qc-opt:disabled{cursor:default;}
+.qc-opt.correct{background:rgba(52,211,153,.12);border-color:var(--green);color:var(--green);font-weight:600;}
+.qc-opt.wrong{background:rgba(248,113,113,.1);border-color:var(--red);color:var(--red);}
+.qc-opt.reveal{background:rgba(56,189,248,.1);border-color:var(--c1);color:var(--c1);font-weight:600;}
+.qc-fb{min-height:24px;text-align:center;font-size:14px;font-weight:600;margin-bottom:.9rem;}
+.qc-fb.ok{color:var(--green)}.qc-fb.no{color:var(--red);}
+.btn-qnext{
+  width:100%;padding:.75rem;background:linear-gradient(135deg,var(--c1),var(--c2));
+  color:#fff;border:none;border-radius:12px;font-family:'Noto Sans Bengali',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:.2s;display:none;
+}
+.btn-qnext:hover{opacity:.9;}
+.qc-counter{text-align:center;font-size:12px;color:var(--muted);margin-top:.7rem;}
 
-/* FEEDBACK & NEXT */
-.fb{min-height:26px;text-align:center;font-size:15px;font-weight:600;margin-bottom:1rem}
-.fb.ok{color:var(--green)} .fb.no{color:var(--red)}
-.btn-row{display:flex;justify-content:center;gap:10px}
-.btn-next{
-  background:linear-gradient(135deg,#0a4a6e,#4c1d95);color:#fff;border:none;border-radius:30px;
-  padding:.7rem 2rem;font-family:'Noto Sans Bengali',sans-serif;font-size:14px;font-weight:600;
-  cursor:pointer;transition:all .2s;display:none;
+/* COMPLETE screen */
+.complete{
+  text-align:center;padding:2.5rem 1.5rem;
+  background:var(--s1);border:1px solid rgba(52,211,153,.3);border-radius:var(--r);
+  position:relative;overflow:hidden;
 }
-.btn-next:hover{transform:translateY(-2px);opacity:.9}
-.btn-example{
-  background:rgba(56,189,248,.08);color:var(--c1);border:1px solid rgba(56,189,248,.25);border-radius:30px;
-  padding:.7rem 1.4rem;font-family:'Noto Sans Bengali',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;transition:all .2s;display:none;
+.complete::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--c1));}
+.c-em{font-size:3.5rem;margin-bottom:.6rem;}
+.c-title{font-family:'Baloo Da 2',cursive;font-size:1.8rem;font-weight:800;color:var(--green);margin-bottom:.3rem;}
+.c-sub{font-size:14px;color:var(--muted);margin-bottom:1.25rem;}
+.c-stats{display:flex;gap:10px;justify-content:center;margin-bottom:1.5rem;flex-wrap:wrap;}
+.c-stat{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;
+  padding:.7rem 1.1rem;min-width:90px;
 }
-.btn-example:hover{background:rgba(56,189,248,.15);}
-.counter{text-align:center;font-size:12px;color:var(--muted);margin-top:.75rem}
+.c-stat-v{font-family:'Baloo Da 2',cursive;font-size:1.4rem;font-weight:700;}
+.c-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
+.c-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.c-btn-next{
+  background:linear-gradient(135deg,var(--green),var(--c1));color:#fff;border:none;
+  border-radius:30px;padding:.75rem 2rem;font-family:'Noto Sans Bengali',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:.2s;
+}
+.c-btn-next:hover{transform:translateY(-2px);opacity:.9;}
+.c-btn-map{
+  background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border);
+  border-radius:30px;padding:.75rem 1.5rem;font-family:'Noto Sans Bengali',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;transition:.2s;
+}
+.c-btn-map:hover{background:rgba(255,255,255,.1);color:var(--text);}
 
-/* XP BAR (total session XP) */
-.xp-bar-wrap{
-  background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);
-  padding:.7rem 1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:12px;
-  animation:fu .5s .05s ease both;
-}
-.xp-icon{font-size:1.1rem}
-.xp-label{font-size:12px;color:var(--muted);white-space:nowrap}
-.xp-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden}
-.xp-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--c6),var(--c4));transition:width .4s cubic-bezier(.4,0,.2,1);width:0%}
-.xp-val{font-family:'Baloo Da 2',cursive;font-size:1rem;font-weight:700;color:var(--c6);white-space:nowrap}
+/* confetti */
+@keyframes conffall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(80px) rotate(360deg);opacity:0}}
+.conf{position:absolute;width:8px;height:8px;border-radius:2px;animation:conffall .9s ease forwards;}
 
-/* END SCREEN */
-.end{
-  text-align:center;padding:3rem 1.5rem;background:var(--s1);
-  border:1px solid var(--border);border-radius:var(--r);animation:fu .5s ease both;
-}
-.end-em{font-size:3.5rem;margin-bottom:.75rem}
-.end-sc{
-  font-family:'Baloo Da 2',cursive;font-size:4rem;font-weight:800;line-height:1;margin-bottom:.5rem;
-  background:linear-gradient(135deg,var(--green),var(--c1));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.end-pts{
-  font-family:'Baloo Da 2',cursive;font-size:1.5rem;font-weight:700;color:var(--c6);margin-bottom:.4rem;
-}
-.end-msg{font-size:15px;color:var(--muted);margin-bottom:1.75rem}
-.end-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem;}
-.end-stat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:.8rem .5rem;text-align:center;}
-.end-stat-v{font-family:'Baloo Da 2',cursive;font-size:1.3rem;font-weight:700;}
-.end-stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
-.btn-restart{
-  background:linear-gradient(135deg,var(--c4),var(--c5));color:#fff;border:none;border-radius:30px;
-  padding:.8rem 2.5rem;font-family:'Noto Sans Bengali',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;
-}
-.btn-restart:hover{transform:translateY(-2px);opacity:.9}
-.btn-back{
-  background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border);border-radius:30px;
-  padding:.8rem 2rem;font-family:'Noto Sans Bengali',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;
-}
-.btn-back:hover{background:rgba(255,255,255,.1);color:var(--text);}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fu .4s ease both;}
 
-/* PASS BANNER */
-.pass-banner{
-  margin:12px 0;padding:10px 16px;border-radius:12px;font-weight:700;font-size:13px;
-}
-.pass-banner.ok{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:#34d399;}
-.pass-banner.fail{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:#f87171;font-weight:400;}
-
-/* RESUME BANNER */
-#resume-banner{
-  background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);
-  border-radius:12px;padding:.85rem 1.1rem;margin-bottom:1.25rem;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  flex-wrap:wrap;animation:fu .4s ease both;
-}
-
-@keyframes fd{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:480px){.opts{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.level-grid{grid-template-columns:repeat(3,1fr)}.qc-opts{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-  <a href="vocab-dashboard.html" class="back-btn">← Vocabulary</a>
-  <span class="topbar-title">📖 A1 — Beginner</span>
-  <div class="nav-av" id="nav-av" onclick="location.href='profile.html'">👤</div>
+  <button class="back-btn" id="topbar-back">← Vocabulary</button>
+  <span class="topbar-center" id="topbar-title">A1 Vocabulary</span>
+  <span style="width:80px"></span>
 </div>
 
-<div class="wrap">
-  <div class="hdr">
-    <div class="hdr-tag">🇬🇧 English A1 · Beginner · বাংলা মাধ্যম</div>
-    <h1>A1 Vocabulary Quiz</h1>
-    <p class="hdr-sub">৪৬০টি শব্দ — Easy → Medium → Hard ক্রমে</p>
+<!-- ── VIEW: MAP ── -->
+<div class="view active" id="view-map">
+  <div class="wrap">
+    <div class="map-hero">
+      <div class="map-hero-tag">📖 A1 · Beginner · ৪৬০ শব্দ</div>
+      <h1>A1 Vocabulary শেখো</h1>
+      <p>২৩টি Level — প্রতিটিতে ২০টি করে শব্দ। একটা শেষ করো, পরেরটা unlock হবে।</p>
+    </div>
+    <div class="overall-prog" id="overall-prog">
+      <div class="op-row">
+        <span class="op-label">মোট অগ্রগতি</span>
+        <span class="op-val" id="op-val">0 / 460</span>
+      </div>
+      <div class="op-bar"><div class="op-fill" id="op-fill" style="width:0%"></div></div>
+      <div class="op-stats">
+        <span class="op-stat">✅ সম্পন্ন: <b id="op-done">0</b> Level</span>
+        <span class="op-stat">⏳ বাকি: <b id="op-rem">23</b> Level</span>
+        <span class="op-stat">⚡ XP: <b id="op-xp">0</b></span>
+      </div>
+    </div>
+    <div class="level-grid" id="level-grid"></div>
   </div>
+</div>
 
-  <!-- XP BAR -->
-  <div class="xp-bar-wrap">
-    <div class="xp-icon">⚡</div>
-    <div class="xp-label">Session XP</div>
-    <div class="xp-track"><div class="xp-fill" id="xpfill"></div></div>
-    <div class="xp-val" id="xpval">0 XP</div>
+<!-- ── VIEW: LEARN ── -->
+<div class="view" id="view-learn">
+  <div class="wrap">
+    <div class="lh">
+      <span class="lh-title" id="lh-title">Level 1</span>
+      <span class="lh-count" id="lh-count"></span>
+    </div>
+    <div class="steps" id="steps">
+      <div class="step-dot active-s" id="step0"></div>
+      <div class="step-dot" id="step1"></div>
+      <div class="step-dot" id="step2"></div>
+    </div>
+    <div id="learn-content"></div>
   </div>
-
-  <!-- STATS -->
-  <div class="stats">
-    <div class="scard sc-ok"><div class="sv" id="sc">0</div><div class="sl">সঠিক</div></div>
-    <div class="scard sc-no"><div class="sv" id="sw">0</div><div class="sl">ভুল</div></div>
-    <div class="scard sc-tot"><div class="sv" id="st">—</div><div class="sl">মোট</div></div>
-    <div class="scard sc-pts"><div class="sv" id="spts">0</div><div class="sl">পয়েন্ট</div></div>
-  </div>
-
-  <!-- PROGRESS -->
-  <div class="prog-wrap">
-    <div class="prog-meta"><span id="plbl">শুরু করুন</span><span id="ppct">0%</span></div>
-    <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
-  </div>
-
-  <!-- DIFFICULTY TABS -->
-  <div class="diff-row">
-    <button class="dbtn on" id="d-all" onclick="setDiff('all')">সব<span class="cnt" id="cnt-all"></span></button>
-    <button class="dbtn" id="d-easy" onclick="setDiff('easy')">🟢 Easy<span class="cnt" id="cnt-easy"></span></button>
-    <button class="dbtn" id="d-medium" onclick="setDiff('medium')">🟡 Medium<span class="cnt" id="cnt-medium"></span></button>
-    <button class="dbtn" id="d-hard" onclick="setDiff('hard')">🔴 Hard<span class="cnt" id="cnt-hard"></span></button>
-  </div>
-
-  <!-- CATEGORY FILTER -->
-  <div class="cat-section">
-    <div class="cat-section-title">বিষয় বেছে নিন <span></span></div>
-    <div class="cat-grid" id="catgrid"></div>
-  </div>
-
-  <!-- QUIZ AREA -->
-  <div id="qa"></div>
 </div>
 
 <script type="module">
 import {
   auth, db, requireAuth,
-  doc, getDoc, setDoc,
-  collection, query, where, getDocs, addDoc,
-  serverTimestamp, onAuthStateChanged
+  doc, getDoc, setDoc, serverTimestamp, onAuthStateChanged
 } from "./js/firebase-config.js";
 import { VOCAB_A1 } from "./js/vocab-a1.js";
 
-/* ── CATEGORY COLORS ── */
-const CAT_COLORS = {
-  Numbers:    ['rgba(56,189,248,.1)',   '#38bdf8', 'rgba(56,189,248,.3)'],
-  Colors:     ['rgba(167,139,250,.1)',  '#a78bfa', 'rgba(167,139,250,.3)'],
-  Family:     ['rgba(244,114,182,.1)',  '#f472b6', 'rgba(244,114,182,.3)'],
-  Food:       ['rgba(251,146,60,.1)',   '#fb923c', 'rgba(251,146,60,.3)'],
-  Body:       ['rgba(52,211,153,.1)',   '#34d399', 'rgba(52,211,153,.3)'],
-  Home:       ['rgba(251,191,36,.1)',   '#fbbf24', 'rgba(251,191,36,.3)'],
-  School:     ['rgba(96,165,250,.1)',   '#60a5fa', 'rgba(96,165,250,.3)'],
-  Time:       ['rgba(129,140,248,.1)',  '#818cf8', 'rgba(129,140,248,.3)'],
-  Animals:    ['rgba(74,222,128,.1)',   '#4ade80', 'rgba(74,222,128,.3)'],
-  Nature:     ['rgba(52,211,153,.1)',   '#34d399', 'rgba(52,211,153,.3)'],
-  Places:     ['rgba(56,189,248,.1)',   '#38bdf8', 'rgba(56,189,248,.3)'],
-  Greetings:  ['rgba(248,113,113,.1)', '#f87171', 'rgba(248,113,113,.3)'],
-  Weather:    ['rgba(125,211,252,.1)', '#7dd3fc', 'rgba(125,211,252,.3)'],
-  Clothes:    ['rgba(216,180,254,.1)', '#d8b4fe', 'rgba(216,180,254,.3)'],
-  Feelings:   ['rgba(249,168,212,.1)', '#f9a8d4', 'rgba(249,168,212,.3)'],
-  Transport:  ['rgba(253,186,116,.1)', '#fdb974', 'rgba(253,186,116,.3)'],
-  Pronouns:   ['rgba(167,139,250,.1)', '#a78bfa', 'rgba(167,139,250,.3)'],
-  Verbs:      ['rgba(251,191,36,.1)',  '#fbbf24', 'rgba(251,191,36,.3)'],
-  Adjectives: ['rgba(56,189,248,.1)',  '#38bdf8', 'rgba(56,189,248,.3)'],
-  Grammar:    ['rgba(52,211,153,.1)',  '#34d399', 'rgba(52,211,153,.3)'],
-  Shopping:   ['rgba(244,114,182,.1)', '#f472b6', 'rgba(244,114,182,.3)'],
-  Technology: ['rgba(96,165,250,.1)',  '#60a5fa', 'rgba(96,165,250,.3)'],
-  Sports:     ['rgba(74,222,128,.1)',  '#4ade80', 'rgba(74,222,128,.3)'],
-  Questions:  ['rgba(248,113,113,.1)','#f87171', 'rgba(248,113,113,.3)'],
-  Jobs:       ['rgba(251,146,60,.1)',  '#fb923c', 'rgba(251,146,60,.3)'],
-  Hobbies:    ['rgba(216,180,254,.1)','#d8b4fe', 'rgba(216,180,254,.3)'],
-  Health:     ['rgba(52,211,153,.1)', '#34d399', 'rgba(52,211,153,.3)'],
-  'Daily Life':['rgba(56,189,248,.1)','#38bdf8', 'rgba(56,189,248,.3)'],
-};
-function cm(cat){ return CAT_COLORS[cat] || ['rgba(100,116,139,.1)','#94a3b8','rgba(100,116,139,.3)']; }
-
-/* ── POINT VALUES ── */
-const POINTS = { easy: 10, medium: 20, hard: 30 };
-const XP_PER_CORRECT = { easy: 5, medium: 10, hard: 15 };
-const XP_SESSION_MAX = 200;
+/* ── CONFIG ── */
+const WORDS_PER_LEVEL = 20;
+const TOTAL = VOCAB_A1.length; // 460
+const TOTAL_LEVELS = Math.ceil(TOTAL / WORDS_PER_LEVEL); // 23
+const XP_PER_LEVEL = 30;
 
 /* ── STATE ── */
-let currentDiff = 'all';
-let activeCats;
-let allCats = [];
-let pool = [], order = [], idx = 0;
-let correct = 0, wrong = 0, answered = false;
-let totalPoints = 0, sessionXP = 0;
 let currentUser = null;
+let userProgress = {}; // { levelsDone: Set, xp: 0, ... }
 
-/* Build vocab sorted by difficulty: easy → medium → hard */
-function sortedVocab(words) {
-  const order = { easy: 0, medium: 1, hard: 2 };
-  return [...words].sort((a, b) => (order[a.difficulty] || 0) - (order[b.difficulty] || 0));
+/* words for level N (1-based) */
+function levelWords(n) {
+  const start = (n - 1) * WORDS_PER_LEVEL;
+  return VOCAB_A1.slice(start, start + WORDS_PER_LEVEL);
 }
 
-/* ── FIREBASE SAVE / LOAD ── */
-const SAVE_KEY = 'vocab_a1_progress';
-
-async function saveProgress() {
+/* ── FIREBASE ── */
+async function loadProgress() {
   if (!currentUser) return;
   try {
-    await setDoc(doc(db, 'quiz_sessions', currentUser.uid + '_vocab_a1'), {
-      uid: currentUser.uid, level: 'a1', type: 'vocab',
-      idx, order, correct, wrong, totalPoints, sessionXP,
-      currentDiff, activeCats: [...activeCats],
-      savedAt: serverTimestamp()
-    }, { merge: true });
-  } catch(e) { console.warn('save error', e); }
+    const snap = await getDoc(doc(db, 'users', currentUser.uid));
+    const d = snap.exists() ? snap.data() : {};
+    const done = d.vocab_a1_levels_done || [];
+    userProgress = {
+      levelsDone: new Set(done),
+      xp: d.xp || 0,
+      totalWordsDone: done.length * WORDS_PER_LEVEL,
+    };
+  } catch(e) { console.warn(e); userProgress = { levelsDone: new Set(), xp: 0, totalWordsDone: 0 }; }
 }
 
-async function loadSaved() {
-  if (!currentUser) return null;
-  try {
-    const snap = await getDoc(doc(db, 'quiz_sessions', currentUser.uid + '_vocab_a1'));
-    return snap.exists() ? snap.data() : null;
-  } catch(e) { return null; }
-}
-
-async function clearSaved() {
+async function saveLevel(n) {
   if (!currentUser) return;
   try {
-    await setDoc(doc(db, 'quiz_sessions', currentUser.uid + '_vocab_a1'), {}, { merge: false });
-  } catch(e) {}
-}
-
-async function pushFinalScore() {
-  if (!currentUser) return;
-  const total = order.length;
-  const pct   = total > 0 ? Math.round((correct / total) * 100) : 0;
-  const passed = pct >= 70;
-  try {
-    const uRef = doc(db, 'users', currentUser.uid);
-    const uSnap = await getDoc(uRef);
-    const d = uSnap.exists() ? uSnap.data() : {};
-    await setDoc(uRef, {
-      totalCorrect:      (d.totalCorrect || 0) + correct,
-      xp:                (d.xp || 0) + sessionXP,
-      bestStreak:        Math.max(d.bestStreak || 0, correct),
-      totalWordsLearned: (d.totalWordsLearned || 0) + correct,
-      sessions_vocab_a1: (d.sessions_vocab_a1 || 0) + 1,
-      ...(passed && { passed_a1: true }),
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-    // log individual word progress
-    for (const i of order.slice(0, idx)) {
-      const w = VOCAB_A1[i];
-      if (!w) continue;
-      await setDoc(doc(db, 'vocab_progress', currentUser.uid + '_' + w.id), {
-        uid: currentUser.uid, level: 'a1', wordId: w.id,
-        word: w.word, mastered: true, updatedAt: serverTimestamp()
+    userProgress.levelsDone.add(n);
+    const done = [...userProgress.levelsDone];
+    userProgress.xp += XP_PER_LEVEL;
+    userProgress.totalWordsDone = done.length * WORDS_PER_LEVEL;
+    if (done.length === TOTAL_LEVELS) {
+      await setDoc(doc(db, 'users', currentUser.uid), {
+        vocab_a1_levels_done: done,
+        xp: userProgress.xp,
+        totalWordsLearned: userProgress.totalWordsDone,
+        passed_a1: true,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    } else {
+      await setDoc(doc(db, 'users', currentUser.uid), {
+        vocab_a1_levels_done: done,
+        xp: userProgress.xp,
+        totalWordsLearned: userProgress.totalWordsDone,
+        updatedAt: serverTimestamp()
       }, { merge: true });
     }
-  } catch(e) { console.warn('final save error', e); }
+  } catch(e) { console.warn(e); }
 }
 
-/* ── RESUME BANNER ── */
-function showResumeBanner(saved) {
-  const banner = document.createElement('div');
-  banner.id = 'resume-banner';
-  banner.innerHTML = `
-    <span style="font-size:13px;color:#7dd3fc;">
-      ⏸️ আগের session পাওয়া গেছে —
-      <b style="color:#38bdf8">${saved.idx} / ${saved.order.length}</b> প্রশ্ন সম্পন্ন
-      · <b style="color:#fbbf24">${saved.totalPoints || 0} pts</b>
-    </span>
-    <div style="display:flex;gap:8px;">
-      <button id="btn-resume" style="background:rgba(56,189,248,.18);border:1px solid rgba(56,189,248,.4);color:#38bdf8;border-radius:8px;padding:5px 16px;font-size:12px;cursor:pointer;font-family:'Noto Sans Bengali',sans-serif;font-weight:700;">▶ Continue</button>
-      <button id="btn-fresh" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#64748b;border-radius:8px;padding:5px 16px;font-size:12px;cursor:pointer;font-family:'Noto Sans Bengali',sans-serif;">নতুন করে</button>
-    </div>`;
-  document.querySelector('.wrap').insertBefore(banner, document.querySelector('.xp-bar-wrap'));
-
-  document.getElementById('btn-resume').onclick = () => {
-    banner.remove();
-    currentDiff  = saved.currentDiff || 'all';
-    activeCats   = new Set(saved.activeCats || allCats);
-    order        = saved.order;
-    idx          = saved.idx;
-    correct      = saved.correct;
-    wrong        = saved.wrong;
-    totalPoints  = saved.totalPoints || 0;
-    sessionXP    = saved.sessionXP   || 0;
-    answered     = false;
-    ['all','easy','medium','hard'].forEach(x =>
-      document.getElementById('d-'+x).classList.toggle('on', x === currentDiff));
-    updatePills();
-    document.getElementById('st').textContent = order.length;
-    document.getElementById('spts').textContent = totalPoints;
-    updateXP();
-    stats(); render();
-  };
-  document.getElementById('btn-fresh').onclick = () => { clearSaved(); banner.remove(); };
+/* ── VIEW SWITCH ── */
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-/* ── PILLS ── */
-function buildPills() {
-  allCats = [...new Set(VOCAB_A1.map(w => w.category))].sort();
-  activeCats = new Set(allCats);
-  const g = document.getElementById('catgrid');
-  g.innerHTML = '';
-  const all = document.createElement('button');
-  all.className = 'cpill-all on'; all.id = 'pill-all';
-  all.textContent = 'সব (' + VOCAB_A1.length + ')';
-  all.addEventListener('click', () => { activeCats = new Set(allCats); updatePills(); restart(); });
-  g.appendChild(all);
-  allCats.forEach(cat => {
-    const [bg, color, border] = cm(cat);
-    const b = document.createElement('button');
-    b.className = 'cpill on'; b.id = 'p-' + cat;
-    b.textContent = cat + ' (' + VOCAB_A1.filter(w => w.category === cat).length + ')';
-    b.style.cssText = `background:${bg};color:${color};border-color:${border}`;
-    b.addEventListener('click', () => {
-      if (activeCats.has(cat) && activeCats.size === 1) return;
-      activeCats.has(cat) ? activeCats.delete(cat) : activeCats.add(cat);
-      updatePills(); restart();
+/* ── LEVEL MAP ── */
+function renderMap() {
+  const done = userProgress.levelsDone;
+  const total = done.size * WORDS_PER_LEVEL;
+  const pct = Math.round((total / TOTAL) * 100);
+  document.getElementById('op-val').textContent  = total + ' / ' + TOTAL;
+  document.getElementById('op-fill').style.width = pct + '%';
+  document.getElementById('op-done').textContent = done.size;
+  document.getElementById('op-rem').textContent  = TOTAL_LEVELS - done.size;
+  document.getElementById('op-xp').textContent   = userProgress.xp;
+
+  const grid = document.getElementById('level-grid');
+  grid.innerHTML = '';
+
+  for (let n = 1; n <= TOTAL_LEVELS; n++) {
+    const isDone    = done.has(n);
+    const isLocked  = n > 1 && !done.has(n - 1);
+    const isCurrent = !isDone && !isLocked;
+
+    const words = levelWords(n);
+    const cats  = [...new Set(words.map(w => w.category))];
+    const catLabel = cats.slice(0,2).join(', ') + (cats.length > 2 ? '…' : '');
+
+    const card = document.createElement('div');
+    card.className = 'lcard' + (isDone ? ' done' : '') + (isLocked ? ' locked' : '') + (isCurrent ? ' current' : '');
+
+    card.innerHTML = `
+      <div class="lcard-badge">${isDone ? '✅' : isLocked ? '🔒' : '▶'}</div>
+      <div class="lcard-num">L${n}</div>
+      <div class="lcard-label">${catLabel}</div>
+      <div class="lcard-words">${WORDS_PER_LEVEL} শব্দ</div>
+      <div class="lcard-prog"><div class="lcard-prog-fill" style="width:${isDone ? 100 : 0}%"></div></div>`;
+
+    if (!isLocked) {
+      card.addEventListener('click', () => startLevel(n));
+    }
+    grid.appendChild(card);
+  }
+  document.getElementById('topbar-back').onclick = () => location.href = 'vocab-dashboard.html';
+  document.getElementById('topbar-title').textContent = 'A1 Vocabulary';
+}
+
+/* ── START LEVEL ── */
+function startLevel(n) {
+  showView('view-learn');
+  document.getElementById('topbar-title').textContent = 'Level ' + n + ' / ' + TOTAL_LEVELS;
+  document.getElementById('topbar-back').onclick = () => { showView('view-map'); renderMap(); };
+
+  const words = levelWords(n);
+  document.getElementById('lh-title').textContent = 'Level ' + n + ' — Flashcards';
+  document.getElementById('lh-count').textContent = WORDS_PER_LEVEL + ' শব্দ';
+  setStep(0);
+  startFlashcards(words, n);
+}
+
+function setStep(i) {
+  for (let s = 0; s < 3; s++) {
+    const el = document.getElementById('step' + s);
+    el.className = 'step-dot' + (s < i ? ' done-s' : s === i ? ' active-s' : '');
+  }
+}
+
+/* ── FLASHCARDS ── */
+function startFlashcards(words, levelN) {
+  let idx = 0;
+  let gotIt = new Set();
+  setStep(0);
+  document.getElementById('lh-title').textContent = 'Level ' + levelN + ' — শব্দ শেখো';
+
+  function render() {
+    if (idx >= words.length) { startQuickCheck(words, levelN); return; }
+    const w = words[idx];
+    const pct = Math.round((idx / words.length) * 100);
+    const content = document.getElementById('learn-content');
+    content.innerHTML = `
+      <div class="fc-prog-bar"><div class="fc-prog-fill" id="fcpf" style="width:${pct}%"></div></div>
+      <div class="fc-progress">${idx + 1} / ${words.length} শব্দ</div>
+      <div class="fc anim" id="fc">
+        <div class="fc-inner" id="fc-inner">
+          <div class="fc-front">
+            <span class="fc-cat">${w.category}</span>
+            <div class="fc-word">${w.word}</div>
+            <div class="fc-phonetic">${w.phonetic}</div>
+            <div class="fc-tap">👆 tap করে অর্থ দেখো</div>
+          </div>
+          <div class="fc-back">
+            <div class="fc-meaning">${w.meaning}</div>
+            <div class="fc-example">📝 <em>${w.example}</em></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav" id="fcnav" style="display:none;">
+        <button class="fc-btn fc-btn-skip" id="fc-skip">আবার দেখবো</button>
+        <button class="fc-btn fc-btn-got" id="fc-got">বুঝেছি ✓</button>
+      </div>
+      <div class="fc-nav" id="fcnav2">
+        <button class="fc-btn fc-btn-next" id="fc-flip">উল্টাও →</button>
+      </div>`;
+
+    const fc = document.getElementById('fc');
+    document.getElementById('fc-flip').addEventListener('click', () => {
+      fc.classList.add('flipped');
+      document.getElementById('fcnav').style.display = 'flex';
+      document.getElementById('fcnav2').style.display = 'none';
     });
-    g.appendChild(b);
-  });
+    document.getElementById('fc-inner').addEventListener('click', () => {
+      fc.classList.toggle('flipped');
+      const flipped = fc.classList.contains('flipped');
+      document.getElementById('fcnav').style.display = flipped ? 'flex' : 'none';
+      document.getElementById('fcnav2').style.display = flipped ? 'none' : 'flex';
+    });
+    document.getElementById('fc-got').addEventListener('click', () => { gotIt.add(idx); idx++; render(); });
+    document.getElementById('fc-skip').addEventListener('click', () => { idx++; render(); });
+  }
+  render();
 }
 
-function updatePills() {
-  allCats.forEach(cat => {
-    const b = document.getElementById('p-' + cat);
-    if (b) b.classList.toggle('on', activeCats.has(cat));
-  });
+/* ── QUICK CHECK ── */
+function startQuickCheck(words, levelN) {
+  setStep(1);
+  document.getElementById('lh-title').textContent = 'Level ' + levelN + ' — Quick Check';
+  // 4 random questions from this level
+  const qs = shuffle([...words]).slice(0, Math.min(4, words.length));
+  let qi = 0, correct = 0;
+
+  function renderQ() {
+    if (qi >= qs.length) { showComplete(words, levelN, correct, qs.length); return; }
+    const w = qs[qi];
+    // distractors from same level
+    const others = shuffle(words.filter(x => x.meaning !== w.meaning).map(x => x.meaning));
+    const opts = shuffle([w.meaning, ...others.slice(0, 3)]);
+    const content = document.getElementById('learn-content');
+    content.innerHTML = `
+      <div class="qc-header anim">
+        <h2>Quick Check 🧠</h2>
+        <p>শব্দগুলো মনে আছে তো?</p>
+      </div>
+      <div class="qc-card anim">
+        <div class="qc-q">এই শব্দের বাংলা অর্থ কী?</div>
+        <div class="qc-word">${w.word}</div>
+        <div class="qc-phonetic">${w.phonetic}</div>
+      </div>
+      <div class="qc-opts" id="qc-opts"></div>
+      <div class="qc-fb" id="qc-fb"></div>
+      <button class="btn-qnext" id="btn-qnext" onclick="window._qnext && window._qnext()">পরবর্তী →</button>
+      <div class="qc-counter">${qi + 1} / ${qs.length}</div>`;
+
+    const od = document.getElementById('qc-opts');
+    opts.forEach(o => {
+      const b = document.createElement('button');
+      b.className = 'qc-opt'; b.textContent = o;
+      b.addEventListener('click', () => {
+        if (b.disabled) return;
+        od.querySelectorAll('.qc-opt').forEach(x => x.disabled = true);
+        const fb = document.getElementById('qc-fb');
+        if (o === w.meaning) {
+          b.classList.add('correct'); fb.textContent = '✓ সঠিক!'; fb.className = 'qc-fb ok'; correct++;
+        } else {
+          b.classList.add('wrong'); fb.textContent = '✗ ভুল হয়েছে'; fb.className = 'qc-fb no';
+          od.querySelectorAll('.qc-opt').forEach(x => { if (x.textContent === w.meaning) x.classList.add('reveal'); });
+        }
+        document.getElementById('btn-qnext').style.display = 'block';
+      });
+      od.appendChild(b);
+    });
+    window._qnext = () => { qi++; renderQ(); };
+  }
+  renderQ();
 }
 
-/* ── DIFF COUNTS ── */
-function updateDiffCounts() {
-  const filtered = VOCAB_A1.filter(w => activeCats.has(w.category));
-  document.getElementById('cnt-all').textContent    = ' ' + filtered.length;
-  document.getElementById('cnt-easy').textContent   = ' ' + filtered.filter(w => w.difficulty === 'easy').length;
-  document.getElementById('cnt-medium').textContent = ' ' + filtered.filter(w => w.difficulty === 'medium').length;
-  document.getElementById('cnt-hard').textContent   = ' ' + filtered.filter(w => w.difficulty === 'hard').length;
+/* ── COMPLETE ── */
+function showComplete(words, levelN, correct, total) {
+  setStep(2);
+  saveLevel(levelN);
+  const pct = Math.round((correct / total) * 100);
+  const em  = pct === 100 ? '🏆' : pct >= 75 ? '🎉' : '💪';
+  const nextLevel = levelN + 1;
+  const hasNext = nextLevel <= TOTAL_LEVELS;
+
+  const content = document.getElementById('learn-content');
+  content.innerHTML = `
+    <div class="complete anim" id="cmp">
+      <div class="c-em">${em}</div>
+      <div class="c-title">Level ${levelN} সম্পন্ন!</div>
+      <div class="c-sub">Quick Check: ${correct}/${total} সঠিক · +${XP_PER_LEVEL} XP অর্জন</div>
+      <div class="c-stats">
+        <div class="c-stat"><div class="c-stat-v" style="color:var(--green)">${WORDS_PER_LEVEL}</div><div class="c-stat-l">শব্দ শেখা</div></div>
+        <div class="c-stat"><div class="c-stat-v" style="color:var(--gold)">${XP_PER_LEVEL}</div><div class="c-stat-l">XP অর্জন</div></div>
+        <div class="c-stat"><div class="c-stat-v" style="color:var(--c1)">${userProgress.levelsDone.size}/${TOTAL_LEVELS}</div><div class="c-stat-l">Level সম্পন্ন</div></div>
+      </div>
+      <div class="c-btns">
+        ${hasNext ? `<button class="c-btn-next" id="btn-cnext">Level ${nextLevel} শুরু করো →</button>` : `<button class="c-btn-next" style="background:linear-gradient(135deg,var(--gold),var(--c4,#fb923c))">🏆 A1 সম্পূর্ণ!</button>`}
+        <button class="c-btn-map" id="btn-cmap">Level Map ←</button>
+      </div>
+    </div>`;
+  spawnConfetti();
+  document.getElementById('btn-cmap').addEventListener('click', () => { showView('view-map'); renderMap(); });
+  if (hasNext) document.getElementById('btn-cnext').addEventListener('click', () => startLevel(nextLevel));
 }
 
-/* ── DIFF SWITCH ── */
-function setDiff(d) {
-  currentDiff = d;
-  ['all','easy','medium','hard'].forEach(x =>
-    document.getElementById('d-'+x).classList.toggle('on', x === d));
-  restart();
-}
-window.setDiff = setDiff;
-
-/* ── XP ── */
-function updateXP() {
-  const pct = Math.min(100, Math.round((sessionXP / XP_SESSION_MAX) * 100));
-  document.getElementById('xpfill').style.width = pct + '%';
-  document.getElementById('xpval').textContent  = sessionXP + ' XP';
+function spawnConfetti() {
+  const cmp = document.getElementById('cmp');
+  if (!cmp) return;
+  const colors = ['#38bdf8','#a78bfa','#34d399','#fbbf24','#f472b6','#fb923c'];
+  for (let i = 0; i < 18; i++) {
+    const c = document.createElement('div');
+    c.className = 'conf';
+    c.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*30}%;background:${colors[i%colors.length]};animation-delay:${Math.random()*.5}s;animation-duration:${.7+Math.random()*.6}s`;
+    cmp.appendChild(c);
+  }
 }
 
-/* ── SHUFFLE ── */
 function shuffle(a) {
   const b = [...a];
   for (let i = b.length - 1; i > 0; i--) {
@@ -531,192 +604,17 @@ function shuffle(a) {
   return b;
 }
 
-/* ── RESTART ── */
-function restart() {
-  clearSaved();
-  updateDiffCounts();
-  // Filter by category & difficulty, then sort easy→medium→hard
-  let filtered = VOCAB_A1
-    .map((w, i) => ({ w, i }))
-    .filter(({ w }) => activeCats.has(w.category));
-  if (currentDiff !== 'all') {
-    filtered = filtered.filter(({ w }) => w.difficulty === currentDiff);
-  }
-  // Sort by difficulty, then shuffle within each group
-  const easy   = shuffle(filtered.filter(({ w }) => w.difficulty === 'easy').map(x => x.i));
-  const medium = shuffle(filtered.filter(({ w }) => w.difficulty === 'medium').map(x => x.i));
-  const hard   = shuffle(filtered.filter(({ w }) => w.difficulty === 'hard').map(x => x.i));
-  order = [...easy, ...medium, ...hard];
-  idx = 0; correct = 0; wrong = 0; answered = false;
-  totalPoints = 0; sessionXP = 0;
-  document.getElementById('st').textContent = order.length;
-  document.getElementById('spts').textContent = 0;
-  updateXP(); stats(); render();
-}
-window.restart = restart;
-
-/* ── STATS ── */
-function stats() {
-  document.getElementById('sc').textContent = correct;
-  document.getElementById('sw').textContent = wrong;
-  const tot = order.length;
-  const pct = tot > 0 ? Math.round((idx / tot) * 100) : 0;
-  const acc = (correct + wrong) > 0 ? Math.round((correct / (correct + wrong)) * 100) : 0;
-  document.getElementById('pfill').style.width = pct + '%';
-  document.getElementById('ppct').textContent  = pct + '%';
-  document.getElementById('plbl').textContent  = idx > 0 ? `${idx} / ${tot} সম্পন্ন` : 'শুরু করুন';
-}
-
-/* ── DISTRACTORS ── */
-function distractors(answer, cat) {
-  const same  = shuffle(VOCAB_A1.filter(w => w.category === cat && w.meaning !== answer).map(w => w.meaning));
-  const other = shuffle(VOCAB_A1.filter(w => w.category !== cat).map(w => w.meaning));
-  const pool  = [...same, ...other];
-  const seen  = new Set([answer]); const res = [];
-  for (const x of pool) { if (!seen.has(x)) { seen.add(x); res.push(x); } if (res.length === 3) break; }
-  return res;
-}
-
-/* ── RENDER ── */
-function render() {
-  const area = document.getElementById('qa');
-  if (!order.length) {
-    area.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted)">কোনো শব্দ পাওয়া যায়নি। Filter পরিবর্তন করুন।</div>';
-    return;
-  }
-  if (idx >= order.length) {
-    showEnd(); return;
-  }
-  const w = VOCAB_A1[order[idx]];
-  if (!w) { idx++; render(); return; }
-  const opts = shuffle([w.meaning, ...distractors(w.meaning, w.category)]);
-  const [bg, color, border] = cm(w.category);
-  const diffClass = w.difficulty === 'easy' ? 'diff-easy' : w.difficulty === 'medium' ? 'diff-medium' : 'diff-hard';
-  const diffLabel = w.difficulty === 'easy' ? '🟢 Easy +' + POINTS.easy + 'pts' :
-                    w.difficulty === 'medium' ? '🟡 Medium +' + POINTS.medium + 'pts' :
-                    '🔴 Hard +' + POINTS.hard + 'pts';
-  stats();
-  area.innerHTML = `
-    <div class="qcard" id="qcard">
-      <div class="pt-flash" id="ptflash"></div>
-      <div class="diff-badge ${diffClass}">${diffLabel}</div><br>
-      <span class="ctag" style="background:${bg};color:${color};border:1px solid ${border}">${w.category}</span>
-      <div class="qword">${w.word}</div>
-      <div class="qphonetic">${w.phonetic}</div>
-      <div class="qhint">বাংলায় মানে কী?</div>
-      <div class="qexample" id="qex"><em>📝</em> ${w.example}</div>
-    </div>
-    <div class="opts" id="opts"></div>
-    <div class="fb" id="fb"></div>
-    <div class="btn-row">
-      <button class="btn-example" id="btn-ex" onclick="toggleExample()">উদাহরণ দেখো 👁</button>
-      <button class="btn-next" id="nxt" onclick="next()">পরবর্তী →</button>
-    </div>
-    <div class="counter">${idx + 1} / ${order.length}</div>`;
-
-  const od = document.getElementById('opts');
-  opts.forEach(o => {
-    const b = document.createElement('button');
-    b.className = 'opt'; b.textContent = o;
-    b.addEventListener('click', () => pick(b, o, w.meaning, w.difficulty));
-    od.appendChild(b);
-  });
-  answered = false;
-}
-
-window.toggleExample = function() {
-  const ex  = document.getElementById('qex');
-  const btn = document.getElementById('btn-ex');
-  if (ex) { ex.classList.toggle('show'); btn.textContent = ex.classList.contains('show') ? 'লুকাও ✕' : 'উদাহরণ দেখো 👁'; }
-};
-
-function pick(btn, chosen, answer, diff) {
-  if (answered) return; answered = true;
-  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
-  const fb = document.getElementById('fb');
-  if (chosen === answer) {
-    btn.classList.add('correct');
-    const pts = POINTS[diff] || 10;
-    const xp  = XP_PER_CORRECT[diff] || 5;
-    totalPoints += pts; sessionXP = Math.min(XP_SESSION_MAX, sessionXP + xp);
-    document.getElementById('spts').textContent = totalPoints;
-    updateXP();
-    fb.textContent = '✓ সঠিক! +' + pts + ' পয়েন্ট'; fb.className = 'fb ok';
-    // point flash
-    const pf = document.getElementById('ptflash');
-    if (pf) { pf.textContent = '+' + pts; pf.style.color = '#fbbf24'; pf.className = 'pt-flash show'; }
-    correct++;
-  } else {
-    btn.classList.add('wrong');
-    fb.textContent = '✗ ভুল হয়েছে'; fb.className = 'fb no'; wrong++;
-    document.querySelectorAll('.opt').forEach(b => { if (b.textContent === answer) b.classList.add('reveal'); });
-    // show example on wrong
-    const ex = document.getElementById('qex');
-    if (ex) ex.classList.add('show');
-  }
-  document.getElementById('btn-ex').style.display = 'inline-block';
-  document.getElementById('nxt').style.display    = 'inline-block';
-  stats(); saveProgress();
-}
-
-function next() { idx++; answered = false; saveProgress(); render(); }
-window.next = next;
-
-/* ── END SCREEN ── */
-function showEnd() {
-  pushFinalScore();
-  const total = order.length;
-  const pct   = Math.round((correct / total) * 100);
-  const passed = pct >= 70;
-  const em  = pct >= 80 ? '🏆' : pct >= 60 ? '🎉' : pct >= 40 ? '💪' : '📚';
-  const msg = pct >= 80 ? 'অসাধারণ! তুমি A1 মাস্টার!' :
-              pct >= 60 ? 'বেশ ভালো করেছ!' :
-              pct >= 40 ? 'চেষ্টা চালিয়ে যাও!' : 'আবার অনুশীলন করো!';
-  const passBanner = passed
-    ? `<div class="pass-banner ok">🎓 A1 Pass! A2 Vocabulary এখন Unlock হয়েছে →</div>`
-    : `<div class="pass-banner fail">৭০% পেলে A2 Unlock হবে। আবার চেষ্টা করো!</div>`;
-  const acc = Math.round((correct / (correct + wrong || 1)) * 100);
-  document.getElementById('qa').innerHTML = `
-    <div class="end">
-      <div class="end-em">${em}</div>
-      <div class="end-sc">${correct}/${total}</div>
-      <div class="end-pts">⚡ ${sessionXP} XP · 🏅 ${totalPoints} pts</div>
-      <div class="end-msg">${msg}<br><small>নির্ভুলতা: ${pct}%</small></div>
-      ${passBanner}
-      <div class="end-grid">
-        <div class="end-stat"><div class="end-stat-v" style="color:var(--green)">${correct}</div><div class="end-stat-l">সঠিক</div></div>
-        <div class="end-stat"><div class="end-stat-v" style="color:var(--red)">${wrong}</div><div class="end-stat-l">ভুল</div></div>
-        <div class="end-stat"><div class="end-stat-v" style="color:var(--c6)">${acc}%</div><div class="end-stat-l">নির্ভুলতা</div></div>
-      </div>
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1.25rem;">
-        <button class="btn-restart" onclick="restart()">আবার খেলুন ↺</button>
-        <button class="btn-back" onclick="location.href='vocab-dashboard.html'">← Dashboard</button>
-      </div>
-    </div>`;
-}
-
 /* ── INIT ── */
-buildPills();
-updateDiffCounts();
-restart();
-
 onAuthStateChanged(auth, async user => {
-  if (!user) return;
   currentUser = user;
-  // Avatar
-  const snap = await getDoc(doc(db, 'users', user.uid));
-  const d    = snap.exists() ? snap.data() : {};
-  const photo = d.photoURL || user.photoURL || '';
-  const name  = d.displayName || user.displayName || '?';
-  const av    = document.getElementById('nav-av');
-  if (photo) av.innerHTML = `<img src="${photo}">`;
-  else av.textContent = name[0]?.toUpperCase() || '?';
-  // Resume check
-  const saved = await loadSaved();
-  if (saved && saved.order && saved.idx > 0 && saved.idx < saved.order.length) {
-    showResumeBanner(saved);
-  }
+  await loadProgress();
+  renderMap();
 });
+
+// fallback if not using firebase auth (demo mode)
+if (!window._fbAuthInit) {
+  loadProgress().then(renderMap);
+}
 </script>
 </body>
 </html>
