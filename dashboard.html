@@ -472,6 +472,7 @@ footer::before{
         <a href="chat.html" class="nav-link">Chat</a>
       </nav>
       <div class="user-section">
+        <a href="admin.html" class="nav-link" id="admin-link" style="display:none;border:1px solid rgba(245,200,66,.25);color:#f5c842;">🛠️ Admin</a>
         <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
         <div class="user-name" id="nav-name">Loading...</div>
         <button class="btn-logout" id="btn-logout">Logout</button>
@@ -835,7 +836,7 @@ footer::before{
 
 <script type="module">
 import {
-  auth, db, signOut, requireAuth,
+  auth, db, signOut, requireAuth, isAdminUser,
   doc, getDoc,
   collection, query, orderBy, limit, getDocs
 } from "./js/firebase-config.js";
@@ -971,6 +972,8 @@ function updateXPBar(xp) {
 
 /* MAIN */
 requireAuth(async user => {
+  if (isAdminUser(user)) document.getElementById("admin-link").style.display = "inline-flex";
+
   const snap = await getDoc(doc(db, "users", user.uid));
   const d    = snap.exists() ? snap.data() : {};
 

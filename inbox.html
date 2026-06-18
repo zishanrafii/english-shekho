@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inbox — English Shekho</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -106,8 +107,34 @@ body{
   flex:1;overflow:hidden;
 }
 @media(max-width:800px){
-  .inbox-shell{grid-template-columns:1fr;}
+  .inbox-shell{grid-template-columns:1fr;position:relative;}
   .nav-links{display:none;}
+  /* Mobile: conv panel full width, thread panel hidden by default */
+  .conv-panel{
+    position:absolute;inset:0;z-index:10;
+    transition:transform .25s ease;
+    transform:translateX(0);
+  }
+  .conv-panel.hidden-mobile{
+    transform:translateX(-100%);
+    pointer-events:none;
+  }
+  .thread-panel{
+    position:absolute;inset:0;z-index:10;
+    transition:transform .25s ease;
+    transform:translateX(100%);
+  }
+  .thread-panel.visible-mobile{
+    transform:translateX(0);
+  }
+  /* Back button — mobile only */
+  .back-btn{display:flex;}
+  .topbar{flex-wrap:nowrap;padding:.6rem 1rem;}
+  .logo-text p{display:none;}
+  .user-name{display:none;}
+}
+@media(min-width:801px){
+  .back-btn{display:none !important;}
 }
 
 /* ─── CONVERSATION LIST ─── */
@@ -359,6 +386,22 @@ body{
 
 @media(max-width:600px){.wrap{padding:0;}.topbar{flex-direction:column;align-items:flex-start;}}
 
+/* ─── TABLER ICON GLOBAL SIZING ─── */
+.attach-btn i,.voice-btn i,.gif-btn i,.grammar-btn i,.send-btn i{font-size:18px;}
+.call-btn i{font-size:17px;}
+.call-log-btn i{font-size:17px;}
+.back-btn i{font-size:20px;}
+.msg-search-close i,.reply-close i,.attach-remove i,
+.info-panel-close i,.media-modal-close i{font-size:14px;}
+.msg-search-nav button i{font-size:12px;}
+.dm-action-btn i{font-size:13px;}
+.ea-save i,.ea-cancel i{font-size:11px;}
+.cbtn i{font-size:22px;}
+.conv-pin-icon i,.conv-mute-icon i{font-size:12px;}
+.archive-toggle i{font-size:13px;vertical-align:-1px;}
+#theme-toggle i{font-size:16px;}
+.grammar-apply i{font-size:13px;}
+
 /* ─── TYPING INDICATOR ─── */
 .typing-indicator{display:flex;align-items:center;gap:8px;padding:.4rem 0;opacity:0;transition:opacity .3s;}
 .typing-indicator.show{opacity:1;}
@@ -415,6 +458,254 @@ body{
 .dm.own .dm-reply-ref{background:rgba(0,0,0,.2);border-left-color:rgba(255,255,255,.5);}
 .dm-reply-ref .ref-name{font-size:10px;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:2px;}
 
+/* ─── LAST SEEN ─── */
+.thread-status.last-seen{color:var(--muted);font-size:11px;}
+
+/* ─── CONV ITEM — mute/pin/archive icons ─── */
+.conv-item-icons{display:flex;gap:4px;align-items:center;}
+.conv-pin-icon{font-size:10px;color:var(--msng-blue);}
+.conv-mute-icon{font-size:10px;color:var(--muted);}
+.conv-item.pinned{border-left:2px solid var(--msng-blue);}
+.conv-item.muted .conv-name{opacity:.6;}
+.conv-item.archived{display:none;}
+.show-archived .conv-item.archived{display:flex;}
+
+/* ─── CONTEXT MENU (right-click on conv) ─── */
+.ctx-menu{
+  position:fixed;background:var(--forward-box-bg);border:1px solid var(--border);
+  border-radius:14px;padding:6px;z-index:5000;min-width:180px;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.ctx-item{
+  display:flex;align-items:center;gap:10px;padding:.55rem .85rem;
+  border-radius:9px;cursor:pointer;font-size:13px;color:var(--text);transition:.15s;
+}
+.ctx-item:hover{background:var(--conv-item-hover);}
+.ctx-item.danger{color:var(--rose);}
+.ctx-item span.ci-icon{font-size:15px;width:20px;text-align:center;}
+
+/* ─── CALL LOG ─── */
+.call-log-btn{
+  width:34px;height:34px;border-radius:50%;border:none;
+  background:rgba(10,124,255,.12);color:var(--msng-blue);
+  font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;flex-shrink:0;
+}
+.call-log-btn:hover{background:rgba(10,124,255,.22);}
+.call-log-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:9000;display:none;align-items:center;justify-content:center;
+}
+.call-log-modal.show{display:flex;}
+.call-log-box{
+  background:var(--forward-box-bg);border:1px solid var(--border);
+  border-radius:20px;padding:1.4rem;width:min(92vw,380px);max-height:80vh;
+  display:flex;flex-direction:column;
+}
+.call-log-box h3{font-size:15px;font-weight:700;margin-bottom:1rem;color:var(--text);}
+.call-log-list{overflow-y:auto;display:flex;flex-direction:column;gap:6px;}
+.call-log-item{
+  display:flex;align-items:center;gap:10px;padding:.65rem .85rem;
+  border-radius:12px;background:var(--conv-item-hover);
+}
+.call-log-avatar{width:38px;height:38px;border-radius:50%;background:var(--msng-gradient);
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;overflow:hidden;flex-shrink:0;}
+.call-log-avatar img{width:100%;height:100%;object-fit:cover;}
+.call-log-info{flex:1;}
+.call-log-name{font-size:13px;font-weight:600;color:var(--text);}
+.call-log-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.call-log-type{font-size:18px;}
+.call-log-missed{color:var(--rose);}
+.call-log-close{margin-top:1rem;width:100%;padding:.55rem;border-radius:20px;border:none;
+  background:var(--search-bg);color:var(--sub);font-size:13px;font-weight:600;cursor:pointer;}
+
+/* ─── ARCHIVE TOGGLE ─── */
+.archive-toggle{
+  padding:.6rem 1rem;font-size:12px;color:var(--msng-blue);cursor:pointer;
+  text-align:center;border-top:1px solid var(--border);font-weight:600;
+  transition:.15s;
+}
+.archive-toggle:hover{background:var(--conv-item-hover);}
+
+/* ─── GRAMMAR CHECK POPUP ─── */
+.grammar-popup{
+  position:absolute;bottom:calc(100% + 8px);left:0;right:0;
+  background:var(--forward-box-bg);border:1px solid var(--border);
+  border-radius:16px;padding:1rem 1.1rem;z-index:200;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);display:none;
+}
+.grammar-popup.show{display:block;}
+.grammar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;}
+.grammar-header h4{font-size:13px;font-weight:700;color:var(--text);}
+.grammar-score{font-size:12px;font-weight:700;padding:2px 10px;border-radius:20px;}
+.grammar-score.good{background:rgba(52,211,153,.15);color:#34d399;}
+.grammar-score.ok{background:rgba(245,200,66,.15);color:#f5c842;}
+.grammar-score.bad{background:rgba(251,113,133,.15);color:#fb7185;}
+.grammar-errors{list-style:none;padding:0;margin:0 0 .7rem;display:flex;flex-direction:column;gap:4px;}
+.grammar-errors li{font-size:12px;color:var(--sub);display:flex;gap:6px;align-items:flex-start;}
+.grammar-errors li::before{content:"⚠️";flex-shrink:0;font-size:11px;}
+.grammar-corrected{font-size:13px;color:var(--text);background:rgba(52,211,153,.08);
+  border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:.5rem .8rem;margin-bottom:.7rem;
+  font-family:'Noto Sans Bengali',sans-serif;line-height:1.5;}
+.grammar-actions{display:flex;gap:6px;}
+.grammar-apply{flex:1;padding:.45rem;border-radius:10px;border:none;
+  background:var(--msng-gradient);color:#fff;font-size:12px;font-weight:700;cursor:pointer;}
+.grammar-dismiss{padding:.45rem .8rem;border-radius:10px;border:none;
+  background:var(--search-bg);color:var(--sub);font-size:12px;cursor:pointer;}
+.grammar-loader{text-align:center;padding:.5rem;color:var(--muted);font-size:12px;}
+
+/* ─── TRANSLATE BUBBLE ─── */
+.dm-translate-btn{
+  font-size:10px;color:var(--msng-blue);cursor:pointer;margin-top:3px;
+  background:none;border:none;padding:0;font-family:'Noto Sans Bengali',sans-serif;
+  display:block;
+}
+.dm-translate-btn:hover{text-decoration:underline;}
+.dm-translated{
+  font-size:12px;color:var(--sub);font-style:italic;margin-top:4px;
+  border-top:1px solid var(--border);padding-top:4px;
+  font-family:'Noto Sans Bengali',sans-serif;line-height:1.5;
+}
+
+/* ─── GIF PICKER ─── */
+.gif-picker{
+  position:absolute;bottom:calc(100% + 8px);left:0;right:0;
+  background:var(--forward-box-bg);border:1px solid var(--border);
+  border-radius:16px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.4);
+  display:none;overflow:hidden;
+}
+.gif-picker.show{display:flex;flex-direction:column;}
+.gif-search{padding:.7rem;border-bottom:1px solid var(--border);}
+.gif-search input{width:100%;background:var(--search-bg);border:none;border-radius:20px;
+  padding:.45rem 1rem;color:var(--text);font-size:13px;outline:none;}
+.gif-search input::placeholder{color:var(--muted);}
+.gif-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:.7rem;
+  max-height:260px;overflow-y:auto;}
+.gif-thumb{border-radius:8px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:var(--surface2);}
+.gif-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:.2s;}
+.gif-thumb:hover img{transform:scale(1.05);}
+.gif-empty{grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--muted);font-size:13px;}
+.gif-loading{grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--muted);font-size:13px;}
+
+/* ─── INPUT BAR POSITION FOR POPUPS ─── */
+.thread-input-bar{position:relative;}
+
+/* ─── GIF/GRAMMAR BUTTONS ─── */
+.gif-btn{
+  width:36px;height:36px;border-radius:50%;border:none;
+  background:transparent;color:var(--msng-blue);font-size:.85rem;font-weight:700;
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s;
+  font-family:'Outfit',sans-serif;
+}
+.gif-btn:hover{background:rgba(10,124,255,.12);}
+.grammar-btn{
+  width:36px;height:36px;border-radius:50%;border:none;
+  background:transparent;color:#34d399;font-size:.85rem;
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.grammar-btn:hover{background:rgba(52,211,153,.12);}
+.grammar-btn.checking{animation:pulse-rec 1s infinite;}
+
+/* ─── MESSAGE SEARCH BAR ─── */
+.msg-search-bar{
+  display:none;align-items:center;gap:8px;
+  padding:.55rem 1rem;border-bottom:1px solid var(--border);
+  background:var(--topbar-bg);
+}
+.msg-search-bar.show{display:flex;}
+.msg-search-bar input{
+  flex:1;background:var(--search-bg);border:none;border-radius:20px;
+  padding:.45rem 1rem;color:var(--text);font-size:13px;outline:none;
+  font-family:'Noto Sans Bengali',sans-serif;
+}
+.msg-search-bar input::placeholder{color:var(--muted);}
+.msg-search-nav{display:flex;gap:4px;align-items:center;}
+.msg-search-nav button{width:28px;height:28px;border-radius:8px;border:none;
+  background:var(--search-bg);color:var(--sub);cursor:pointer;font-size:12px;}
+.msg-search-count{font-size:11px;color:var(--muted);min-width:40px;text-align:center;}
+.msg-search-close{width:28px;height:28px;border-radius:50%;border:none;
+  background:transparent;color:var(--muted);cursor:pointer;font-size:14px;}
+.dm-bubble.search-highlight{outline:2px solid var(--gold);outline-offset:2px;}
+
+/* ─── SHARED MEDIA MODAL ─── */
+.media-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);
+  z-index:9100;display:none;flex-direction:column;
+}
+.media-modal.show{display:flex;}
+.media-modal-header{
+  display:flex;align-items:center;gap:12px;padding:1rem 1.2rem;
+  border-bottom:1px solid var(--border);background:var(--topbar-bg);flex-shrink:0;
+}
+.media-modal-header h3{font-size:15px;font-weight:700;color:var(--text);flex:1;}
+.media-modal-tabs{display:flex;gap:6px;}
+.media-tab{padding:.4rem 1rem;border-radius:20px;border:none;font-size:12px;font-weight:600;
+  background:var(--search-bg);color:var(--sub);cursor:pointer;transition:.15s;}
+.media-tab.active{background:var(--msng-blue);color:#fff;}
+.media-modal-close{width:32px;height:32px;border-radius:50%;border:none;
+  background:var(--search-bg);color:var(--sub);cursor:pointer;font-size:14px;}
+.media-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:3px;padding:1rem;overflow-y:auto;flex:1;
+}
+.media-thumb{
+  aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:pointer;
+  background:var(--surface2);position:relative;
+}
+.media-thumb img{width:100%;height:100%;object-fit:cover;transition:.2s;}
+.media-thumb:hover img{transform:scale(1.05);}
+.media-file-list{padding:1rem;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:6px;}
+.media-file-item{
+  display:flex;align-items:center;gap:10px;padding:.7rem .9rem;
+  border-radius:12px;background:var(--surface2);text-decoration:none;
+}
+.media-file-icon{font-size:1.5rem;flex-shrink:0;}
+.media-file-info .mf-name{font-size:13px;font-weight:600;color:var(--text);}
+.media-file-info .mf-date{font-size:11px;color:var(--muted);margin-top:2px;}
+.media-empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:13px;}
+
+/* ─── CHAT INFO PANEL (theme + nickname) ─── */
+.info-panel{
+  position:absolute;right:0;top:0;bottom:0;width:min(100%,320px);
+  background:var(--forward-box-bg);border-left:1px solid var(--border);
+  z-index:50;transform:translateX(100%);transition:transform .25s ease;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.info-panel.show{transform:translateX(0);}
+.info-panel-header{
+  display:flex;align-items:center;gap:10px;padding:1rem 1.1rem;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.info-panel-header h3{font-size:14px;font-weight:700;color:var(--text);flex:1;}
+.info-panel-close{width:30px;height:30px;border-radius:50%;border:none;
+  background:var(--search-bg);color:var(--sub);cursor:pointer;font-size:13px;}
+.info-panel-body{padding:1.1rem;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:1.2rem;}
+.info-section h4{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.7rem;}
+
+/* Nickname */
+.nickname-row{display:flex;gap:8px;align-items:center;}
+.nickname-input{
+  flex:1;background:var(--search-bg);border:1px solid var(--border);
+  border-radius:10px;padding:.5rem .8rem;color:var(--text);font-size:13px;
+  font-family:'Noto Sans Bengali',sans-serif;outline:none;
+}
+.nickname-input:focus{border-color:var(--msng-blue);}
+.nickname-save{padding:.5rem 1rem;border-radius:10px;border:none;
+  background:var(--msng-blue);color:#fff;font-size:12px;font-weight:700;cursor:pointer;}
+
+/* Theme colors */
+.theme-colors{display:flex;flex-wrap:wrap;gap:8px;}
+.theme-swatch{
+  width:36px;height:36px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;transition:.15s;
+}
+.theme-swatch.selected{border-color:var(--text);transform:scale(1.1);}
+.theme-swatch-label{font-size:11px;color:var(--muted);text-align:center;margin-top:3px;}
+.theme-swatch-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;}
+
+/* Thread panel relative for info panel */
+.thread-panel{position:relative;}
+
 /* ─── FORWARD ─── */
 .forward-modal{
   position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);
@@ -466,11 +757,11 @@ body{
       <div class="user-section">
         <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">👤</div>
         <div class="user-name" id="nav-name">Learner</div>
-        <button class="btn-logout" id="btn-logout">Logout</button>
+        <button id="call-log-btn" class="call-log-btn" title="Call history"><i class="ti ti-history" aria-hidden="true"></i></button>
         <button id="theme-toggle" title="Toggle dark/light mode" style="
           width:34px;height:34px;border-radius:50%;border:1px solid var(--border);
           background:var(--search-bg);color:var(--sub);font-size:1rem;cursor:pointer;
-          display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0;">🌙</button>
+          display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0;"><i class="ti ti-moon" aria-hidden="true"></i></button>
       </div>
     </div>
   </div>
@@ -488,6 +779,7 @@ body{
       <div class="conv-list" id="conv-list">
         <div class="conv-empty">লোড হচ্ছে...</div>
       </div>
+      <div class="archive-toggle" id="archive-toggle"><i class="ti ti-archive" aria-hidden="true"></i> Archived conversations দেখো</div>
     </div>
 
     <!-- THREAD -->
@@ -498,15 +790,32 @@ body{
       </div>
       <div id="thread-active-wrap" style="display:none;flex-direction:column;height:100%;">
         <div class="thread-header">
+          <button class="back-btn" id="back-btn" style="
+            width:32px;height:32px;border-radius:50%;border:none;
+            background:transparent;color:var(--msng-blue);font-size:1.2rem;
+            cursor:pointer;display:none;align-items:center;justify-content:center;
+            flex-shrink:0;padding:0;"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
           <div class="thread-avatar" id="thread-avatar">?</div>
           <div>
             <div class="thread-name" id="thread-name">—</div>
             <div class="thread-status" id="thread-status">offline</div>
           </div>
           <div class="thread-call-actions">
-            <button class="call-btn" id="audio-call-btn" title="Audio call">📞</button>
-            <button class="call-btn" id="video-call-btn" title="Video call">🎥</button>
+            <button class="call-btn" id="msg-search-btn" title="Search messages"><i class="ti ti-search" aria-hidden="true"></i></button>
+            <button class="call-btn" id="media-btn" title="Shared media"><i class="ti ti-photo" aria-hidden="true"></i></button>
+            <button class="call-btn" id="info-btn" title="Chat info"><i class="ti ti-info-circle" aria-hidden="true"></i></button>
+            <button class="call-btn" id="audio-call-btn" title="Audio call"><i class="ti ti-phone" aria-hidden="true"></i></button>
+            <button class="call-btn" id="video-call-btn" title="Video call"><i class="ti ti-video" aria-hidden="true"></i></button>
           </div>
+        </div>
+        <div class="msg-search-bar" id="msg-search-bar">
+          <input type="text" id="msg-search-input" placeholder="Message খোঁজো...">
+          <div class="msg-search-nav">
+            <button id="msg-search-prev"><i class="ti ti-chevron-up" aria-hidden="true"></i></button>
+            <span class="msg-search-count" id="msg-search-count"></span>
+            <button id="msg-search-next"><i class="ti ti-chevron-down" aria-hidden="true"></i></button>
+          </div>
+          <button class="msg-search-close" id="msg-search-close"><i class="ti ti-x" aria-hidden="true"></i></button>
         </div>
         <div class="thread-messages" id="thread-messages"></div>
         <div class="typing-indicator" id="typing-indicator">
@@ -518,7 +827,7 @@ body{
             <div class="rp-name" id="reply-name"></div>
             <div class="rp-text" id="reply-text"></div>
           </div>
-          <button class="reply-close" id="reply-close">✕</button>
+          <button class="reply-close" id="reply-close"><i class="ti ti-x" aria-hidden="true"></i></button>
         </div>
         <div class="attach-preview" id="attach-preview">
           <img id="ap-img" style="display:none;">
@@ -527,20 +836,62 @@ body{
             <div class="ap-name" id="ap-name"></div>
             <div id="ap-status">Ready to send</div>
           </div>
-          <button class="attach-remove" id="ap-remove">✕</button>
+          <button class="attach-remove" id="ap-remove"><i class="ti ti-x" aria-hidden="true"></i></button>
+        </div>
+        <!-- INFO PANEL -->
+        <div class="info-panel" id="info-panel">
+          <div class="info-panel-header">
+            <h3>Chat Info</h3>
+            <button class="info-panel-close" id="info-panel-close"><i class="ti ti-x" aria-hidden="true"></i></button>
+          </div>
+          <div class="info-panel-body">
+            <div class="info-section">
+              <h4>Nickname</h4>
+              <div class="nickname-row">
+                <input type="text" class="nickname-input" id="nickname-input" placeholder="Nickname দাও...">
+                <button class="nickname-save" id="nickname-save">Save</button>
+              </div>
+            </div>
+            <div class="info-section">
+              <h4>Chat Theme</h4>
+              <div class="theme-colors" id="theme-colors"></div>
+            </div>
+          </div>
         </div>
         <div class="recording-bar" id="recording-bar">
           <div class="recording-dot"></div>
           <div class="recording-time" id="recording-time">0:00</div>
           <div class="recording-label">Recording voice message...</div>
           <button class="rec-cancel" id="rec-cancel" title="Cancel">✕</button>
-          <button class="rec-send" id="rec-send" title="Send">➤</button>
+          <button class="rec-send" id="rec-send" title="Send"><i class="ti ti-send-2" aria-hidden="true"></i></button>
+        </div>
+        <div class="gif-picker" id="gif-picker">
+          <div class="gif-search">
+            <input type="text" id="gif-search-input" placeholder="GIF খোঁজো... (e.g. happy, laugh)">
+          </div>
+          <div class="gif-grid" id="gif-grid">
+            <div class="gif-loading">GIF লোড হচ্ছে...</div>
+          </div>
+        </div>
+        <div class="grammar-popup" id="grammar-popup">
+          <div class="grammar-header">
+            <h4>✍️ Grammar Check</h4>
+            <span class="grammar-score" id="grammar-score"></span>
+          </div>
+          <div class="grammar-errors" id="grammar-errors"></div>
+          <div class="grammar-corrected" id="grammar-corrected"></div>
+          <div class="grammar-actions">
+            <button class="grammar-apply" id="grammar-apply">✓ Corrected version use করো</button>
+            <button class="grammar-dismiss" id="grammar-dismiss">Dismiss</button>
+          </div>
         </div>
         <div class="thread-input-bar">
           <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx,.txt" style="display:none;">
-          <button class="attach-btn" id="attach-btn" title="Attach file">📎</button>
+          <button class="attach-btn" id="attach-btn" title="Attach file"><i class="ti ti-paperclip" aria-hidden="true"></i></button>
+          <button class="gif-btn" id="gif-btn" title="Send GIF"><i class="ti ti-gif" aria-hidden="true"></i></button>
           <textarea id="msg-input" placeholder="একটি message লিখো..." rows="1"></textarea>
-          <button class="voice-btn" id="voice-btn" title="Voice message">🎤</button>
+          <button class="grammar-btn" id="grammar-btn" title="Grammar check"><i class="ti ti-writing-sign" aria-hidden="true"></i></button>
+          <button class="voice-btn" id="voice-btn" title="Voice message"><i class="ti ti-microphone" aria-hidden="true"></i></button>
           <button class="send-btn" id="send-btn" disabled>➤</button>
         </div>
       </div>
@@ -551,6 +902,31 @@ body{
 </div><!-- end .wrap -->
 
 <!-- INCOMING CALL BANNER -->
+<!-- SHARED MEDIA MODAL -->
+<div class="media-modal" id="media-modal">
+  <div class="media-modal-header">
+    <h3>Shared Media</h3>
+    <div class="media-modal-tabs">
+      <button class="media-tab active" data-tab="photos">Photos</button>
+      <button class="media-tab" data-tab="files">Files</button>
+    </div>
+    <button class="media-modal-close" id="media-modal-close"><i class="ti ti-x" aria-hidden="true"></i></button>
+  </div>
+  <div class="media-grid" id="media-grid"></div>
+  <div class="media-file-list" id="media-file-list" style="display:none;"></div>
+</div>
+
+<!-- CALL LOG MODAL -->
+<div class="call-log-modal" id="call-log-modal">
+  <div class="call-log-box">
+    <h3>Call History</h3>
+    <div class="call-log-list" id="call-log-list">
+      <div style="color:var(--muted);text-align:center;padding:1.5rem;font-size:13px;">কোনো call history নেই</div>
+    </div>
+    <button class="call-log-close" id="call-log-close">বন্ধ করো</button>
+  </div>
+</div>
+
 <!-- FORWARD MODAL -->
 <div class="forward-modal" id="forward-modal">
   <div class="forward-box">
@@ -583,10 +959,10 @@ body{
       <video class="call-video-local" id="local-video" autoplay playsinline muted></video>
     </div>
     <div class="call-actions">
-      <button class="cbtn muted" id="call-mute-btn" title="Mute">🎙️</button>
+      <button class="cbtn muted" id="call-mute-btn" title="Mute"><i class="ti ti-microphone" aria-hidden="true"></i></button>
       <button class="cbtn active" id="call-video-toggle-btn" title="Toggle camera">🎥</button>
-      <button class="cbtn active" id="call-screenshare-btn" title="Share screen">🖥️</button>
-      <button class="cbtn end" id="call-end-btn" title="End call">📵</button>
+      <button class="cbtn active" id="call-screenshare-btn" title="Share screen"><i class="ti ti-screen-share" aria-hidden="true"></i></button>
+      <button class="cbtn end" id="call-end-btn" title="End call"><i class="ti ti-phone-off" aria-hidden="true"></i></button>
     </div>
   </div>
 </div>
@@ -613,6 +989,9 @@ let unsubMessages = null;
 let unsubConvList = [];
 let pendingFile  = null;
 let pendingPreviewUrl = null;
+let convMeta     = {};      // uid -> {pinned, muted, archived}
+let callLog      = [];      // [{uid, type, duration, ts, missed}]
+let showArchived = false;
 
 function toast(msg){
   const t = document.getElementById("toast");
@@ -659,20 +1038,34 @@ function renderConvList(filter=""){
     return;
   }
 
-  list.innerHTML = filtered.map(uid=>{
+  // Sort: pinned first
+  const sorted = [...filtered].sort((a,b)=>{
+    const ap = convMeta[a]?.pinned ? 1 : 0;
+    const bp = convMeta[b]?.pinned ? 1 : 0;
+    return bp - ap;
+  });
+
+  list.innerHTML = sorted.map(uid=>{
     const u = userCache[uid] || {};
     const name = esc(u.displayName || "User");
     const photo = u.photoURL || "";
     const avatarInner = photo ? `<img src="${photo}">` : `<span>${name[0]?.toUpperCase()||"?"}</span>`;
     const active = uid === activeConvUid ? "active" : "";
+    const meta = convMeta[uid] || {};
+    const pinIcon = meta.pinned ? `<span class="conv-pin-icon"><i class="ti ti-pin" aria-hidden="true"></i></span>` : "";
+    const muteIcon = meta.muted ? `<span class="conv-mute-icon"><i class="ti ti-bell-off" aria-hidden="true"></i></span>` : "";
+    const archivedClass = meta.archived ? "archived" : "";
+    const mutedClass = meta.muted ? "muted" : "";
+    const pinnedClass = meta.pinned ? "pinned" : "";
     return `
-      <div class="conv-item ${active}" data-uid="${uid}">
+      <div class="conv-item ${active} ${archivedClass} ${mutedClass} ${pinnedClass}" data-uid="${uid}">
         <div class="conv-avatar">${avatarInner}</div>
         <div class="conv-info">
           <div class="conv-name">${name}</div>
           <div class="conv-preview" id="preview-${uid}">কথা বলা শুরু করো...</div>
         </div>
         <div class="conv-meta">
+          <div class="conv-item-icons">${pinIcon}${muteIcon}</div>
           <div class="conv-time" id="time-${uid}"></div>
         </div>
       </div>`;
@@ -680,6 +1073,7 @@ function renderConvList(filter=""){
 
   list.querySelectorAll(".conv-item").forEach(el=>{
     el.addEventListener("click", ()=> openConversation(el.dataset.uid));
+    el.addEventListener("contextmenu", e=> showCtxMenu(e, el.dataset.uid));
   });
 
   // load last message previews
@@ -720,6 +1114,13 @@ function openConversation(uid){
   const activeWrap = document.getElementById("thread-active-wrap");
   activeWrap.style.display = "flex";
 
+  // Mobile: hide conv panel, show thread panel
+  if(window.innerWidth <= 800){
+    document.querySelector(".conv-panel").classList.add("hidden-mobile");
+    document.querySelector(".thread-panel").classList.add("visible-mobile");
+    document.getElementById("back-btn").style.display = "flex";
+  }
+
   const u = userCache[uid] || {};
   const name = esc(u.displayName || "User");
   const photo = u.photoURL || "";
@@ -730,8 +1131,13 @@ function openConversation(uid){
 
   loadMessages(uid);
   listenTyping(uid);
+  listenLastSeen(uid);
   markConversationSeen(uid);
   clearReply();
+  applyTheme(uid);
+  // Apply nickname
+  const nick = nicknames[uid];
+  if(nick) document.getElementById("thread-name").textContent = nick;
 }
 
 /* ══════════════════════════════════
@@ -813,7 +1219,8 @@ function buildMsgEl(m, otherUid, msgId, convId){
       </a>`;
     }
   }
-  const textHtml = m.text ? `<div class="dm-bubble">${esc(m.text)}${editedTag}</div>` : "";
+  const translateBtn = m.text ? `<button class="dm-translate-btn" data-translate="${msgId}">🌐 বাংলায় দেখো</button>` : "";
+  const textHtml = m.text ? `<div class="dm-bubble">${esc(m.text)}${editedTag}</div>${translateBtn}` : "";
   const reactionsHtml = buildReactionsHtml(m.reactions, msgId);
   const replyRefHtml = m.replyTo ? buildReplyRefHtml(m.replyTo) : "";
   const seenHtml = getSeenEl(m, isOwn);
@@ -822,11 +1229,11 @@ function buildMsgEl(m, otherUid, msgId, convId){
   let actionsHtml = "";
   {
     const canEdit = isOwn && !!m.text && !m.attachmentUrl;
-    const replyBtn = `<button class="dm-action-btn" data-reply="${msgId}" title="Reply">↩️</button>`;
-    const fwdBtn = m.text ? `<button class="dm-action-btn" data-forward="${msgId}" title="Forward">➡️</button>` : "";
-    const reactBtn = `<button class="dm-action-btn" data-react="${msgId}" title="React">😊</button>`;
-    const editBtn2 = canEdit ? `<button class="dm-action-btn" data-edit="${msgId}" title="Edit">✏️</button>` : "";
-    const unsendBtn2 = isOwn ? `<button class="dm-action-btn" data-unsend="${msgId}" title="Unsend">🗑️</button>` : "";
+    const replyBtn = `<button class="dm-action-btn" data-reply="${msgId}" title="Reply"><i class="ti ti-corner-up-left"></i></button>`;
+    const fwdBtn = m.text ? `<button class="dm-action-btn" data-forward="${msgId}" title="Forward"><i class="ti ti-share"></i></button>` : "";
+    const reactBtn = `<button class="dm-action-btn" data-react="${msgId}" title="React"><i class="ti ti-mood-smile"></i></button>`;
+    const editBtn2 = canEdit ? `<button class="dm-action-btn" data-edit="${msgId}" title="Edit"><i class="ti ti-pencil"></i></button>` : "";
+    const unsendBtn2 = isOwn ? `<button class="dm-action-btn" data-unsend="${msgId}" title="Unsend"><i class="ti ti-trash"></i></button>` : "";
     actionsHtml = `<div class="dm-actions">${reactBtn}${replyBtn}${fwdBtn}${editBtn2}${unsendBtn2}</div>`;
   }
 
@@ -840,8 +1247,8 @@ function buildMsgEl(m, otherUid, msgId, convId){
       <div class="dm-edit-box" id="edit-box-${msgId}">
         <textarea id="edit-input-${msgId}">${esc(m.text||"")}</textarea>
         <div class="dm-edit-actions">
-          <button class="ea-save" data-save="${msgId}" title="Save">✔</button>
-          <button class="ea-cancel" data-cancel="${msgId}" title="Cancel">✕</button>
+          <button class="ea-save" data-save="${msgId}" title="Save"><i class="ti ti-check"></i></button>
+          <button class="ea-cancel" data-cancel="${msgId}" title="Cancel"><i class="ti ti-x"></i></button>
         </div>
       </div>
       ${reactionsHtml}
@@ -889,6 +1296,36 @@ function buildMsgEl(m, otherUid, msgId, convId){
       e.stopPropagation();
       addReaction(el.dataset["react-msgid"] || msgId, el.dataset.emoji);
     });
+  });
+
+  // Translate button
+  const transBtn = wrap.querySelector(`[data-translate="${msgId}"]`);
+  if(transBtn) transBtn.addEventListener("click", async e=>{
+    e.stopPropagation();
+    if(transBtn.dataset.done === "1") return;
+    transBtn.textContent = "🌐 অনুবাদ হচ্ছে...";
+    transBtn.disabled = true;
+    try{
+      const res = await fetch("/api/translate", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ text: m.text, targetLang:"bn" })
+      });
+      const data = await res.json();
+      if(data.translation){
+        const div = document.createElement("div");
+        div.className = "dm-translated";
+        div.textContent = data.translation;
+        transBtn.after(div);
+        transBtn.textContent = "🌐 বাংলা অনুবাদ";
+        transBtn.dataset.done = "1";
+      } else {
+        transBtn.textContent = "🌐 বাংলায় দেখো";
+        transBtn.disabled = false;
+      }
+    }catch(e){
+      transBtn.textContent = "🌐 বাংলায় দেখো";
+      transBtn.disabled = false;
+    }
   });
 
   const playBtn = wrap.querySelector(".voice-play-btn");
@@ -1180,7 +1617,7 @@ requireAuth(async user => {
   const d = snap.exists() ? snap.data() : {};
   userCache[user.uid] = d;
 
-  const name  = d.displayName || user.displayName || "Learner";
+  const name  = d.displayName || user.displayName || user.email?.split("@")[0] || "User";
   const photo = d.photoURL    || user.photoURL    || "";
   document.getElementById("nav-name").textContent = name;
   const av = document.getElementById("nav-avatar");
@@ -1471,6 +1908,8 @@ async function startCall(video){
   currentCallConvId = dmId(currentUser.uid, activeConvUid);
   currentCallPeerUid = activeConvUid;
   isCaller = true;
+  window._callStartTime = Date.now();
+  window._callType = video ? "video" : "audio";
 
   try{
     localStream = await navigator.mediaDevices.getUserMedia({ audio:true, video });
@@ -1643,7 +2082,7 @@ function toggleMute(){
   if(!track) return;
   track.enabled = !track.enabled;
   document.getElementById("call-mute-btn").classList.toggle("muted", !track.enabled);
-  document.getElementById("call-mute-btn").textContent = track.enabled ? "🎙️" : "🔇";
+  document.getElementById("call-mute-btn").innerHTML = track.enabled ? '<i class="ti ti-microphone" aria-hidden="true"></i>' : '<i class="ti ti-microphone-off" aria-hidden="true"></i>';
 }
 
 function toggleVideo(){
@@ -1701,17 +2140,533 @@ async function endCall(notifyRemote){
   document.getElementById("local-video").srcObject = null;
   document.getElementById("call-overlay").classList.remove("show");
   document.getElementById("call-videos").classList.remove("show");
-  document.getElementById("call-mute-btn").textContent = "🎙️";
+  document.getElementById("call-mute-btn").innerHTML = '<i class="ti ti-microphone" aria-hidden="true"></i>';
   document.getElementById("call-mute-btn").classList.remove("muted");
-  document.getElementById("call-video-toggle-btn").textContent = "🎥";
+  document.getElementById("call-video-toggle-btn").innerHTML = '<i class="ti ti-video" aria-hidden="true"></i>';
   document.getElementById("call-video-toggle-btn").classList.add("active");
-  document.getElementById("call-screenshare-btn").textContent = "🖥️";
+  document.getElementById("call-screenshare-btn").innerHTML = '<i class="ti ti-screen-share" aria-hidden="true"></i>';
   document.getElementById("call-screenshare-btn").classList.add("active");
 
+  // Save to call log
+  if(currentCallPeerUid){
+    const dur = Math.floor((Date.now() - (window._callStartTime||Date.now())) / 1000);
+    saveCallToLog(currentCallPeerUid, window._callType||"audio", dur, false);
+  }
   currentCallId = null;
   currentCallConvId = null;
   currentCallPeerUid = null;
 }
+
+/* ══════════════════════════════════════════
+   LAST SEEN
+══════════════════════════════════════════ */
+function updateLastSeen(){
+  if(!currentUser) return;
+  updateDoc(doc(db,"users",currentUser.uid), {
+    lastSeen: serverTimestamp(), online: true
+  }).catch(()=>{});
+}
+
+function listenLastSeen(uid){
+  onSnapshot(doc(db,"users",uid), snap=>{
+    const data = snap.data() || {};
+    const statusEl = document.getElementById("thread-status");
+    if(!statusEl) return;
+    if(activeConvUid !== uid) return;
+    if(data.online){
+      statusEl.textContent = "Active now";
+      statusEl.className = "thread-status online";
+    } else if(data.lastSeen?.toDate){
+      const diff = Math.floor((Date.now() - data.lastSeen.toDate()) / 60000);
+      let label;
+      if(diff < 1) label = "Just now";
+      else if(diff < 60) label = `Active ${diff}m ago`;
+      else if(diff < 1440) label = `Active ${Math.floor(diff/60)}h ago`;
+      else label = `Active ${Math.floor(diff/1440)}d ago`;
+      statusEl.textContent = label;
+      statusEl.className = "thread-status last-seen";
+    }
+  });
+}
+
+/* ══════════════════════════════════════════
+   CONV META — PIN / MUTE / ARCHIVE
+   Stored in Firestore: users/{uid}/convMeta/{otherUid}
+══════════════════════════════════════════ */
+async function loadConvMeta(){
+  if(!currentUser) return;
+  try{
+    const snap = await getDocs(collection(db,"users",currentUser.uid,"convMeta"));
+    snap.forEach(d=>{ convMeta[d.id] = d.data(); });
+    renderConvList();
+  }catch(e){ console.warn("convMeta load failed",e); }
+}
+
+async function setConvMeta(uid, key, value){
+  if(!currentUser) return;
+  const ref = doc(db,"users",currentUser.uid,"convMeta",uid);
+  convMeta[uid] = { ...(convMeta[uid]||{}), [key]: value };
+  await setDoc(ref, convMeta[uid], { merge:true }).catch(()=>{});
+  renderConvList();
+}
+
+/* ══════════════════════════════════════════
+   CONTEXT MENU (right-click on conversation)
+══════════════════════════════════════════ */
+let activeCtxMenu = null;
+
+function showCtxMenu(e, uid){
+  e.preventDefault();
+  closeCtxMenu();
+  const meta = convMeta[uid] || {};
+  const menu = document.createElement("div");
+  menu.className = "ctx-menu";
+  menu.style.left = Math.min(e.clientX, window.innerWidth - 200) + "px";
+  menu.style.top  = Math.min(e.clientY, window.innerHeight - 200) + "px";
+
+  const items = [
+    { icon: meta.pinned ? "📌" : "📌", label: meta.pinned ? "Unpin" : "Pin conversation",
+      action: ()=> setConvMeta(uid, "pinned", !meta.pinned) },
+    { icon: meta.muted ? "🔔" : "🔕", label: meta.muted ? "Unmute" : "Mute notifications",
+      action: ()=> setConvMeta(uid, "muted", !meta.muted) },
+    { icon: "🗄️", label: meta.archived ? "Unarchive" : "Archive conversation",
+      action: ()=> setConvMeta(uid, "archived", !meta.archived) },
+  ];
+
+  items.forEach(item=>{
+    const el = document.createElement("div");
+    el.className = "ctx-item";
+    el.innerHTML = `<span class="ci-icon">${item.icon}</span>${item.label}`;
+    el.addEventListener("click", ()=>{ item.action(); closeCtxMenu(); });
+    menu.appendChild(el);
+  });
+
+  document.body.appendChild(menu);
+  activeCtxMenu = menu;
+}
+
+function closeCtxMenu(){
+  activeCtxMenu?.remove();
+  activeCtxMenu = null;
+}
+document.addEventListener("click", closeCtxMenu);
+
+/* ══════════════════════════════════════════
+   CALL LOG
+══════════════════════════════════════════ */
+function saveCallToLog(uid, type, durationSec, missed){
+  callLog.unshift({ uid, type, durationSec, missed, ts: Date.now() });
+  if(callLog.length > 50) callLog.length = 50;
+  try{ localStorage.setItem("es-call-log", JSON.stringify(callLog)); }catch(e){}
+}
+
+function loadCallLog(){
+  try{
+    const saved = localStorage.getItem("es-call-log");
+    if(saved) callLog = JSON.parse(saved);
+  }catch(e){ callLog = []; }
+}
+
+function renderCallLog(){
+  const list = document.getElementById("call-log-list");
+  if(!callLog.length){
+    list.innerHTML = `<div style="color:var(--muted);text-align:center;padding:1.5rem;font-size:13px;">কোনো call history নেই</div>`;
+    return;
+  }
+  list.innerHTML = callLog.map(entry=>{
+    const u = userCache[entry.uid] || {};
+    const name = u.displayName || "User";
+    const photo = u.photoURL || "";
+    const avatarHtml = photo ? `<img src="${photo}">` : name[0]?.toUpperCase();
+    const typeIcon = entry.type === "video" ? "🎥" : "📞";
+    const missedClass = entry.missed ? "call-log-missed" : "";
+    const dur = entry.durationSec
+      ? `${Math.floor(entry.durationSec/60)}:${String(entry.durationSec%60).padStart(2,"0")}`
+      : "";
+    const timeAgo = (() => {
+      const diff = Math.floor((Date.now() - entry.ts) / 60000);
+      if(diff < 1) return "Just now";
+      if(diff < 60) return `${diff}m ago`;
+      if(diff < 1440) return `${Math.floor(diff/60)}h ago`;
+      return `${Math.floor(diff/1440)}d ago`;
+    })();
+    return `<div class="call-log-item">
+      <div class="call-log-avatar">${avatarHtml}</div>
+      <div class="call-log-info">
+        <div class="call-log-name ${missedClass}">${name}</div>
+        <div class="call-log-meta">${entry.missed?"Missed · ":""}${dur ? dur+" · ":""}${timeAgo}</div>
+      </div>
+      <div class="call-log-type">${typeIcon}</div>
+    </div>`;
+  }).join("");
+}
+
+document.getElementById("call-log-btn").addEventListener("click", ()=>{
+  renderCallLog();
+  document.getElementById("call-log-modal").classList.add("show");
+});
+document.getElementById("call-log-close").addEventListener("click", ()=>{
+  document.getElementById("call-log-modal").classList.remove("show");
+});
+
+/* Archive toggle */
+document.getElementById("archive-toggle").addEventListener("click", ()=>{
+  showArchived = !showArchived;
+  const list = document.getElementById("conv-list");
+  list.classList.toggle("show-archived", showArchived);
+  document.getElementById("archive-toggle").innerHTML =
+    showArchived ? '<i class="ti ti-archive" aria-hidden="true"></i> Archived লুকাও' : '<i class="ti ti-archive" aria-hidden="true"></i> Archived conversations দেখো';
+});
+
+/* ══════════════════════════════════════════
+   MESSAGE SEARCH
+══════════════════════════════════════════ */
+let searchMatches = [];
+let searchIdx = 0;
+
+document.getElementById("msg-search-btn").addEventListener("click", ()=>{
+  document.getElementById("msg-search-bar").classList.toggle("show");
+  if(document.getElementById("msg-search-bar").classList.contains("show"))
+    document.getElementById("msg-search-input").focus();
+  else clearMsgSearch();
+});
+document.getElementById("msg-search-close").addEventListener("click", ()=>{
+  document.getElementById("msg-search-bar").classList.remove("show");
+  clearMsgSearch();
+});
+
+function clearMsgSearch(){
+  document.getElementById("msg-search-input").value = "";
+  document.querySelectorAll(".dm-bubble.search-highlight").forEach(el=>el.classList.remove("search-highlight"));
+  searchMatches = []; searchIdx = 0;
+  document.getElementById("msg-search-count").textContent = "";
+}
+
+document.getElementById("msg-search-input").addEventListener("input", e=>{
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".dm-bubble.search-highlight").forEach(el=>el.classList.remove("search-highlight"));
+  searchMatches = [];
+  if(!q){ document.getElementById("msg-search-count").textContent = ""; return; }
+  document.querySelectorAll(".dm-bubble").forEach(el=>{
+    if(el.textContent.toLowerCase().includes(q)){
+      el.classList.add("search-highlight");
+      searchMatches.push(el);
+    }
+  });
+  searchIdx = searchMatches.length - 1;
+  document.getElementById("msg-search-count").textContent = searchMatches.length ? `${searchIdx+1}/${searchMatches.length}` : "0";
+  if(searchMatches.length) searchMatches[searchIdx].scrollIntoView({behavior:"smooth",block:"center"});
+});
+
+document.getElementById("msg-search-next").addEventListener("click", ()=>{
+  if(!searchMatches.length) return;
+  searchIdx = (searchIdx + 1) % searchMatches.length;
+  searchMatches[searchIdx].scrollIntoView({behavior:"smooth",block:"center"});
+  document.getElementById("msg-search-count").textContent = `${searchIdx+1}/${searchMatches.length}`;
+});
+document.getElementById("msg-search-prev").addEventListener("click", ()=>{
+  if(!searchMatches.length) return;
+  searchIdx = (searchIdx - 1 + searchMatches.length) % searchMatches.length;
+  searchMatches[searchIdx].scrollIntoView({behavior:"smooth",block:"center"});
+  document.getElementById("msg-search-count").textContent = `${searchIdx+1}/${searchMatches.length}`;
+});
+
+/* ══════════════════════════════════════════
+   SHARED MEDIA GALLERY
+══════════════════════════════════════════ */
+let mediaTab = "photos";
+
+document.getElementById("media-btn").addEventListener("click", ()=>{
+  openMediaModal();
+});
+document.getElementById("media-modal-close").addEventListener("click", ()=>{
+  document.getElementById("media-modal").classList.remove("show");
+});
+document.querySelectorAll(".media-tab").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".media-tab").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    mediaTab = btn.dataset.tab;
+    renderMediaTab();
+  });
+});
+
+let allMediaMessages = [];
+
+async function openMediaModal(){
+  if(!activeConvUid || !currentUser) return;
+  document.getElementById("media-modal").classList.add("show");
+  const convId = dmId(currentUser.uid, activeConvUid);
+  const q2 = query(
+    collection(db,"conversations",convId,"messages"),
+    orderBy("createdAt","desc"),
+    limit(100)
+  );
+  const snap = await getDocs(q2);
+  allMediaMessages = snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.attachmentUrl);
+  renderMediaTab();
+}
+
+function renderMediaTab(){
+  const photos = allMediaMessages.filter(m=>m.attachmentType==="image");
+  const files  = allMediaMessages.filter(m=>m.attachmentType!=="image");
+  const grid = document.getElementById("media-grid");
+  const fileList = document.getElementById("media-file-list");
+
+  if(mediaTab === "photos"){
+    grid.style.display = "grid"; fileList.style.display = "none";
+    if(!photos.length){ grid.innerHTML = `<div class="media-empty" style="grid-column:1/-1;">কোনো photo নেই</div>`; return; }
+    grid.innerHTML = photos.map(m=>`
+      <div class="media-thumb">
+        <img src="${m.attachmentUrl}" loading="lazy" onclick="window.open('${m.attachmentUrl}','_blank')">
+      </div>`).join("");
+  } else {
+    grid.style.display = "none"; fileList.style.display = "flex";
+    if(!files.length){ fileList.innerHTML = `<div class="media-empty">কোনো file নেই</div>`; return; }
+    fileList.innerHTML = files.map(m=>{
+      const icon = m.attachmentType==="voice" ? "🎤" : "📄";
+      const name = m.attachmentName || "File";
+      const date = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleDateString("bn-BD") : "";
+      return `<a class="media-file-item" href="${m.attachmentUrl}" target="_blank" download>
+        <span class="media-file-icon">${icon}</span>
+        <div class="media-file-info">
+          <div class="mf-name">${name}</div>
+          <div class="mf-date">${date}</div>
+        </div>
+      </a>`;
+    }).join("");
+  }
+}
+
+/* ══════════════════════════════════════════
+   CHAT INFO — NICKNAME + THEME
+══════════════════════════════════════════ */
+const CHAT_THEMES = [
+  { name:"Default",   gradient:"linear-gradient(135deg,#0a7cff,#c43eff)", bubble:"#0a7cff" },
+  { name:"Sunset",    gradient:"linear-gradient(135deg,#f97316,#ec4899)",  bubble:"#f97316" },
+  { name:"Forest",    gradient:"linear-gradient(135deg,#16a34a,#0d9488)",  bubble:"#16a34a" },
+  { name:"Ocean",     gradient:"linear-gradient(135deg,#0369a1,#06b6d4)",  bubble:"#0369a1" },
+  { name:"Rose",      gradient:"linear-gradient(135deg,#e11d48,#f43f5e)",  bubble:"#e11d48" },
+  { name:"Amber",     gradient:"linear-gradient(135deg,#d97706,#f59e0b)",  bubble:"#d97706" },
+  { name:"Violet",    gradient:"linear-gradient(135deg,#7c3aed,#a78bfa)",  bubble:"#7c3aed" },
+];
+
+let chatThemes = {}; // uid -> theme index
+let nicknames  = {}; // uid -> nickname
+
+function loadChatSettings(){
+  try{
+    chatThemes = JSON.parse(localStorage.getItem("es-chat-themes")||"{}");
+    nicknames  = JSON.parse(localStorage.getItem("es-nicknames")||"{}");
+  }catch(e){}
+}
+
+function saveChatSettings(){
+  try{
+    localStorage.setItem("es-chat-themes", JSON.stringify(chatThemes));
+    localStorage.setItem("es-nicknames",   JSON.stringify(nicknames));
+  }catch(e){}
+}
+
+function applyTheme(uid){
+  const idx = chatThemes[uid] ?? 0;
+  const theme = CHAT_THEMES[idx] || CHAT_THEMES[0];
+  document.documentElement.style.setProperty("--msng-gradient", theme.gradient);
+  document.documentElement.style.setProperty("--msng-blue", theme.bubble);
+}
+
+function renderThemeSwatches(uid){
+  const container = document.getElementById("theme-colors");
+  const current = chatThemes[uid] ?? 0;
+  container.innerHTML = CHAT_THEMES.map((t,i)=>`
+    <div class="theme-swatch-wrap">
+      <div class="theme-swatch${i===current?" selected":""}" data-idx="${i}"
+        style="background:${t.gradient};" title="${t.name}"></div>
+      <div class="theme-swatch-label">${t.name}</div>
+    </div>`).join("");
+  container.querySelectorAll(".theme-swatch").forEach(sw=>{
+    sw.addEventListener("click", ()=>{
+      const i = parseInt(sw.dataset.idx);
+      chatThemes[uid] = i;
+      saveChatSettings();
+      applyTheme(uid);
+      renderThemeSwatches(uid);
+    });
+  });
+}
+
+document.getElementById("info-btn").addEventListener("click", ()=>{
+  if(!activeConvUid) return;
+  document.getElementById("nickname-input").value = nicknames[activeConvUid] || "";
+  renderThemeSwatches(activeConvUid);
+  document.getElementById("info-panel").classList.add("show");
+});
+document.getElementById("info-panel-close").addEventListener("click", ()=>{
+  document.getElementById("info-panel").classList.remove("show");
+});
+
+document.getElementById("nickname-save").addEventListener("click", ()=>{
+  if(!activeConvUid) return;
+  const val = document.getElementById("nickname-input").value.trim();
+  if(val) nicknames[activeConvUid] = val;
+  else delete nicknames[activeConvUid];
+  saveChatSettings();
+  // Update thread name display
+  const u = userCache[activeConvUid] || {};
+  document.getElementById("thread-name").textContent = val || u.displayName || "User";
+  toast("✅ Nickname save হয়েছে!");
+});
+
+/* ══════════════════════════════════════════
+   GRAMMAR CHECK
+══════════════════════════════════════════ */
+let grammarCorrected = "";
+
+document.getElementById("grammar-btn").addEventListener("click", async ()=>{
+  const text = document.getElementById("msg-input").value.trim();
+  if(!text){ toast("⚠️ কিছু লিখো আগে!"); return; }
+  if(text.split(/\s+/).length < 2){ toast("⚠️ একটু বড় লিখো!"); return; }
+
+  const btn = document.getElementById("grammar-btn");
+  btn.classList.add("checking");
+  btn.title = "Checking...";
+
+  try{
+    const res = await fetch("/api/grammar-check", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ text })
+    });
+    const data = await res.json();
+    btn.classList.remove("checking");
+
+    if(data.error){ toast("⚠️ Grammar check হয়নি।"); return; }
+
+    const popup = document.getElementById("grammar-popup");
+    const scoreEl = document.getElementById("grammar-score");
+    const errorsEl = document.getElementById("grammar-errors");
+    const correctedEl = document.getElementById("grammar-corrected");
+
+    scoreEl.textContent = `Score: ${data.score}/10`;
+    scoreEl.className = "grammar-score " + (data.score >= 8 ? "good" : data.score >= 5 ? "ok" : "bad");
+
+    if(!data.hasErrors){
+      errorsEl.innerHTML = `<li style="color:var(--emerald);">✅ কোনো grammar error নেই!</li>`;
+    } else {
+      errorsEl.innerHTML = (data.errors||[]).map(e=>`<li>${e}</li>`).join("");
+    }
+
+    grammarCorrected = data.corrected || text;
+    correctedEl.textContent = grammarCorrected;
+
+    popup.classList.add("show");
+  } catch(e){
+    btn.classList.remove("checking");
+    toast("⚠️ Grammar check হয়নি।");
+  }
+});
+
+document.getElementById("grammar-apply").addEventListener("click", ()=>{
+  document.getElementById("msg-input").value = grammarCorrected;
+  document.getElementById("grammar-popup").classList.remove("show");
+  document.getElementById("msg-input").focus();
+  // trigger input event to enable send button
+  document.getElementById("msg-input").dispatchEvent(new Event("input"));
+});
+
+document.getElementById("grammar-dismiss").addEventListener("click", ()=>{
+  document.getElementById("grammar-popup").classList.remove("show");
+});
+
+/* ══════════════════════════════════════════
+   GIF PICKER (Tenor API)
+   Add TENOR_API_KEY to Cloudflare env vars
+   Get free key: https://tenor.com/developer/keyregistration
+══════════════════════════════════════════ */
+const TENOR_API_KEY = "AIzaSyAyimkuYQYF_y7VMpe3m5PB9vAiKhxqSEU"; // Public demo key — replace with yours
+const TENOR_CLIENT = "english_shekho";
+let gifOpen = false;
+let gifDebounce = null;
+
+document.getElementById("gif-btn").addEventListener("click", e=>{
+  e.stopPropagation();
+  gifOpen = !gifOpen;
+  const picker = document.getElementById("gif-picker");
+  picker.classList.toggle("show", gifOpen);
+  if(gifOpen) fetchGifs("trending");
+});
+
+document.addEventListener("click", e=>{
+  if(!document.getElementById("gif-picker").contains(e.target) &&
+     e.target.id !== "gif-btn"){
+    document.getElementById("gif-picker").classList.remove("show");
+    gifOpen = false;
+  }
+});
+
+document.getElementById("gif-search-input").addEventListener("input", e=>{
+  clearTimeout(gifDebounce);
+  const q = e.target.value.trim();
+  gifDebounce = setTimeout(()=> fetchGifs(q || "trending"), 400);
+});
+
+async function fetchGifs(query){
+  const grid = document.getElementById("gif-grid");
+  grid.innerHTML = `<div class="gif-loading">🔍 খোঁজা হচ্ছে...</div>`;
+  try{
+    const url = query === "trending"
+      ? `https://tenor.googleapis.com/v2/featured?key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT}&limit=12`
+      : `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(query)}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT}&limit=12`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const results = data.results || [];
+    if(!results.length){
+      grid.innerHTML = `<div class="gif-empty">কোনো GIF পাওয়া যায়নি 😕</div>`;
+      return;
+    }
+    grid.innerHTML = results.map(gif=>{
+      const preview = gif.media_formats?.tinygif?.url || gif.media_formats?.gif?.url || "";
+      const full    = gif.media_formats?.gif?.url || preview;
+      return `<div class="gif-thumb" data-url="${full}">
+        <img src="${preview}" loading="lazy" alt="${gif.title||"gif"}">
+      </div>`;
+    }).join("");
+    grid.querySelectorAll(".gif-thumb").forEach(el=>{
+      el.addEventListener("click", ()=> sendGif(el.dataset.url));
+    });
+  }catch(err){
+    grid.innerHTML = `<div class="gif-empty">GIF লোড হয়নি 😕</div>`;
+  }
+}
+
+async function sendGif(url){
+  if(!activeConvUid || !currentUser) return;
+  document.getElementById("gif-picker").classList.remove("show");
+  gifOpen = false;
+  const convId = dmId(currentUser.uid, activeConvUid);
+  try{
+    await addDoc(collection(db,"conversations",convId,"messages"), {
+      senderId: currentUser.uid,
+      attachmentUrl: url,
+      attachmentType: "image",
+      attachmentName: "GIF",
+      createdAt: serverTimestamp()
+    });
+    await setDoc(doc(db,"conversations",convId), {
+      participants: [currentUser.uid, activeConvUid],
+      updatedAt: serverTimestamp()
+    }, { merge:true });
+  }catch(e){ toast("⚠️ GIF send হয়নি।"); }
+}
+
+/* ══════════════════════════════════
+   MOBILE BACK BUTTON
+══════════════════════════════════ */
+document.getElementById("back-btn").addEventListener("click", ()=>{
+  document.querySelector(".conv-panel").classList.remove("hidden-mobile");
+  document.querySelector(".thread-panel").classList.remove("visible-mobile");
+  document.getElementById("back-btn").style.display = "none";
+  activeConvUid = null;
+});
 
 /* ══════════════════════════════════
    DARK / LIGHT MODE TOGGLE
@@ -1720,12 +2675,12 @@ const themeBtn = document.getElementById("theme-toggle");
 const savedTheme = localStorage.getItem("es-theme") || "dark";
 if(savedTheme === "light"){
   document.documentElement.classList.add("light");
-  themeBtn.textContent = "☀️";
+  themeBtn.innerHTML = '<i class="ti ti-sun" aria-hidden="true"></i>';
 }
 
 themeBtn.addEventListener("click", ()=>{
   const isLight = document.documentElement.classList.toggle("light");
-  themeBtn.textContent = isLight ? "☀️" : "🌙";
+  themeBtn.innerHTML = isLight ? '<i class="ti ti-sun" aria-hidden="true"></i>' : '<i class="ti ti-moon" aria-hidden="true"></i>';
   localStorage.setItem("es-theme", isLight ? "light" : "dark");
 });
 </script>
@@ -1774,8 +2729,8 @@ function markConversationSeen(uid){
 
 function getSeenEl(m, isOwn){
   if(!isOwn) return "";
-  if(m.seen) return `<div class="dm-seen">✓✓</div>`;
-  return `<div class="dm-seen delivered">✓</div>`;
+  if(m.seen) return `<div class="dm-seen"><i class="ti ti-checks" style="font-size:11px;"></i></div>`;
+  return `<div class="dm-seen delivered"><i class="ti ti-check" style="font-size:11px;"></i></div>`;
 }
 
 /* ══════════════════════════════════════════

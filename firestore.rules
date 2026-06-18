@@ -2,14 +2,24 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ───── ADMIN CHECK ─────
+    // Hardcoded admin email list. Admin hole sob jaygay extra permission pabe.
+    function isAdmin() {
+      return request.auth != null &&
+        request.auth.token.email in [
+          "zishanrafii@gmail.com"
+        ];
+    }
+
     // ───── USERS ─────
     // Sobai login thakle nijer o onner profile dekhte parbe (leaderboard, friends list e dorkar)
     // Kintu nijer document chara onno karo data write/delete korte parbe na
+    // Admin hole onno user-er document o update korte parbe (ban, role change, etc.)
     match /users/{userId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.auth.uid == userId;
-      allow update: if request.auth != null && request.auth.uid == userId;
-      allow delete: if false;
+      allow update: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
     }
 
     // ───── CONVERSATIONS / DM CHAT ─────
@@ -55,22 +65,47 @@ service cloud.firestore {
 
     // ───── COMMUNITY CHAT (public room) ─────
     // Login thakle sobai porte o nijer naam diye message likhte parbe
+    // Admin hole onner message o delete (moderate) korte parbe
     match /community_chat/{messageId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null &&
         request.resource.data.senderId == request.auth.uid;
-      allow update, delete: if request.auth != null &&
-        resource.data.senderId == request.auth.uid;
+      allow update: if request.auth != null && resource.data.senderId == request.auth.uid;
+      allow delete: if request.auth != null &&
+        (resource.data.senderId == request.auth.uid || isAdmin());
     }
 
     // ───── LISTENING SESSIONS ─────
     // Login thakle nijer session save korte parbe, onner ta porbe na
     match /listening_sessions/{sessionId} {
-      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
       allow create: if request.auth != null &&
         request.resource.data.uid == request.auth.uid &&
         request.resource.data.lessonId is string;
       allow update, delete: if false;
+    }
+
+    // ───── READING SESSIONS ─────
+    // Login thakle nijer reading session (passage completion log) save korte parbe, onner ta porbe na
+    match /reading_sessions/{sessionId} {
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+      allow create: if request.auth != null &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.passageId is string;
+      allow update, delete: if false;
+    }
+
+    // ───── ADMIN-MANAGED CONTENT ─────
+    // passages, grammar_lessons: Sobai porte parbe, shudhu admin add/edit/delete korte parbe.
+    // (Reading Center ar Grammar Hub-er static JS data file-er paribarte
+    //  bhobishyote Firestore-driven content-e migrate korar jonno taiyar kora.)
+    match /passages/{passageId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+    match /grammar_lessons/{lessonId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
     }
 
         // ───── CHAT ROOMS (used by chat.html) ─────
@@ -90,7 +125,7 @@ service cloud.firestore {
     // ───── QUIZ SCORES (root collection — used by progress.html history/chart) ─────
     // Nijer score read korte parbe, create korte parbe, kintu change/delete kora jabe na
     match /scores/{scoreId} {
-      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
       allow create: if request.auth != null &&
         request.resource.data.uid == request.auth.uid;
       allow update, delete: if false;
@@ -99,10 +134,11 @@ service cloud.firestore {
     // ───── WRITING LAB ─────
     // writings: submitted writing pieces (sentence/paragraph/essay/email/story)
     // User nijer submission create korte parbe, nijer ta porte/dekhte parbe
+    // Admin hole kono inappropriate writing delete (moderate) korte parbe
     match /writings/{writingId} {
       // Nijer lekha othoba public-e share kora lekha — keu porte parbe
       allow read: if request.auth != null &&
-        (resource.data.uid == request.auth.uid || resource.data.isPublic == true);
+        (resource.data.uid == request.auth.uid || resource.data.isPublic == true || isAdmin());
       allow create: if request.auth != null &&
         request.resource.data.uid == request.auth.uid &&
         request.resource.data.type is string &&
@@ -111,7 +147,7 @@ service cloud.firestore {
       allow update: if request.auth != null &&
         resource.data.isPublic == true &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reviewCount','avgRating']);
-      allow delete: if false;
+      allow delete: if isAdmin();
 
       // Community review-gulo
       match /reviews/{reviewId} {
@@ -155,7 +191,7 @@ service cloud.firestore {
     // User-specific quiz scores (quiz-beginner, quiz-intermediate, quiz-advanced)
     // Shudhu nijer score likhte/porte parbe
     match /users/{userId}/scores/{scoreId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
       allow create: if request.auth != null && request.auth.uid == userId;
       allow update, delete: if false; // score immutable — ekbar save hoile change hobe na
     }

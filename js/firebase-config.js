@@ -137,6 +137,28 @@ function requireAuth(callback) {
   });
 }
 
+/* ── Admin check ──
+   IMPORTANT: this list must exactly match the isAdmin() email list
+   inside firestore.rules. Client-side check is for UI/UX (hiding the
+   admin panel link, redirecting non-admins) — the real security
+   boundary is always Firestore Rules, not this list. */
+const ADMIN_EMAILS = ["zishanrafii@gmail.com"];
+
+function isAdminUser(user) {
+  return !!user && !!user.email && ADMIN_EMAILS.includes(user.email);
+}
+
+/* ── Auth guard for admin-only pages: redirect non-admins to dashboard ── */
+function requireAdmin(callback) {
+  requireAuth(user => {
+    if (!isAdminUser(user)) {
+      window.location.href = "dashboard.html";
+      return;
+    }
+    callback(user);
+  });
+}
+
 /* ── Get full user data from Firestore ── */
 async function getUserData(uid) {
   const snap = await getDoc(doc(db, "users", uid));
@@ -175,5 +197,6 @@ export {
   addDoc, serverTimestamp, onSnapshot,
   where, increment, arrayUnion, arrayRemove,
   uploadToCloud, toast, makeAvatar,
-  requireAuth, getUserData, dmId, esc, fmtTime, fmtDate
+  requireAuth, requireAdmin, isAdminUser, ADMIN_EMAILS,
+  getUserData, dmId, esc, fmtTime, fmtDate
 };
