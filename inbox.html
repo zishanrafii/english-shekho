@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inbox — English Shekho</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1680,10 +1680,14 @@ document.getElementById("conv-search").addEventListener("input", e=>{
 /* ══════════════════════════════════
    AUTH + INIT
 ══════════════════════════════════ */
-document.getElementById("btn-logout").onclick = async ()=>{
-  await signOut(auth);
-  window.location.href="index.html";
-};
+// Logout button moved to Settings page — guard in case it's still present somewhere
+const logoutBtnEl = document.getElementById("btn-logout");
+if(logoutBtnEl){
+  logoutBtnEl.onclick = async ()=>{
+    await signOut(auth);
+    window.location.href="index.html";
+  };
+}
 
 requireAuth(async user => {
   currentUser = user;
