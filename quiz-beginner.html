@@ -250,8 +250,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <div class="hero-inner">
       <div class="hero-left">
         <div class="hero-eyebrow">📝 Beginner Quiz · A1-A2</div>
-        <h2>Test Your <span>Basics</span> 🎯</h2>
-        <p class="hero-sub">৩০০+ word pair থেকে auto-generate হওয়া quiz — A1 ও A2 দুই level-এ। প্রতিবার নতুন প্রশ্ন! Topic অনুযায়ী sublevel দিয়ে practice করো।</p>
+        <h2>🌱 Beginner — <span>Level <span id="cur-lvl-display">1</span></span></h2>
+        <p class="hero-sub">৪১২টা word থেকে ২০টা করে Level। একটা Level এ ৭০%+ পেলে পরেরটা unlock হবে।</p>
       </div>
       <div class="hero-stats">
         <div class="hstat">
@@ -277,33 +277,28 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   </div>
 
   <!-- SUBLEVEL TABS -->
-  <div class="level-tabs" style="margin-top:-.8rem;margin-bottom:1.4rem;" id="sublevel-tabs">
-    <a href="quiz-beginner.html" class="level-tab" id="sl-all">📋 All Topics</a>
-    <a href="quiz-beginner.html?level=A1" class="level-tab" id="sl-a1">🔵 A1 Only</a>
-    <a href="quiz-beginner.html?level=A2" class="level-tab" id="sl-a2">🟣 A2 Only</a>
-    <a href="quiz-beginner.html?cat=Greetings"  class="level-tab" data-cat="Greetings">👋 Greetings</a>
-    <a href="quiz-beginner.html?cat=Family"     class="level-tab" data-cat="Family">👨‍👩‍👧 Family</a>
-    <a href="quiz-beginner.html?cat=Colors"     class="level-tab" data-cat="Colors">🎨 Colors</a>
-    <a href="quiz-beginner.html?cat=Numbers"    class="level-tab" data-cat="Numbers">🔢 Numbers</a>
-    <a href="quiz-beginner.html?cat=Animals"    class="level-tab" data-cat="Animals">🐾 Animals</a>
-    <a href="quiz-beginner.html?cat=Food"       class="level-tab" data-cat="Food">🍚 Food</a>
-    <a href="quiz-beginner.html?cat=Body"       class="level-tab" data-cat="Body">🫀 Body</a>
-    <a href="quiz-beginner.html?cat=Home"       class="level-tab" data-cat="Home">🏠 Home</a>
-    <a href="quiz-beginner.html?cat=School"     class="level-tab" data-cat="School">📚 School</a>
-    <a href="quiz-beginner.html?cat=Daily Life" class="level-tab" data-cat="Daily Life">☀️ Daily Life</a>
-    <a href="quiz-beginner.html?cat=Work"       class="level-tab" data-cat="Work">💼 Work</a>
-    <a href="quiz-beginner.html?cat=Time"       class="level-tab" data-cat="Time">⏰ Time</a>
-    <a href="quiz-beginner.html?cat=Shopping"   class="level-tab" data-cat="Shopping">🛍️ Shopping</a>
-    <a href="quiz-beginner.html?cat=Transport"  class="level-tab" data-cat="Transport">🚌 Transport</a>
-    <a href="quiz-beginner.html?cat=Travel"     class="level-tab" data-cat="Travel">✈️ Travel</a>
-    <a href="quiz-beginner.html?cat=Places"     class="level-tab" data-cat="Places">📍 Places</a>
-    <a href="quiz-beginner.html?cat=Weather"    class="level-tab" data-cat="Weather">🌤️ Weather</a>
-    <a href="quiz-beginner.html?cat=Health"     class="level-tab" data-cat="Health">💊 Health</a>
-    <a href="quiz-beginner.html?cat=Emotions"   class="level-tab" data-cat="Emotions">😊 Emotions</a>
-    <a href="quiz-beginner.html?cat=Character"  class="level-tab" data-cat="Character">🌟 Character</a>
-    <a href="quiz-beginner.html?cat=Adjectives" class="level-tab" data-cat="Adjectives">✨ Adjectives</a>
-    <a href="quiz-beginner.html?cat=Verbs"      class="level-tab" data-cat="Verbs">⚡ Verbs</a>
-    <a href="quiz-beginner.html?cat=Technology" class="level-tab" data-cat="Technology">📱 Technology</a>
+  <div class="level-tabs" style="margin-top:-.8rem;margin-bottom:1.4rem;overflow-x:auto;" id="sublevel-tabs">
+    <a href="quiz-beginner.html?lvl=1" class="level-tab" data-lvl="1">Level 1</a>
+    <a href="quiz-beginner.html?lvl=2" class="level-tab" data-lvl="2">Level 2</a>
+    <a href="quiz-beginner.html?lvl=3" class="level-tab" data-lvl="3">Level 3</a>
+    <a href="quiz-beginner.html?lvl=4" class="level-tab" data-lvl="4">Level 4</a>
+    <a href="quiz-beginner.html?lvl=5" class="level-tab" data-lvl="5">Level 5</a>
+    <a href="quiz-beginner.html?lvl=6" class="level-tab" data-lvl="6">Level 6</a>
+    <a href="quiz-beginner.html?lvl=7" class="level-tab" data-lvl="7">Level 7</a>
+    <a href="quiz-beginner.html?lvl=8" class="level-tab" data-lvl="8">Level 8</a>
+    <a href="quiz-beginner.html?lvl=9" class="level-tab" data-lvl="9">Level 9</a>
+    <a href="quiz-beginner.html?lvl=10" class="level-tab" data-lvl="10">Level 10</a>
+    <a href="quiz-beginner.html?lvl=11" class="level-tab" data-lvl="11">Level 11</a>
+    <a href="quiz-beginner.html?lvl=12" class="level-tab" data-lvl="12">Level 12</a>
+    <a href="quiz-beginner.html?lvl=13" class="level-tab" data-lvl="13">Level 13</a>
+    <a href="quiz-beginner.html?lvl=14" class="level-tab" data-lvl="14">Level 14</a>
+    <a href="quiz-beginner.html?lvl=15" class="level-tab" data-lvl="15">Level 15</a>
+    <a href="quiz-beginner.html?lvl=16" class="level-tab" data-lvl="16">Level 16</a>
+    <a href="quiz-beginner.html?lvl=17" class="level-tab" data-lvl="17">Level 17</a>
+    <a href="quiz-beginner.html?lvl=18" class="level-tab" data-lvl="18">Level 18</a>
+    <a href="quiz-beginner.html?lvl=19" class="level-tab" data-lvl="19">Level 19</a>
+    <a href="quiz-beginner.html?lvl=20" class="level-tab" data-lvl="20">Level 20</a>
+    <a href="quiz-beginner.html?lvl=21" class="level-tab" data-lvl="21">Level 21</a>
   </div>
 
   <!-- PROGRESS -->
@@ -418,16 +413,13 @@ import { WB } from "./js/data/quiz-beginner-data.js";
 /* ══════════════════════════════════════════════
    SUBLEVEL SUPPORT — ?cat=Family&level=A1
 ══════════════════════════════════════════════ */
-const urlParams  = new URLSearchParams(window.location.search);
-const subCat     = urlParams.get('cat');
-const subLevel   = urlParams.get('level'); // "A1" | "A2" | null
-const isSublevel = !!subCat;
+const urlParams = new URLSearchParams(window.location.search);
+const currentLvl = parseInt(urlParams.get('lvl')) || 1;
+const CHUNK_SIZE  = 20;
+const TOTAL_LVL   = 21;
 
 /* ══════════════════════════════════════════════
-   AUTO-GENERATE QUIZ from word pairs
-   For each word, direction randomly chosen:
-     bn→en: "\"X\" এর English কী?"
-     en→bn: "\"X\" এর বাংলা অর্থ কী?"
+   CHUNK-BASED QUIZ SYSTEM
 ══════════════════════════════════════════════ */
 function shuffle(arr){ return arr.sort(()=>Math.random()-.5); }
 
@@ -444,19 +436,19 @@ function distractors(answer, pool, field, count=3){
 }
 
 function generateQuiz(pool){
-  return shuffle([...pool]).map((p, i) => {
-    const toBn = Math.random() < .5;
-    const q   = toBn ? p.en : p.bn;
-    const a   = toBn ? p.bn : p.en;
+  return pool.map((p, i) => {
+    const toBn  = Math.random() < .5;
+    const q     = toBn ? p.en : p.bn;
+    const a     = toBn ? p.bn : p.en;
     const field = toBn ? "bn" : "en";
     const hint  = toBn ? "বাংলা অর্থ কী?" : "English কী?";
-    const opts  = shuffle([a, ...distractors(a, pool, field)]);
+    const opts  = shuffle([a, ...distractors(a, WB, field)]);
     return {
-      id    : `w${i}_${p.en}`,
-      topic : p.cat,
-      level : p.level,
-      q     : `"${q}"`,
-      qbn   : hint,
+      id     : `w${i}_${p.en}`,
+      topic  : p.cat,
+      level  : p.level,
+      q      : `"${q}"`,
+      qbn    : hint,
       options: opts,
       answer : opts.indexOf(a),
       explain: `✅ "${p.en}" = "${p.bn}" (${p.cat} · ${p.level})`
@@ -464,67 +456,17 @@ function generateQuiz(pool){
   });
 }
 
-/* build QUIZ from WB filtered by sublevel if needed */
-function buildQuizPool(){
-  let pool = WB;
-  if(isSublevel && subCat)   pool = pool.filter(w => w.cat   === subCat);
-  if(subLevel)               pool = pool.filter(w => w.level === subLevel);
-  return generateQuiz(pool);
+function getChunk(lvl){
+  const start = (lvl - 1) * CHUNK_SIZE;
+  return WB.slice(start, start + CHUNK_SIZE);
 }
 
-let QUIZ = buildQuizPool();
-const ALL_CATS = ["All", ...new Set(WB.map(w => w.cat))];
+let QUIZ = generateQuiz(getChunk(currentLvl));
 
 /* ══════════════════════════════════════════════
-   SUBLEVEL ORDER & LOCK SYSTEM
+   LEVEL LOCK SYSTEM
 ══════════════════════════════════════════════ */
-const BEGINNER_ORDER = [
-  { cat:"Greetings",  icon:"👋" },
-  { cat:"Family",     icon:"👨‍👩‍👧" },
-  { cat:"Colors",     icon:"🎨" },
-  { cat:"Numbers",    icon:"🔢" },
-  { cat:"Animals",    icon:"🐾" },
-  { cat:"Food",       icon:"🍚" },
-  { cat:"Body",       icon:"🫀" },
-  { cat:"Home",       icon:"🏠" },
-  { cat:"School",     icon:"📚" },
-  { cat:"Daily Life", icon:"☀️" },
-  { cat:"Work",       icon:"💼" },
-  { cat:"Time",       icon:"⏰" },
-  { cat:"Shopping",   icon:"🛍️" },
-  { cat:"Transport",  icon:"🚌" },
-  { cat:"Travel",     icon:"✈️" },
-  { cat:"Places",     icon:"📍" },
-  { cat:"Weather",    icon:"🌤️" },
-  { cat:"Health",     icon:"💊" },
-  { cat:"Emotions",   icon:"😊" },
-  { cat:"Character",  icon:"🌟" },
-  { cat:"Adjectives", icon:"✨" },
-  { cat:"Verbs",      icon:"⚡" },
-  { cat:"Technology", icon:"📱" },
-];
-
-let passedCats = []; // loaded from Firestore
-
-function applySubLevelLocks() {
-  const tabs = document.querySelectorAll("#sublevel-tabs .level-tab[data-cat]");
-  tabs.forEach(tab => {
-    const cat = tab.dataset.cat;
-    const idx = BEGINNER_ORDER.findIndex(x => x.cat === cat);
-    if (idx <= 0) return; // Greetings (first) always unlocked
-    const prevCat = BEGINNER_ORDER[idx - 1].cat;
-    const isLocked = !passedCats.includes(prevCat);
-    if (isLocked) {
-      tab.classList.add("locked");
-      tab.removeAttribute("href");
-      tab.title = `"${prevCat}" শেষ করলে unlock হবে`;
-      tab.onclick = e => {
-        e.preventDefault();
-        showToast(`🔒 আগে "${prevCat}" সম্পন্ন করো`);
-      };
-    }
-  });
-}
+let passedLevels = [];
 
 function showToast(msg) {
   let t = document.getElementById("toast");
@@ -534,29 +476,42 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 2200);
 }
 
-async function markCatPassed(cat) {
-  if (passedCats.includes(cat)) return;
-  passedCats.push(cat);
+function applySubLevelLocks() {
+  // Update hero display
+  const el = document.getElementById("cur-lvl-display");
+  if(el) el.textContent = currentLvl;
+
+  const tabs = document.querySelectorAll("#sublevel-tabs .level-tab[data-lvl]");
+  tabs.forEach(tab => {
+    const lvl = parseInt(tab.dataset.lvl);
+    if (lvl === 1) { if(lvl === currentLvl) tab.classList.add("active"); return; }
+    const isLocked = !passedLevels.includes(lvl - 1);
+    if (isLocked) {
+      tab.classList.add("locked");
+      tab.removeAttribute("href");
+      tab.onclick = e => {
+        e.preventDefault();
+        showToast(`🔒 আগে Level ${lvl - 1} সম্পন্ন করো (70%+)`);
+      };
+    }
+    if (lvl === currentLvl) tab.classList.add("active");
+  });
+}
+
+async function markLevelPassed(lvl) {
+  if (passedLevels.includes(lvl)) return;
+  passedLevels.push(lvl);
   if (!fbUser) return;
   try {
-    await setDoc(doc(db, "users", fbUser.uid), { passed_beginner_cats: passedCats }, { merge: true });
-  } catch(e) { console.warn("markCatPassed failed", e); }
+    await setDoc(doc(db, "users", fbUser.uid), { passed_beginner_levels: passedLevels }, { merge: true });
+  } catch(e) { console.warn("markLevelPassed failed", e); }
 }
 
 /* ── if sublevel mode: hide cat pills, show sublevel label ── */
-if(isSublevel){
-  const catWrap = document.getElementById("cat-pills");
-  if(catWrap) catWrap.style.display = "none";
-}
-
-const TOPICS = isSublevel
-  ? [subCat]
-  : ["All", ...new Set(WB.map(w => w.cat))];
-
 /* ══════════════════════════════════
    STATE
 ══════════════════════════════════ */
-let activeTopic = isSublevel ? subCat : "All";
+let activeTopic = "All";
 let order = [];
 let qIndex = 0;
 let answered = {};
@@ -571,7 +526,7 @@ onAuthStateChanged(auth, u => { fbUser = u; });
 /* ══════════════════════════════════════════════
    SAVE / RESUME PROGRESS (Firestore)
 ══════════════════════════════════════════════ */
-const PROGRESS_KEY = () => fbUser ? fbUser.uid + '_beginner' + (subCat ? '_' + subCat.replace(/\s+/g,'_') : '') : null;
+const PROGRESS_KEY = () => fbUser ? fbUser.uid + '_beginner_lvl' + currentLvl : null;
 
 async function saveProgress() {
   if (!fbUser) return;
@@ -579,7 +534,7 @@ async function saveProgress() {
     await setDoc(doc(db, 'quiz_progress', PROGRESS_KEY()), {
       qIndex, correctCount, wrongCount, bestStreak,
       order: order.map(q => q.id),
-      activeTopic,
+      currentLvl,
       ts: Date.now(),
       updatedAt: serverTimestamp()
     });
@@ -664,8 +619,7 @@ function showResumeBanner(saved) {
 }
 
 function poolQ(){
-  if(activeTopic === "All") return QUIZ;
-  return QUIZ.filter(q => q.topic === activeTopic);
+  return QUIZ;
 }
 
 function toast(msg){
@@ -679,7 +633,6 @@ function toast(msg){
    BUILD PILLS
 ══════════════════════════════════ */
 function buildPills(){
-  if(isSublevel) return;
   const wrap = document.getElementById("cat-pills");
   wrap.innerHTML = TOPICS.map(t => {
     const count = t === "All" ? QUIZ.length : QUIZ.filter(q=>q.topic===t).length;
@@ -690,7 +643,6 @@ function buildPills(){
   wrap.querySelectorAll(".pill").forEach(el=>{
     el.addEventListener("click", ()=>{
       activeTopic = el.dataset.topic;
-      QUIZ = buildQuizPool(); // regenerate with shuffle
       buildPills();
       startQuiz();
     });
@@ -701,7 +653,7 @@ function buildPills(){
    QUIZ FLOW
 ══════════════════════════════════ */
 function startQuiz(){
-  QUIZ = buildQuizPool();
+  QUIZ = generateQuiz(getChunk(currentLvl));
   order = poolQ();
   qIndex = 0;
   answered = {};
@@ -864,18 +816,13 @@ function showResult(){
   saveScoreToFirestore(correctCount, total, pct);
 
   // Mark this sublevel as passed if score >= 60%
-  if (isSublevel && subCat && pct >= 60) {
-    await markCatPassed(subCat);
-  }
-
   /* ── Pass banner ── */
   const passBanner = document.getElementById('pass-banner');
   if(passBanner) passBanner.remove();
 
-  // Sublevel passed — show next unlock banner
-  if(isSublevel && subCat && pct >= 60){
-    const idx = BEGINNER_ORDER.findIndex(x => x.cat === subCat);
-    const nextLevel = BEGINNER_ORDER[idx + 1];
+  if(pct >= 70){
+    await markLevelPassed(currentLvl);
+    const nextLvl = currentLvl + 1;
     const banner = document.createElement('div');
     banner.id = 'pass-banner';
     banner.style.cssText = `
@@ -883,30 +830,30 @@ function showResult(){
       border:1px solid rgba(52,211,153,.3);border-radius:16px;
       padding:1.1rem 1.4rem;margin-top:1.2rem;text-align:center;
     `;
-    if(nextLevel){
+    if(nextLvl <= TOTAL_LVL){
       banner.innerHTML = `
         <div style="font-size:1.6rem;margin-bottom:.4rem;">🔓</div>
         <div style="font-size:1rem;font-weight:800;color:var(--emerald);margin-bottom:.3rem;">
-          "${subCat}" Passed! ${pct}% স্কোর
+          Level ${currentLvl} Passed! ${pct}% স্কোর
         </div>
         <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
-          পরের sublevel "${nextLevel.cat}" এখন unlock হয়েছে!
+          Level ${nextLvl} এখন unlock হয়েছে!
         </div>
-        <button onclick="location.href='quiz-beginner.html?cat='+encodeURIComponent(nextLevel.cat)"
+        <button onclick="location.href='quiz-beginner.html?lvl=${nextLvl}'"
           style="background:linear-gradient(135deg,rgba(245,200,66,.16),rgba(251,191,36,.12));
             border:1px solid rgba(245,200,66,.35);color:var(--gold);
             border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
             cursor:pointer;font-family:'Outfit',sans-serif;">
-          ${nextLevel.icon} ${nextLevel.cat} শুরু করো →
+          ▶ Level ${nextLvl} শুরু করো →
         </button>`;
     } else {
       banner.innerHTML = `
         <div style="font-size:1.6rem;margin-bottom:.4rem;">🏆</div>
         <div style="font-size:1rem;font-weight:800;color:var(--gold);margin-bottom:.3rem;">
-          সব Beginner Sublevel Completed!
+          সব Beginner Level Completed!
         </div>
         <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
-          দারুণ! এখন Intermediate quiz-এ যাওয়ার সময়!
+          দারুণ! এখন Intermediate quiz-এর জন্য প্রস্তুত!
         </div>
         <button onclick="location.href='quiz-intermediate.html'"
           style="background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(6,182,212,.12));
@@ -916,30 +863,6 @@ function showResult(){
           🚀 Intermediate শুরু করো →
         </button>`;
     }
-    document.getElementById('result-card').appendChild(banner);
-  } else if(!isSublevel && pct >= 70){
-    const banner = document.createElement('div');
-    banner.id = 'pass-banner';
-    banner.style.cssText = `
-      background:linear-gradient(135deg,rgba(52,211,153,.08),rgba(245,200,66,.06));
-      border:1px solid rgba(52,211,153,.3);border-radius:16px;
-      padding:1.1rem 1.4rem;margin-top:1.2rem;text-align:center;
-    `;
-    banner.innerHTML = `
-      <div style="font-size:1.6rem;margin-bottom:.4rem;">🎉</div>
-      <div style="font-size:1rem;font-weight:800;color:var(--emerald);margin-bottom:.3rem;">
-        Beginner Level Passed!
-      </div>
-      <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
-        তুমি ${pct}% স্কোর করে Beginner পার করেছো। Intermediate quiz-এর জন্য প্রস্তুত!
-      </div>
-      <button onclick="location.href='quiz-intermediate.html'"
-        style="background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(6,182,212,.12));
-          border:1px solid rgba(45,212,191,.35);color:var(--teal);
-          border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
-          cursor:pointer;font-family:'Outfit',sans-serif;">
-        🚀 Intermediate শুরু করো →
-      </button>`;
     document.getElementById('result-card').appendChild(banner);
   }
 }
@@ -962,8 +885,8 @@ async function saveScoreToFirestore(correct, total, pct){
   const merge = {merge:true};
 
   /* ── 1. Session log ── */
-  const sessionLevel = subLevel || (isSublevel ? "Mixed" : "A1-A2");
-  const sessionCat   = subCat   || activeTopic || "All";
+  const sessionLevel = "A1-A2";
+  const sessionCat   = `Level ${currentLvl}`;
 
   const catBreakdown = {};
   const wrongList    = [];
@@ -1129,7 +1052,7 @@ requireAuth(async user => {
   else av.textContent = name[0]?.toUpperCase() || "?";
 
   // Load passed cats and apply sublevel locks
-  passedCats = d.passed_beginner_cats || [];
+  passedLevels = d.passed_beginner_levels || [];
   applySubLevelLocks();
 
   buildPills();

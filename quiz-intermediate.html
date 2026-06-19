@@ -250,8 +250,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <div class="hero-inner">
       <div class="hero-left">
         <div class="hero-eyebrow">📝 Intermediate Quiz · B1-B2</div>
-        <h2>Level Up Your <span>Skills</span> 🚀</h2>
-        <p class="hero-sub">Tense, Conditionals, Phrasal Verbs, Grammar, Vocabulary, Idioms, Reading, Writing, Pronunciation — ২৫০+ MCQ। B1 ও B2 level আলাদা করে practice করো।</p>
+        <h2>🚀 Intermediate — <span>Level <span id="cur-lvl-display">1</span></span></h2>
+        <p class="hero-sub">৫১০টা MCQ থেকে ২০টা করে Level। একটা Level এ ৭০%+ পেলে পরেরটা unlock হবে।</p>
       </div>
       <div class="hero-stats">
         <div class="hstat">
@@ -281,15 +281,25 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <a href="quiz-intermediate.html" class="level-tab">📋 All Topics</a>
     <a href="quiz-intermediate.html?level=B1" class="level-tab">🔵 B1 Only</a>
     <a href="quiz-intermediate.html?level=B2" class="level-tab">🟣 B2 Only</a>
-    <a href="quiz-intermediate.html?cat=Tense"         class="level-tab" data-cat="Tense">⏱️ Tense</a>
-    <a href="quiz-intermediate.html?cat=Grammar"       class="level-tab" data-cat="Grammar">📐 Grammar</a>
-    <a href="quiz-intermediate.html?cat=Vocabulary"    class="level-tab" data-cat="Vocabulary">📖 Vocabulary</a>
-    <a href="quiz-intermediate.html?cat=Conditionals"  class="level-tab" data-cat="Conditionals">🔀 Conditionals</a>
-    <a href="quiz-intermediate.html?cat=Phrasal Verbs" class="level-tab" data-cat="Phrasal Verbs">🔗 Phrasal Verbs</a>
-    <a href="quiz-intermediate.html?cat=Idioms"        class="level-tab" data-cat="Idioms">💬 Idioms</a>
-    <a href="quiz-intermediate.html?cat=Reading"       class="level-tab" data-cat="Reading">📄 Reading</a>
-    <a href="quiz-intermediate.html?cat=Writing"       class="level-tab" data-cat="Writing">✍️ Writing</a>
-    <a href="quiz-intermediate.html?cat=Pronunciation" class="level-tab" data-cat="Pronunciation">🔊 Pronunciation</a>
+    <a href="quiz-intermediate.html?cat=Tense"              class="level-tab" data-cat="Tense">⏱️ Tense</a>
+    <a href="quiz-intermediate.html?cat=Grammar"            class="level-tab" data-cat="Grammar">📐 Grammar</a>
+    <a href="quiz-intermediate.html?cat=Vocabulary"         class="level-tab" data-cat="Vocabulary">📖 Vocabulary</a>
+    <a href="quiz-intermediate.html?cat=Passive Voice"      class="level-tab" data-cat="Passive Voice">🔄 Passive Voice</a>
+    <a href="quiz-intermediate.html?cat=Modal Verbs"        class="level-tab" data-cat="Modal Verbs">⚙️ Modal Verbs</a>
+    <a href="quiz-intermediate.html?cat=Narration"          class="level-tab" data-cat="Narration">💬 Narration</a>
+    <a href="quiz-intermediate.html?cat=Conditionals"       class="level-tab" data-cat="Conditionals">🔀 Conditionals</a>
+    <a href="quiz-intermediate.html?cat=Phrasal Verbs"      class="level-tab" data-cat="Phrasal Verbs">🔗 Phrasal Verbs</a>
+    <a href="quiz-intermediate.html?cat=Prepositions"       class="level-tab" data-cat="Prepositions">📌 Prepositions</a>
+    <a href="quiz-intermediate.html?cat=Articles"           class="level-tab" data-cat="Articles">🔤 Articles</a>
+    <a href="quiz-intermediate.html?cat=Sentence Structure" class="level-tab" data-cat="Sentence Structure">🧩 Sentence Structure</a>
+    <a href="quiz-intermediate.html?cat=Word Formation"     class="level-tab" data-cat="Word Formation">🔨 Word Formation</a>
+    <a href="quiz-intermediate.html?cat=Linking Words"      class="level-tab" data-cat="Linking Words">🔁 Linking Words</a>
+    <a href="quiz-intermediate.html?cat=Idioms"             class="level-tab" data-cat="Idioms">💡 Idioms</a>
+    <a href="quiz-intermediate.html?cat=Reading"            class="level-tab" data-cat="Reading">📄 Reading</a>
+    <a href="quiz-intermediate.html?cat=Writing"            class="level-tab" data-cat="Writing">✍️ Writing</a>
+    <a href="quiz-intermediate.html?cat=Question Tags"      class="level-tab" data-cat="Question Tags">❓ Question Tags</a>
+    <a href="quiz-intermediate.html?cat=Gerund & Infinitive" class="level-tab" data-cat="Gerund & Infinitive">🔃 Gerund & Infinitive</a>
+    <a href="quiz-intermediate.html?cat=Pronunciation"      class="level-tab" data-cat="Pronunciation">🔊 Pronunciation</a>
   </div>
 
   <!-- PROGRESS -->
@@ -404,58 +414,23 @@ import { QUIZ_BANK } from "./js/data/quiz-intermediate-data.js";
    SUBLEVEL SUPPORT — ?cat=Tense&level=B1
 ══════════════════════════════════════════════ */
 const urlParams  = new URLSearchParams(window.location.search);
-const subCat     = urlParams.get('cat');
-const subLevel   = urlParams.get('level');
-const isSublevel = !!subCat || !!subLevel;
+const currentLvl = parseInt(urlParams.get('lvl')) || 1;
+const CHUNK_SIZE  = 20;
+const TOTAL_LVL   = 26; // ceil(510/20)
 
 function shuffle(arr){ return arr.sort(()=>Math.random()-.5); }
 
-function buildPool(){
-  let pool = QUIZ_BANK;
-  if(subCat)   pool = pool.filter(q => q.topic === subCat);
-  if(subLevel) pool = pool.filter(q => q.level === subLevel);
-  return shuffle([...pool]);
+function getChunk(lvl){
+  const start = (lvl - 1) * CHUNK_SIZE;
+  return QUIZ_BANK.slice(start, start + CHUNK_SIZE);
 }
 
-let QUIZ = buildPool();
-const ALL_TOPICS = ["All", ...new Set(QUIZ_BANK.map(q=>q.topic))];
+let QUIZ = shuffle([...getChunk(currentLvl)]);
 
 /* ══════════════════════════════════════════════
-   SUBLEVEL ORDER & LOCK SYSTEM
+   LEVEL LOCK SYSTEM
 ══════════════════════════════════════════════ */
-const INTERMEDIATE_ORDER = [
-  { cat:"Tense",         icon:"⏱️" },
-  { cat:"Grammar",       icon:"📐" },
-  { cat:"Vocabulary",    icon:"📖" },
-  { cat:"Conditionals",  icon:"🔀" },
-  { cat:"Phrasal Verbs", icon:"🔗" },
-  { cat:"Idioms",        icon:"💬" },
-  { cat:"Reading",       icon:"📄" },
-  { cat:"Writing",       icon:"✍️" },
-  { cat:"Pronunciation", icon:"🔊" },
-];
-
-let passedTopics = []; // loaded from Firestore
-
-function applySubLevelLocks() {
-  const tabs = document.querySelectorAll("#sublevel-tabs .level-tab[data-cat]");
-  tabs.forEach(tab => {
-    const cat = tab.dataset.cat;
-    const idx = INTERMEDIATE_ORDER.findIndex(x => x.cat === cat);
-    if (idx <= 0) return; // Tense (first) always unlocked
-    const prevCat = INTERMEDIATE_ORDER[idx - 1].cat;
-    const isLocked = !passedTopics.includes(prevCat);
-    if (isLocked) {
-      tab.classList.add("locked");
-      tab.removeAttribute("href");
-      tab.title = `"${prevCat}" শেষ করলে unlock হবে`;
-      tab.onclick = e => {
-        e.preventDefault();
-        showToast(`🔒 আগে "${prevCat}" সম্পন্ন করো`);
-      };
-    }
-  });
-}
+let passedLevels = [];
 
 function showToast(msg) {
   let t = document.getElementById("toast");
@@ -465,20 +440,45 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 2200);
 }
 
-async function markTopicPassed(cat) {
-  if (passedTopics.includes(cat)) return;
-  passedTopics.push(cat);
+function applySubLevelLocks() {
+  const el = document.getElementById("cur-lvl-display");
+  if(el) el.textContent = currentLvl;
+
+  const tabs = document.querySelectorAll("#sublevel-tabs .level-tab[data-lvl]");
+  tabs.forEach(tab => {
+    const lvl = parseInt(tab.dataset.lvl);
+    if (lvl === 1) { if(lvl === currentLvl) tab.classList.add("active"); return; }
+    const isLocked = !passedLevels.includes(lvl - 1);
+    if (isLocked) {
+      tab.classList.add("locked");
+      tab.removeAttribute("href");
+      tab.onclick = e => {
+        e.preventDefault();
+        showToast(`🔒 আগে Level ${lvl - 1} সম্পন্ন করো (70%+)`);
+      };
+    }
+    if (lvl === currentLvl) tab.classList.add("active");
+  });
+}
+
+async function markLevelPassed(lvl) {
+  if (passedLevels.includes(lvl)) return;
+  passedLevels.push(lvl);
   if (!fbUser) return;
   try {
-    await setDoc(doc(db, "users", fbUser.uid), { passed_intermediate_topics: passedTopics }, { merge: true });
-  } catch(e) { console.warn("markTopicPassed failed", e); }
+    await setDoc(doc(db, "users", fbUser.uid), { passed_intermediate_levels: passedLevels }, { merge: true });
+  } catch(e) { console.warn("markLevelPassed failed", e); }
 }
 
 /* ══════════════════════════════════
    STATE
 ══════════════════════════════════ */
-let activeTopic = subCat || "All";
+let activeTopic = "All";
 let order = [];
+let qIndex = 0;
+let answered = {};
+let correctCount = 0;
+let wrongCount = 0;
 let qIndex = 0;
 let answered = {};
 let correctCount = 0;
@@ -492,7 +492,7 @@ onAuthStateChanged(auth, u => { fbUser = u; });
 /* ══════════════════════════════════════════════
    SAVE / RESUME PROGRESS (Firestore)
 ══════════════════════════════════════════════ */
-const PROGRESS_KEY = () => fbUser ? fbUser.uid + '_intermediate' + (subCat ? '_' + subCat.replace(/\s+/g,'_') : '') : null;
+const PROGRESS_KEY = () => fbUser ? fbUser.uid + '_intermediate_lvl' + currentLvl : null;
 
 async function saveProgress() {
   if (!fbUser) return;
@@ -500,7 +500,7 @@ async function saveProgress() {
     await setDoc(doc(db, 'quiz_progress', PROGRESS_KEY()), {
       qIndex, correctCount, wrongCount, bestStreak,
       order: order.map(q => q.id),
-      activeTopic,
+      currentLvl,
       ts: Date.now(),
       updatedAt: serverTimestamp()
     });
@@ -584,10 +584,7 @@ function showResumeBanner(saved) {
 }
 
 function poolQ(){
-  let pool = QUIZ_BANK;
-  if(subLevel) pool = pool.filter(q=>q.level===subLevel);
-  if(activeTopic !== "All") pool = pool.filter(q=>q.topic===activeTopic);
-  return shuffle([...pool]);
+  return QUIZ;
 }
 
 function toast(msg){
@@ -601,21 +598,8 @@ function toast(msg){
    BUILD PILLS
 ══════════════════════════════════ */
 function buildPills(){
-  if(isSublevel){ document.getElementById("cat-pills").style.display="none"; return; }
   const wrap = document.getElementById("cat-pills");
-  wrap.innerHTML = ALL_TOPICS.map(t => {
-    const count = t==="All" ? QUIZ_BANK.length : QUIZ_BANK.filter(q=>q.topic===t).length;
-    return `<div class="pill ${t===activeTopic?'active':''}" data-topic="${t}">
-      ${t} <span class="pill-count">${count}</span>
-    </div>`;
-  }).join("");
-  wrap.querySelectorAll(".pill").forEach(el=>{
-    el.addEventListener("click", ()=>{
-      activeTopic = el.dataset.topic;
-      buildPills();
-      startQuiz();
-    });
-  });
+  if(wrap) wrap.style.display = "none";
 }
 
 /* ══════════════════════════════════
@@ -782,17 +766,13 @@ function showResult(){
   saveScoreToFirestore(correctCount, total, pct);
 
   // Mark this sublevel as passed if score >= 60%
-  if (isSublevel && subCat && pct >= 60) {
-    await markTopicPassed(subCat);
-  }
-
   /* ── Pass banner ── */
   const passBanner = document.getElementById('pass-banner');
   if (passBanner) passBanner.remove();
 
-  if (isSublevel && subCat && pct >= 60) {
-    const idx = INTERMEDIATE_ORDER.findIndex(x => x.cat === subCat);
-    const nextLevel = INTERMEDIATE_ORDER[idx + 1];
+  if (pct >= 70) {
+    await markLevelPassed(currentLvl);
+    const nextLvl = currentLvl + 1;
     const banner = document.createElement('div');
     banner.id = 'pass-banner';
     banner.style.cssText = `
@@ -800,30 +780,30 @@ function showResult(){
       border:1px solid rgba(45,212,191,.3);border-radius:16px;
       padding:1.1rem 1.4rem;margin-top:1.2rem;text-align:center;
     `;
-    if (nextLevel) {
+    if(nextLvl <= TOTAL_LVL){
       banner.innerHTML = `
         <div style="font-size:1.6rem;margin-bottom:.4rem;">🔓</div>
         <div style="font-size:1rem;font-weight:800;color:var(--teal);margin-bottom:.3rem;">
-          "${subCat}" Passed! ${pct}% স্কোর
+          Level ${currentLvl} Passed! ${pct}% স্কোর
         </div>
         <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
-          পরের sublevel "${nextLevel.cat}" এখন unlock হয়েছে!
+          Level ${nextLvl} এখন unlock হয়েছে!
         </div>
-        <button onclick="location.href='quiz-intermediate.html?cat='+encodeURIComponent(nextLevel.cat)"
+        <button onclick="location.href='quiz-intermediate.html?lvl=${nextLvl}'"
           style="background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(6,182,212,.12));
             border:1px solid rgba(45,212,191,.35);color:var(--teal);
             border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
             cursor:pointer;font-family:'Outfit',sans-serif;">
-          ${nextLevel.icon} ${nextLevel.cat} শুরু করো →
+          ▶ Level ${nextLvl} শুরু করো →
         </button>`;
     } else {
       banner.innerHTML = `
         <div style="font-size:1.6rem;margin-bottom:.4rem;">🏆</div>
         <div style="font-size:1rem;font-weight:800;color:var(--teal);margin-bottom:.3rem;">
-          সব Intermediate Sublevel Completed!
+          সব Intermediate Level Completed!
         </div>
         <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
-          দারুণ! এখন Advanced quiz-এ যাওয়ার সময়!
+          দারুণ! এখন Advanced quiz-এর জন্য প্রস্তুত!
         </div>
         <button onclick="location.href='quiz-advanced.html'"
           style="background:linear-gradient(135deg,rgba(129,140,248,.16),rgba(167,139,250,.12));
@@ -833,30 +813,6 @@ function showResult(){
           🏆 Advanced শুরু করো →
         </button>`;
     }
-    document.getElementById('result-card').appendChild(banner);
-  } else if (!isSublevel && pct >= 70) {
-    const banner = document.createElement('div');
-    banner.id = 'pass-banner';
-    banner.style.cssText = `
-      background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(45,212,191,.06));
-      border:1px solid rgba(129,140,248,.3);border-radius:16px;
-      padding:1.1rem 1.4rem;margin-top:1.2rem;text-align:center;
-    `;
-    banner.innerHTML = `
-      <div style="font-size:1.6rem;margin-bottom:.4rem;">🎉</div>
-      <div style="font-size:1rem;font-weight:800;color:var(--indigo);margin-bottom:.3rem;">
-        Intermediate Level Passed!
-      </div>
-      <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
-        তুমি ${pct}% স্কোর করে Intermediate পার করেছো। Advanced quiz-এর জন্য প্রস্তুত!
-      </div>
-      <button onclick="location.href='quiz-advanced.html'"
-        style="background:linear-gradient(135deg,rgba(129,140,248,.16),rgba(167,139,250,.12));
-          border:1px solid rgba(129,140,248,.35);color:var(--indigo);
-          border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
-          cursor:pointer;font-family:'Outfit',sans-serif;">
-        🏆 Advanced শুরু করো →
-      </button>`;
     document.getElementById('result-card').appendChild(banner);
   }
 }
@@ -869,8 +825,8 @@ async function saveScoreToFirestore(correct, total, pct){
   const merge = {merge:true};
   const uRef  = doc(db,"users",currentUid);
 
-  const sessionLevel = subLevel || "B1-B2";
-  const sessionCat   = subCat || activeTopic || "All";
+  const sessionLevel = "B1-B2";
+  const sessionCat   = `Level ${currentLvl}`;
 
   const catBreakdown = {};
   const wrongList    = [];
@@ -1023,7 +979,7 @@ requireAuth(async user => {
   else av.textContent = name[0]?.toUpperCase() || "?";
 
   // Load passed topics and apply sublevel locks
-  passedTopics = d.passed_intermediate_topics || [];
+  passedLevels = d.passed_intermediate_levels || [];
   applySubLevelLocks();
 
   buildPills();

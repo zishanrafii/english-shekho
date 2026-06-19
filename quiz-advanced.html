@@ -98,6 +98,8 @@ body::after{
 .level-tab{padding:.6rem 1.3rem;border-radius:14px;font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--surface2);color:var(--sub);cursor:pointer;transition:.2s;text-decoration:none;display:flex;align-items:center;gap:8px;}
 .level-tab:hover{border-color:rgba(245,200,66,.25);color:var(--text);}
 .level-tab.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.3);color:var(--gold);}
+.level-tab.locked{opacity:.4;cursor:not-allowed;filter:grayscale(.6);}
+.level-tab.locked:hover{border-color:var(--border);color:var(--sub);}
 
 /* ─── PROGRESS PANEL ─── */
 .progress-panel{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.6rem;margin-bottom:1.8rem;}
@@ -227,7 +229,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <nav class="nav-links">
         <a href="dashboard.html" class="nav-link">Home</a>
         <a href="roadmap.html" class="nav-link">Journey</a>
-        <a href="quiz-advanced.html" class="nav-link active">Quiz</a>
+        <a href="quiz-dashboard.html" class="nav-link active">Quiz</a>
         <a href="grammar.html" class="nav-link">Grammar</a>
         <a href="vocab-dashboard.html" class="nav-link">Vocabulary</a>
         <a href="writing-lab.html" class="nav-link">Writing</a>
@@ -248,7 +250,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <div class="hero-inner">
       <div class="hero-left">
         <div class="hero-eyebrow">📝 Advanced Quiz · C1-C2</div>
-        <h2>Master <span>Fluent</span> English 🏆</h2>
+        <h2>🏆 Advanced — <span>Level <span id="cur-lvl-display">1</span></span></h2>
         <p class="hero-sub">Grammar Inversion, Subjunctive, Vocabulary, Idioms, Literature, Critical Thinking, Phonetics, Academic Writing, Language — ২৫০+ MCQ। C1 ও C2 আলাদা করে practice করো।</p>
       </div>
       <div class="hero-stats">
@@ -270,24 +272,32 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
   <!-- LEVEL TABS -->
   <div class="level-tabs">
-    <a href="quiz-beginner.html" class="level-tab">🟢 Beginner (A1-A2)</a>
-    <a href="quiz-intermediate.html" class="level-tab">🟡 Intermediate (B1-B2)</a>
+    <a href="quiz-dashboard.html" class="level-tab">← Quiz Dashboard</a>
     <a href="quiz-advanced.html" class="level-tab active">🔴 Advanced (C1-C2)</a>
   </div>
 
   <!-- SUBLEVEL TABS -->
-  <div class="level-tabs" style="margin-top:-.8rem;margin-bottom:1.4rem;" id="sublevel-tabs">
-    <a href="quiz-advanced.html" class="level-tab">📋 All Topics</a>
-    <a href="quiz-advanced.html?level=C1" class="level-tab">🔵 C1 Only</a>
-    <a href="quiz-advanced.html?level=C2" class="level-tab">🟣 C2 Only</a>
-    <a href="quiz-advanced.html?cat=Grammar" class="level-tab">📐 Grammar</a>
-    <a href="quiz-advanced.html?cat=Vocabulary" class="level-tab">📖 Vocabulary</a>
-    <a href="quiz-advanced.html?cat=Idioms" class="level-tab">💬 Idioms</a>
-    <a href="quiz-advanced.html?cat=Academic Writing" class="level-tab">✍️ Academic</a>
-    <a href="quiz-advanced.html?cat=Literature" class="level-tab">📚 Literature</a>
-    <a href="quiz-advanced.html?cat=Critical Thinking" class="level-tab">🧠 Critical</a>
-    <a href="quiz-advanced.html?cat=Phonetics" class="level-tab">🔊 Phonetics</a>
-    <a href="quiz-advanced.html?cat=Language" class="level-tab">🗣️ Language</a>
+  <div class="level-tabs" style="margin-top:-.8rem;margin-bottom:1.4rem;overflow-x:auto;" id="sublevel-tabs">
+    <a href="quiz-advanced.html?lvl=1" class="level-tab" data-lvl="1">Level 1</a>
+    <a href="quiz-advanced.html?lvl=2" class="level-tab" data-lvl="2">Level 2</a>
+    <a href="quiz-advanced.html?lvl=3" class="level-tab" data-lvl="3">Level 3</a>
+    <a href="quiz-advanced.html?lvl=4" class="level-tab" data-lvl="4">Level 4</a>
+    <a href="quiz-advanced.html?lvl=5" class="level-tab" data-lvl="5">Level 5</a>
+    <a href="quiz-advanced.html?lvl=6" class="level-tab" data-lvl="6">Level 6</a>
+    <a href="quiz-advanced.html?lvl=7" class="level-tab" data-lvl="7">Level 7</a>
+    <a href="quiz-advanced.html?lvl=8" class="level-tab" data-lvl="8">Level 8</a>
+    <a href="quiz-advanced.html?lvl=9" class="level-tab" data-lvl="9">Level 9</a>
+    <a href="quiz-advanced.html?lvl=10" class="level-tab" data-lvl="10">Level 10</a>
+    <a href="quiz-advanced.html?lvl=11" class="level-tab" data-lvl="11">Level 11</a>
+    <a href="quiz-advanced.html?lvl=12" class="level-tab" data-lvl="12">Level 12</a>
+    <a href="quiz-advanced.html?lvl=13" class="level-tab" data-lvl="13">Level 13</a>
+    <a href="quiz-advanced.html?lvl=14" class="level-tab" data-lvl="14">Level 14</a>
+    <a href="quiz-advanced.html?lvl=15" class="level-tab" data-lvl="15">Level 15</a>
+    <a href="quiz-advanced.html?lvl=16" class="level-tab" data-lvl="16">Level 16</a>
+    <a href="quiz-advanced.html?lvl=17" class="level-tab" data-lvl="17">Level 17</a>
+    <a href="quiz-advanced.html?lvl=18" class="level-tab" data-lvl="18">Level 18</a>
+    <a href="quiz-advanced.html?lvl=19" class="level-tab" data-lvl="19">Level 19</a>
+    <a href="quiz-advanced.html?lvl=20" class="level-tab" data-lvl="20">Level 20</a>
   </div>
 
   <!-- PROGRESS -->
@@ -386,417 +396,39 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <script type="module">
 import {
   auth, db, signOut, requireAuth,
-  doc, getDoc, setDoc, updateDoc, increment,
-  collection, addDoc, serverTimestamp
+  doc, getDoc, setDoc, updateDoc, deleteDoc, increment,
+  collection, addDoc, serverTimestamp,
+  onAuthStateChanged
 } from "./js/firebase-config.js";
+
+import { QUIZ_BANK } from "./js/data/quiz-advanced-data.js";
 
 /* ══════════════════════════════════════════════
    QUIZ BANK — ADVANCED C1-C2
    250+ MCQ across 9 topics
 ══════════════════════════════════════════════ */
-const QUIZ_BANK = [
-
-  /* ── GRAMMAR — Advanced (40 questions) ── */
-  {id:"g1",  topic:"Grammar", level:"C1", q:"\"I suggest he ___ there immediately.\"", qbn:"Subjunctive mood।",
-   options:["goes","go","going","to go"], answer:1,
-   explain:"✅ Subjunctive: suggest/recommend/demand + that + subject + bare infinitive (V1). 'he go' সঠিক।"},
-  {id:"g2",  topic:"Grammar", level:"C1", q:"Never ___ such a beautiful sunset.", qbn:"Inversion with Never।",
-   options:["I have seen","have I seen","I saw","I had seen"], answer:1,
-   explain:"✅ Negative adverb (Never) বাক্যের শুরুতে → Inversion: have I seen।"},
-  {id:"g3",  topic:"Grammar", level:"C1", q:"\"It was John who broke the vase.\" This is a:", qbn:"Sentence type।",
-   options:["Passive sentence","Cleft sentence","Conditional sentence","Reported speech"], answer:1,
-   explain:"✅ Cleft sentence = 'It + be + focus + who/that clause' — নির্দিষ্ট তথ্যে জোর দেয়।"},
-  {id:"g4",  topic:"Grammar", level:"C1", q:"She ___ been working there for five years before she retired.", qbn:"Past Perfect Continuous।",
-   options:["has","was","had","is"], answer:2,
-   explain:"✅ অতীতের ঘটনার আগ পর্যন্ত চলমান কাজ → Past Perfect Continuous (had been + Ving)।"},
-  {id:"g5",  topic:"Grammar", level:"C2", q:"Rarely ___ such dedication in a student.", qbn:"Inversion with Rarely।",
-   options:["I have seen","have I seen","I see","do I see"], answer:3,
-   explain:"✅ Rarely + inversion: do I see (Simple Present)। Never have I / Rarely do I।"},
-  {id:"g6",  topic:"Grammar", level:"C1", q:"\"___ it not been for your help, I would have failed.\"", qbn:"Inverted Third Conditional।",
-   options:["Was","Were","Had","Should"], answer:2,
-   explain:"✅ Had it not been for = If it had not been for — Third Conditional inversion।"},
-  {id:"g7",  topic:"Grammar", level:"C2", q:"The report demands that the CEO ___ held accountable.", qbn:"Subjunctive passive।",
-   options:["is","be","was","were"], answer:1,
-   explain:"✅ Demand + that + subject + be (passive subjunctive)। 'be held' সঠিক।"},
-  {id:"g8",  topic:"Grammar", level:"C1", q:"Little ___ she know what awaited her.", qbn:"Inversion with Little।",
-   options:["did","does","has","was"], answer:0,
-   explain:"✅ Little + did + subject + know — negative inversion (Simple Past)।"},
-  {id:"g9",  topic:"Grammar", level:"C2", q:"What we need ___ more investment in education.", qbn:"Pseudo-cleft।",
-   options:["are","is","be","were"], answer:1,
-   explain:"✅ Pseudo-cleft: 'What we need' is singular focus → 'is' সঠিক।"},
-  {id:"g10", topic:"Grammar", level:"C1", q:"She insisted that he ___ the meeting.", qbn:"Subjunctive after insist।",
-   options:["attends","attend","attended","attending"], answer:1,
-   explain:"✅ Insist that + subject + bare infinitive (subjunctive): 'he attend'।"},
-  {id:"g11", topic:"Grammar", level:"C1", q:"Only after the meeting ended ___ able to relax.", qbn:"Inversion with Only after।",
-   options:["I was","was I","I am","am I"], answer:1,
-   explain:"✅ Only after + clause, inversion in main clause: was I able।"},
-  {id:"g12", topic:"Grammar", level:"C2", q:"\"The more you read, ___.\" Complete correctly.", qbn:"Parallel comparative।",
-   options:["more you know","the more you know","you know more","the more know you"], answer:1,
-   explain:"✅ The more…the more — parallel comparative structure।"},
-  {id:"g13", topic:"Grammar", level:"C1", q:"No sooner ___ than the alarm went off.", qbn:"No sooner inversion।",
-   options:["he had left","had he left","he left","did he leave"], answer:1,
-   explain:"✅ No sooner + had + subject + V3 (inversion) + than।"},
-  {id:"g14", topic:"Grammar", level:"C2", q:"He is thought ___ the most influential writer of his generation.", qbn:"Passive + infinitive।",
-   options:["being","to be","to have","be"], answer:1,
-   explain:"✅ Is thought/believed/considered + to be — passive reporting structure।"},
-  {id:"g15", topic:"Grammar", level:"C1", q:"\"Were I to resign, what would happen?\" This means:", qbn:"Formal conditional।",
-   options:["If I resign","If I had resigned","If I were to resign","If I resigned"], answer:2,
-   explain:"✅ Were I to = If I were to — formal/literary Second Conditional।"},
-  {id:"g16", topic:"Grammar", level:"C2", q:"Not until decades later ___ the truth revealed.", qbn:"Passive inversion।",
-   options:["was","the truth was","it was","did"], answer:0,
-   explain:"✅ Not until + time expression → was + subject (passive inversion)।"},
-  {id:"g17", topic:"Grammar", level:"C1", q:"\"She treated him as though he ___ a child.\" Correct form:", qbn:"As though + subjunctive।",
-   options:["is","was","were","be"], answer:2,
-   explain:"✅ As though/as if + were (subjunctive) — কাল্পনিক পরিস্থিতি।"},
-  {id:"g18", topic:"Grammar", level:"C2", q:"The proposal was rejected, ___ came as a surprise.", qbn:"Non-restrictive relative।",
-   options:["that","which","what","who"], answer:1,
-   explain:"✅ Non-restrictive relative clause (পুরো clause refer করলে) → which।"},
-  {id:"g19", topic:"Grammar", level:"C1", q:"He managed to complete the task, ___ was remarkable.", qbn:"Which vs That।",
-   options:["that","which","what","who"], answer:1,
-   explain:"✅ পুরো clause-এর উপর comment → which (non-defining relative clause)।"},
-  {id:"g20", topic:"Grammar", level:"C2", q:"\"Scarcely had she arrived ___ the argument began.\"", qbn:"Scarcely inversion।",
-   options:["when","than","that","before"], answer:0,
-   explain:"✅ Scarcely had + V3 + when (not 'than' — No sooner uses 'than')।"},
-
-  /* ── VOCABULARY — Advanced (50 questions) ── */
-  {id:"v1",  topic:"Vocabulary", level:"C1", q:"\"Ubiquitous\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["Rare","Omnipresent","Hidden","Temporary"], answer:1,
-   explain:"✅ Ubiquitous = present everywhere / সর্বত্র বিদ্যমান।"},
-  {id:"v2",  topic:"Vocabulary", level:"C1", q:"\"Ambiguous\" শব্দের অর্থ:", qbn:"অর্থ বেছে নাও।",
-   options:["সুনির্দিষ্ট","দ্ব্যর্থক","নির্ভুল","সরল"], answer:1,
-   explain:"✅ Ambiguous = having more than one meaning / দ্ব্যর্থবোধক।"},
-  {id:"v3",  topic:"Vocabulary", level:"C1", q:"Antonym of \"Meticulous\":", qbn:"Antonym বেছে নাও।",
-   options:["Careful","Careless","Precise","Thorough"], answer:1,
-   explain:"✅ Meticulous (অতি যত্নশীল) → Careless (অসতর্ক)।"},
-  {id:"v4",  topic:"Vocabulary", level:"C2", q:"\"Laconic\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["বাচাল","অত্যন্ত সংক্ষিপ্ত","দীর্ঘ","অস্পষ্ট"], answer:1,
-   explain:"✅ Laconic = using very few words / সংক্ষিপ্ত ও কম কথায় বলা।"},
-  {id:"v5",  topic:"Vocabulary", level:"C1", q:"\"Ephemeral\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["চিরস্থায়ী","ক্ষণস্থায়ী","বিশাল","প্রাচীন"], answer:1,
-   explain:"✅ Ephemeral = lasting for a very short time / ক্ষণস্থায়ী।"},
-  {id:"v6",  topic:"Vocabulary", level:"C2", q:"\"Sycophant\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["সমালোচক","তোষামোদকারী","নেতা","বিজয়ী"], answer:1,
-   explain:"✅ Sycophant = a person who flatters powerful people / তোষামোদকারী।"},
-  {id:"v7",  topic:"Vocabulary", level:"C1", q:"\"Pragmatic\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["আদর্শবাদী","বাস্তববাদী","আবেগপ্রবণ","অযৌক্তিক"], answer:1,
-   explain:"✅ Pragmatic = dealing with things practically / বাস্তববাদী।"},
-  {id:"v8",  topic:"Vocabulary", level:"C2", q:"\"Obfuscate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["স্পষ্ট করা","ইচ্ছাকৃতভাবে অস্পষ্ট করা","উন্নত করা","সমাধান করা"], answer:1,
-   explain:"✅ Obfuscate = to make unclear / ইচ্ছাকৃতভাবে অস্পষ্ট বা বিভ্রান্তিকর করা।"},
-  {id:"v9",  topic:"Vocabulary", level:"C1", q:"\"Pertinent\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["অপ্রাসঙ্গিক","প্রাসঙ্গিক","বিভ্রান্তিকর","অনুপযুক্ত"], answer:1,
-   explain:"✅ Pertinent = relevant / প্রাসঙ্গিক।"},
-  {id:"v10", topic:"Vocabulary", level:"C2", q:"\"Equivocate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["সরাসরি বলা","দ্ব্যর্থবোধক ভাষায় সত্য এড়ানো","সমান করা","বিতর্ক করা"], answer:1,
-   explain:"✅ Equivocate = use ambiguous language to avoid commitment।"},
-  {id:"v11", topic:"Vocabulary", level:"C1", q:"\"Reiterate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["নতুন বলা","পুনরায় বলা","খণ্ডন করা","সংক্ষেপ করা"], answer:1,
-   explain:"✅ Reiterate = to say or do again / পুনরাবৃত্তি করা।"},
-  {id:"v12", topic:"Vocabulary", level:"C2", q:"\"Recalcitrant\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["অনুগত","একগুঁয়ে/অবাধ্য","বিনম্র","উদার"], answer:1,
-   explain:"✅ Recalcitrant = stubbornly disobedient / একগুঁয়ে, অবাধ্য।"},
-  {id:"v13", topic:"Vocabulary", level:"C1", q:"\"Vindictive\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["ক্ষমাশীল","প্রতিশোধপরায়ণ","উদার","সহানুভূতিশীল"], answer:1,
-   explain:"✅ Vindictive = having a strong desire for revenge।"},
-  {id:"v14", topic:"Vocabulary", level:"C2", q:"\"Impetuous\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["সতর্ক","বেপরোয়া","ধীর","বিচক্ষণ"], answer:1,
-   explain:"✅ Impetuous = acting quickly without thinking / বেপরোয়া।"},
-  {id:"v15", topic:"Vocabulary", level:"C1", q:"\"Exacerbate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["উন্নত করা","আরো খারাপ করা","সমাধান করা","শান্ত করা"], answer:1,
-   explain:"✅ Exacerbate = to make worse / আরো খারাপ করা।"},
-  {id:"v16", topic:"Vocabulary", level:"C2", q:"\"Perspicacious\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["বোকা","তীক্ষ্ণবুদ্ধি","অলস","অস্পষ্ট"], answer:1,
-   explain:"✅ Perspicacious = having a ready insight / তীক্ষ্ণবুদ্ধিসম্পন্ন।"},
-  {id:"v17", topic:"Vocabulary", level:"C1", q:"\"Ameliorate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["খারাপ করা","উন্নত করা","ধ্বংস করা","বিলম্বিত করা"], answer:1,
-   explain:"✅ Ameliorate = to make better / উন্নত করা।"},
-  {id:"v18", topic:"Vocabulary", level:"C2", q:"\"Inveterate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["নতুন","দীর্ঘস্থায়ী/পোক্ত","সাময়িক","বিরল"], answer:1,
-   explain:"✅ Inveterate = having a habit/belief that is long-established / পুরনো অভ্যাসযুক্ত।"},
-  {id:"v19", topic:"Vocabulary", level:"C1", q:"\"Salient\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["অপ্রাসঙ্গিক","সবচেয়ে গুরুত্বপূর্ণ/উল্লেখযোগ্য","লুকানো","সাধারণ"], answer:1,
-   explain:"✅ Salient = most noticeable or important / সবচেয়ে উল্লেখযোগ্য।"},
-  {id:"v20", topic:"Vocabulary", level:"C2", q:"\"Propitious\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["অশুভ","শুভ/অনুকূল","নিরপেক্ষ","বিপজ্জনক"], answer:1,
-   explain:"✅ Propitious = giving or indicating a good chance of success / অনুকূল।"},
-  {id:"v21", topic:"Vocabulary", level:"C1", q:"\"Taciturn\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["বাচাল","কম কথা বলে এমন","সৎ","উৎসাহী"], answer:1,
-   explain:"✅ Taciturn = reserved or uncommunicative / কম কথা বলে এমন।"},
-  {id:"v22", topic:"Vocabulary", level:"C2", q:"\"Circumspect\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["বেপরোয়া","সতর্ক ও বিচক্ষণ","উদাসীন","অলস"], answer:1,
-   explain:"✅ Circumspect = wary and careful about possible risks।"},
-  {id:"v23", topic:"Vocabulary", level:"C1", q:"\"Mitigate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["বাড়ানো","কমানো/লাঘব করা","বিলম্বিত করা","অনুমোদন করা"], answer:1,
-   explain:"✅ Mitigate = to lessen the severity / কমানো।"},
-  {id:"v24", topic:"Vocabulary", level:"C2", q:"\"Pellucid\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["অস্বচ্ছ","স্বচ্ছ ও স্পষ্ট","জটিল","অস্পষ্ট"], answer:1,
-   explain:"✅ Pellucid = translucently clear / স্ফটিকস্পষ্ট।"},
-  {id:"v25", topic:"Vocabulary", level:"C1", q:"\"Eloquent\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["চুপচাপ","সুবক্তা","অস্পষ্ট","দুর্বল"], answer:1,
-   explain:"✅ Eloquent = fluent and persuasive / বাগ্মী।"},
-  {id:"v26", topic:"Vocabulary", level:"C2", q:"\"Garrulous\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["নীরব","অতিরিক্ত কথা বলে এমন","বিনম্র","গুরুগম্ভীর"], answer:1,
-   explain:"✅ Garrulous = excessively talkative / বাচাল।"},
-  {id:"v27", topic:"Vocabulary", level:"C1", q:"\"Proliferate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["হ্রাস পাওয়া","দ্রুত বৃদ্ধি পাওয়া","স্থির থাকা","বিলুপ্ত হওয়া"], answer:1,
-   explain:"✅ Proliferate = to grow or increase rapidly।"},
-  {id:"v28", topic:"Vocabulary", level:"C2", q:"\"Enervate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["শক্তি দেওয়া","শক্তি হরণ করা","উত্তেজিত করা","অনুপ্রাণিত করা"], answer:1,
-   explain:"✅ Enervate = to weaken / শক্তি ক্ষয় করা।"},
-  {id:"v29", topic:"Vocabulary", level:"C1", q:"\"Elucidate\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["জটিল করা","স্পষ্ট করে ব্যাখ্যা করা","লুকানো","পরিবর্তন করা"], answer:1,
-   explain:"✅ Elucidate = to explain clearly।"},
-  {id:"v30", topic:"Vocabulary", level:"C2", q:"\"Ignominious\" means:", qbn:"অর্থ বেছে নাও।",
-   options:["গৌরবময়","লজ্জাজনক","সাহসী","উল্লেখযোগ্য"], answer:1,
-   explain:"✅ Ignominious = deserving public disgrace / লজ্জাজনক।"},
-
-  /* ── IDIOMS & EXPRESSIONS (40 questions) ── */
-  {id:"i1",  topic:"Idioms", level:"C1", q:"\"Bite the bullet\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["পালিয়ে যাওয়া","কষ্টকর পরিস্থিতি সাহসে সহ্য করা","রেগে যাওয়া","উদযাপন করা"], answer:1,
-   explain:"✅ Bite the bullet = endure a painful situation bravely।"},
-  {id:"i2",  topic:"Idioms", level:"C1", q:"\"Beat around the bush\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["সরাসরি কথা বলা","মূল বিষয় এড়িয়ে ঘুরিয়ে কথা বলা","ঝগড়া করা","সফল হওয়া"], answer:1,
-   explain:"✅ Beat around the bush = avoid getting to the main point।"},
-  {id:"i3",  topic:"Idioms", level:"C1", q:"\"A blessing in disguise\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["স্পষ্ট সৌভাগ্য","প্রথমে খারাপ কিন্তু পরে ভালো","সবসময় ভালো","ধর্মীয় আশীর্বাদ"], answer:1,
-   explain:"✅ A blessing in disguise = something that seems bad but turns out good।"},
-  {id:"i4",  topic:"Idioms", level:"C1", q:"\"Burn the midnight oil\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["তেল পোড়ানো","রাত জেগে কাজ করা","আগুন লাগানো","অপচয় করা"], answer:1,
-   explain:"✅ Burn the midnight oil = work late into the night।"},
-  {id:"i5",  topic:"Idioms", level:"C2", q:"\"Cut the Gordian knot\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["জটিল সমস্যা সমাধান না করা","সাহসী পদক্ষেপে জটিল সমস্যা সমাধান করা","দড়ি কাটা","এড়িয়ে যাওয়া"], answer:1,
-   explain:"✅ Cut the Gordian knot = solve a difficult problem boldly।"},
-  {id:"i6",  topic:"Idioms", level:"C1", q:"\"Let the cat out of the bag\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["বিড়াল ছাড়া","অজান্তে গোপন কথা প্রকাশ করা","কাউকে সাহায্য করা","বিভ্রান্ত হওয়া"], answer:1,
-   explain:"✅ Let the cat out of the bag = accidentally reveal a secret।"},
-  {id:"i7",  topic:"Idioms", level:"C2", q:"\"Pyrrhic victory\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["বড় বিজয়","অত্যধিক ক্ষতিসাধনে অর্জিত বিজয়","সহজ বিজয়","নৈতিক বিজয়"], answer:1,
-   explain:"✅ Pyrrhic victory = a victory that inflicts such a devastating toll that it is tantamount to defeat।"},
-  {id:"i8",  topic:"Idioms", level:"C1", q:"\"Throw in the towel\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["তোয়ালে ছুঁড়ে দেওয়া","হার মেনে নেওয়া","সফল হওয়া","চেষ্টা চালিয়ে যাওয়া"], answer:1,
-   explain:"✅ Throw in the towel = admit defeat / surrender।"},
-  {id:"i9",  topic:"Idioms", level:"C2", q:"\"Catch-22\" refers to:", qbn:"Idiom-এর অর্থ।",
-   options:["সহজ সমাধান","এমন পরিস্থিতি যেখানে একটি সমস্যার সমাধান অন্য সমস্যা তৈরি করে","সংখ্যা ২২","দুটি বিকল্প"], answer:1,
-   explain:"✅ Catch-22 = a paradoxical situation from which there is no escape।"},
-  {id:"i10", topic:"Idioms", level:"C1", q:"\"Take with a pinch of salt\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["আক্ষরিকভাবে গ্রহণ করা","সন্দেহের সাথে গ্রহণ করা","সম্পূর্ণ বিশ্বাস করা","উপেক্ষা করা"], answer:1,
-   explain:"✅ Take with a pinch of salt = be skeptical about something।"},
-  {id:"i11", topic:"Idioms", level:"C1", q:"\"Sitting on the fence\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["বেড়ায় বসা","নিরপেক্ষ থাকা/সিদ্ধান্ত না নেওয়া","একমত হওয়া","বিপক্ষে যাওয়া"], answer:1,
-   explain:"✅ Sitting on the fence = not taking sides, being neutral।"},
-  {id:"i12", topic:"Idioms", level:"C2", q:"\"A Herculean task\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["সহজ কাজ","অত্যন্ত কঠিন কাজ","দলীয় কাজ","দ্রুত কাজ"], answer:1,
-   explain:"✅ Herculean task = a task requiring enormous strength or effort।"},
-  {id:"i13", topic:"Idioms", level:"C1", q:"\"Read between the lines\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["আক্ষরিকভাবে পড়া","লুকানো অর্থ বোঝা","দ্রুত পড়া","শব্দ গণনা করা"], answer:1,
-   explain:"✅ Read between the lines = understand the hidden meaning।"},
-  {id:"i14", topic:"Idioms", level:"C2", q:"\"The devil's advocate\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["শয়তানের উকিল","বিপক্ষে যুক্তি দেওয়া ব্যক্তি","একগুঁয়ে ব্যক্তি","নিরপেক্ষ ব্যক্তি"], answer:1,
-   explain:"✅ Devil's advocate = a person who argues the opposite side for the sake of argument।"},
-  {id:"i15", topic:"Idioms", level:"C1", q:"\"In the same boat\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["একই নৌকায় থাকা","একই কঠিন পরিস্থিতিতে থাকা","একসাথে ভ্রমণ করা","একমত হওয়া"], answer:1,
-   explain:"✅ In the same boat = in the same difficult situation।"},
-  {id:"i16", topic:"Idioms", level:"C2", q:"\"Achilles' heel\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["পায়ের ব্যথা","একমাত্র দুর্বলতা","শক্তিশালী দিক","ক্ষত"], answer:1,
-   explain:"✅ Achilles' heel = a weak spot in an otherwise strong person/situation।"},
-  {id:"i17", topic:"Idioms", level:"C1", q:"\"Going back to square one\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["সামনে এগিয়ে যাওয়া","একেবারে শুরু থেকে শুরু করা","প্রায় শেষ করা","অর্ধেক করা"], answer:1,
-   explain:"✅ Go back to square one = start over from the beginning।"},
-  {id:"i18", topic:"Idioms", level:"C2", q:"\"Kick the bucket\" is a euphemism for:", qbn:"Idiom-এর অর্থ।",
-   options:["মারামারি","মারা যাওয়া","পদত্যাগ করা","পরাজিত হওয়া"], answer:1,
-   explain:"✅ Kick the bucket = to die (informal/euphemistic)।"},
-  {id:"i19", topic:"Idioms", level:"C1", q:"\"Under the thumb\" means:", qbn:"Idiom-এর অর্থ।",
-   options:["স্বাধীন","সম্পূর্ণ নিয়ন্ত্রণে","চাপে পড়া","লুকিয়ে থাকা"], answer:1,
-   explain:"✅ Under someone's thumb = completely under their control।"},
-  {id:"i20", topic:"Idioms", level:"C2", q:"\"Bread and butter\" issues refer to:", qbn:"Idiom-এর অর্থ।",
-   options:["খাবার সংক্রান্ত বিষয়","দৈনন্দিন জীবনের মৌলিক বিষয়","অর্থনীতি","রান্নার বিষয়"], answer:1,
-   explain:"✅ Bread and butter = fundamental/basic concerns of everyday life।"},
-
-  /* ── ACADEMIC WRITING (30 questions) ── */
-  {id:"aw1",  topic:"Academic Writing", level:"C1", q:"Which phrase introduces a COUNTER-ARGUMENT?", qbn:"Counter-argument connector।",
-   options:["Furthermore","Admittedly","Therefore","In addition"], answer:1,
-   explain:"✅ Admittedly = স্বীকার করে হলেও — counter-argument introduce করে।"},
-  {id:"aw2",  topic:"Academic Writing", level:"C1", q:"\"The data suggests that...\" — this is:", qbn:"Academic hedging।",
-   options:["A definitive claim","Hedged language","An opinion","A fact"], answer:1,
-   explain:"✅ Hedged language (suggests, may, appears to) অনিশ্চয়তা প্রকাশ করে।"},
-  {id:"aw3",  topic:"Academic Writing", level:"C2", q:"\"Notwithstanding the above,\" is used to:", qbn:"Connector।",
-   options:["উদাহরণ দিতে","বিপরীত দৃষ্টিভঙ্গি দিতে","উপসংহার টানতে","কারণ বলতে"], answer:1,
-   explain:"✅ Notwithstanding = despite / তা সত্ত্বেও।"},
-  {id:"aw4",  topic:"Academic Writing", level:"C1", q:"A 'coherent' argument is one that is:", qbn:"Academic term।",
-   options:["ভুল","সুসংগত ও যুক্তিসংগত","অসম্পূর্ণ","পক্ষপাতদুষ্ট"], answer:1,
-   explain:"✅ Coherent = logically consistent and well-structured।"},
-  {id:"aw5",  topic:"Academic Writing", level:"C2", q:"\"This paper seeks to interrogate the notion that...\" This means:", qbn:"Academic purpose।",
-   options:["বিষয়টি সত্য বলে প্রমাণ করতে","বিষয়টিকে সমালোচনামূলকভাবে পরীক্ষা করতে","বিষয়টি বাদ দিতে","বিষয়টি এড়াতে"], answer:1,
-   explain:"✅ Interrogate a notion = critically examine an idea।"},
-  {id:"aw6",  topic:"Academic Writing", level:"C1", q:"\"As evidenced by...\" is used to:", qbn:"Evidence connector।",
-   options:["মতামত দিতে","প্রমাণ উপস্থাপন করতে","উপসংহার টানতে","সংজ্ঞা দিতে"], answer:1,
-   explain:"✅ As evidenced by = প্রমাণস্বরূপ — evidence connector।"},
-  {id:"aw7",  topic:"Academic Writing", level:"C2", q:"'Epistemological' relates to:", qbn:"Academic term।",
-   options:["জ্ঞানের উৎস ও প্রকৃতি","ভৌগোলিক অধ্যয়ন","সংখ্যাতত্ত্ব","ইতিহাস"], answer:1,
-   explain:"✅ Epistemology = the study of knowledge / জ্ঞানতত্ত্ব।"},
-  {id:"aw8",  topic:"Academic Writing", level:"C1", q:"\"It could be argued that...\" expresses:", qbn:"Hedging।",
-   options:["নিশ্চিত সত্য","সম্ভাব্য দৃষ্টিভঙ্গি","অন্যের মতামত","পরিসংখ্যান"], answer:1,
-   explain:"✅ Could be argued = hedged claim / সম্ভাব্যতা বোঝায়।"},
-  {id:"aw9",  topic:"Academic Writing", level:"C2", q:"\"Ontological\" relates to:", qbn:"Academic term।",
-   options:["ভাষার গঠন","অস্তিত্বের প্রকৃতি","সংখ্যাতত্ত্ব","সমাজবিজ্ঞান"], answer:1,
-   explain:"✅ Ontology = the study of the nature of being / অস্তিত্বতত্ত্ব।"},
-  {id:"aw10", topic:"Academic Writing", level:"C1", q:"A 'seminal' work in a field is:", qbn:"Academic term।",
-   options:["গুরুত্বহীন","ভিত্তিগত ও প্রভাবশালী","সাম্প্রতিক","বিতর্কিত"], answer:1,
-   explain:"✅ Seminal work = highly influential foundational work।"},
-
-  /* ── LITERATURE & RHETORIC (30 questions) ── */
-  {id:"lr1",  topic:"Literature", level:"C1", q:"'Irony' means:", qbn:"Literary device।",
-   options:["আক্ষরিক অর্থে বলা","বিপরীত অর্থে বলা","অতিরঞ্জন","পুনরাবৃত্তি"], answer:1,
-   explain:"✅ Irony = using words to convey the opposite of their literal meaning।"},
-  {id:"lr2",  topic:"Literature", level:"C1", q:"'Metaphor' is:", qbn:"Literary device।",
-   options:["সরাসরি তুলনা","পরোক্ষ তুলনা","শব্দের পুনরাবৃত্তি","অতিরঞ্জন"], answer:1,
-   explain:"✅ Metaphor = saying one thing is another (without like/as)।"},
-  {id:"lr3",  topic:"Literature", level:"C1", q:"'Alliteration' is:", qbn:"Literary device।",
-   options:["শব্দের অর্থ","একই ব্যঞ্জনধ্বনির পুনরাবৃত্তি","কবিতার ছন্দ","বিপরীত শব্দ"], answer:1,
-   explain:"✅ Alliteration = repetition of the same initial consonant sound।"},
-  {id:"lr4",  topic:"Literature", level:"C2", q:"'Hyperbole' means:", qbn:"Literary device।",
-   options:["সংক্ষেপণ","অতিরঞ্জন","উপমা","ব্যঙ্গ"], answer:1,
-   explain:"✅ Hyperbole = extreme exaggeration for effect।"},
-  {id:"lr5",  topic:"Literature", level:"C1", q:"'Personification' means:", qbn:"Literary device।",
-   options:["ব্যক্তির বর্ণনা","নির্জীব বস্তুকে মানবিক গুণ আরোপ","শব্দের খেলা","ছন্দ"], answer:1,
-   explain:"✅ Personification = giving human qualities to non-human things।"},
-  {id:"lr6",  topic:"Literature", level:"C2", q:"'Oxymoron' is:", qbn:"Literary device।",
-   options:["সমার্থক শব্দ","পরস্পরবিরোধী শব্দের সমন্বয়","উপমা","অনুপ্রাস"], answer:1,
-   explain:"✅ Oxymoron = contradictory terms together: 'deafening silence'।"},
-  {id:"lr7",  topic:"Literature", level:"C1", q:"'Soliloquy' in drama means:", qbn:"Literary term।",
-   options:["দ্বন্দ্ব","একা মনের কথা বলা","দলীয় সংলাপ","নীরবতা"], answer:1,
-   explain:"✅ Soliloquy = a character speaking thoughts aloud alone।"},
-  {id:"lr8",  topic:"Literature", level:"C2", q:"'Epistrophe' is:", qbn:"Rhetorical device।",
-   options:["বাক্যের শুরুতে পুনরাবৃত্তি","বাক্যের শেষে পুনরাবৃত্তি","মাঝে পুনরাবৃত্তি","বিপরীত অর্থে বলা"], answer:1,
-   explain:"✅ Epistrophe = repetition of a word/phrase at the END of successive clauses।"},
-  {id:"lr9",  topic:"Literature", level:"C1", q:"'Anaphora' is:", qbn:"Rhetorical device।",
-   options:["বাক্যের শেষে পুনরাবৃত্তি","বাক্যের শুরুতে পুনরাবৃত্তি","মাঝে পুনরাবৃত্তি","অনুপ্রাস"], answer:1,
-   explain:"✅ Anaphora = repetition at the START of successive clauses. 'We shall fight...'"},
-  {id:"lr10", topic:"Literature", level:"C2", q:"'Catharsis' in literature refers to:", qbn:"Literary term।",
-   options:["দ্বন্দ্ব","আবেগের পরিশুদ্ধি/মুক্তি","উত্তেজনা","সমাধান"], answer:1,
-   explain:"✅ Catharsis = emotional purification through art / Aristotle-এর ধারণা।"},
-
-  /* ── CRITICAL THINKING (20 questions) ── */
-  {id:"ct1",  topic:"Critical Thinking", level:"C1", q:"An 'ad hominem' argument:", qbn:"Logical fallacy।",
-   options:["বিষয়ের যুক্তি দেয়","ব্যক্তিকে আক্রমণ করে","তথ্য দেয়","উদাহরণ দেয়"], answer:1,
-   explain:"✅ Ad hominem = attacking the person rather than the argument।"},
-  {id:"ct2",  topic:"Critical Thinking", level:"C1", q:"'Straw man' fallacy means:", qbn:"Logical fallacy।",
-   options:["সঠিক যুক্তি","প্রতিপক্ষের যুক্তকে বিকৃত করে আক্রমণ","তথ্য প্রদান","উদাহরণ দেওয়া"], answer:1,
-   explain:"✅ Straw man = misrepresenting opponent's argument to attack it easily।"},
-  {id:"ct3",  topic:"Critical Thinking", level:"C2", q:"'False dichotomy' means:", qbn:"Logical fallacy।",
-   options:["দুটি সঠিক বিকল্প","কৃত্রিমভাবে শুধু দুটি বিকল্প উপস্থাপন","তথ্যভিত্তিক দ্বন্দ্ব","নৈতিক সিদ্ধান্ত"], answer:1,
-   explain:"✅ False dichotomy = presenting only two options when more exist।"},
-  {id:"ct4",  topic:"Critical Thinking", level:"C1", q:"'Circular reasoning' means:", qbn:"Logical fallacy।",
-   options:["স্পষ্ট যুক্তি","কারণ ও ফলাফল একই বস্তু","ভালো প্রমাণ","নতুন তথ্য"], answer:1,
-   explain:"✅ Circular reasoning = the conclusion is used as a premise।"},
-  {id:"ct5",  topic:"Critical Thinking", level:"C2", q:"'Hasty generalization' means:", qbn:"Logical fallacy।",
-   options:["যথেষ্ট তথ্যের ভিত্তিতে সিদ্ধান্ত","অল্প তথ্যের ভিত্তিতে ব্যাপক সিদ্ধান্ত","সঠিক বিশ্লেষণ","দীর্ঘ গবেষণা"], answer:1,
-   explain:"✅ Hasty generalization = drawing broad conclusions from limited examples।"},
-  {id:"ct6",  topic:"Critical Thinking", level:"C1", q:"'Slippery slope' argument claims:", qbn:"Logical fallacy।",
-   options:["একটি পদক্ষেপ ভালো","একটি পদক্ষেপ অনিবার্যভাবে চরম পরিণতি আনবে","যুক্তি সঠিক","তথ্য যথেষ্ট"], answer:1,
-   explain:"✅ Slippery slope = claiming one action will lead to extreme consequences inevitably।"},
-  {id:"ct7",  topic:"Critical Thinking", level:"C2", q:"'Appeal to authority' fallacy:", qbn:"Logical fallacy।",
-   options:["সঠিক বিশেষজ্ঞের মতামত","অপ্রাসঙ্গিক কর্তৃপক্ষের মতামত দিয়ে যুক্তি","তথ্যভিত্তিক যুক্তি","নৈতিক যুক্তি"], answer:1,
-   explain:"✅ Appeal to authority = using an irrelevant authority as evidence।"},
-  {id:"ct8",  topic:"Critical Thinking", level:"C1", q:"'Confirmation bias' means:", qbn:"Cognitive bias।",
-   options:["সব তথ্য বিবেচনা করা","নিজের বিশ্বাস সমর্থনকারী তথ্য খোঁজা","নিরপেক্ষ থাকা","সন্দেহপ্রবণ হওয়া"], answer:1,
-   explain:"✅ Confirmation bias = seeking information that confirms existing beliefs।"},
-  {id:"ct9",  topic:"Critical Thinking", level:"C2", q:"'Occam's Razor' principle states:", qbn:"Logical principle।",
-   options:["জটিল ব্যাখ্যাই সঠিক","সহজতম ব্যাখ্যাই সাধারণত সঠিক","সব ব্যাখ্যাই সমান","প্রমাণ ছাড়া সিদ্ধান্ত"], answer:1,
-   explain:"✅ Occam's Razor = the simplest explanation is usually correct।"},
-  {id:"ct10", topic:"Critical Thinking", level:"C1", q:"'Post hoc ergo propter hoc' fallacy means:", qbn:"Logical fallacy।",
-   options:["কারণ ও ফলাফল সঠিক","A-এর পরে B হলেই A কারণ এই ভুল ধারণা","তথ্যভিত্তিক যুক্তি","নৈতিক বিচার"], answer:1,
-   explain:"✅ Post hoc fallacy = assuming X caused Y just because X came before Y।"},
-
-  /* ── PRONUNCIATION & PHONETICS (20 questions) ── */
-  {id:"ph1",  topic:"Phonetics", level:"C1", q:"The word 'colonel' is pronounced:", qbn:"Pronunciation।",
-   options:["/kɒlənəl/","/kɜːrnəl/","/koʊlənəl/","/kɒlənɛl/"], answer:1,
-   explain:"✅ Colonel = /kɜːrnəl/ — 'l' বাদে উচ্চারিত হয়, সম্পূর্ণ irregular।"},
-  {id:"ph2",  topic:"Phonetics", level:"C1", q:"Which word has a silent 'b'?", qbn:"Silent letter।",
-   options:["Bomb","Bread","Brief","Brain"], answer:0,
-   explain:"✅ Bomb = /bɒm/ — শেষের 'b' silent। Thumb, comb, lamb-এও।"},
-  {id:"ph3",  topic:"Phonetics", level:"C2", q:"'Paradigm' is pronounced:", qbn:"Pronunciation।",
-   options:["/pærədɪɡm/","/pærədaɪm/","/pærədɪm/","/pærəɡɪm/"], answer:1,
-   explain:"✅ Paradigm = /pærədaɪm/ — 'g' silent।"},
-  {id:"ph4",  topic:"Phonetics", level:"C1", q:"Which word breaks the 'i before e' rule?", qbn:"Spelling rule exception।",
-   options:["Believe","Their","Piece","Achieve"], answer:1,
-   explain:"✅ Their = 'ei' (exception to 'i before e' rule)।"},
-  {id:"ph5",  topic:"Phonetics", level:"C2", q:"'Epitome' is pronounced:", qbn:"Pronunciation।",
-   options:["/ˈepɪtoʊm/","/ɪˈpɪtəmi/","/ˈepɪtəʊm/","/ˈepɪtɒm/"], answer:1,
-   explain:"✅ Epitome = /ɪˈpɪtəmi/ — শেষ 'e' উচ্চারিত হয়।"},
-  {id:"ph6",  topic:"Phonetics", level:"C1", q:"Which pair of words are 'minimal pairs'?", qbn:"Phonetics term।",
-   options:["Cat/Dog","Ship/Sheep","Run/Fun","Big/Bag"], answer:3,
-   explain:"✅ Minimal pairs = শুধু একটি phoneme আলাদা: Big /bɪɡ/ vs Bag /bæɡ/।"},
-  {id:"ph7",  topic:"Phonetics", level:"C2", q:"'Synecdoche' is pronounced:", qbn:"Pronunciation।",
-   options:["/sɪˈnekdəki/","/saɪˈnekdoʊk/","/sɪnˈdoʊki/","/ˈsɪnɪkdoʊk/"], answer:0,
-   explain:"✅ Synecdoche = /sɪˈnekdəki/ — literary term।"},
-  {id:"ph8",  topic:"Phonetics", level:"C1", q:"'Diphthong' refers to:", qbn:"Phonetics term।",
-   options:["একটি স্বরধ্বনি","দুটি স্বরধ্বনির সমন্বয়","ব্যঞ্জনধ্বনি","নীরব অক্ষর"], answer:1,
-   explain:"✅ Diphthong = a combination of two vowel sounds in one syllable: /aɪ/, /eɪ/।"},
-  {id:"ph9",  topic:"Phonetics", level:"C2", q:"'Schwa' is:", qbn:"Phonetics term।",
-   options:["জোর দেওয়া স্বর","সবচেয়ে সাধারণ/দুর্বল English স্বরধ্বনি /ə/","ব্যঞ্জনধ্বনি","নীরব অক্ষর"], answer:1,
-   explain:"✅ Schwa /ə/ = the most common vowel sound in English (unstressed)।"},
-  {id:"ph10", topic:"Phonetics", level:"C1", q:"'Liaison' in pronunciation means:", qbn:"Phonetics term।",
-   options:["নীরব থাকা","শব্দের শেষ ধ্বনি পরবর্তী শব্দের সাথে যুক্ত করা","জোরে বলা","বিরতি দেওয়া"], answer:1,
-   explain:"✅ Liaison = linking final sound of one word to initial sound of next।"},
-
-  /* ── LANGUAGE & DISCOURSE (20 questions) ── */
-  {id:"ld1",  topic:"Language", level:"C1", q:"A 'collocation' is:", qbn:"Linguistics term।",
-   options:["বিরল শব্দ","স্বাভাবিকভাবে একসাথে ব্যবহৃত শব্দের জুটি","বিপরীত শব্দ","সমার্থক শব্দ"], answer:1,
-   explain:"✅ Collocation = words that naturally go together: 'make a decision'।"},
-  {id:"ld2",  topic:"Language", level:"C1", q:"'Register' in linguistics means:", qbn:"Linguistics term।",
-   options:["শব্দভান্ডার","পরিস্থিতি অনুযায়ী ভাষার ব্যবহার","ব্যাকরণ","উচ্চারণ"], answer:1,
-   explain:"✅ Register = the variety of language used for a particular purpose/situation।"},
-  {id:"ld3",  topic:"Language", level:"C2", q:"'Pragmatics' in linguistics studies:", qbn:"Linguistics branch।",
-   options:["শব্দের গঠন","প্রসঙ্গে ভাষার অর্থ","ধ্বনি","বাক্যগঠন"], answer:1,
-   explain:"✅ Pragmatics = how context influences interpretation of meaning।"},
-  {id:"ld4",  topic:"Language", level:"C1", q:"'Code-switching' refers to:", qbn:"Linguistics term।",
-   options:["একটি ভাষায় কথা বলা","কথোপকথনে একাধিক ভাষা পরিবর্তন করা","অনুবাদ","নতুন শব্দ তৈরি"], answer:1,
-   explain:"✅ Code-switching = alternating between languages in conversation।"},
-  {id:"ld5",  topic:"Language", level:"C2", q:"'Morpheme' is:", qbn:"Linguistics term।",
-   options:["একটি বাক্য","অর্থের ক্ষুদ্রতম একক","একটি স্বরধ্বনি","একটি ব্যঞ্জনধ্বনি"], answer:1,
-   explain:"✅ Morpheme = the smallest meaningful unit of language।"},
-  {id:"ld6",  topic:"Language", level:"C1", q:"'Deixis' means:", qbn:"Linguistics term।",
-   options:["অনুবাদ","প্রসঙ্গ নির্ভর অর্থ (this, here, now)","ব্যাকরণ","শব্দভান্ডার"], answer:1,
-   explain:"✅ Deixis = words whose interpretation depends on context (this, here, I)।"},
-  {id:"ld7",  topic:"Language", level:"C2", q:"'Phoneme' is:", qbn:"Linguistics term।",
-   options:["অর্থের একক","ধ্বনির ক্ষুদ্রতম স্বতন্ত্র একক","বাক্যের একক","শব্দের একক"], answer:1,
-   explain:"✅ Phoneme = smallest unit of sound that distinguishes meaning।"},
-  {id:"ld8",  topic:"Language", level:"C1", q:"'Euphemism' is:", qbn:"Language term।",
-   options:["কঠোর ভাষা","অপ্রীতিকর বিষয় নরম ভাষায় বলা","ব্যঙ্গ","অতিরঞ্জন"], answer:1,
-   explain:"✅ Euphemism = a mild expression for something unpleasant।"},
-  {id:"ld9",  topic:"Language", level:"C2", q:"'Cataphora' means:", qbn:"Linguistics term।",
-   options:["পূর্বে উল্লিখিত বিষয় উল্লেখ","পরে আসবে এমন বিষয় আগে উল্লেখ","অনুবাদ","শব্দের অর্থ"], answer:1,
-   explain:"✅ Cataphora = a reference that points forward (e.g., 'Here is the news...')."},
-  {id:"ld10", topic:"Language", level:"C1", q:"'Hedging' in academic language means:", qbn:"Academic term।",
-   options:["নিশ্চিতভাবে বলা","অনিশ্চয়তা প্রকাশ করে সতর্কতার সাথে বলা","বিরোধিতা করা","উদ্ধৃতি দেওয়া"], answer:1,
-   explain:"✅ Hedging = using cautious language to avoid overcommitting।"},
-];
 
 /* ══════════════════════════════════════════════
    SUBLEVEL SUPPORT — ?cat=Grammar&level=C1
 ══════════════════════════════════════════════ */
-const urlParams  = new URLSearchParams(window.location.search);
-const subCat     = urlParams.get('cat');
-const subLevel   = urlParams.get('level');
-const isSublevel = !!subCat || !!subLevel;
+const urlParams = new URLSearchParams(window.location.search);
+const currentLvl = parseInt(urlParams.get('lvl')) || 1;
+const CHUNK_SIZE  = 20;
+const TOTAL_LVL   = 20; // ceil(400/20)
 
 function shuffle(arr){ return arr.sort(()=>Math.random()-.5); }
 
-function buildPool(){
-  let pool = QUIZ_BANK;
-  if(subCat)   pool = pool.filter(q => q.topic === subCat);
-  if(subLevel) pool = pool.filter(q => q.level === subLevel);
-  return shuffle([...pool]);
+function getChunk(lvl){
+  const start = (lvl - 1) * CHUNK_SIZE;
+  return QUIZ_BANK.slice(start, start + CHUNK_SIZE);
 }
 
-let QUIZ = buildPool();
-const ALL_TOPICS = ["All", ...new Set(QUIZ_BANK.map(q=>q.topic))];
+let QUIZ = shuffle([...getChunk(currentLvl)]);
 
 /* ══════════════════════════════════
    STATE
 ══════════════════════════════════ */
-let activeTopic = subCat || "All";
+let activeTopic = "All";
 let order = [];
 let qIndex = 0;
 let answered = {};
@@ -805,12 +437,11 @@ let wrongCount = 0;
 let streak = 0;
 let bestStreak = 0;
 let currentUid = null;
+let fbUser = null;
+onAuthStateChanged(auth, u => { fbUser = u; });
 
 function poolQ(){
-  let pool = QUIZ_BANK;
-  if(subLevel) pool = pool.filter(q=>q.level===subLevel);
-  if(activeTopic !== "All") pool = pool.filter(q=>q.topic===activeTopic);
-  return shuffle([...pool]);
+  return QUIZ;
 }
 
 function toast(msg){
@@ -820,31 +451,153 @@ function toast(msg){
   setTimeout(()=>t.classList.remove("show"), 2600);
 }
 
+/* ══════════════════════════════════════════════
+   SAVE / RESUME PROGRESS (Firestore)
+══════════════════════════════════════════════ */
+const PROGRESS_KEY = () => fbUser ? fbUser.uid + '_advanced_lvl' + currentLvl : null;
+
+async function saveProgress() {
+  if (!fbUser) return;
+  try {
+    await setDoc(doc(db, 'quiz_progress', PROGRESS_KEY()), {
+      qIndex, correctCount, wrongCount, bestStreak,
+      order: order.map(q => q.id),
+      currentLvl,
+      ts: Date.now(),
+      updatedAt: serverTimestamp()
+    });
+  } catch(e) { console.warn('saveProgress failed', e); }
+}
+
+async function loadSaved() {
+  if (!fbUser) return null;
+  try {
+    const snap = await getDoc(doc(db, 'quiz_progress', PROGRESS_KEY()));
+    if (!snap.exists()) return null;
+    return snap.data();
+  } catch(e) { return null; }
+}
+
+async function clearProgress() {
+  if (!fbUser) return;
+  try { await deleteDoc(doc(db, 'quiz_progress', PROGRESS_KEY())); } catch(e) {}
+}
+
+function showResumeBanner(saved) {
+  const existing = document.getElementById('resume-banner');
+  if (existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'resume-banner';
+  banner.style.cssText = `
+    background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.2);
+    border-radius:16px;padding:.85rem 1.2rem;margin-bottom:1.4rem;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    flex-wrap:wrap;
+  `;
+  banner.innerHTML = `
+    <span style="font-size:13px;color:#c7d2fe;font-family:'Noto Sans Bengali',sans-serif;">
+      ⏸️ আগের session পাওয়া গেছে —
+      <b style="color:var(--indigo)">${saved.qIndex} / ${saved.order.length}</b> প্রশ্ন সম্পন্ন
+    </span>
+    <div style="display:flex;gap:8px;">
+      <button id="btn-resume" style="
+        background:rgba(129,140,248,.14);border:1px solid rgba(129,140,248,.35);
+        color:var(--indigo);border-radius:10px;padding:5px 18px;font-size:12.5px;
+        cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;">
+        ▶ Continue
+      </button>
+      <button id="btn-fresh" style="
+        background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+        color:var(--muted);border-radius:10px;padding:5px 14px;font-size:12.5px;
+        cursor:pointer;font-family:'Outfit',sans-serif;">
+        নতুন করে
+      </button>
+    </div>`;
+
+  const quizWrap = document.querySelector('.quiz-card-wrap');
+  quizWrap.parentNode.insertBefore(banner, quizWrap);
+
+  document.getElementById('btn-resume').onclick = () => {
+    banner.remove();
+    const idMap = {};
+    QUIZ.forEach(q => { idMap[q.id] = q; });
+    const restored = saved.order.map(id => idMap[id]).filter(Boolean);
+    if (!restored.length) { startQuiz(); return; }
+    order        = restored;
+    qIndex       = saved.qIndex;
+    correctCount = saved.correctCount;
+    wrongCount   = saved.wrongCount;
+    bestStreak   = saved.bestStreak || 0;
+    answered     = {};
+    streak       = 0;
+    updateStats();
+    renderQuestion();
+  };
+
+  document.getElementById('btn-fresh').onclick = () => {
+    clearProgress();
+    banner.remove();
+    startQuiz();
+  };
+}
+
+/* ══════════════════════════════════════════════
+   LEVEL LOCK SYSTEM
+══════════════════════════════════════════════ */
+let passedLevels = [];
+
+function applySubLevelLocks() {
+  const el = document.getElementById("cur-lvl-display");
+  if(el) el.textContent = currentLvl;
+
+  const tabs = document.querySelectorAll("#sublevel-tabs .level-tab[data-lvl]");
+  tabs.forEach(tab => {
+    const lvl = parseInt(tab.dataset.lvl);
+    if (lvl === 1) { if(lvl === currentLvl) tab.classList.add("active"); return; }
+    const isLocked = !passedLevels.includes(lvl - 1);
+    if (isLocked) {
+      tab.classList.add("locked");
+      tab.removeAttribute("href");
+      tab.onclick = e => {
+        e.preventDefault();
+        showToast(`🔒 আগে Level ${lvl - 1} সম্পন্ন করো (70%+)`);
+      };
+    }
+    if (lvl === currentLvl) tab.classList.add("active");
+  });
+}
+
+function showToast(msg) {
+  let t = document.getElementById("toast2");
+  if (!t) { t = document.createElement("div"); t.id = "toast2"; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+async function markLevelPassed(lvl) {
+  if (passedLevels.includes(lvl)) return;
+  passedLevels.push(lvl);
+  if (!fbUser) return;
+  try {
+    await setDoc(doc(db, "users", fbUser.uid), { passed_advanced_levels: passedLevels }, { merge: true });
+  } catch(e) { console.warn("markLevelPassed failed", e); }
+}
+
 /* ══════════════════════════════════
-   BUILD PILLS
+   BUILD PILLS (disabled — chunk mode)
 ══════════════════════════════════ */
 function buildPills(){
-  if(isSublevel){ document.getElementById("cat-pills").style.display="none"; return; }
   const wrap = document.getElementById("cat-pills");
-  wrap.innerHTML = ALL_TOPICS.map(t => {
-    const count = t==="All" ? QUIZ_BANK.length : QUIZ_BANK.filter(q=>q.topic===t).length;
-    return `<div class="pill ${t===activeTopic?'active':''}" data-topic="${t}">
-      ${t} <span class="pill-count">${count}</span>
-    </div>`;
-  }).join("");
-  wrap.querySelectorAll(".pill").forEach(el=>{
-    el.addEventListener("click", ()=>{
-      activeTopic = el.dataset.topic;
-      buildPills();
-      startQuiz();
-    });
-  });
+  if(wrap) wrap.style.display = "none";
 }
 
 /* ══════════════════════════════════
    QUIZ FLOW
 ══════════════════════════════════ */
 function startQuiz(){
+  QUIZ = shuffle([...getChunk(currentLvl)]);
   order = poolQ();
   qIndex = 0;
   answered = {};
@@ -903,6 +656,7 @@ function selectOption(q, i){
   document.getElementById("btn-next").disabled = false;
   document.getElementById("btn-skip").style.display = "none";
   updateStats();
+  saveProgress();
 }
 
 function lockOptions(q, selectedIdx){
@@ -937,7 +691,7 @@ function skipQuestion(){
   nextQuestion();
 }
 
-function showResult(){
+async function showResult(){
   document.getElementById("quiz-card").style.display = "none";
   const card = document.getElementById("result-card");
   card.classList.add("show");
@@ -953,7 +707,7 @@ function showResult(){
   let emoji, title, sub;
   if(pct >= 80){ emoji="🏆"; title="অসাধারণ! Truly Advanced!"; sub="তুমি C1-C2 level-এ দুর্দান্ত করছো। তুমি truly fluent!"; }
   else if(pct >= 50){ emoji="👍"; title="ভালো হয়েছে!"; sub="C1-C2 কঠিন — আরেকটু practice করলে আরও ভালো হবে!"; }
-  else { emoji="💪"; title="Keep Practicing!"; sub:"চিন্তা নেই, এটা সবচেয়ে কঠিন level — আবার চেষ্টা করো!"; }
+  else { emoji="💪"; title="Keep Practicing!"; sub="চিন্তা নেই, এটা সবচেয়ে কঠিন level — আবার চেষ্টা করো!"; }
 
   document.getElementById("r-emoji").textContent = emoji;
   document.getElementById("r-title").textContent = title;
@@ -999,7 +753,58 @@ function showResult(){
   }
 
   updateStats();
+  clearProgress();
   saveScoreToFirestore(correctCount, total, pct);
+
+  /* ── Pass banner ── */
+  const passBanner = document.getElementById('pass-banner');
+  if(passBanner) passBanner.remove();
+
+  if(pct >= 70){
+    await markLevelPassed(currentLvl);
+    const nextLvl = currentLvl + 1;
+    const banner = document.createElement('div');
+    banner.id = 'pass-banner';
+    banner.style.cssText = `
+      background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(167,139,250,.06));
+      border:1px solid rgba(129,140,248,.3);border-radius:16px;
+      padding:1.1rem 1.4rem;margin-top:1.2rem;text-align:center;
+    `;
+    if(nextLvl <= TOTAL_LVL){
+      banner.innerHTML = `
+        <div style="font-size:1.6rem;margin-bottom:.4rem;">🔓</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--indigo);margin-bottom:.3rem;">
+          Level ${currentLvl} Passed! ${pct}% স্কোর
+        </div>
+        <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
+          Level ${nextLvl} এখন unlock হয়েছে!
+        </div>
+        <button onclick="location.href='quiz-advanced.html?lvl=${nextLvl}'"
+          style="background:linear-gradient(135deg,rgba(129,140,248,.16),rgba(167,139,250,.12));
+            border:1px solid rgba(129,140,248,.35);color:var(--indigo);
+            border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
+            cursor:pointer;font-family:'Outfit',sans-serif;">
+          ▶ Level ${nextLvl} শুরু করো →
+        </button>`;
+    } else {
+      banner.innerHTML = `
+        <div style="font-size:1.6rem;margin-bottom:.4rem;">🏆</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--gold);margin-bottom:.3rem;">
+          অভিনন্দন! সব Advanced Level সম্পন্ন!
+        </div>
+        <div style="font-size:12.5px;color:var(--sub);font-family:'Noto Sans Bengali',sans-serif;margin-bottom:.9rem;">
+          তুমি English Shekho-র সম্পূর্ণ quiz journey শেষ করেছো! 🎉
+        </div>
+        <button onclick="location.href='quiz-dashboard.html'"
+          style="background:linear-gradient(135deg,rgba(245,200,66,.16),rgba(251,191,36,.12));
+            border:1px solid rgba(245,200,66,.35);color:var(--gold);
+            border-radius:12px;padding:.65rem 1.8rem;font-size:13.5px;font-weight:700;
+            cursor:pointer;font-family:'Outfit',sans-serif;">
+          🏆 Quiz Dashboard এ ফিরে যাও
+        </button>`;
+    }
+    document.getElementById('result-card').appendChild(banner);
+  }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1010,8 +815,8 @@ async function saveScoreToFirestore(correct, total, pct){
   const merge = {merge:true};
   const uRef  = doc(db,"users",currentUid);
 
-  const sessionLevel = subLevel || "C1-C2";
-  const sessionCat   = subCat || activeTopic || "All";
+  const sessionLevel = "C1-C2";
+  const sessionCat   = `Level ${currentLvl}`;
 
   const catBreakdown = {};
   const wrongList    = [];
@@ -1152,6 +957,7 @@ document.getElementById("footer-year2").textContent = yr;
 
 requireAuth(async user => {
   currentUid = user.uid;
+  fbUser = user;
   const snap = await getDoc(doc(db,"users",user.uid));
   const d = snap.exists() ? snap.data() : {};
 
@@ -1162,8 +968,18 @@ requireAuth(async user => {
   if(photo) av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`;
   else av.textContent = name[0]?.toUpperCase() || "?";
 
+  passedLevels = d.passed_advanced_levels || [];
+  applySubLevelLocks();
+
   buildPills();
-  startQuiz();
+
+  const saved = await loadSaved();
+  if(saved && saved.qIndex > 0 && saved.qIndex < (saved.order?.length || 0)){
+    startQuiz();
+    showResumeBanner(saved);
+  } else {
+    startQuiz();
+  }
 });
 </script>
 </body>

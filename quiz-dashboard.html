@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f5c842">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="English Shekho">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<title>Quiz Dashboard — English Shekho</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#04080f;--surface:#080e1a;--surface2:#0c1322;--surface3:#101828;
+  --border:rgba(255,255,255,.055);
+  --gold:#f5c842;--gold2:#e0a820;
+  --teal:#2dd4bf;--rose:#fb7185;--indigo:#818cf8;
+  --emerald:#34d399;--orange:#fb923c;--amber:#fbbf24;
+  --muted:#64748b;--sub:#94a3b8;--text:#f0f4f8;
+  /* Beginner */
+  --bg-c1:#f5c842;--bg-c2:#fbbf24;--bg-glow:rgba(245,200,66,.2);
+  /* Intermediate */
+  --im-c1:#2dd4bf;--im-c2:#06b6d4;--im-glow:rgba(45,212,191,.2);
+  /* Advanced */
+  --ad-c1:#818cf8;--ad-c2:#a78bfa;--ad-glow:rgba(129,140,248,.2);
+}
+
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 55% at 0% 0%,rgba(245,200,66,.06),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,rgba(45,212,191,.05),transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,rgba(129,140,248,.025),transparent 60%);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.007) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.007) 1px,transparent 1px);
+  background-size:52px 52px;}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.85rem 1.5rem;margin-bottom:0;gap:1rem;flex-wrap:wrap;
+  background:rgba(8,14,26,.85);border-bottom:1px solid var(--border);
+  backdrop-filter:blur(24px);position:sticky;top:0;z-index:100;
+}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(45,212,191,.1));border:1px solid rgba(245,200,66,.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 0 16px rgba(245,200,66,.1);flex-shrink:0;}
+.logo-text h1{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.4px;}
+.logo-text p{font-size:9.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.nav-links{display:flex;gap:4px;}
+.nav-link{padding:.38rem .85rem;border-radius:10px;font-size:12px;font-weight:600;color:var(--sub);text-decoration:none;transition:.2s;border:1px solid transparent;}
+.nav-link:hover{background:rgba(255,255,255,.05);color:var(--text);border-color:var(--border);}
+.nav-link.active{background:rgba(245,200,66,.09);border-color:rgba(245,200,66,.28);color:var(--gold);}
+.user-section{display:flex;align-items:center;gap:8px;}
+.user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(45,212,191,.15));display:flex;align-items:center;justify-content:center;font-size:.9rem;overflow:hidden;border:2px solid rgba(245,200,66,.3);cursor:pointer;flex-shrink:0;transition:.2s;}
+.user-avatar:hover{border-color:var(--gold);box-shadow:0 0 18px rgba(245,200,66,.2);}
+.user-avatar img{width:100%;height:100%;object-fit:cover;}
+.user-name{font-size:13px;font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-logout{border:1px solid rgba(251,113,133,.2);background:rgba(251,113,133,.07);color:var(--rose);padding:.38rem .85rem;border-radius:10px;cursor:pointer;font-weight:600;font-family:'Outfit',sans-serif;font-size:12px;transition:.2s;}
+.btn-logout:hover{background:rgba(251,113,133,.15);border-color:var(--rose);}
+
+/* ── WRAP ── */
+.wrap{max-width:1100px;margin:0 auto;padding:2.8rem 1.5rem 0;position:relative;z-index:1;}
+
+/* ── HERO ── */
+.hero{text-align:center;margin-bottom:3rem;}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:1.1rem;background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.2);color:var(--gold);}
+.hero h2{font-size:clamp(2rem,4.5vw,2.8rem);font-weight:800;letter-spacing:-.6px;line-height:1.15;margin-bottom:.6rem;}
+.hero h2 .g{background:linear-gradient(135deg,#f5c842,#2dd4bf,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:14px;color:var(--sub);line-height:1.75;max-width:520px;margin:0 auto;font-family:'Noto Sans Bengali',sans-serif;}
+
+/* ── CARDS GRID ── */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:2.8rem;}
+
+/* BASE CARD */
+.level-card{
+  position:relative;border-radius:24px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .3s;
+  cursor:pointer;text-decoration:none;display:block;
+}
+.level-card:hover{transform:translateY(-10px) scale(1.02);}
+
+/* Beginner */
+.card-beginner{background:linear-gradient(145deg,#100d01,#1a1302,#100d01);}
+.card-beginner:hover{box-shadow:0 28px 60px rgba(245,200,66,.22),0 0 0 1px rgba(245,200,66,.3);}
+.card-beginner .card-glow{background:radial-gradient(circle,rgba(245,200,66,.28),transparent 70%);}
+.card-beginner .card-stripe{background:linear-gradient(90deg,var(--bg-c1),var(--bg-c2),transparent);}
+.card-beginner .level-badge{background:rgba(245,200,66,.12);border-color:rgba(245,200,66,.3);color:var(--gold);}
+.card-beginner .card-icon-bg{background:linear-gradient(135deg,rgba(245,200,66,.18),rgba(245,200,66,.06));}
+.card-beginner .card-icon{color:var(--gold);}
+.card-beginner .card-title{color:var(--gold);}
+.card-beginner .pill{background:rgba(245,200,66,.08);color:#fde68a;border-color:rgba(245,200,66,.2);}
+.card-beginner .card-btn{background:linear-gradient(135deg,#a16207,#92400e);color:#fff;}
+.card-beginner .card-btn:hover{background:linear-gradient(135deg,var(--gold),var(--gold2));}
+.card-beginner .prog-fill{background:linear-gradient(90deg,var(--bg-c1),var(--bg-c2));}
+
+/* Intermediate */
+.card-intermediate{background:linear-gradient(145deg,#010f10,#021a1a,#010f10);}
+.card-intermediate:hover{box-shadow:0 28px 60px rgba(45,212,191,.2),0 0 0 1px rgba(45,212,191,.3);}
+.card-intermediate .card-glow{background:radial-gradient(circle,rgba(45,212,191,.28),transparent 70%);}
+.card-intermediate .card-stripe{background:linear-gradient(90deg,var(--im-c1),var(--im-c2),transparent);}
+.card-intermediate .level-badge{background:rgba(45,212,191,.12);border-color:rgba(45,212,191,.3);color:var(--teal);}
+.card-intermediate .card-icon-bg{background:linear-gradient(135deg,rgba(45,212,191,.18),rgba(6,182,212,.06));}
+.card-intermediate .card-icon{color:var(--teal);}
+.card-intermediate .card-title{color:var(--teal);}
+.card-intermediate .pill{background:rgba(45,212,191,.08);color:#99f6e4;border-color:rgba(45,212,191,.2);}
+.card-intermediate .card-btn{background:linear-gradient(135deg,#0e7490,#164e63);color:#fff;}
+.card-intermediate .card-btn:hover{background:linear-gradient(135deg,var(--teal),var(--im-c2));}
+.card-intermediate .prog-fill{background:linear-gradient(90deg,var(--im-c1),var(--im-c2));}
+
+/* Advanced */
+.card-advanced{background:linear-gradient(145deg,#06050f,#0d0b1e,#06050f);}
+.card-advanced:hover{box-shadow:0 28px 60px rgba(129,140,248,.2),0 0 0 1px rgba(129,140,248,.3);}
+.card-advanced .card-glow{background:radial-gradient(circle,rgba(129,140,248,.28),transparent 70%);}
+.card-advanced .card-stripe{background:linear-gradient(90deg,var(--ad-c1),var(--ad-c2),transparent);}
+.card-advanced .level-badge{background:rgba(129,140,248,.12);border-color:rgba(129,140,248,.3);color:var(--indigo);}
+.card-advanced .card-icon-bg{background:linear-gradient(135deg,rgba(129,140,248,.18),rgba(167,139,250,.06));}
+.card-advanced .card-icon{color:var(--indigo);}
+.card-advanced .card-title{color:var(--indigo);}
+.card-advanced .pill{background:rgba(129,140,248,.08);color:#c7d2fe;border-color:rgba(129,140,248,.2);}
+.card-advanced .card-btn{background:linear-gradient(135deg,#4338ca,#3730a3);color:#fff;}
+.card-advanced .card-btn:hover{background:linear-gradient(135deg,var(--indigo),var(--ad-c2));}
+.card-advanced .prog-fill{background:linear-gradient(90deg,var(--ad-c1),var(--ad-c2));}
+
+/* Card internals */
+.card-glow{position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;pointer-events:none;}
+.card-stripe{position:absolute;top:0;left:0;right:0;height:3px;}
+.card-inner{padding:1.9rem;}
+.card-top-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.4rem;}
+.card-icon-bg{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.card-icon{font-size:1.65rem;line-height:1;}
+.level-badge{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:800;letter-spacing:.08em;padding:4px 12px;border-radius:20px;border:1px solid;}
+.card-title{font-size:1.4rem;font-weight:800;margin-bottom:.35rem;letter-spacing:-.3px;}
+.card-subtitle{font-size:12.5px;color:var(--sub);line-height:1.65;margin-bottom:1.2rem;font-family:'Noto Sans Bengali',sans-serif;}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.4rem;}
+.pill{font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:20px;border:1px solid;}
+
+/* Progress */
+.prog-label{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:5px;font-family:'JetBrains Mono',monospace;}
+.prog-track{height:5px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;margin-bottom:1.4rem;}
+.prog-fill{height:100%;border-radius:6px;width:0%;transition:width 1s cubic-bezier(.4,0,.2,1);}
+
+/* Meta row */
+.meta-row{display:flex;gap:1.2rem;margin-bottom:1.7rem;}
+.meta-item{display:flex;flex-direction:column;gap:2px;}
+.meta-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:800;}
+.meta-lbl{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+
+/* Button */
+.card-btn{
+  width:100%;padding:.8rem;border:none;border-radius:13px;
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .25s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;
+}
+.card-btn .arrow{transition:transform .2s;}
+.level-card:hover .arrow{transform:translateX(5px);}
+
+/* Lock overlay */
+.locked-overlay{
+  position:absolute;inset:0;
+  background:rgba(4,8,15,.72);backdrop-filter:blur(4px);
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  border-radius:24px;z-index:10;
+}
+.lock-icon{font-size:2.6rem;}
+.lock-text{font-size:14px;font-weight:700;color:var(--sub);}
+.lock-req{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+/* ── BOTTOM STATS ── */
+.bottom-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:3rem;}
+.bstat{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:1.2rem 1.3rem;display:flex;align-items:center;gap:14px;transition:.2s;}
+.bstat:hover{border-color:rgba(255,255,255,.1);transform:translateY(-2px);}
+.bstat-icon{font-size:1.6rem;flex-shrink:0;}
+.bstat-v{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:800;}
+.bstat-l{font-size:10.5px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+
+/* ── FOOTER ── */
+footer{margin-top:1rem;border-top:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.35),rgba(45,212,191,.35),transparent);}
+.footer-inner{max-width:1160px;margin:auto;padding:2.2rem 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;}
+.footer-brand .brand-name{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,#f5c842,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
+.footer-brand .brand-sub{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:.9rem;font-family:'Noto Sans Bengali',sans-serif;}
+.copyright-text{font-size:10.5px;color:#2d3748;line-height:1.8;font-family:'JetBrains Mono',monospace;}
+.footer-col h4{font-size:.9rem;font-weight:700;color:var(--sub);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.dev-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;}
+.dev-name{font-size:.95rem;font-weight:700;margin-bottom:2px;}
+.dev-title{font-size:9.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-bottom:.75rem;}
+.dev-contact{display:flex;flex-direction:column;gap:.45rem;}
+.contact-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);}
+.contact-row a{color:var(--sub);text-decoration:none;transition:.2s;}
+.contact-row a:hover{color:var(--text);}
+.contact-icon{font-size:.9rem;}
+.social-links{display:flex;flex-direction:column;gap:.5rem;}
+.social-link{display:flex;align-items:center;gap:10px;padding:.5rem .7rem;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);text-decoration:none;color:var(--sub);transition:.2s;}
+.social-link:hover{background:rgba(255,255,255,.05);color:var(--text);}
+.sl-icon{font-size:1rem;}
+.sl-label{font-size:12px;font-weight:600;flex:1;}
+.sl-handle{font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.footer-bottom{max-width:1160px;margin:auto;padding:.8rem 1.4rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;border-top:1px solid rgba(255,255,255,.04);font-size:11px;color:#2d3748;font-family:'JetBrains Mono',monospace;}
+.footer-bottom a{color:#374151;text-decoration:none;}
+.footer-bottom a:hover{color:var(--muted);}
+.footer-heart{color:var(--rose);}
+
+@media(max-width:900px){.cards-grid{grid-template-columns:1fr;}.bottom-stats{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr;gap:1.6rem;}.nav-links{display:none;}}
+@media(max-width:500px){.topbar{flex-direction:column;align-items:flex-start;}.bottom-stats{grid-template-columns:repeat(2,1fr);}.wrap{padding:1.8rem 1rem 0;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🇬🇧</div>
+    <div class="logo-text">
+      <h1>English Shekho</h1>
+      <p>QUIZ · DASHBOARD</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links">
+      <a href="dashboard.html" class="nav-link">Home</a>
+      <a href="roadmap.html" class="nav-link">Journey</a>
+      <a href="quiz-dashboard.html" class="nav-link active">Quiz</a>
+      <a href="grammar.html" class="nav-link">Grammar</a>
+      <a href="vocab-dashboard.html" class="nav-link">Vocabulary</a>
+      <a href="writing-lab.html" class="nav-link">Writing</a>
+    </nav>
+    <div class="user-section">
+      <div class="user-avatar" id="nav-avatar" onclick="location.href='profile.html'">?</div>
+      <span class="user-name" id="nav-name">Loading...</span>
+      <button class="btn-logout" id="btn-logout">Logout</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">📝 Quiz · A1 → C2</div>
+    <h2>তোমার <span class="g">Level</span> বেছে নাও</h2>
+    <p class="hero-sub">
+      <span style="color:var(--gold)">Beginner</span> থেকে শুরু করে
+      <span style="color:var(--teal)">Intermediate</span> এবং
+      <span style="color:var(--indigo)">Advanced</span> পর্যন্ত —
+      তোমার স্তর অনুযায়ী quiz দাও এবং এগিয়ে যাও।
+    </p>
+  </div>
+
+  <!-- LEVEL CARDS -->
+  <div class="cards-grid">
+
+    <!-- BEGINNER -->
+    <a href="quiz-beginner.html" class="level-card card-beginner">
+      <div class="card-glow"></div>
+      <div class="card-stripe"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon">🌱</div></div>
+          <span class="level-badge">A1 · A2</span>
+        </div>
+        <div class="card-title">Beginner</div>
+        <div class="card-subtitle">Basic vocabulary, greetings, family, numbers, colors ও everyday words দিয়ে শুরু করো।</div>
+        <div class="pills">
+          <span class="pill">অভিবাদন</span>
+          <span class="pill">পরিবার</span>
+          <span class="pill">সংখ্যা</span>
+          <span class="pill">রং</span>
+          <span class="pill">পেশা</span>
+          <span class="pill">খাবার</span>
+        </div>
+        <div class="prog-label">
+          <span>অগ্রগতি</span>
+          <span id="bg-pct">0%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="bg-bar"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--gold)">300+</span>
+            <span class="meta-lbl">মোট শব্দ</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--emerald)" id="bg-correct">0</span>
+            <span class="meta-lbl">সঠিক</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--amber)" id="bg-sessions">0</span>
+            <span class="meta-lbl">সেশন</span>
+          </div>
+        </div>
+        <div class="card-btn">Quiz শুরু করো <span class="arrow">→</span></div>
+      </div>
+    </a>
+
+    <!-- INTERMEDIATE -->
+    <a href="quiz-intermediate.html" class="level-card card-intermediate" id="card-intermediate">
+      <div class="card-glow"></div>
+      <div class="card-stripe"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon">🚀</div></div>
+          <span class="level-badge">B1 · B2</span>
+        </div>
+        <div class="card-title">Intermediate</div>
+        <div class="card-subtitle">Grammar, tenses, phrasal verbs ও reading comprehension practice করো।</div>
+        <div class="pills">
+          <span class="pill">Tenses</span>
+          <span class="pill">Phrasal Verbs</span>
+          <span class="pill">Grammar</span>
+          <span class="pill">Conditionals</span>
+          <span class="pill">Narration</span>
+        </div>
+        <div class="prog-label">
+          <span>অগ্রগতি</span>
+          <span id="im-pct">0%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="im-bar"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--teal)">150+</span>
+            <span class="meta-lbl">প্রশ্ন</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--emerald)" id="im-correct">0</span>
+            <span class="meta-lbl">সঠিক</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--amber)" id="im-sessions">0</span>
+            <span class="meta-lbl">সেশন</span>
+          </div>
+        </div>
+        <div class="card-btn">Quiz শুরু করো <span class="arrow">→</span></div>
+      </div>
+      <!-- Lock overlay -->
+      <div class="locked-overlay" id="im-lock">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">Intermediate Locked</div>
+        <div class="lock-req" id="im-lock-req">Beginner-এ কমপক্ষে ১টি session শেষ করো</div>
+      </div>
+    </a>
+
+    <!-- ADVANCED -->
+    <a href="quiz-advanced.html" class="level-card card-advanced" id="card-advanced">
+      <div class="card-glow"></div>
+      <div class="card-stripe"></div>
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="card-icon-bg"><div class="card-icon">🏆</div></div>
+          <span class="level-badge">C1 · C2</span>
+        </div>
+        <div class="card-title">Advanced</div>
+        <div class="card-subtitle">Idioms, critical thinking, academic writing ও complex grammar শেখো।</div>
+        <div class="pills">
+          <span class="pill">Idioms</span>
+          <span class="pill">Academic</span>
+          <span class="pill">Inversion</span>
+          <span class="pill">Subjunctive</span>
+          <span class="pill">Phonetics</span>
+        </div>
+        <div class="prog-label">
+          <span>অগ্রগতি</span>
+          <span id="ad-pct">0%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="ad-bar"></div></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--indigo)">200+</span>
+            <span class="meta-lbl">প্রশ্ন</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--emerald)" id="ad-correct">0</span>
+            <span class="meta-lbl">সঠিক</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val" style="color:var(--amber)" id="ad-sessions">0</span>
+            <span class="meta-lbl">সেশন</span>
+          </div>
+        </div>
+        <div class="card-btn">Quiz শুরু করো <span class="arrow">→</span></div>
+      </div>
+      <!-- Lock overlay -->
+      <div class="locked-overlay" id="ad-lock">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">Advanced Locked</div>
+        <div class="lock-req" id="ad-lock-req">Intermediate-এ কমপক্ষে ১টি session শেষ করো</div>
+      </div>
+    </a>
+
+  </div><!-- /cards-grid -->
+
+  <!-- BOTTOM STATS -->
+  <div class="bottom-stats">
+    <div class="bstat">
+      <div class="bstat-icon">✅</div>
+      <div>
+        <div class="bstat-v" style="color:var(--emerald)" id="total-correct">0</div>
+        <div class="bstat-l">মোট সঠিক উত্তর</div>
+      </div>
+    </div>
+    <div class="bstat">
+      <div class="bstat-icon">📋</div>
+      <div>
+        <div class="bstat-v" style="color:var(--teal)" id="total-sessions">0</div>
+        <div class="bstat-l">মোট সেশন</div>
+      </div>
+    </div>
+    <div class="bstat">
+      <div class="bstat-icon">⚡</div>
+      <div>
+        <div class="bstat-v" style="color:var(--indigo)" id="total-xp">0</div>
+        <div class="bstat-l">মোট XP</div>
+      </div>
+    </div>
+    <div class="bstat">
+      <div class="bstat-icon">🏆</div>
+      <div>
+        <div class="bstat-v" style="color:var(--gold)" id="best-score">0%</div>
+        <div class="bstat-l">সেরা স্কোর</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand-name">🇬🇧 English Shekho</div>
+      <div class="brand-sub">একটি বাংলা-মাধ্যম English ভাষা শেখার প্ল্যাটফর্ম। A1 থেকে C2 পর্যন্ত vocabulary, grammar, speaking এবং live chat সুবিধা।</div>
+      <div class="copyright-text">© <span id="footer-year"></span> English Shekho<br><span>All rights reserved.</span><br><span>Unauthorized reproduction</span><br><span>is strictly prohibited.</span></div>
+    </div>
+    <div class="footer-col">
+      <h4>👨‍💻 Developer</h4>
+      <div class="dev-card">
+        <div class="dev-name">Zishan Rafi</div>
+        <div class="dev-title">WEB DEVELOPER · EDUCATOR</div>
+        <div class="dev-contact">
+          <div class="contact-row"><div class="contact-icon">📧</div><a href="mailto:zishanrafii@gmail.com">zishanrafii@gmail.com</a></div>
+          <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+8801877083978">+8801877083978</a></div>
+          <div class="contact-row"><div class="contact-icon">💬</div><a href="https://wa.me/8801877083978" target="_blank">WhatsApp</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>🔗 Social Media</h4>
+      <div class="social-links">
+        <a href="https://facebook.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">📘</span><span class="sl-label">Facebook</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://www.youtube.com/@Cyrus_rush" target="_blank" class="social-link"><span class="sl-icon">▶️</span><span class="sl-label">YouTube</span><span class="sl-handle">Cy-Rush</span></a>
+        <a href="https://instagram.com/sodium_neon" target="_blank" class="social-link"><span class="sl-icon">📸</span><span class="sl-label">Instagram</span><span class="sl-handle">Zishan Rafi</span></a>
+        <a href="https://github.com/zishanrafii" target="_blank" class="social-link"><span class="sl-icon">🐙</span><span class="sl-label">GitHub</span><span class="sl-handle">zishanrafi</span></a>
+        <a href="https://t.me/zissueissue" target="_blank" class="social-link"><span class="sl-icon">✈️</span><span class="sl-label">Telegram</span><span class="sl-handle">itz cyrus</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© <span id="footer-year2"></span> English Shekho · Developed by <a href="https://facebook.com/zishanrafii" target="_blank">Zishan Rafi</a></div>
+    <div>Built with <span class="footer-heart">♥</span> for Bengali learners &nbsp;·&nbsp; Version 1.0</div>
+  </div>
+</footer>
+
+<script type="module">
+import {
+  auth, db, signOut, requireAuth,
+  doc, getDoc,
+  collection, getDocs
+} from "./js/firebase-config.js";
+
+const yr = new Date().getFullYear();
+document.getElementById("footer-year").textContent  = yr;
+document.getElementById("footer-year2").textContent = yr;
+
+document.getElementById("btn-logout").addEventListener("click", async () => {
+  await signOut(auth);
+  location.href = "index.html";
+});
+
+function lockCard(cardId, overlayId) {
+  const card = document.getElementById(cardId);
+  const overlay = document.getElementById(overlayId);
+  if (card && overlay) {
+    overlay.style.display = "flex";
+    card.style.pointerEvents = "none";
+    card.style.opacity = ".55";
+    card.href = "#";
+  }
+}
+
+requireAuth(async user => {
+  // ── Nav user info ──
+  const uRef  = doc(db, "users", user.uid);
+  const uSnap = await getDoc(uRef);
+  const d     = uSnap.exists() ? uSnap.data() : {};
+
+  const name  = d.displayName || user.displayName || "Learner";
+  const photo = d.photoURL    || user.photoURL    || "";
+  document.getElementById("nav-name").textContent = name;
+  const av = document.getElementById("nav-avatar");
+  if (photo) av.innerHTML = `<img src="${photo}" alt="avatar">`;
+  else av.textContent = name[0]?.toUpperCase() || "?";
+
+  // ── Root stats ──
+  document.getElementById("total-correct").textContent  = d.totalCorrect  || 0;
+  document.getElementById("total-sessions").textContent = d.sessions       || 0;
+  document.getElementById("total-xp").textContent       = d.xp             || 0;
+  document.getElementById("best-score").textContent     = (d.bestScore     || 0) + "%";
+
+  // ── Per-level stats from quizStats subcollection ──
+  const levels = [
+    { key: "beginner",     barId: "bg-bar",  pctId: "bg-pct",  cId: "bg-correct",  sId: "bg-sessions"  },
+    { key: "intermediate", barId: "im-bar",  pctId: "im-pct",  cId: "im-correct",  sId: "im-sessions"  },
+    { key: "advanced",     barId: "ad-bar",  pctId: "ad-pct",  cId: "ad-correct",  sId: "ad-sessions"  },
+  ];
+
+  const statsData = {};
+
+  for (const lv of levels) {
+    try {
+      const snap = await getDoc(doc(db, "users", user.uid, "quizStats", lv.key));
+      const s    = snap.exists() ? snap.data() : {};
+
+      const correct  = s.totalCorrect   || 0;
+      const total    = s.totalQuestions || 0;
+      const sessions = s.sessions       || 0;
+      const pct      = total > 0 ? Math.min(100, Math.round((correct / total) * 100)) : 0;
+
+      statsData[lv.key] = { correct, total, sessions, pct };
+
+      document.getElementById(lv.cId).textContent  = correct;
+      document.getElementById(lv.sId).textContent  = sessions;
+      document.getElementById(lv.pctId).textContent = pct + "%";
+      setTimeout(() => {
+        document.getElementById(lv.barId).style.width = pct + "%";
+      }, 200);
+    } catch(e) {
+      // quizStats doc doesn't exist yet — leave as 0
+    }
+  }
+
+  // ── Lock logic ──
+  // Intermediate unlocks after Beginner has at least 1 session
+  const bgSessions = statsData["beginner"]?.sessions || 0;
+  const imSessions = statsData["intermediate"]?.sessions || 0;
+
+  if (bgSessions < 1) {
+    lockCard("card-intermediate", "im-lock");
+  }
+
+  // Advanced unlocks after Intermediate has at least 1 session
+  if (imSessions < 1) {
+    lockCard("card-advanced", "ad-lock");
+  }
+});
+</script>
+</body>
+</html>
