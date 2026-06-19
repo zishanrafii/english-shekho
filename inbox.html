@@ -386,6 +386,50 @@ body{
 
 @media(max-width:600px){.wrap{padding:0;}.topbar{flex-direction:column;align-items:flex-start;}}
 
+/* ─── DISAPPEARING MESSAGES ─── */
+.disappear-select{
+  width:100%;background:var(--search-bg);border:1px solid var(--border);
+  border-radius:10px;padding:.5rem .8rem;color:var(--text);font-size:13px;
+  outline:none;cursor:pointer;
+}
+.dm-bubble.disappearing{border:1px dashed rgba(251,113,133,.4);}
+.dm-expire-label{font-size:9px;color:var(--rose);margin-top:2px;display:block;}
+
+/* ─── WALLPAPER ─── */
+.wallpaper-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.wallpaper-thumb{
+  aspect-ratio:1;border-radius:10px;cursor:pointer;overflow:hidden;
+  border:2px solid transparent;transition:.15s;position:relative;
+}
+.wallpaper-thumb.selected{border-color:var(--msng-blue);}
+.wallpaper-thumb div{width:100%;height:100%;border-radius:8px;}
+.wallpaper-none{background:var(--search-bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);}
+
+/* ─── IMAGE SAVE BUTTON ─── */
+.img-save-btn{
+  position:absolute;top:6px;right:6px;
+  width:28px;height:28px;border-radius:8px;border:none;
+  background:rgba(0,0,0,.55);color:#fff;font-size:13px;
+  cursor:pointer;display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);transition:.15s;z-index:5;
+}
+.img-save-btn:hover{background:rgba(0,0,0,.75);}
+.dm-attach-img-wrap{position:relative;display:inline-block;}
+.dm-attach-img-wrap:hover .img-save-btn{display:flex;}
+
+/* ─── EXPORT/BACKUP ─── */
+.export-btn{
+  width:100%;padding:.6rem;border-radius:12px;border:none;
+  background:var(--search-bg);color:var(--text);font-size:13px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:.15s;margin-bottom:8px;
+}
+.export-btn:hover{background:rgba(10,124,255,.1);color:var(--msng-blue);}
+.export-btn i{font-size:16px;}
+
+/* ─── THREAD WALLPAPER ─── */
+.thread-messages.has-wallpaper{background-size:cover;background-position:center;}
+
 /* ─── TABLER ICON GLOBAL SIZING ─── */
 .attach-btn i,.voice-btn i,.gif-btn i,.grammar-btn i,.send-btn i{font-size:18px;}
 .call-btn i{font-size:17px;}
@@ -856,6 +900,28 @@ body{
               <h4>Chat Theme</h4>
               <div class="theme-colors" id="theme-colors"></div>
             </div>
+            <div class="info-section">
+              <h4>Wallpaper</h4>
+              <div class="wallpaper-grid" id="wallpaper-grid"></div>
+            </div>
+            <div class="info-section">
+              <h4>Disappearing Messages</h4>
+              <select class="disappear-select" id="disappear-select">
+                <option value="0">Off</option>
+                <option value="3600">১ ঘন্টা পর</option>
+                <option value="86400">১ দিন পর</option>
+                <option value="604800">১ সপ্তাহ পর</option>
+              </select>
+            </div>
+            <div class="info-section">
+              <h4>Conversation Backup</h4>
+              <button class="export-btn" id="export-json-btn">
+                <i class="ti ti-file-export" aria-hidden="true"></i> JSON হিসেবে export করো
+              </button>
+              <button class="export-btn" id="export-txt-btn">
+                <i class="ti ti-file-text" aria-hidden="true"></i> Text file হিসেবে export করো
+              </button>
+            </div>
           </div>
         </div>
         <div class="recording-bar" id="recording-bar">
@@ -1135,6 +1201,9 @@ function openConversation(uid){
   markConversationSeen(uid);
   clearReply();
   applyTheme(uid);
+  applyWallpaper(uid);
+  const disSel = document.getElementById("disappear-select");
+  if(disSel) disSel.value = disappearSettings[uid] || "0";
   // Apply nickname
   const nick = nicknames[uid];
   if(nick) document.getElementById("thread-name").textContent = nick;
@@ -1211,7 +1280,12 @@ function buildMsgEl(m, otherUid, msgId, convId){
     </div>`;
   } else if(m.attachmentUrl){
     if(m.attachmentType === "image"){
-      attachHtml = `<img class="dm-attach-img" src="${m.attachmentUrl}" onclick="window.open('${m.attachmentUrl}','_blank')">`;
+      attachHtml = `<div class="dm-attach-img-wrap">
+        <img class="dm-attach-img" src="${m.attachmentUrl}" onclick="window.open('${m.attachmentUrl}','_blank')">
+        <button class="img-save-btn" title="Save image" onclick="saveImage('${m.attachmentUrl}','${m.attachmentName||'image.jpg'}')">
+          <i class="ti ti-download"></i>
+        </button>
+      </div>`;
     } else {
       const fname = m.attachmentName || "File";
       attachHtml = `<a class="dm-attach-file" href="${m.attachmentUrl}" target="_blank" download>
@@ -1628,6 +1702,13 @@ requireAuth(async user => {
   renderConvList();
   listenForIncomingCalls();
   listenForNewMessages(); // ← নতুন message notification
+  loadConvMeta();
+  loadCallLog();
+  loadChatSettings();
+  loadDisappearSettings();
+  loadWallpapers();
+  updateLastSeen();
+  setInterval(updateLastSeen, 30000);
 
   // open conversation if ?uid= is passed (e.g. from friends.html "Message" button)
   const params = new URLSearchParams(location.search);
@@ -2499,6 +2580,7 @@ document.getElementById("info-btn").addEventListener("click", ()=>{
   if(!activeConvUid) return;
   document.getElementById("nickname-input").value = nicknames[activeConvUid] || "";
   renderThemeSwatches(activeConvUid);
+  renderWallpaperGrid(activeConvUid);
   document.getElementById("info-panel").classList.add("show");
 });
 document.getElementById("info-panel-close").addEventListener("click", ()=>{
@@ -2578,12 +2660,13 @@ document.getElementById("grammar-dismiss").addEventListener("click", ()=>{
 });
 
 /* ══════════════════════════════════════════
-   GIF PICKER (Tenor API)
-   Add TENOR_API_KEY to Cloudflare env vars
-   Get free key: https://tenor.com/developer/keyregistration
+   GIF PICKER (Klipy API — Tenor replacement)
+   Tenor shut down its API in 2026; Klipy is the
+   recommended drop-in alternative (lifetime free tier).
+   Get your key: https://partner.klipy.com → Add Platform
 ══════════════════════════════════════════ */
-const TENOR_API_KEY = "AIzaSyAyimkuYQYF_y7VMpe3m5PB9vAiKhxqSEU"; // Public demo key — replace with yours
-const TENOR_CLIENT = "english_shekho";
+const KLIPY_API_KEY = "H8YecGPqUcxxFVlxX8FHisVnOlSxA46pxKVSLzk9dYkrJPIRnLBPtlIO8zqO7FWi";
+const KLIPY_CUSTOMER_ID = "english_shekho_user"; // any string identifying this app/user
 let gifOpen = false;
 let gifDebounce = null;
 
@@ -2614,18 +2697,19 @@ async function fetchGifs(query){
   grid.innerHTML = `<div class="gif-loading">🔍 খোঁজা হচ্ছে...</div>`;
   try{
     const url = query === "trending"
-      ? `https://tenor.googleapis.com/v2/featured?key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT}&limit=12`
-      : `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(query)}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT}&limit=12`;
+      ? `https://api.klipy.com/api/v1/${KLIPY_API_KEY}/gifs/trending/${KLIPY_CUSTOMER_ID}?per_page=12`
+      : `https://api.klipy.com/api/v1/${KLIPY_API_KEY}/gifs/search/${KLIPY_CUSTOMER_ID}?q=${encodeURIComponent(query)}&per_page=12`;
     const res = await fetch(url);
     const data = await res.json();
-    const results = data.results || [];
+    const results = data?.result?.data || data?.data || [];
     if(!results.length){
       grid.innerHTML = `<div class="gif-empty">কোনো GIF পাওয়া যায়নি 😕</div>`;
       return;
     }
     grid.innerHTML = results.map(gif=>{
-      const preview = gif.media_formats?.tinygif?.url || gif.media_formats?.gif?.url || "";
-      const full    = gif.media_formats?.gif?.url || preview;
+      // Klipy file structure: gif.file.sm.gif.url (small preview) / gif.file.hd.gif.url or .md (full)
+      const preview = gif.file?.sm?.gif?.url || gif.file?.xs?.gif?.url || gif.file?.md?.gif?.url || "";
+      const full    = gif.file?.md?.gif?.url || gif.file?.hd?.gif?.url || preview;
       return `<div class="gif-thumb" data-url="${full}">
         <img src="${preview}" loading="lazy" alt="${gif.title||"gif"}">
       </div>`;
@@ -2657,6 +2741,180 @@ async function sendGif(url){
     }, { merge:true });
   }catch(e){ toast("⚠️ GIF send হয়নি।"); }
 }
+
+/* ══════════════════════════════════════════
+   IMAGE SAVE
+══════════════════════════════════════════ */
+async function saveImage(url, filename){
+  try{
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename || "image.jpg";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast("✅ Image save হয়েছে!");
+  }catch(e){ toast("⚠️ Save হয়নি।"); }
+}
+window.saveImage = saveImage;
+
+/* ══════════════════════════════════════════
+   DISAPPEARING MESSAGES
+══════════════════════════════════════════ */
+let disappearSettings = {}; // uid -> seconds (0 = off)
+
+function loadDisappearSettings(){
+  try{ disappearSettings = JSON.parse(localStorage.getItem("es-disappear")||"{}"); }catch(e){}
+}
+function saveDisappearSettings(){
+  try{ localStorage.setItem("es-disappear", JSON.stringify(disappearSettings)); }catch(e){}
+}
+
+document.getElementById("disappear-select").addEventListener("change", e=>{
+  if(!activeConvUid) return;
+  const val = parseInt(e.target.value);
+  disappearSettings[activeConvUid] = val;
+  saveDisappearSettings();
+  toast(val ? `⏱️ Messages ${e.target.options[e.target.selectedIndex].text} delete হবে` : "Disappearing messages বন্ধ করা হয়েছে");
+});
+
+function checkDisappearing(){
+  if(!activeConvUid) return;
+  const secs = disappearSettings[activeConvUid];
+  if(!secs) return;
+  const msgs = document.querySelectorAll(".dm");
+  msgs.forEach(el=>{
+    const ts = parseInt(el.dataset.ts || "0");
+    if(!ts) return;
+    const age = (Date.now() - ts) / 1000;
+    if(age > secs){
+      const convId = dmId(currentUser.uid, activeConvUid);
+      const msgId = el.dataset.id;
+      if(msgId) updateDoc(doc(db,"conversations",convId,"messages",msgId), { unsent:true }).catch(()=>{});
+    }
+  });
+}
+setInterval(checkDisappearing, 30000);
+
+/* ══════════════════════════════════════════
+   WALLPAPER
+══════════════════════════════════════════ */
+const WALLPAPERS = [
+  { name:"None",    value:"",        preview:"" },
+  { name:"Dark",    value:"linear-gradient(160deg,#0f0c29,#302b63,#24243e)", preview:"linear-gradient(160deg,#0f0c29,#302b63,#24243e)" },
+  { name:"Ocean",   value:"linear-gradient(135deg,#0575e6,#021b79)", preview:"linear-gradient(135deg,#0575e6,#021b79)" },
+  { name:"Forest",  value:"linear-gradient(135deg,#134e5e,#71b280)", preview:"linear-gradient(135deg,#134e5e,#71b280)" },
+  { name:"Sunset",  value:"linear-gradient(135deg,#f093fb,#f5576c)", preview:"linear-gradient(135deg,#f093fb,#f5576c)" },
+  { name:"Galaxy",  value:"linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)", preview:"linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)" },
+  { name:"Mint",    value:"linear-gradient(135deg,#a8edea,#fed6e3)", preview:"linear-gradient(135deg,#a8edea,#fed6e3)" },
+  { name:"Amber",   value:"linear-gradient(135deg,#f7971e,#ffd200)", preview:"linear-gradient(135deg,#f7971e,#ffd200)" },
+];
+
+let wallpapers = {}; // uid -> wallpaper value
+
+function loadWallpapers(){
+  try{ wallpapers = JSON.parse(localStorage.getItem("es-wallpapers")||"{}"); }catch(e){}
+}
+function saveWallpapers(){
+  try{ localStorage.setItem("es-wallpapers", JSON.stringify(wallpapers)); }catch(e){}
+}
+
+function applyWallpaper(uid){
+  const val = wallpapers[uid] || "";
+  const el = document.getElementById("thread-messages");
+  if(!el) return;
+  if(val){
+    el.style.background = val;
+    el.classList.add("has-wallpaper");
+  } else {
+    el.style.background = "";
+    el.classList.remove("has-wallpaper");
+  }
+}
+
+function renderWallpaperGrid(uid){
+  const grid = document.getElementById("wallpaper-grid");
+  const current = wallpapers[uid] || "";
+  grid.innerHTML = WALLPAPERS.map((w,i)=>`
+    <div class="wallpaper-thumb${w.value===current?" selected":""}" data-idx="${i}" title="${w.name}">
+      ${w.value
+        ? `<div style="background:${w.preview};width:100%;height:100%;border-radius:8px;"></div>`
+        : `<div class="wallpaper-none">None</div>`}
+    </div>`).join("");
+  grid.querySelectorAll(".wallpaper-thumb").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const w = WALLPAPERS[parseInt(el.dataset.idx)];
+      wallpapers[uid] = w.value;
+      saveWallpapers();
+      applyWallpaper(uid);
+      renderWallpaperGrid(uid);
+    });
+  });
+}
+
+/* ══════════════════════════════════════════
+   CONVERSATION BACKUP / EXPORT
+══════════════════════════════════════════ */
+async function exportConversation(format){
+  if(!activeConvUid || !currentUser){ toast("⚠️ কোনো conversation select করো!"); return; }
+  const convId = dmId(currentUser.uid, activeConvUid);
+  const peer = userCache[activeConvUid] || {};
+  const me = userCache[currentUser.uid] || {};
+  toast("⏳ Export হচ্ছে...");
+  try{
+    const snap = await getDocs(query(
+      collection(db,"conversations",convId,"messages"),
+      orderBy("createdAt","asc")
+    ));
+    const msgs = snap.docs.map(d=>({id:d.id,...d.data()}));
+
+    if(format === "json"){
+      const data = {
+        exported: new Date().toISOString(),
+        participants: [
+          { uid: currentUser.uid, name: me.displayName||"Me" },
+          { uid: activeConvUid,   name: peer.displayName||"User" }
+        ],
+        messages: msgs.map(m=>({
+          sender: m.senderId===currentUser.uid ? (me.displayName||"Me") : (peer.displayName||"User"),
+          text: m.unsent ? "[unsent]" : (m.text||""),
+          attachment: m.attachmentUrl || null,
+          time: m.createdAt?.toDate?.()?.toISOString() || ""
+        }))
+      };
+      downloadFile(JSON.stringify(data, null, 2), `chat-${peer.displayName||"conversation"}.json`, "application/json");
+    } else {
+      let txt = `Conversation with ${peer.displayName||"User"}
+Exported: ${new Date().toLocaleString("bn-BD")}
+${"─".repeat(40)}
+
+`;
+      msgs.forEach(m=>{
+        if(m.unsent) return;
+        const sender = m.senderId===currentUser.uid ? (me.displayName||"Me") : (peer.displayName||"User");
+        const time = m.createdAt?.toDate?.()?.toLocaleString("bn-BD") || "";
+        const text = m.text || (m.attachmentUrl ? "[Attachment]" : "");
+        txt += `[${time}] ${sender}: ${text}
+`;
+      });
+      downloadFile(txt, `chat-${peer.displayName||"conversation"}.txt`, "text/plain");
+    }
+    toast("✅ Export সম্পন্ন!");
+  }catch(e){ toast("⚠️ Export হয়নি।"); console.error(e); }
+}
+
+function downloadFile(content, filename, type){
+  const blob = new Blob([content], { type });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+document.getElementById("export-json-btn").addEventListener("click", ()=> exportConversation("json"));
+document.getElementById("export-txt-btn").addEventListener("click",  ()=> exportConversation("txt"));
 
 /* ══════════════════════════════════
    MOBILE BACK BUTTON
