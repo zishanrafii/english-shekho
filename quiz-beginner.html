@@ -630,23 +630,11 @@ function toast(msg){
 }
 
 /* ══════════════════════════════════
-   BUILD PILLS
+   BUILD PILLS (disabled — chunk/level mode)
 ══════════════════════════════════ */
 function buildPills(){
   const wrap = document.getElementById("cat-pills");
-  wrap.innerHTML = TOPICS.map(t => {
-    const count = t === "All" ? QUIZ.length : QUIZ.filter(q=>q.topic===t).length;
-    return `<div class="pill ${t===activeTopic?'active':''}" data-topic="${t}">
-      ${t} <span class="pill-count">${count}</span>
-    </div>`;
-  }).join("");
-  wrap.querySelectorAll(".pill").forEach(el=>{
-    el.addEventListener("click", ()=>{
-      activeTopic = el.dataset.topic;
-      buildPills();
-      startQuiz();
-    });
-  });
+  if(wrap) wrap.style.display = "none";
 }
 
 /* ══════════════════════════════════
