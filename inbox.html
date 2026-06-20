@@ -1047,6 +1047,13 @@ import {
 /* ══════════════════════════════════
    STATE
 ══════════════════════════════════ */
+// Guard against malformed/placeholder photoURL values saved by mistake elsewhere
+function safePhoto(url){
+  if(!url || typeof url !== "string") return "";
+  if(url.includes("${") || !url.startsWith("http")) return "";
+  return url;
+}
+
 let currentUser  = null;
 let friendUids   = [];
 let userCache    = {};      // uid -> {displayName, photoURL}
@@ -1114,7 +1121,7 @@ function renderConvList(filter=""){
   list.innerHTML = sorted.map(uid=>{
     const u = userCache[uid] || {};
     const name = esc(u.displayName || "User");
-    const photo = u.photoURL || "";
+    const photo = safePhoto(u.photoURL || "");
     const avatarInner = photo ? `<img src="${photo}">` : `<span>${name[0]?.toUpperCase()||"?"}</span>`;
     const active = uid === activeConvUid ? "active" : "";
     const meta = convMeta[uid] || {};
@@ -1189,7 +1196,7 @@ function openConversation(uid){
 
   const u = userCache[uid] || {};
   const name = esc(u.displayName || "User");
-  const photo = u.photoURL || "";
+  const photo = safePhoto(u.photoURL || "");
   document.getElementById("thread-name").textContent = u.displayName || "User";
   document.getElementById("thread-avatar").innerHTML = photo
     ? `<img src="${photo}">` : `<span>${name[0]?.toUpperCase()||"?"}</span>`;
@@ -1261,7 +1268,7 @@ function buildMsgEl(m, otherUid, msgId, convId){
   }
 
   const owner = isOwn ? (userCache[currentUser.uid] || {}) : (userCache[otherUid] || {});
-  const photo = owner.photoURL || "";
+  const photo = safePhoto(owner.photoURL || "");
   const name  = owner.displayName || (isOwn ? "তুমি" : "User");
   const avatarInner = photo ? `<img src="${photo}">` : `<span>${(name[0]||"?").toUpperCase()}</span>`;
   const time = m.createdAt ? fmtTime(m.createdAt) : "";
@@ -1696,7 +1703,7 @@ requireAuth(async user => {
   userCache[user.uid] = d;
 
   const name  = d.displayName || user.displayName || user.email?.split("@")[0] || "User";
-  const photo = d.photoURL    || user.photoURL    || "";
+  const photo = safePhoto(d.photoURL    || user.photoURL    || "");
   document.getElementById("nav-name").textContent = name;
   const av = document.getElementById("nav-avatar");
   if(photo) av.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`;
@@ -1966,7 +1973,7 @@ function listenForIncomingCalls(){
 function showIncomingBanner(callId, convId, call){
   const peer = userCache[call.callerId] || {};
   document.getElementById("incoming-name").textContent = peer.displayName || "User";
-  const photo = peer.photoURL || "";
+  const photo = safePhoto(peer.photoURL || "");
   document.getElementById("incoming-avatar").innerHTML = photo
     ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
     : (peer.displayName||"?")[0].toUpperCase();
@@ -2147,7 +2154,7 @@ function setupPCHandlers(){
 function showCallUI(peerUid, video, statusText, ringing){
   const peer = userCache[peerUid] || {};
   document.getElementById("call-name").textContent = peer.displayName || "User";
-  const photo = peer.photoURL || "";
+  const photo = safePhoto(peer.photoURL || "");
   document.getElementById("call-avatar").innerHTML = photo
     ? `<img src="${photo}">` : (peer.displayName||"?")[0].toUpperCase();
   const statusEl = document.getElementById("call-status");
@@ -2361,7 +2368,7 @@ function renderCallLog(){
   list.innerHTML = callLog.map(entry=>{
     const u = userCache[entry.uid] || {};
     const name = u.displayName || "User";
-    const photo = u.photoURL || "";
+    const photo = safePhoto(u.photoURL || "");
     const avatarHtml = photo ? `<img src="${photo}">` : name[0]?.toUpperCase();
     const typeIcon = entry.type === "video" ? "🎥" : "📞";
     const missedClass = entry.missed ? "call-log-missed" : "";
@@ -2945,7 +2952,6 @@ themeBtn.addEventListener("click", ()=>{
   themeBtn.innerHTML = isLight ? '<i class="ti ti-sun" aria-hidden="true"></i>' : '<i class="ti ti-moon" aria-hidden="true"></i>';
   localStorage.setItem("es-theme", isLight ? "light" : "dark");
 });
-</script>
 
 /* ══════════════════════════════════════════
    1. TYPING INDICATOR
@@ -3102,7 +3108,7 @@ function openForwardModal(text){
     if(uid === activeConvUid) return; // skip current conversation
     const u = userCache[uid] || {};
     const name = u.displayName || "User";
-    const photo = u.photoURL || "";
+    const photo = safePhoto(u.photoURL || "");
     const item = document.createElement("div");
     item.className = "forward-item";
     item.dataset.uid = uid;
@@ -3147,6 +3153,7 @@ document.getElementById("fwd-send").addEventListener("click", async ()=>{
   document.getElementById("forward-modal").classList.remove("show");
   forwardText = null; forwardTarget = null;
 });
+</script>
 
 </body>
 </html>

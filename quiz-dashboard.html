@@ -283,16 +283,16 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <div class="prog-track"><div class="prog-fill" id="bg-bar"></div></div>
         <div class="meta-row">
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--gold)">300+</span>
+            <span class="meta-val" style="color:var(--gold)">412</span>
             <span class="meta-lbl">মোট শব্দ</span>
           </div>
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--emerald)" id="bg-correct">0</span>
-            <span class="meta-lbl">সঠিক</span>
+            <span class="meta-val" style="color:var(--emerald)" id="bg-correct">0/21</span>
+            <span class="meta-lbl">Level সম্পন্ন</span>
           </div>
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--amber)" id="bg-sessions">0</span>
-            <span class="meta-lbl">সেশন</span>
+            <span class="meta-val" style="color:var(--amber)" id="bg-pct2">0%</span>
+            <span class="meta-lbl">Progress</span>
           </div>
         </div>
         <div class="card-btn">Quiz শুরু করো <span class="arrow">→</span></div>
@@ -324,16 +324,16 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <div class="prog-track"><div class="prog-fill" id="im-bar"></div></div>
         <div class="meta-row">
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--teal)">150+</span>
+            <span class="meta-val" style="color:var(--teal)">510</span>
             <span class="meta-lbl">প্রশ্ন</span>
           </div>
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--emerald)" id="im-correct">0</span>
-            <span class="meta-lbl">সঠিক</span>
+            <span class="meta-val" style="color:var(--emerald)" id="im-correct">0/26</span>
+            <span class="meta-lbl">Level সম্পন্ন</span>
           </div>
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--amber)" id="im-sessions">0</span>
-            <span class="meta-lbl">সেশন</span>
+            <span class="meta-val" style="color:var(--amber)" id="im-pct2">0%</span>
+            <span class="meta-lbl">Progress</span>
           </div>
         </div>
         <div class="card-btn">Quiz শুরু করো <span class="arrow">→</span></div>
@@ -342,7 +342,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <div class="locked-overlay" id="im-lock">
         <div class="lock-icon">🔒</div>
         <div class="lock-text">Intermediate Locked</div>
-        <div class="lock-req" id="im-lock-req">Beginner-এ কমপক্ষে ১টি session শেষ করো</div>
+        <div class="lock-req" id="im-lock-req">Beginner-এর Level 1 পাস করো (70%+)</div>
       </div>
     </a>
 
@@ -371,16 +371,16 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <div class="prog-track"><div class="prog-fill" id="ad-bar"></div></div>
         <div class="meta-row">
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--indigo)">200+</span>
+            <span class="meta-val" style="color:var(--indigo)">400</span>
             <span class="meta-lbl">প্রশ্ন</span>
           </div>
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--emerald)" id="ad-correct">0</span>
-            <span class="meta-lbl">সঠিক</span>
+            <span class="meta-val" style="color:var(--emerald)" id="ad-correct">0/20</span>
+            <span class="meta-lbl">Level সম্পন্ন</span>
           </div>
           <div class="meta-item">
-            <span class="meta-val" style="color:var(--amber)" id="ad-sessions">0</span>
-            <span class="meta-lbl">সেশন</span>
+            <span class="meta-val" style="color:var(--amber)" id="ad-pct2">0%</span>
+            <span class="meta-lbl">Progress</span>
           </div>
         </div>
         <div class="card-btn">Quiz শুরু করো <span class="arrow">→</span></div>
@@ -389,7 +389,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <div class="locked-overlay" id="ad-lock">
         <div class="lock-icon">🔒</div>
         <div class="lock-text">Advanced Locked</div>
-        <div class="lock-req" id="ad-lock-req">Intermediate-এ কমপক্ষে ১টি session শেষ করো</div>
+        <div class="lock-req" id="ad-lock-req">Intermediate-এর Level 1 পাস করো (70%+)</div>
       </div>
     </a>
 
@@ -482,6 +482,10 @@ document.getElementById("btn-logout").addEventListener("click", async () => {
   location.href = "index.html";
 });
 
+const BEGINNER_TOTAL_LVL     = 21;
+const INTERMEDIATE_TOTAL_LVL = 26;
+const ADVANCED_TOTAL_LVL     = 20;
+
 function lockCard(cardId, overlayId) {
   const card = document.getElementById(cardId);
   const overlay = document.getElementById(overlayId);
@@ -512,49 +516,42 @@ requireAuth(async user => {
   document.getElementById("total-xp").textContent       = d.xp             || 0;
   document.getElementById("best-score").textContent     = (d.bestScore     || 0) + "%";
 
-  // ── Per-level stats from quizStats subcollection ──
-  const levels = [
-    { key: "beginner",     barId: "bg-bar",  pctId: "bg-pct",  cId: "bg-correct",  sId: "bg-sessions"  },
-    { key: "intermediate", barId: "im-bar",  pctId: "im-pct",  cId: "im-correct",  sId: "im-sessions"  },
-    { key: "advanced",     barId: "ad-bar",  pctId: "ad-pct",  cId: "ad-correct",  sId: "ad-sessions"  },
-  ];
+  // ── Per-level progress from passed_*_levels arrays ──
+  const passedBeginner     = d.passed_beginner_levels     || [];
+  const passedIntermediate = d.passed_intermediate_levels || [];
+  const passedAdvanced     = d.passed_advanced_levels     || [];
 
-  const statsData = {};
+  const bgDone = passedBeginner.length;
+  const imDone = passedIntermediate.length;
+  const adDone = passedAdvanced.length;
 
-  for (const lv of levels) {
-    try {
-      const snap = await getDoc(doc(db, "users", user.uid, "quizStats", lv.key));
-      const s    = snap.exists() ? snap.data() : {};
+  const bgPct = Math.round((bgDone / BEGINNER_TOTAL_LVL) * 100);
+  const imPct = Math.round((imDone / INTERMEDIATE_TOTAL_LVL) * 100);
+  const adPct = Math.round((adDone / ADVANCED_TOTAL_LVL) * 100);
 
-      const correct  = s.totalCorrect   || 0;
-      const total    = s.totalQuestions || 0;
-      const sessions = s.sessions       || 0;
-      const pct      = total > 0 ? Math.min(100, Math.round((correct / total) * 100)) : 0;
+  document.getElementById("bg-correct").textContent = `${bgDone}/${BEGINNER_TOTAL_LVL}`;
+  document.getElementById("bg-pct2").textContent = bgPct + "%";
+  document.getElementById("bg-pct").textContent = bgPct + "%";
+  setTimeout(() => { document.getElementById("bg-bar").style.width = bgPct + "%"; }, 200);
 
-      statsData[lv.key] = { correct, total, sessions, pct };
+  document.getElementById("im-correct").textContent = `${imDone}/${INTERMEDIATE_TOTAL_LVL}`;
+  document.getElementById("im-pct2").textContent = imPct + "%";
+  document.getElementById("im-pct").textContent = imPct + "%";
+  setTimeout(() => { document.getElementById("im-bar").style.width = imPct + "%"; }, 200);
 
-      document.getElementById(lv.cId).textContent  = correct;
-      document.getElementById(lv.sId).textContent  = sessions;
-      document.getElementById(lv.pctId).textContent = pct + "%";
-      setTimeout(() => {
-        document.getElementById(lv.barId).style.width = pct + "%";
-      }, 200);
-    } catch(e) {
-      // quizStats doc doesn't exist yet — leave as 0
-    }
-  }
+  document.getElementById("ad-correct").textContent = `${adDone}/${ADVANCED_TOTAL_LVL}`;
+  document.getElementById("ad-pct2").textContent = adPct + "%";
+  document.getElementById("ad-pct").textContent = adPct + "%";
+  setTimeout(() => { document.getElementById("ad-bar").style.width = adPct + "%"; }, 200);
 
   // ── Lock logic ──
-  // Intermediate unlocks after Beginner has at least 1 session
-  const bgSessions = statsData["beginner"]?.sessions || 0;
-  const imSessions = statsData["intermediate"]?.sessions || 0;
-
-  if (bgSessions < 1) {
+  // Intermediate unlocks after Beginner Level 1 is passed
+  if (bgDone < 1) {
     lockCard("card-intermediate", "im-lock");
   }
 
-  // Advanced unlocks after Intermediate has at least 1 session
-  if (imSessions < 1) {
+  // Advanced unlocks after Intermediate Level 1 is passed
+  if (imDone < 1) {
     lockCard("card-advanced", "ad-lock");
   }
 });
