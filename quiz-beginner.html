@@ -1013,19 +1013,6 @@ const yr = new Date().getFullYear();
 document.getElementById("footer-year").textContent  = yr;
 document.getElementById("footer-year2").textContent = yr;
 
-/* ── highlight active sublevel tab ── */
-(function(){
-  const p = new URLSearchParams(window.location.search);
-  const cat = p.get('cat'), lv = p.get('level');
-  document.querySelectorAll("#sublevel-tabs .level-tab").forEach(a=>{
-    const ap = new URLSearchParams(a.href.split('?')[1]||'');
-    const ac = ap.get('cat'), al = ap.get('level');
-    if(cat && ac === cat) a.classList.add('active');
-    else if(!cat && lv && al === lv) a.classList.add('active');
-    else if(!cat && !lv && !ac && !al) a.classList.add('active');
-  });
-})();
-
 requireAuth(async user => {
   currentUid = user.uid;
   fbUser = user;
