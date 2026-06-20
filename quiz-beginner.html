@@ -747,7 +747,7 @@ function skipQuestion(){
   nextQuestion();
 }
 
-function showResult(){
+async function showResult(){
   document.getElementById("quiz-card").style.display = "none";
   const card = document.getElementById("result-card");
   card.classList.add("show");
