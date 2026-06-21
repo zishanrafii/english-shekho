@@ -102,33 +102,42 @@ function makeAvatar(url, name, size = 36) {
   return wrap;
 }
 
-/* ── Auth guard: redirect to index if not logged in ── */
+/* ── Auth guard: redirect to index if not logged in ──
+   callback receives (user, userData) — userData is the already-fetched
+   users/{uid} document (object, or {} if somehow still missing after sync).
+   Pages can ignore the second argument (back-compat) or use it to skip
+   a duplicate getDoc(users/uid) call right after requireAuth resolves. */
 function requireAuth(callback) {
   onAuthStateChanged(auth, async user => {
     if (!user) { window.location.href = "index.html"; return; }
     // Auto-create or update user document — fixes PWA/Google login users missing from friends list
+    let userData = {};
     try {
       const userRef = doc(db, "users", user.uid);
       const snap = await getDoc(userRef);
       if (!snap.exists()) {
-        await setDoc(userRef, {
+        userData = {
           uid: user.uid,
           displayName: user.displayName || user.email.split("@")[0],
           email: user.email,
           photoURL: user.photoURL || "",
-          createdAt: serverTimestamp(),
           xp: 0, streak: 0, sessions: 0, totalCorrect: 0
-        });
+        };
+        await setDoc(userRef, { ...userData, createdAt: serverTimestamp() });
       } else {
+        userData = snap.data();
         const updates = {};
-        if (user.displayName && snap.data().displayName !== user.displayName)
+        if (user.displayName && userData.displayName !== user.displayName)
           updates.displayName = user.displayName;
-        if (user.photoURL && snap.data().photoURL !== user.photoURL)
+        if (user.photoURL && userData.photoURL !== user.photoURL)
           updates.photoURL = user.photoURL;
-        if (Object.keys(updates).length) await updateDoc(userRef, updates);
+        if (Object.keys(updates).length) {
+          await updateDoc(userRef, updates);
+          userData = { ...userData, ...updates };
+        }
       }
     } catch(e) { console.warn("User doc sync failed:", e); }
-    callback(user);
+    callback(user, userData);
   });
 }
 
