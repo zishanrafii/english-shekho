@@ -25,8 +25,6 @@ import {
   where, increment, arrayUnion, arrayRemove
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBPS0TkQ-9_SO5C0WcYkT459lXFDPaTPXM",
@@ -45,9 +43,6 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 const gProvider = new GoogleAuthProvider();
-
-// Analytics only works in supported environments (not file://, not all browsers)
-isSupported().then(ok => { if (ok) getAnalytics(app); }).catch(()=>{});
 
 /* ── Cloudinary upload ── */
 async function uploadToCloud(file, resourceType = "auto") {

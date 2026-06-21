@@ -804,7 +804,6 @@ const VOCAB_B1 = [
   {id:"b1w748", word:"Interpret",     phonetic:"/ɪnˈtɜːrprɪt/",    meaning:"ব্যাখ্যা করা",           example:"Interpret the results correctly.",           category:"Miscellaneous", difficulty:"medium", level:"B1"},
   {id:"b1w749", word:"Implement",     phonetic:"/ˈɪmplɪment/",     meaning:"বাস্তবায়ন করা",         example:"Implement the plan step by step.",           category:"Miscellaneous", difficulty:"medium", level:"B1"},
   {id:"b1w750", word:"Evaluate",      phonetic:"/ɪˈvæljueɪt/",     meaning:"মূল্যায়ন করা",          example:"Evaluate the pros and cons first.",          category:"Miscellaneous", difficulty:"medium", level:"B1"},
-];
 
   /* ── Finance & Banking (30) ── */
   {id:"b1w751", word:"Mortgage",      phonetic:"/ˈmɔːrɡɪdʒ/",      meaning:"বন্ধকী ঋণ",             example:"She took a mortgage to buy her house.",      category:"Finance",       difficulty:"hard",   level:"B1"},

@@ -107,7 +107,7 @@ self.addEventListener("fetch", event => {
         })
         .catch(() => {
           // Offline: cache থেকে দাও, না পেলে index.html
-          return caches.match(request) || caches.match(OFFLINE_PAGE);
+          return caches.match(request).then(cached => cached || caches.match(OFFLINE_PAGE));
         })
     );
     return;
